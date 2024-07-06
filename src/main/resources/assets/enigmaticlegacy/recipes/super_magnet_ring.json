@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "LEL",
+    "GRG",
+    "LGL"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "L": {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    },
+    "R": {
+      "item": "enigmaticlegacy:iron_ring"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:super_magnet_ring"
+    }
+}

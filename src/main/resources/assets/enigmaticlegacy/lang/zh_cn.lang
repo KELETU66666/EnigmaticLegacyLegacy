@@ -1,0 +1,40 @@
+item.cursed_ring.name=七咒之戒
+item.soul_crystal.name=灵魂水晶
+
+tooltip.enigmaticlegacy.holdShift=§5按住 §6Shift §5查看详情。
+
+tooltip.enigmaticlegacy.cursedRing1=§5一旦佩戴，它便成为你的一部分。
+tooltip.enigmaticlegacy.cursedRing2=§4这枚戒指将永远陪伴着你。
+tooltip.enigmaticlegacy.cursedRing2_creative=§6需要神的能力才能取下它。
+tooltip.enigmaticlegacy.cursedRing3=§d七个诅咒将会降临到佩戴者身上：
+tooltip.enigmaticlegacy.cursedRing4=§5- 使受到的§6任何§5来源的伤害加倍
+tooltip.enigmaticlegacy.cursedRing4_alt=§5- 使受到的§6任何§5来源的伤害加倍
+tooltip.enigmaticlegacy.cursedRing5=§5- 中立生物会主动攻击你
+tooltip.enigmaticlegacy.cursedRing6=§5- 盔甲效力降低 §6
+tooltip.enigmaticlegacy.cursedRing6_1=
+tooltip.enigmaticlegacy.cursedRing7=§5- 你对怪物的伤害降低 §6
+tooltip.enigmaticlegacy.cursedRing7_1=
+tooltip.enigmaticlegacy.cursedRing8=§5- 一旦着火，火焰将会永远灼烧着你
+tooltip.enigmaticlegacy.cursedRing9=§5- 每次死亡都会使你的灵魂破裂
+tooltip.enigmaticlegacy.cursedRing10=§5- 无药可医的失眠症困扰着你
+tooltip.enigmaticlegacy.cursedRing11=§d而那些坚韧顽强之人，将会被给予七个祝福：
+tooltip.enigmaticlegacy.cursedRing12=§5- §6+
+tooltip.enigmaticlegacy.cursedRing12_1=§d 时运等级
+tooltip.enigmaticlegacy.cursedRing13=§5- §6+
+tooltip.enigmaticlegacy.cursedRing13_1=§d 掠夺等级
+tooltip.enigmaticlegacy.cursedRing14=§5- §6+
+tooltip.enigmaticlegacy.cursedRing14_1=§5 §d经验§5 掉落
+tooltip.enigmaticlegacy.cursedRing15=§5- §6+
+tooltip.enigmaticlegacy.cursedRing15_1=§5在附魔台中的§d附魔能力
+tooltip.enigmaticlegacy.cursedRing16=§5- 一些生物开始产出独特掉落物。
+tooltip.enigmaticlegacy.cursedRing17=§5- 可以随时打开你的§6末影箱
+tooltip.enigmaticlegacy.cursedRing18=§5- 你可以使用独特的物品
+
+tooltip.enigmaticlegacy.cursedOnesOnly1=承受七咒之人，
+tooltip.enigmaticlegacy.cursedOnesOnly2=才能使用该物品。
+
+tooltip.enigmaticlegacy.soulCrystal1=§6右击§5吸收水晶，
+tooltip.enigmaticlegacy.soulCrystal2=§5并恢复一颗破碎的§6灵魂水晶§5。
+
+key.categories.enigmaticlegacy=亘古遗物
+key.ender_chest_gui=末影箱

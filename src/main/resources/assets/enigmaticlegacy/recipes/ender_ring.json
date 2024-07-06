@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " C ",
+    "IRI",
+    "NPN"
+  ],
+  "key": {
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "R": {
+      "item": "enigmaticlegacy:iron_ring"
+    },
+    "C": {
+      "item": "minecraft:ender_chest"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:ender_ring"
+    }
+}

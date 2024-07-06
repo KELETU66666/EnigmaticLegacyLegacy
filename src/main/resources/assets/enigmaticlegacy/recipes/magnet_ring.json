@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " D ",
+    "IRG",
+    " E "
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "R": {
+      "item": "enigmaticlegacy:iron_ring"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:magnet_ring"
+    }
+}

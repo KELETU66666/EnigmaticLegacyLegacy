@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "NIN",
+    "IRI",
+    "NIN"
+  ],
+  "key": {
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "R": {
+      "item": "enigmaticlegacy:iron_ring"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:gem_ring"
+    }
+}
