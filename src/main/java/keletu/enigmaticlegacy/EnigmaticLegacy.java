@@ -45,7 +45,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.0.1";
+    public static final String VERSION = "0.0.2";
 
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
