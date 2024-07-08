@@ -1,0 +1,35 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "NCN",
+    "IHI",
+    "DGD"
+  ],
+  "key": {
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "H": {
+      "item": "enigmaticlegacy:earth_heart"
+    },
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:mining_charm"
+    }
+}

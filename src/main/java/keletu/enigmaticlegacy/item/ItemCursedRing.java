@@ -4,9 +4,10 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
+import keletu.enigmaticlegacy.util.IFortuneBonus;
+import keletu.enigmaticlegacy.util.ILootingBonus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemCursedRing extends ItemBaseBauble implements IBauble {
+public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingBonus, IFortuneBonus {
 
 	protected final Multimap<String, AttributeModifier> attributeMap = HashMultimap.create();
 
@@ -183,5 +184,15 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble {
 	@Override
 	public BaubleType getBaubleType(ItemStack itemStack) {
 		return BaubleType.RING;
+	}
+
+	@Override
+	public int bonusLevelLooting() {
+		return lootingBonus;
+	}
+
+	@Override
+	public int bonusLevelFortune() {
+		return fortuneBonus;
 	}
 }

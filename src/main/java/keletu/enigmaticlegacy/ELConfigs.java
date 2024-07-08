@@ -31,7 +31,16 @@ public class ELConfigs {
     public static int range;
     public static int superRange;
     public static boolean invertShift;
-
+    public static float breakSpeedBonus;
+    public static double reachDistanceBonus;
+    public static float undeadDamageBonus;
+    public static float hostileDamageBonus;
+    public static boolean bonusLootingEnabled;
+    public static boolean doubleXPEnabled;
+    public static double attackDamage;
+    public static double attackSpeed;
+    public static double movementSpeed;
+    public static double damageResistance;
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
 
@@ -80,6 +89,27 @@ public class ELConfigs {
 
         superRange = config.getInt("Range", "SuperMagnetRing", 16, 1, 256, "The radius in which Dislocation Ring will attract items.");
 
+        breakSpeedBonus = config.getFloat("BreakSpeed", "MiningCharm", 0.3F, 0, 10, "Mining speed boost granted by Charm of Treasure Hunter. Defined as percentage.");
+
+        reachDistanceBonus = config.getFloat("ReachDistance", "MiningCharm", 2.15F, 0, 16, "Additional block reach granted by Charm of Treasure Hunter.");
+
+        undeadDamageBonus = config.getFloat("UndeadDamage", "MonsterCharm", 0.25F, 0, 10, "Damage bonus against undead enemies for Emblem of Monster Slayer. Defined as percentage.");
+
+        hostileDamageBonus = config.getFloat("HostileDamage", "MonsterCharm", 0.1F, 0, 10, "Damage bonus against agressive creatures for Emblem of Monster Slayer. Defined as percentage.");
+
+        bonusLootingEnabled = config.getBoolean("BonusLooting", "MonsterCharm", true, "Whether or not Emblem of Monster Slayer should provide +1 Looting Level.");
+
+        doubleXPEnabled = config.getBoolean("DoubleXP", "MonsterCharm", true, "Whether or not Emblem of Monster Slayer should provide double experience drop from monsters.");
+
+        attackDamage = config.getFloat("DamageBoost", "Emblem of Bloodstained Valor", 1, 0, 100, "Damage increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
+
+        attackSpeed = config.getFloat("AttackSpeedBoost", "Emblem of Bloodstained Valor", 1, 0, 100, "Attack speed increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
+
+        movementSpeed = config.getFloat("SpeedBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100 ,"Movement speed increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
+
+        damageResistance = config.getFloat("ResistanceBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100, "Damage resistance provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
+
+
         //builder.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
         //        + Configuration.NEW_LINE + "Btw Jusey, when I said 'very cute though', I meant you. Bees are cute either of course.");
 
@@ -96,7 +126,7 @@ public class ELConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[0], "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

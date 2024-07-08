@@ -65,9 +65,9 @@ public class ItemSuperMagnetRing extends ItemBaseBauble {
 					break;
 				}
 
-				if (!ELEvents.canPickStack((EntityPlayer) living, item.getItem())) {
-					continue;
-				}
+				//if (!ELEvents.canPickStack((EntityPlayer) living, item.getItem())) {
+				//	continue;
+				//}
 
 				ELEvents.setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
 				item.setPickupDelay(0);

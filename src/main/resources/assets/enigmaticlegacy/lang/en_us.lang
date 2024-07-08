@@ -5,6 +5,27 @@ item.gem_ring.name=Gem Ring
 item.ender_ring.name=Ring of Ender
 item.magnet_ring.name=Magnet Ring
 item.super_magnet_ring.name=Dislocation Ring
+item.monster_charm.name=Emblem of Monster Slayer
+item.mining_charm.name=Charm of Treasure Hunter
+item.berserk_emblem.name=Emblem of Bloodstained Valor
+
+#material
+item.astral_dust.name=Astral dust
+item.ender_rod.name=Ender Stick
+item.etherium_ore.name=Raw Etherium Ore
+item.etherium_ingot.name=Etherium Inogt
+item.earth_heart.name=Heart of The Earth
+
+#armor & tools
+item.etherium_helm.name=Etherium Helmet
+item.etherium_chest.name=Etherium Cuirass
+item.etherium_legs.name=Etherium Greaves
+item.etherium_boots.name=Etherium Boots
+item.etherium_pickaxe.name=Etherium Pickaxe
+item.etherium_axe.name=Etherium Waraxe
+item.etherium_shovel.name=Etherium Shovel
+item.etherium_sword.name=Etherium Broadsword
+item.etherium_scythe.name=Etherium Scythe
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -51,6 +72,57 @@ tooltip.enigmaticlegacy.superMagnetRing2_2=§6 blocks§5 radius.
 tooltip.enigmaticlegacy.superMagnetRing3=§5This can be disabled by holding §6Shift§5.
 tooltip.enigmaticlegacy.superMagnetRing3_alt=§5Only takes effect when holding §6Shift§5.
 
+tooltip.enigmaticlegacy.miningCharm1=§6+
+tooltip.enigmaticlegacy.miningCharm1_1=§d Mining Speed
+tooltip.enigmaticlegacy.miningCharm2=§6+
+tooltip.enigmaticlegacy.miningCharm2_1=§d Fortune Level
+tooltip.enigmaticlegacy.miningCharm3=§5When you are underground and in dark,
+tooltip.enigmaticlegacy.miningCharm4=§5applies §6Night Vision§5 effect to you. This
+tooltip.enigmaticlegacy.miningCharm5=§5feature can be disabled by pressing
+tooltip.enigmaticlegacy.miningCharm6=§5the §6Right-Click§5 when holding charm.
+tooltip.enigmaticlegacy.miningCharmNightVision=§dNight Vision:
+
+tooltip.enigmaticlegacy.monsterCharm1=§6+
+tooltip.enigmaticlegacy.monsterCharm1_1=§d Damage§5 against undead creatures.
+tooltip.enigmaticlegacy.monsterCharm2=§6+
+tooltip.enigmaticlegacy.monsterCharm2_1=§d Damage§5 against other aggressive creatures.
+tooltip.enigmaticlegacy.monsterCharm3=§6+1 §dLooting Level
+tooltip.enigmaticlegacy.monsterCharm4=§5Slain monsters drop double as much experience.
+
+tooltip.enigmaticlegacy.berserk_emblem1= §dAttack Damage
+tooltip.enigmaticlegacy.berserk_emblem2= §dAttack Speed
+tooltip.enigmaticlegacy.berserk_emblem3= §dMovement Speed
+tooltip.enigmaticlegacy.berserk_emblem4= §dDamage Resistance
+tooltip.enigmaticlegacy.berserk_emblem5=§5These traits are multiplied by how many percents
+tooltip.enigmaticlegacy.berserk_emblem6=§5of your health pool you're currently missing.
+tooltip.enigmaticlegacy.berserk_emblem7=§dCurrent traits:
+tooltip.enigmaticlegacy.berserk_emblem8= §dAttack Damage
+tooltip.enigmaticlegacy.berserk_emblem9= §dAttack Speed
+tooltip.enigmaticlegacy.berserk_emblem10= §dMovement Speed
+tooltip.enigmaticlegacy.berserk_emblem11= §dDamage Resistance
+
+tooltip.enigmaticlegacy.etheriumArmor1=§5Is invisible while worn.
+tooltip.enigmaticlegacy.etheriumHelmet1=§5Is invisible while worn.
+tooltip.enigmaticlegacy.etheriumChestplate1=§5Is invisible while worn.
+tooltip.enigmaticlegacy.etheriumLeggings1=§5Are invisible while worn.
+tooltip.enigmaticlegacy.etheriumBoots1=§5Are invisible while worn.
+tooltip.enigmaticlegacy.etheriumArmorSetBonus1=§dSet Bonus:
+tooltip.enigmaticlegacy.etheriumArmorSetBonus2=§5- When your health drops below §6
+tooltip.enigmaticlegacy.etheriumArmorSetBonus2_1=§5, generates
+tooltip.enigmaticlegacy.etheriumArmorSetBonus3=§5  powerful shield that reflects most projectiles,
+tooltip.enigmaticlegacy.etheriumArmorSetBonus4=§5  provides §6
+tooltip.enigmaticlegacy.etheriumArmorSetBonus4_1=§6 Damage Resistance§5, and knocks
+tooltip.enigmaticlegacy.etheriumArmorSetBonus5=§5  back any creatures attack you.
+tooltip.enigmaticlegacy.etheriumArmorSetBonus6=§5
+
+tooltip.enigmaticlegacy.add=§6+
+
+tooltip.enigmaticlegacy.tainted1=§5Slightly tainted by cursed one's presence.
+tooltip.enigmaticlegacy.tainted2=§5Tainted by the touch of a cursed being.
+
+tooltip.enigmaticlegacy.enabled=§6Enabled
+tooltip.enigmaticlegacy.disabled=§6Disabled
+
 tooltip.enigmaticlegacy.cursedOnesOnly1=Only those who bear the Seven Curses
 tooltip.enigmaticlegacy.cursedOnesOnly2=hold power to obtain and use this item.
 
@@ -58,4 +130,5 @@ tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
 key.categories.enigmaticlegacy=Enigmatic Legacy²
-key.ender_chest_gui=Ender Chest
+key.enderRing=Open Ender Chest
+enigmaticlegacy.ender_chest_gui=Ender Chest

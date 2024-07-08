@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " C ",
+    "IHI",
+    "DGD"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:experience_bottle"
+    },
+    "I": {
+      "item": "minecraft:blaze_powder"
+    },
+    "C": {
+      "item": "minecraft:rabbit_stew"
+    },
+    "H": {
+      "item": "minecraft:skull",
+      "data": 0
+    },
+    "G": {
+      "item": "enigmaticlegacy:earth_heart"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:monster_charm"
+    }
+}

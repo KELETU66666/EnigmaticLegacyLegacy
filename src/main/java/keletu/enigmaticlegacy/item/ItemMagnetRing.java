@@ -24,62 +24,62 @@ import java.util.List;
 
 public class ItemMagnetRing extends ItemBaseBauble {
 
-	public ItemMagnetRing() {
-		super("magnet_ring", EnumRarity.RARE);
-	}
+    public ItemMagnetRing() {
+        super("magnet_ring", EnumRarity.RARE);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 
-		list.add("");
+        list.add("");
 
-		if (GuiScreen.isShiftKeyDown()) {
-			list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.magnetRing1") + range + I18n.format("tooltip.enigmaticlegacy.magnetRing1_1"));
-			list.add(invertShift ? I18n.format("tooltip.enigmaticlegacy.magnetRing2_alt") : I18n.format("tooltip.enigmaticlegacy.magnetRing2"));
-		} else {
-			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
-		}
-	}
+        if (GuiScreen.isShiftKeyDown()) {
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.magnetRing1") + range + I18n.format("tooltip.enigmaticlegacy.magnetRing1_1"));
+            list.add(invertShift ? I18n.format("tooltip.enigmaticlegacy.magnetRing2_alt") : I18n.format("tooltip.enigmaticlegacy.magnetRing2"));
+        } else {
+            list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
+        }
+    }
 
-	@Override
-	public BaubleType getBaubleType(ItemStack itemStack) {
-		return BaubleType.RING;
-	}
+    @Override
+    public BaubleType getBaubleType(ItemStack itemStack) {
+        return BaubleType.RING;
+    }
 
-	@Override
-	public void onWornTick(ItemStack stack, EntityLivingBase living) {
-		if ((invertShift != GuiScreen.isShiftKeyDown()) || !(living instanceof EntityPlayer))
-			return;
+    @Override
+    public void onWornTick(ItemStack stack, EntityLivingBase living) {
+        if ((invertShift != GuiScreen.isShiftKeyDown()) || !(living instanceof EntityPlayer))
+            return;
 
-		double x = living.posX;
-		double y = living.posY + 0.75;
-		double z = living.posZ;
+        double x = living.posX;
+        double y = living.posY + 0.75;
+        double z = living.posZ;
 
-		List<EntityItem> items = living.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
-		int pulled = 0;
-		for (EntityItem item : items)
-			if (this.canPullItem(item)) {
-				if (pulled > 200) {
-					break;
-				}
+        List<EntityItem> items = living.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
+        int pulled = 0;
+        for (EntityItem item : items)
+            if (this.canPullItem(item)) {
+                if (pulled > 200) {
+                    break;
+                }
 
-				if (!ELEvents.canPickStack((EntityPlayer) living, item.getItem())) {
-					continue;
-				}
+                //if (!ELEvents.canPickStack((EntityPlayer) living, item.getItem())) {
+                //	continue;
+                //}
 
-				ELEvents.setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
-				item.setPickupDelay(0);
+                ELEvents.setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
+                item.setPickupDelay(0);
 
-				//for (int counter = 0; counter <= 2; counter++)
-				//	living.world.addParticle(ParticleTypes.WITCH, item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ(), (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D);
-				pulled++;
-			}
+                //for (int counter = 0; counter <= 2; counter++)
+                //	living.world.addParticle(ParticleTypes.WITCH, item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ(), (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D);
+                pulled++;
+            }
 
-	}
+    }
 
-	protected boolean canPullItem(EntityItem item) {
-		ItemStack stack = item.getItem();
-		return !item.isDead && !stack.isEmpty() && !item.getEntityData().getBoolean("PreventRemoteMovement");
-	}
+    protected boolean canPullItem(EntityItem item) {
+        ItemStack stack = item.getItem();
+        return !item.isDead && !stack.isEmpty() && !item.getEntityData().getBoolean("PreventRemoteMovement");
+    }
 }

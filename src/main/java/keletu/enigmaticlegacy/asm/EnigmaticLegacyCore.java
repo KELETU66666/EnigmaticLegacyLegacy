@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.asm;
 
-import java.util.Map;
-
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+
+import java.util.Map;
 
 @IFMLLoadingPlugin.Name(value = "EnigmaticLegacyCore")
 @IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE)

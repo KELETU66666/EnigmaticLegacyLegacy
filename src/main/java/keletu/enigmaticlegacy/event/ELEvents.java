@@ -2,15 +2,16 @@ package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import keletu.enigmaticlegacy.ELConfigs;
+import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.MODID;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
-import keletu.enigmaticlegacy.ELConfigs;
-import static keletu.enigmaticlegacy.ELConfigs.painMultiplier;
-import static keletu.enigmaticlegacy.ELConfigs.ultraHardcore;
 import keletu.enigmaticlegacy.core.Vector3;
-import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
+import keletu.enigmaticlegacy.item.ItemCursedRing;
+import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.util.ICursed;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -39,7 +40,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.util.FakePlayer;
@@ -90,7 +90,7 @@ public class ELEvents {
         Vector3 entityVector = Vector3.fromEntityCenter(entity);
         Vector3 finalVector = originalPosVector.subtract(entityVector);
 
-        if(finalVector.mag() > 1)
+        if (finalVector.mag() > 1)
             finalVector = finalVector.normalize();
 
         entity.motionX = finalVector.x * modifier;
@@ -100,7 +100,7 @@ public class ELEvents {
 
     /**
      * @return True if ItemStack can be added to player's inventory (fully or
-     *         partially), false otherwise.
+     * partially), false otherwise.
      */
 
     public static boolean canPickStack(EntityPlayer player, ItemStack stack) {
@@ -212,6 +212,10 @@ public class ELEvents {
                 addDrop(event, new ItemStack(Items.NETHER_STAR, 1));
             }
         }
+    }
+
+    public static float getMissingHealthPool(EntityPlayer player) {
+        return (player.getMaxHealth() - Math.min(player.getHealth(), player.getMaxHealth())) / player.getMaxHealth();
     }
 
     @SubscribeEvent(priority = HIGH)
@@ -331,7 +335,7 @@ public class ELEvents {
             return;
 
         for (ResourceLocation rl : ELConfigs.cursedItemList) {
-            if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
+            if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl) || event.getItemStack().getItem() instanceof ICursed) {
                 TextFormatting color = !hasCursed(event.getEntityPlayer()) ? TextFormatting.DARK_RED : TextFormatting.GRAY;
                 event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
                 event.getToolTip().add(2, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly2"));
@@ -353,7 +357,7 @@ public class ELEvents {
 
     @SubscribeEvent
     public static void tickHandler(TickEvent.PlayerTickEvent event) {
-        if(event.player.world.isRemote)
+        if (event.player.world.isRemote)
             return;
 
         EntityPlayer player = event.player;
@@ -418,9 +422,54 @@ public class ELEvents {
         if (event.getEntityLiving() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getEntityLiving())) {
             event.setAmount(event.getAmount() * painMultiplier);
         }
+
+        if (event.getSource().getTrueSource() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+            Entity immediateSource = event.getSource().getImmediateSource();
+
+            float damageBoost = 0F;
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
+                damageBoost += event.getAmount()*(getMissingHealthPool(player)*(float)ELConfigs.attackDamage);
+            }
+
+            //if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.cursedScroll)) {
+            //    damageBoost += event.getAmount()*(CursedScroll.damageBoost.getValue().asModifier()*SuperpositionHandler.getCurseAmount(player));
+            //}
+
+            event.setAmount(event.getAmount()+damageBoost);
+        }
+        
+        if(event.getEntityLiving() instanceof EntityPlayer){
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
+                event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) ELConfigs.damageResistance)));
+            }
+        }
+
         if (event.getEntityLiving() instanceof EntityMob) {
+            EntityMob monster = (EntityMob) event.getEntityLiving();
+
             if (event.getSource().getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+                /*
+                 * Handler for damage bonuses of Charm of Monster Slayer.
+                 */
+
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.monsterCharm) != -1) {
+                    if (monster.isEntityUndead()) {
+                        event.setAmount(event.getAmount() * (1 + ELConfigs.undeadDamageBonus));
+                    } else if (monster.getAttackTarget() == player || monster instanceof EntityCreeper) {
+
+                        if (monster instanceof EntityEnderman || monster instanceof EntityPigZombie || monster instanceof EntityBlaze || monster instanceof EntityGuardian || monster instanceof EntityElderGuardian/* || !monster.canChangeDimensions()*/) {
+                            // NO-OP
+                        } else {
+                            event.setAmount(event.getAmount() * (1 + ELConfigs.hostileDamageBonus));
+                        }
+
+                    }
+                }
                 if (hasCursed(player)) {
                     event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
                 }
@@ -432,6 +481,12 @@ public class ELEvents {
     public static void onExperienceDrop(LivingExperienceDropEvent event) {
         EntityPlayer player = event.getAttackingPlayer();
         int bonusExp = 0;
+
+        if (event.getEntityLiving() instanceof EntityMob) {
+            if (doubleXPEnabled && player != null && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.monsterCharm) != -1) {
+                bonusExp += event.getOriginalExperience() * (((ItemMonsterCharm) EnigmaticLegacy.monsterCharm).bonusXPModifier - 1.0F);
+            }
+        }
 
         if (player != null && hasCursed(player)) {
             bonusExp += event.getOriginalExperience() * ELConfigs.experienceBonus;
