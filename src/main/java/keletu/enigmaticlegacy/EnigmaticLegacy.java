@@ -3,10 +3,11 @@ package keletu.enigmaticlegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.RenderEntityItemIndestructible;
 import keletu.enigmaticlegacy.item.*;
-import keletu.enigmaticlegacy.item.etherium.EtheriumArmor;
+import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
+import keletu.enigmaticlegacy.util.LootHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -46,6 +48,7 @@ public class EnigmaticLegacy {
     public static final String VERSION = "0.0.1";
 
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
+    public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
     public static Item cursedRing = new ItemCursedRing();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
     public static Item ironRing = new ItemIronRing();
@@ -68,6 +71,14 @@ public class EnigmaticLegacy {
     public static Item etheriumChest = new EtheriumArmor(EntityEquipmentSlot.CHEST, 1, "etherium_chest");
     public static Item etheriumLegs = new EtheriumArmor(EntityEquipmentSlot.LEGS, 2, "etherium_legs");
     public static Item etheriumBoots = new EtheriumArmor(EntityEquipmentSlot.FEET, 1, "etherium_boots");
+
+    //Tool
+    public static Item etheriumSword = new ItemEtheriumSword();
+    public static Item etheriumAxe = new ItemEtheriumAxe();
+    public static Item etheriumPickaxe = new ItemEtheriumPick();
+    public static Item etheriumSpade = new ItemEtheriumSpade();
+    public static Item astralBreaker = new ItemAstralBreaker();
+
     public static SimpleNetworkWrapper packetInstance;
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -84,7 +95,9 @@ public class EnigmaticLegacy {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 0, MODID, 80, 3, true);
-        GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 0.5f);
+        MinecraftForge.EVENT_BUS.register(new LootHandler());
+
+        GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }
 
     @Mod.EventHandler
@@ -116,6 +129,11 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumChest);
             event.getRegistry().register(etheriumLegs);
             event.getRegistry().register(etheriumBoots);
+            event.getRegistry().register(etheriumSword);
+            event.getRegistry().register(etheriumAxe);
+            event.getRegistry().register(etheriumPickaxe);
+            event.getRegistry().register(etheriumSpade);
+            event.getRegistry().register(astralBreaker);
         }
 
         @SubscribeEvent
@@ -140,6 +158,11 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(etheriumChest, 0, new ModelResourceLocation(etheriumChest.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(etheriumLegs, 0, new ModelResourceLocation(etheriumLegs.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(etheriumBoots, 0, new ModelResourceLocation(etheriumBoots.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(etheriumSword, 0, new ModelResourceLocation(etheriumSword.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(etheriumAxe, 0, new ModelResourceLocation(etheriumAxe.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(etheriumPickaxe, 0, new ModelResourceLocation(etheriumPickaxe.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(etheriumSpade, 0, new ModelResourceLocation(etheriumSpade.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(astralBreaker, 0, new ModelResourceLocation(astralBreaker.getRegistryName(), "inventory"));
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemIndestructible.class, manager -> new RenderEntityItemIndestructible(manager, Minecraft.getMinecraft().getRenderItem()));
         }

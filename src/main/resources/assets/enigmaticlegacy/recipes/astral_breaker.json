@@ -1,0 +1,31 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "XAX",
+    "PES",
+    "XBX"
+  ],
+  "key": {
+    "A": {
+      "item": "enigmaticlegacy:etherium_axe"
+    },
+    "P": {
+      "item": "enigmaticlegacy:etherium_pickaxe"
+    },
+    "S": {
+      "item": "enigmaticlegacy:etherium_Spade"
+    },
+    "X": {
+      "item": "enigmaticlegacy:astral_dust"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "B": {
+      "item": "minecraft:dragon_breath"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:astral_breaker"
+  }
+}

@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.util.ITaintable;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +29,7 @@ public class ItemEarthHeart extends ItemBase implements ITaintable {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (this.isTainted(stack)) {
-			tooltip.add("tooltip.enigmaticlegacy.tainted1");
+			tooltip.add(I18n.format("tooltip.enigmaticlegacy.tainted1"));
 		}
 	}
 

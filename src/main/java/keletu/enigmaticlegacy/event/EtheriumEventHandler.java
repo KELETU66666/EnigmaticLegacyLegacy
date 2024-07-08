@@ -26,7 +26,8 @@ public class EtheriumEventHandler {
                 if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
                     EntityLivingBase attacker = ((EntityLivingBase) event.getSource().getTrueSource());
                     Vector3 vec = Vector3.fromEntityCenter(player).subtract(Vector3.fromEntityCenter(event.getSource().getTrueSource())).normalize();
-                    attacker.knockBack(attacker, 0.75F, vec.x, vec.z);
+                    if (!(vec.x == 0 && vec.z == 0))
+                        attacker.knockBack(player, 0.75F, vec.x, vec.z);
                     player.world.playSound(null, player.getPosition(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0F, 0.9F + (float) (Math.random() * 0.1D));
                     player.world.playSound(null, player.getPosition(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0F, 0.9F + (float) (Math.random() * 0.1D));
                 }

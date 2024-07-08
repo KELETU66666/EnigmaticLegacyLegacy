@@ -23,9 +23,10 @@ item.etherium_legs.name=Etherium Greaves
 item.etherium_boots.name=Etherium Boots
 item.etherium_pickaxe.name=Etherium Pickaxe
 item.etherium_axe.name=Etherium Waraxe
-item.etherium_shovel.name=Etherium Shovel
+item.etherium_spade.name=Etherium Shovel
 item.etherium_sword.name=Etherium Broadsword
 item.etherium_scythe.name=Etherium Scythe
+item.astral_breaker.name=Astral Breaker
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -34,7 +35,7 @@ tooltip.enigmaticlegacy.cursedRing2=§4This ring will persist with you forever.
 tooltip.enigmaticlegacy.cursedRing2_creative=§6With the power of god, you can unequip it.
 tooltip.enigmaticlegacy.cursedRing3=§dSeven curses will befall whoever bears it:
 tooltip.enigmaticlegacy.cursedRing4=§5- You receive double damage from §6ANY§5 source.
-tooltip.enigmaticlegacy.cursedRing4_alt=§5- You receive §6%%1$s§5 damage from §6ANY§5 source.
+tooltip.enigmaticlegacy.cursedRing4_alt=§5- You receive §6%换§5 damage from §6ANY§5 source.
 tooltip.enigmaticlegacy.cursedRing5=§5- Neutral creatures are aggresive towards you.
 tooltip.enigmaticlegacy.cursedRing6=§5- Armor is §6
 tooltip.enigmaticlegacy.cursedRing6_1=§5 less effective.
@@ -115,7 +116,34 @@ tooltip.enigmaticlegacy.etheriumArmorSetBonus4_1=§6 Damage Resistance§5, and k
 tooltip.enigmaticlegacy.etheriumArmorSetBonus5=§5  back any creatures attack you.
 tooltip.enigmaticlegacy.etheriumArmorSetBonus6=§5
 
+tooltip.enigmaticlegacy.etheriumPickaxe1=§5Mines blocks in §63*3*1§5 area.
+tooltip.enigmaticlegacy.etheriumPickaxe2=§5Hold §6Shift§5 to suppress this effect.
+tooltip.enigmaticlegacy.etheriumPickaxe3=§5Press §6Shift+Right-Click§5 to toggle.
+
+tooltip.enigmaticlegacy.etheriumAxe1=§5Chops wood and leaves in §63*3*1§5 area.
+tooltip.enigmaticlegacy.etheriumAxe2=§5Hold §6Shift§5 to suppress this effect.
+tooltip.enigmaticlegacy.etheriumAxe3=§5Press §6Shift+Right-Click§5 to toggle.
+
+tooltip.enigmaticlegacy.etheriumShovel1=§5Digs blocks in §63*3*1§5 area.
+tooltip.enigmaticlegacy.etheriumShovel2=§5Hold §6Shift§5 to suppress this effect.
+tooltip.enigmaticlegacy.etheriumShovel3=§5Press §6Shift+Right-Click§5 to toggle.
+
+tooltip.enigmaticlegacy.etheriumSword1=§5Pressing §6Right-Click§5 while holding it will
+tooltip.enigmaticlegacy.etheriumSword2=§5throw you in the direction opposite to
+tooltip.enigmaticlegacy.etheriumSword3=§5your sight.
+tooltip.enigmaticlegacy.etheriumSword4=§5This ability has §
+tooltip.enigmaticlegacy.etheriumSword4_1= §6seconds§5 cooldown.
+tooltip.enigmaticlegacy.etheriumSword5=§5Press §6Shift+Right-Click§5 to suppress it.
+
+tooltip.enigmaticlegacy.astralBreaker1=§5Breaks blocks in §63*3*1§5 area.
+tooltip.enigmaticlegacy.astralBreaker2=§5Hold §6Shift§5 to suppress this effect.
+tooltip.enigmaticlegacy.astralBreaker3=§5Press §6Shift+Right-Click§5 to toggle.
+tooltip.enigmaticlegacy.astralBreaker4=§5Effective against most blocks.
+
 tooltip.enigmaticlegacy.add=§6+
+
+tooltip.enigmaticlegacy.aoeDisabled=§cArea effects are suppressed.
+tooltip.enigmaticlegacy.abilityDisabled=§cSpecial abilities are suppressed.
 
 tooltip.enigmaticlegacy.tainted1=§5Slightly tainted by cursed one's presence.
 tooltip.enigmaticlegacy.tainted2=§5Tainted by the touch of a cursed being.
