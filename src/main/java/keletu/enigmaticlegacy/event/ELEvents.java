@@ -11,7 +11,6 @@ import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.util.ICursed;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -143,7 +142,9 @@ public class ELEvents {
             if (!ELConfigs.enableSpecialDrops)
                 return;
 
-            if (killed.getClass() == EntitySkeleton.class || killed.getClass() == EntityStray.class) {
+            if (killed.getClass() == EntityShulker.class) {
+                addDropWithChance(event, new ItemStack(EnigmaticLegacy.astralDust, 1), 20);
+            }else if (killed.getClass() == EntitySkeleton.class || killed.getClass() == EntityStray.class) {
                 addDrop(event, getRandomSizeStack(Items.ARROW, 3, 15));
             } else if (killed.getClass() == EntityZombie.class || killed.getClass() == EntityHusk.class) {
                 addDropWithChance(event, getRandomSizeStack(Items.SLIME_BALL, 1, 3), 25);
@@ -335,7 +336,7 @@ public class ELEvents {
             return;
 
         for (ResourceLocation rl : ELConfigs.cursedItemList) {
-            if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl) || event.getItemStack().getItem() instanceof ICursed) {
+            if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
                 TextFormatting color = !hasCursed(event.getEntityPlayer()) ? TextFormatting.DARK_RED : TextFormatting.GRAY;
                 event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
                 event.getToolTip().add(2, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly2"));

@@ -1,3 +1,4 @@
+#bauble
 item.cursed_ring.name=Ring of Seven Curses
 item.soul_crystal.name=Soul Crystal
 item.iron_ring.name=Iron Ring
@@ -8,6 +9,7 @@ item.super_magnet_ring.name=Dislocation Ring
 item.monster_charm.name=Emblem of Monster Slayer
 item.mining_charm.name=Charm of Treasure Hunter
 item.berserk_emblem.name=Emblem of Bloodstained Valor
+item.mega_sponge.name=Mega Sponge
 
 #material
 item.astral_dust.name=Astral dust
@@ -15,6 +17,7 @@ item.ender_rod.name=Ender Stick
 item.etherium_ore.name=Raw Etherium Ore
 item.etherium_ingot.name=Etherium Inogt
 item.earth_heart.name=Heart of The Earth
+item.twisted_core.name=Twisted Heart
 
 #armor & tools
 item.etherium_helm.name=Etherium Helmet
@@ -139,6 +142,9 @@ tooltip.enigmaticlegacy.astralBreaker1=§5Breaks blocks in §63*3*1§5 area.
 tooltip.enigmaticlegacy.astralBreaker2=§5Hold §6Shift§5 to suppress this effect.
 tooltip.enigmaticlegacy.astralBreaker3=§5Press §6Shift+Right-Click§5 to toggle.
 tooltip.enigmaticlegacy.astralBreaker4=§5Effective against most blocks.
+
+tooltip.enigmaticlegacy.megaSponge1=§5Instantly absorbs water in small radius
+tooltip.enigmaticlegacy.megaSponge2=§5around you, when you enter it.
 
 tooltip.enigmaticlegacy.add=§6+
 

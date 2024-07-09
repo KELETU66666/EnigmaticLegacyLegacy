@@ -6,7 +6,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.event.ELEvents;
-import keletu.enigmaticlegacy.util.ICursed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -26,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemBerserkEmblem extends ItemBaseBauble implements ICursed {
+public class ItemBerserkEmblem extends ItemBaseBauble {
 
 
     public ItemBerserkEmblem() {

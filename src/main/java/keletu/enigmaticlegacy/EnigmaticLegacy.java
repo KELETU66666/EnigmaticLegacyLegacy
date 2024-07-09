@@ -6,10 +6,12 @@ import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
+import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.LootHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
@@ -34,6 +36,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(
         modid = EnigmaticLegacy.MODID,
@@ -59,6 +62,7 @@ public class EnigmaticLegacy {
     public static Item miningCharm = new ItemMiningCharm();
     public static Item monsterCharm = new ItemMonsterCharm();
     public static Item berserkEmblem = new ItemBerserkEmblem();
+    public static Item megaSponge = new ItemMegasponge();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
@@ -66,6 +70,8 @@ public class EnigmaticLegacy {
     public static Item etheriumIngot = new ItemBase("etherium_ingot", EnumRarity.RARE);
     public static Item enderRod = new ItemBase("ender_rod", EnumRarity.EPIC);
     public static Item astralDust = new ItemBase("astral_dust", EnumRarity.EPIC);
+    public static Item twistedCore = new ItemBase("twisted_core", EnumRarity.EPIC).setMaxStackSize(1);
+
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
     public static Item etheriumChest = new EtheriumArmor(EntityEquipmentSlot.CHEST, 1, "etherium_chest");
@@ -87,6 +93,7 @@ public class EnigmaticLegacy {
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
+        packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
 
         if (event.getSide().isClient())
             EnderChestRingHandler.registerKeybinds();
@@ -134,6 +141,15 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumPickaxe);
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
+            event.getRegistry().register(megaSponge);
+            event.getRegistry().register(twistedCore);
+        }
+
+        @SubscribeEvent
+        public static void OreRegister(RegistryEvent.Register<Enchantment> event)
+        {
+            OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 0));
+            OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 1));
         }
 
         @SubscribeEvent
@@ -150,6 +166,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(monsterCharm, 0, new ModelResourceLocation(monsterCharm.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(berserkEmblem, 0, new ModelResourceLocation(berserkEmblem.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(earthHeart, 0, new ModelResourceLocation(earthHeart.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(earthHeart, 1, new ModelResourceLocation(earthHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(etheriumOre, 0, new ModelResourceLocation(etheriumOre.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(etheriumIngot, 0, new ModelResourceLocation(etheriumIngot.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enderRod, 0, new ModelResourceLocation(enderRod.getRegistryName(), "inventory"));
@@ -163,6 +180,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(etheriumPickaxe, 0, new ModelResourceLocation(etheriumPickaxe.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(etheriumSpade, 0, new ModelResourceLocation(etheriumSpade.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(astralBreaker, 0, new ModelResourceLocation(astralBreaker.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(megaSponge, 0, new ModelResourceLocation(megaSponge.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(twistedCore, 0, new ModelResourceLocation(twistedCore.getRegistryName(), "inventory"));
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemIndestructible.class, manager -> new RenderEntityItemIndestructible(manager, Minecraft.getMinecraft().getRenderItem()));
         }

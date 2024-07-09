@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " T ",
+    "IGI",
+    "DED"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "I": {
+      "item": "minecraft:blaze_powder"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "item": "enigmaticlegacy:earth_heart",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:twisted_core"
+  }
+}

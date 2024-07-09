@@ -21,7 +21,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,11 +44,11 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 
-        TextComponentTranslation mode = new TextComponentTranslation("tooltip.enigmaticlegacy.enabled");
+        String mode = I18n.format("tooltip.enigmaticlegacy.enabled");
 
         if (ItemNBTHelper.verifyExistance(stack, "nightVisionEnabled"))
             if (!ItemNBTHelper.getBoolean(stack, "nightVisionEnabled", true)) {
-                mode = new TextComponentTranslation("tooltip.enigmaticlegacy.disabled");
+                mode = I18n.format("tooltip.enigmaticlegacy.disabled");
             }
 
         list.add("");
@@ -67,7 +66,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
         }
 
         list.add("");
-        list.add(I18n.format("tooltip.enigmaticlegacy.miningCharmNightVision", null, mode));
+        list.add(I18n.format("tooltip.enigmaticlegacy.miningCharmNightVision") + mode);
     }
 
     public void removeNightVisionEffect(EntityPlayer player, int duration) {
@@ -110,10 +109,10 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
 
         if (ItemNBTHelper.getBoolean(stack, "nightVisionEnabled", true)) {
             ItemNBTHelper.setBoolean(stack, "nightVisionEnabled", false);
-            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_VILLAGER_YES, SoundCategory.PLAYERS, (float) (0.8F + (Math.random() * 0.2F)), (float) (0.8F + (Math.random() * 0.2F)));
+            world.playSound(null, player.getPosition(), SoundEvents.BLOCK_NOTE_PLING, SoundCategory.PLAYERS, (float) (0.8F + (Math.random() * 0.2F)), (float) (0.8F + (Math.random() * 0.2F)));
         } else {
             ItemNBTHelper.setBoolean(stack, "nightVisionEnabled", true);
-            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.PLAYERS, (float) (0.8F + (Math.random() * 0.2F)), (float) (0.8F + (Math.random() * 0.2F)));
+            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, (float) (0.8F + (Math.random() * 0.2F)), (float) (0.8F + (Math.random() * 0.2F)));
         }
 
         player.swingArm(handIn);

@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:sponge",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:mega_sponge"
+  }
+}

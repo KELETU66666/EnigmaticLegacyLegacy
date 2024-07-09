@@ -19,7 +19,8 @@
       "ore": "gemDiamond"
     },
     "H": {
-      "item": "enigmaticlegacy:earth_heart"
+      "type": "forge:ore_dict",
+      "ore": "coreEarth"
     },
     "G": {
       "item": "minecraft:ghast_tear"

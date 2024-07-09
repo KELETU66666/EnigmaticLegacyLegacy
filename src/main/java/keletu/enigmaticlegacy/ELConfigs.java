@@ -41,6 +41,7 @@ public class ELConfigs {
     public static double attackSpeed;
     public static double movementSpeed;
     public static double damageResistance;
+    public static int radius;
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
 
@@ -109,6 +110,7 @@ public class ELConfigs {
 
         damageResistance = config.getFloat("ResistanceBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100, "Damage resistance provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
 
+        radius = config.getInt("Radius", "Mega Sponge", 4, 1, 128, "Radius in which Exptrapolated Megaspong absorbs water. Default 4 equals to vanilla sponge");
 
         //builder.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
         //        + Configuration.NEW_LINE + "Btw Jusey, when I said 'very cute though', I meant you. Bees are cute either of course.");
@@ -126,7 +128,7 @@ public class ELConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
