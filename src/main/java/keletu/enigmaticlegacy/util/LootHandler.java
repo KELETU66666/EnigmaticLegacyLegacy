@@ -47,11 +47,11 @@ public final class LootHandler {
     }
 
     private LootPool getInjectPool(String entryName) {
-        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "te_inject_pool");
+        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "enigmatic_inject_pool");
     }
 
     private LootEntryTable getInjectEntry(String name, int weight) {
-        return new LootEntryTable(new ResourceLocation(EnigmaticLegacy.MODID, "inject/" + name), weight, 0, new LootCondition[0], "te_inject_entry");
+        return new LootEntryTable(new ResourceLocation(EnigmaticLegacy.MODID, "inject/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool");
     }
 
 }
