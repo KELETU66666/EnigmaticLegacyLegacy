@@ -1,10 +1,12 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 
@@ -14,6 +16,11 @@ public abstract class ItemBaseBauble extends ItemBase implements IBauble {
     public ItemBaseBauble(String name, EnumRarity rare){
         super(name, rare);
         this.maxStackSize = 1;
+    }
+
+    @Override
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+        return BaublesApi.isBaubleEquipped((EntityPlayer) player, this) == -1;
     }
 
     @Override

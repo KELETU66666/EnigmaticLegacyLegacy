@@ -5,10 +5,9 @@ import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.MODID;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.core.Vector3;
-import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
+import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import net.minecraft.block.Block;
@@ -27,6 +26,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -67,7 +67,9 @@ import java.util.*;
 public class ELEvents {
 
     private static final Map<UUID, NonNullList<ItemStack>> playerKeepsMapBaubles = new HashMap<>();
+    private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
+    public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone evt) {
@@ -135,82 +137,90 @@ public class ELEvents {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDrops(LivingDropsEvent event) {
-        if (event.isRecentlyHit() && event.getSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
-
+        if (event.isRecentlyHit() && event.getSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityLivingBase killed = event.getEntityLiving();
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
-            if (!ELConfigs.enableSpecialDrops)
-                return;
+            if (enableWitherite && killed.getClass() == EntityWither.class && player.getActivePotionEffect(MobEffects.WEAKNESS) != null) {
+                addDrop(event, getRandomSizeStack(EnigmaticLegacy.ingotWitherite, 1, 3));
+            }
 
-            if (killed.getClass() == EntityShulker.class) {
-                addDropWithChance(event, new ItemStack(EnigmaticLegacy.astralDust, 1), 20);
-            }else if (killed.getClass() == EntitySkeleton.class || killed.getClass() == EntityStray.class) {
-                addDrop(event, getRandomSizeStack(Items.ARROW, 3, 15));
-            } else if (killed.getClass() == EntityZombie.class || killed.getClass() == EntityHusk.class) {
-                addDropWithChance(event, getRandomSizeStack(Items.SLIME_BALL, 1, 3), 25);
-            } else if (killed.getClass() == EntitySpider.class || killed.getClass() == EntityCaveSpider.class) {
-                addDrop(event, getRandomSizeStack(Items.STRING, 2, 12));
-            } else if (killed.getClass() == EntityGuardian.class) {
-                addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "nautilus_shell")), 1), 15);
-                addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 2, 5));
-            } else if (killed.getClass() == EntityElderGuardian.class) {
-                addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 4, 16));
-                addDrop(event, getRandomSizeStack(Items.PRISMARINE_SHARD, 7, 28));
-                addOneOf(event,
-                        //new ItemStack(guardianHeart, 1),
-                        new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "heart_of_the_sea")), 1),
-                        new ItemStack(Items.GOLDEN_APPLE, 1, 1),
-                        new ItemStack(Items.ENDER_EYE, 1),
-                        EnchantmentHelper.addRandomEnchantment(new Random(), new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "trident")), 1), 25 + new Random().nextInt(15), true));
-            } else if (killed.getClass() == EntityEnderman.class) {
-                addDropWithChance(event, getRandomSizeStack(Items.ENDER_EYE, 1, 2), 40);
-            } else if (killed.getClass() == EntityBlaze.class) {
-                addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 5));
-                //addDropWithChance(event, new ItemStack(EnigmaticLegacy.livingFlame, 1), 15);
-            } else if (killed.getClass() == EntityPigZombie.class) {
-                addDropWithChance(event, getRandomSizeStack(Items.GOLD_INGOT, 1, 3), 40);
-                addDropWithChance(event, getRandomSizeStack(Items.GLOWSTONE_DUST, 1, 7), 30);
-            } else if (killed.getClass() == EntityWitch.class) {
-                addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 30);
-                //addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3));
-                addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 30);
-                //addDropWithChance(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3), 50);
-            } else if ((Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityPillager.class")) || killed.getClass() == EntityVindicator.class) {
-                addDrop(event, getRandomSizeStack(Items.EMERALD, 0, 4));
-            } else if (killed.getClass() == EntityVillager.class) {
-                addDrop(event, getRandomSizeStack(Items.EMERALD, 2, 6));
-            } else if (killed.getClass() == EntityCreeper.class) {
-                addDrop(event, getRandomSizeStack(Items.GUNPOWDER, 4, 12));
-            } else if (killed.getClass() == EntityEvoker.class) {
-                addDrop(event, new ItemStack(Items.TOTEM_OF_UNDYING, 1));
-                addDrop(event, getRandomSizeStack(Items.EMERALD, 5, 20));
-                addDropWithChance(event, new ItemStack(Items.GOLDEN_APPLE, 1, 1), 10);
-                addDropWithChance(event, getRandomSizeStack(Items.ENDER_PEARL, 1, 3), 30);
-                addDropWithChance(event, getRandomSizeStack(Items.BLAZE_ROD, 2, 4), 30);
-                addDropWithChance(event, getRandomSizeStack(Items.EXPERIENCE_BOTTLE, 4, 10), 50);
-            } else if (killed.getClass() == EntityWitherSkeleton.class) {
-                addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
-                addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("futuremc", "netherite_scrap")), 1), 7);
-            } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
-                addDropWithChance(event, ELEvents.getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
-                //} else if (killed.getClass() == EntityGhast.class) {
-                //    addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 4));
-            } else if (killed.getClass() == EntityVex.class) {
-                addDrop(event, getRandomSizeStack(Items.GLOWSTONE_DUST, 0, 2));
-                //   addDropWithChance(event, new ItemStack(Items.PHANTOM_MEMBRANE, 1), 30);
-                //}  else if (killed.getClass() == PiglinEntity.class) {
-                //    addDropWithChance(event, getRandomSizeStack(Items.GOLD_INGOT, 2, 4), 50);
-            } else if (Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityRavager.class")) {
-                addDrop(event, getRandomSizeStack(Items.EMERALD, 3, 10));
-                addDrop(event, getRandomSizeStack(Items.LEATHER, 2, 7));
-                addDropWithChance(event, getRandomSizeStack(Items.DIAMOND, 0, 4), 50);
-            } else if (killed.getClass() == EntityMagmaCube.class) {
-                addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 1));
-            } else if (killed.getClass() == EntityChicken.class) {
-                addDropWithChance(event, new ItemStack(Items.EGG, 1), 50);
-            } else if (killed.getClass() == EntityWither.class) {
-                addDrop(event, new ItemStack(Items.NETHER_STAR, 1));
+            if (hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
+
+
+                if (!ELConfigs.enableSpecialDrops)
+                    return;
+
+                if (killed.getClass() == EntityShulker.class) {
+                    addDropWithChance(event, new ItemStack(EnigmaticLegacy.astralDust, 1), 20);
+                } else if (killed.getClass() == EntitySkeleton.class || killed.getClass() == EntityStray.class) {
+                    addDrop(event, getRandomSizeStack(Items.ARROW, 3, 15));
+                } else if (killed.getClass() == EntityZombie.class || killed.getClass() == EntityHusk.class) {
+                    addDropWithChance(event, getRandomSizeStack(Items.SLIME_BALL, 1, 3), 25);
+                } else if (killed.getClass() == EntitySpider.class || killed.getClass() == EntityCaveSpider.class) {
+                    addDrop(event, getRandomSizeStack(Items.STRING, 2, 12));
+                } else if (killed.getClass() == EntityGuardian.class) {
+                    addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "nautilus_shell")), 1), 15);
+                    addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 2, 5));
+                } else if (killed.getClass() == EntityElderGuardian.class) {
+                    addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 4, 16));
+                    addDrop(event, getRandomSizeStack(Items.PRISMARINE_SHARD, 7, 28));
+                    addOneOf(event,
+                            //new ItemStack(guardianHeart, 1),
+                            new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "heart_of_the_sea")), 1),
+                            new ItemStack(Items.GOLDEN_APPLE, 1, 1),
+                            new ItemStack(Items.ENDER_EYE, 1),
+                            EnchantmentHelper.addRandomEnchantment(new Random(), new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "trident")), 1), 25 + new Random().nextInt(15), true));
+                } else if (killed.getClass() == EntityEnderman.class) {
+                    addDropWithChance(event, getRandomSizeStack(Items.ENDER_EYE, 1, 2), 40);
+                } else if (killed.getClass() == EntityBlaze.class) {
+                    addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 5));
+                    //addDropWithChance(event, new ItemStack(EnigmaticLegacy.livingFlame, 1), 15);
+                } else if (killed.getClass() == EntityPigZombie.class) {
+                    addDropWithChance(event, getRandomSizeStack(Items.GOLD_INGOT, 1, 3), 40);
+                    addDropWithChance(event, getRandomSizeStack(Items.GLOWSTONE_DUST, 1, 7), 30);
+                } else if (killed.getClass() == EntityWitch.class) {
+                    addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 30);
+                    //addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3));
+                    addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 30);
+                    //addDropWithChance(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3), 50);
+                } else if ((Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityPillager.class")) || killed.getClass() == EntityVindicator.class) {
+                    addDrop(event, getRandomSizeStack(Items.EMERALD, 0, 4));
+                } else if (killed.getClass() == EntityVillager.class) {
+                    addDrop(event, getRandomSizeStack(Items.EMERALD, 2, 6));
+                } else if (killed.getClass() == EntityCreeper.class) {
+                    addDrop(event, getRandomSizeStack(Items.GUNPOWDER, 4, 12));
+                } else if (killed.getClass() == EntityEvoker.class) {
+                    addDrop(event, new ItemStack(Items.TOTEM_OF_UNDYING, 1));
+                    addDrop(event, getRandomSizeStack(Items.EMERALD, 5, 20));
+                    addDropWithChance(event, new ItemStack(Items.GOLDEN_APPLE, 1, 1), 10);
+                    addDropWithChance(event, getRandomSizeStack(Items.ENDER_PEARL, 1, 3), 30);
+                    addDropWithChance(event, getRandomSizeStack(Items.BLAZE_ROD, 2, 4), 30);
+                    addDropWithChance(event, getRandomSizeStack(Items.EXPERIENCE_BOTTLE, 4, 10), 50);
+                } else if (killed.getClass() == EntityWitherSkeleton.class) {
+                    addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
+                    addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
+                    addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("futuremc", "netherite_scrap")), 1), 7);
+                } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                    addDropWithChance(event, ELEvents.getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
+                    //} else if (killed.getClass() == EntityGhast.class) {
+                    //    addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 4));
+                } else if (killed.getClass() == EntityVex.class) {
+                    addDrop(event, getRandomSizeStack(Items.GLOWSTONE_DUST, 0, 2));
+                    //   addDropWithChance(event, new ItemStack(Items.PHANTOM_MEMBRANE, 1), 30);
+                    //}  else if (killed.getClass() == PiglinEntity.class) {
+                    //    addDropWithChance(event, getRandomSizeStack(Items.GOLD_INGOT, 2, 4), 50);
+                } else if (Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityRavager.class")) {
+                    addDrop(event, getRandomSizeStack(Items.EMERALD, 3, 10));
+                    addDrop(event, getRandomSizeStack(Items.LEATHER, 2, 7));
+                    addDropWithChance(event, getRandomSizeStack(Items.DIAMOND, 0, 4), 50);
+                } else if (killed.getClass() == EntityMagmaCube.class) {
+                    addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 1));
+                } else if (killed.getClass() == EntityChicken.class) {
+                    addDropWithChance(event, new ItemStack(Items.EGG, 1), 50);
+                } else if (killed.getClass() == EntityWither.class) {
+                    addDrop(event, getRandomSizeStack(EnigmaticLegacy.evilEssence, 1, 4));
+                }
             }
         }
     }
@@ -224,6 +234,11 @@ public class ELEvents {
         if (!event.isCanceled() && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             genericEnforce(event, player, player.getHeldItemMainhand());
+
+            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == EnigmaticLegacy.theTwist && hasCursed(player)) {
+                float knockbackPower = ELConfigs.knockbackBonus;
+                knockbackThatBastard.put(event.getEntityLiving(), knockbackPower);
+            }
         }
     }
 
@@ -397,6 +412,12 @@ public class ELEvents {
 
     @SubscribeEvent
     public static void onLivingKnockback(LivingKnockBackEvent event) {
+        if (knockbackThatBastard.containsKey(event.getEntityLiving())) {
+            float knockbackPower = knockbackThatBastard.get(event.getEntityLiving());
+            event.setStrength(event.getStrength() * knockbackPower);
+            knockbackThatBastard.remove(event.getEntityLiving());
+        }
+
         if (event.getEntityLiving() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getEntityLiving())) {
             event.setStrength(event.getStrength() * ELConfigs.knockbackDebuff);
         }
@@ -420,30 +441,43 @@ public class ELEvents {
         if (event.getAmount() >= Float.MAX_VALUE)
             return;
 
-        if (event.getEntityLiving() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getEntityLiving())) {
-            event.setAmount(event.getAmount() * painMultiplier);
-        }
-
         if (event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             Entity immediateSource = event.getSource().getImmediateSource();
 
+            if (player.getHeldItemMainhand() != ItemStack.EMPTY) {
+                ItemStack mainhandStack = player.getHeldItemMainhand();
+
+                if (mainhandStack.getItem() == EnigmaticLegacy.theTwist) {
+                    if (hasCursed(player)) {
+                        if (!event.getEntityLiving().isNonBoss() || event.getEntityLiving() instanceof EntityPlayer) {
+                            event.setAmount(event.getAmount() * ELConfigs.bossDamageBonus);
+                        }
+                    } else {
+                        event.setCanceled(true);
+                    }
+                }
+            }
+
             float damageBoost = 0F;
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
-                damageBoost += event.getAmount()*(getMissingHealthPool(player)*(float)ELConfigs.attackDamage);
+                damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) ELConfigs.attackDamage);
             }
 
             //if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.cursedScroll)) {
             //    damageBoost += event.getAmount()*(CursedScroll.damageBoost.getValue().asModifier()*SuperpositionHandler.getCurseAmount(player));
             //}
 
-            event.setAmount(event.getAmount()+damageBoost);
+            event.setAmount(event.getAmount() + damageBoost);
         }
-        
-        if(event.getEntityLiving() instanceof EntityPlayer){
+
+        if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
+            if (hasCursed(player)) {
+                event.setAmount(event.getAmount() * painMultiplier);
+            }
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
                 event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) ELConfigs.damageResistance)));
             }
@@ -472,7 +506,9 @@ public class ELEvents {
                     }
                 }
                 if (hasCursed(player)) {
-                    event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
+                    if (event.getSource().getImmediateSource() != player || player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist) {
+                        event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
+                    }
                 }
             }
         }
@@ -496,7 +532,7 @@ public class ELEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusExp);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent(priority = HIGH)
     public static void keepRingCurses(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
 
@@ -524,6 +560,12 @@ public class ELEvents {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
+        if(!data.getBoolean(SPAWN_WITH_BOOK))
+        {
+            ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(theAcknowledgment));
+            data.setBoolean(SPAWN_WITH_BOOK, true);
+        }
+
         if (ultraHardcore) {
             if (!data.getBoolean(SPAWN_WITH_CURSE)) {
                 IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
@@ -532,7 +574,7 @@ public class ELEvents {
                 else
                     ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
             }
-        } else {
+        } else if(!ultraNoobMode){
             if (!data.getBoolean(SPAWN_WITH_CURSE))
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
         }
@@ -580,7 +622,7 @@ public class ELEvents {
                 baubles.setStackInSlot(i, ItemStack.EMPTY);
                 if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
                     ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                    EntityItemIndestructible droppedSoulCrystal = new EntityItemIndestructible(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
+                    EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
                     droppedSoulCrystal.setOwnerId(player.getUniqueID());
                     player.world.spawnEntity(droppedSoulCrystal);
                 }

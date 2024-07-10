@@ -21,7 +21,7 @@
     },
     "G": {
       "type": "forge:ore_dict",
-      "ore": "coreEarth"
+      "ore": "ingotNetherite"
     }
   },
   "result": {

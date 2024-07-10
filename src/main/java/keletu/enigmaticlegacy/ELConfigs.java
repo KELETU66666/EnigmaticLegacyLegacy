@@ -27,6 +27,7 @@ public class ELConfigs {
     public static Boolean enableSpecialDrops;
     public static int iconOffset;
     public static int heartLoss;
+    public static boolean ultraNoobMode;
     public static boolean ultraHardcore;
     public static int range;
     public static int superRange;
@@ -41,7 +42,13 @@ public class ELConfigs {
     public static double attackSpeed;
     public static double movementSpeed;
     public static double damageResistance;
+    public static float twistAttackDamage;
+    public static float twistAttackSpeed;
+    public static float bossDamageBonus;
+    public static float knockbackBonus;
     public static int radius;
+    public static boolean spawnWithBook;
+    public static boolean enableWitherite;
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
 
@@ -49,40 +56,48 @@ public class ELConfigs {
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
-        painMultiplier = config.getFloat("PainModifier", "Generic Config", 2F, 0, 100, "Defines how much damage bearers of the ring receive from any source. Measured as percentage.");
+        spawnWithBook = config.getBoolean("SpawnWithBook", "Generic Config", true, "If true, When player entering a new world will give the acknowledgment guidebook");
 
-        monsterDamageDebuff = config.getFloat("MonsterDamageDebuff", "Generic Config", 0.5F, 0, 100, "How much damage monsters receive from bearers of the ring will be decreased, in percents.");
+        enableWitherite = config.getBoolean("EnableWitherite", "Generic Config", true, "If true, wither will drop witherite ingot (with ore 'ingotNetherite') when killed by player, you can disable it if your pack have other ways to get netherite");
 
-        armorDebuff = config.getFloat("ArmorDebuff", "Generic Config", 0.3F, 0, 1, "How much less effective armor will be for those who bear the ring. Measured as percetage.");
+        painMultiplier = config.getFloat("PainModifier", "The Seven Curses", 2F, 0, 100, "Defines how much damage bearers of the ring receive from any source. Measured as percentage.");
 
-        experienceBonus = config.getFloat("ExperienceBonus", "Generic Config", 4F, 0, 100, "How much experience will drop from mobs to bearers of the ring, measured in percents.");
+        monsterDamageDebuff = config.getFloat("MonsterDamageDebuff", "The Seven Curses", 0.5F, 0, 100, "How much damage monsters receive from bearers of the ring will be decreased, in percents.");
 
-        fortuneBonus = config.getInt("FortuneBonus", "Generic Config", 1, 0, 100, "How many bonus Fortune levels ring provides");
+        armorDebuff = config.getFloat("ArmorDebuff", "The Seven Curses", 0.3F, 0, 1, "How much less effective armor will be for those who bear the ring. Measured as percetage.");
 
-        lootingBonus = config.getInt("LootingBonus", "Generic Config", 1, 0, 100, "How many bonus Looting levels ring provides");
+        experienceBonus = config.getFloat("ExperienceBonus", "The Seven Curses", 4F, 0, 100, "How much experience will drop from mobs to bearers of the ring, measured in percents.");
 
-        enchantingBonus = config.getInt("EnchantingBonus", "Generic Config", 10, 0, 100, "How much additional Enchanting Power ring provides in Enchanting Table.");
-        
-        enableSpecialDrops = config.getBoolean("EnableSpecialDrops", "Generic Config", true, "Set to false to disable ALL special drops that can be obtained from vanilla mobs when "
+        fortuneBonus = config.getInt("FortuneBonus", "The Seven Curses", 1, 0, 100, "How many bonus Fortune levels ring provides");
+
+        lootingBonus = config.getInt("LootingBonus", "The Seven Curses", 1, 0, 100, "How many bonus Looting levels ring provides");
+
+        enchantingBonus = config.getInt("EnchantingBonus", "The Seven Curses", 10, 0, 100, "How much additional Enchanting Power ring provides in Enchanting Table.");
+
+
+
+        enableSpecialDrops = config.getBoolean("EnableSpecialDrops", "The Seven Curses", true, "Set to false to disable ALL special drops that can be obtained from vanilla mobs when "
                 + "bearing Ring of the Seven Curses.");
 
-        ultraHardcore = config.getBoolean("UltraHardcode", "Generic Config", false, "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when "
+        ultraNoobMode = config.getBoolean("UltraNoobMode", "The Seven Curses", false, "If true, Player's will not received Ring of Seven Curses when entering a new world.");
+
+        ultraHardcore = config.getBoolean("UltraHardcode", "The Seven Curses", false, "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when "
                 + "entering a new world, instead of just being added to their inventory.");
 
-        knockbackDebuff = config.getFloat("KnockbackDebuff", "Generic Config", 2F, 0, 1, "How much knockback bearers of the ring take, measured in percents.");
+        knockbackDebuff = config.getFloat("KnockbackDebuff", "The Seven Curses", 2F, 0, 1, "How much knockback bearers of the ring take, measured in percents.");
 
-        neutralAngerRange = config.getFloat("NeutralAngerRange", "Generic Config", 24, 4, 100, "Range in which neutral creatures are angered against bearers of the ring.");
+        neutralAngerRange = config.getFloat("NeutralAngerRange", "The Seven Curses", 24, 4, 100, "Range in which neutral creatures are angered against bearers of the ring.");
 
-        neutralXRayRange = config.getFloat("NeutralXRayRange", "Generic Config", 4, 0, 100, "Range in which neutral creatures can see and target bearers of the ring even if they can't directly see them.");
+        neutralXRayRange = config.getFloat("NeutralXRayRange", "The Seven Curses", 4, 0, 100, "Range in which neutral creatures can see and target bearers of the ring even if they can't directly see them.");
 
-        endermenRandomportFrequency = config.getFloat("EndermenRandomportFrequency", "Generic Config", 1, 0.01F, 100, "Allows to adjust how frequently Endermen will try to randomly teleport to player bearing the ring, even "
+        endermenRandomportFrequency = config.getFloat("EndermenRandomportFrequency", "The Seven Curses", 1, 0.01F, 100, "Allows to adjust how frequently Endermen will try to randomly teleport to player bearing the ring, even "
                         + "if they can't see the player and are not angered yet. Lower value = less probability of this happening.");
 
-        endermenRandomportRange = config.getFloat("EndermenRandomportRange", "Generic Config", 32, 8, 100, "Range in which Endermen can try to randomly teleport to bearers of the ring.");
+        endermenRandomportRange = config.getFloat("EndermenRandomportRange", "The Seven Curses", 32, 8, 100, "Range in which Endermen can try to randomly teleport to bearers of the ring.");
 
-        iconOffset = config.getInt("IconOffset", "Generic Config", -51, -500, 500, "X Offset for EnderChest tab");
+        iconOffset = config.getInt("IconOffset", "The Seven Curses", -51, -500, 500, "X Offset for EnderChest tab");
 
-        heartLoss = config.getInt("MaxHeartLoss", "Generic Config", 7, 0, 9, "Max amount of heart loss");
+        heartLoss = config.getInt("MaxHeartLoss", "The Seven Curses", 7, 0, 9, "Max amount of heart loss");
 
         range = config.getInt("Range", "MagnetRing", 8, 1, 256, "The radius in which Magnetic Ring will attract items.");
 
@@ -112,6 +127,14 @@ public class ELConfigs {
 
         radius = config.getInt("Radius", "Mega Sponge", 4, 1, 128, "Radius in which Exptrapolated Megaspong absorbs water. Default 4 equals to vanilla sponge");
 
+        twistAttackDamage = config.getFloat("AttackDamage", "The Twist", 8, 0, 32768, "Attack damage of The Twist, actual damage shown in tooltip will be is 1 + this_value.");
+
+        twistAttackSpeed = config.getFloat("AttackSpeed", "The Twist", -1.8F, -32768, 32768, "Attack speed of The Twist.");
+
+        bossDamageBonus = config.getFloat("BossDamageBonus", "The Twist", 3, 0, 10, "Attack damage bonus of The Twist against players and bossess.");
+
+        knockbackBonus = config.getFloat("KnockbackPowerBonus", "The Twist", 3, 0, 10, "Knockback bonus of The Twist. For Phantoms, this value is multiplied by 1.5.");
+
         //builder.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
         //        + Configuration.NEW_LINE + "Btw Jusey, when I said 'very cute though', I meant you. Bees are cute either of course.");
 
@@ -128,7 +151,7 @@ public class ELConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

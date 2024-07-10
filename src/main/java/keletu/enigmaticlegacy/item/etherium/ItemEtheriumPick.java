@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.item.etherium;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockStructure;
@@ -10,7 +11,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
@@ -37,6 +40,27 @@ public class ItemEtheriumPick extends ItemPickaxe implements IEtheriumTool {
         setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "etherium_pickaxe"));
 
         setCreativeTab(CreativeTabs.TOOLS);
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    @Nullable
+    public Entity createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
+        item.setDefaultPickupDelay();
+        item.motionX = location.motionX;
+        item.motionY = location.motionY;
+        item.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            item.setThrower(((EntityItem) location).getThrower());
+            item.setOwner(((EntityItem) location).getOwner());
+        }
+
+        return item;
     }
 
     @Override

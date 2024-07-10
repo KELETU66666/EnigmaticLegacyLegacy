@@ -1,0 +1,7 @@
+{
+	"name": "Accessories",
+	"description": "Many items, though wearable on one's own body, serve no apparent function at first glance.<br2/>Yet you can craft or discover things imbued with powerful magic that take shape of rings, or charms, or something else that is more convenient to carry around and doesn't burden it's owner as much as heavy armor or a sword.",
+	"icon": "baubles:ring",
+	"sortnum": 50,
+	"secret": false
+}

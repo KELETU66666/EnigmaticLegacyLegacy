@@ -1,0 +1,21 @@
+{
+    "name": "Exquisite Ring",
+    "icon": "enigmaticlegacy:gem_ring",
+    "category": "enigmaticlegacy:accessories",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 5,
+    "pages": [
+        {
+            "type": "text",
+            "text": "A bit more work and about as much of precious gold, and you can reforge mundane iron ring into much shinier and fancier form.<br2/>The only notable property of this accessory, apart from being all shiny and golden, is that it has effect on Piglins similar to wearing gold armor - they will respect you a bit more when seeing this"
+        },
+		{
+            "type": "crafting",
+			"recipe": "enigmaticlegacy:gem_ring",
+            "title": " ",
+            "text": "preciousness on your finger, and won't try to kill as soon as you enter their field of view."
+        }
+    ]
+}

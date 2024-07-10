@@ -105,6 +105,7 @@ dependencies {
 
     // Example of deobfuscating a dependency
     implementation rfg.deobf("curse.maven:baubles-227083:2518667")
+    implementation rfg.deobf("curse.maven:patchouli-306770:3162874")
 
     if (project.use_mixins.toBoolean()) {
         // Change your mixin refmap name here:

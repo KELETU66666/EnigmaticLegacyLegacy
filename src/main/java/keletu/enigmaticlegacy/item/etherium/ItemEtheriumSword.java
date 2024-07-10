@@ -2,10 +2,13 @@ package keletu.enigmaticlegacy.item.etherium;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.core.Vector3;
+import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
@@ -36,6 +39,27 @@ public class ItemEtheriumSword extends ItemSword implements IEtheriumTool {
     }
 
     @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    @Nullable
+    public Entity createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
+        item.setDefaultPickupDelay();
+        item.motionX = location.motionX;
+        item.motionY = location.motionY;
+        item.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            item.setThrower(((EntityItem) location).getThrower());
+            item.setOwner(((EntityItem) location).getOwner());
+        }
+
+        return item;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         if (GuiScreen.isShiftKeyDown()) {
@@ -43,7 +67,7 @@ public class ItemEtheriumSword extends ItemSword implements IEtheriumTool {
             list.add(I18n.format("tooltip.enigmaticlegacy.etheriumSword2"));
             list.add(I18n.format("tooltip.enigmaticlegacy.etheriumSword3"));
             list.add("");
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.etheriumSword4") + 60F / 20F + I18n.format("tooltip.enigmaticlegacy.etheriumSword4_1"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.etheriumSword4") + 3 + I18n.format("tooltip.enigmaticlegacy.etheriumSword4_1"));
             list.add(I18n.format("tooltip.enigmaticlegacy.etheriumSword5"));
         } else {
             list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));

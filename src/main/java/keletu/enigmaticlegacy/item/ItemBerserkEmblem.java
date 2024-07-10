@@ -5,14 +5,17 @@ import baubles.api.BaublesApi;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
+import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.event.ELEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
@@ -99,5 +102,26 @@ public class ItemBerserkEmblem extends ItemBaseBauble {
     @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
         return BaubleType.CHARM;
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    @Nullable
+    public Entity createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
+        item.setDefaultPickupDelay();
+        item.motionX = location.motionX;
+        item.motionY = location.motionY;
+        item.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            item.setThrower(((EntityItem) location).getThrower());
+            item.setOwner(((EntityItem) location).getOwner());
+        }
+
+        return item;
     }
 }

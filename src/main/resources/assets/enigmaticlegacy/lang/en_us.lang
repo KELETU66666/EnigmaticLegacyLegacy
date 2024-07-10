@@ -18,8 +18,12 @@ item.etherium_ore.name=Raw Etherium Ore
 item.etherium_ingot.name=Etherium Inogt
 item.earth_heart.name=Heart of The Earth
 item.twisted_core.name=Twisted Heart
+item.witherite_ingot.name=Witherite Ingot
+item.evil_essence.name=Nefarious Essence
 
 #armor & tools
+item.the_acknowledgment.name=The Acknowledgment
+item.the_twist.name=The Twist
 item.etherium_helm.name=Etherium Helmet
 item.etherium_chest.name=Etherium Cuirass
 item.etherium_legs.name=Etherium Greaves
@@ -32,6 +36,17 @@ item.etherium_scythe.name=Etherium Scythe
 item.astral_breaker.name=Astral Breaker
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
+
+tooltip.enigmaticlegacy.theAcknowledgment1=§5The blinding light of revelation shall
+tooltip.enigmaticlegacy.theAcknowledgment2=§5incinerate those who refuse to embrace it.
+
+tooltip.enigmaticlegacy.theTwist1=§5On a path to take it all away,
+tooltip.enigmaticlegacy.theTwist2=§5there can be no better way of knowing...
+tooltip.enigmaticlegacy.theTwist3=§5Against bosses and players:
+tooltip.enigmaticlegacy.theTwist4=§dAlteration of the §6Fourth Curse§5:
+tooltip.enigmaticlegacy.theTwist5=§5- Always deals it's full damage.
+tooltip.enigmaticlegacy.theTwist6=§d Damage§5 against bosses and players.
+tooltip.enigmaticlegacy.theTwist7=§d Knockback§5
 
 tooltip.enigmaticlegacy.cursedRing1=§5Once worn, it becomes a part of you.
 tooltip.enigmaticlegacy.cursedRing2=§4This ring will persist with you forever.
@@ -146,6 +161,10 @@ tooltip.enigmaticlegacy.astralBreaker4=§5Effective against most blocks.
 tooltip.enigmaticlegacy.megaSponge1=§5Instantly absorbs water in small radius
 tooltip.enigmaticlegacy.megaSponge2=§5around you, when you enter it.
 
+tooltip.enigmaticlegacy.witherite1=§5Can be obtained through
+tooltip.enigmaticlegacy.witherite2=§5killing a wither when
+tooltip.enigmaticlegacy.witherite3=§5tortured by weakness.
+
 tooltip.enigmaticlegacy.add=§6+
 
 tooltip.enigmaticlegacy.aoeDisabled=§cArea effects are suppressed.
@@ -163,6 +182,7 @@ tooltip.enigmaticlegacy.cursedOnesOnly2=hold power to obtain and use this item.
 tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
+#Misc
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 enigmaticlegacy.ender_chest_gui=Ender Chest

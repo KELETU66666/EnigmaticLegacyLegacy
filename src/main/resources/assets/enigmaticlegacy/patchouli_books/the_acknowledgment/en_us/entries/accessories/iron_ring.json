@@ -1,0 +1,21 @@
+{
+    "name": "Iron Ring",
+    "icon": "enigmaticlegacy:iron_ring",
+    "category": "enigmaticlegacy:accessories",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Quite simple in it's design, this thing could've been forged even by the most casual blacksmith, not to mention a demigod alike you.<br2/>This ring is only useful as all it takes to create is some mundane iron. It might not save you from being beheaded, but can protect one of your fingers from being cut off someday... Perhaps."
+        },
+		{
+            "type": "crafting",
+			"recipe": "enigmaticlegacy:iron_ring",
+            "title": " ",
+            "text": ""
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ERE",
+    "NGN",
+    "ETE"
+  ],
+  "key": {
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "G": {
+      "item": "enigmaticlegacy:the_acknowledgment"
+    },
+    "T": {
+      "item": "enigmaticlegacy:twisted_core"
+    },
+    "E": {
+      "item": "enigmaticlegacy:evil_essence"
+    },
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "ingotNetherite"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:the_twist"
+  }
+}

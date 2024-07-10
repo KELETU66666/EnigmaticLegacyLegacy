@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy;
 
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import keletu.enigmaticlegacy.entity.RenderEntityItemIndestructible;
+import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
@@ -9,7 +9,6 @@ import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.LootHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
@@ -24,7 +23,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -66,10 +64,12 @@ public class EnigmaticLegacy {
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
-    public static Item etheriumOre = new ItemBase("etherium_ore", EnumRarity.RARE);
-    public static Item etheriumIngot = new ItemBase("etherium_ingot", EnumRarity.RARE);
+    public static Item etheriumOre = new ItemBaseFireProof("etherium_ore", EnumRarity.RARE);
+    public static Item etheriumIngot = new ItemBaseFireProof("etherium_ingot", EnumRarity.RARE);
     public static Item enderRod = new ItemBase("ender_rod", EnumRarity.EPIC);
-    public static Item astralDust = new ItemBase("astral_dust", EnumRarity.EPIC);
+    public static Item astralDust = new ItemBaseFireProof("astral_dust", EnumRarity.EPIC);
+    public static Item evilEssence = new ItemBaseFireProof("evil_essence", EnumRarity.EPIC);
+    public static Item ingotWitherite = new ItemIngotWitherite();
     public static Item twistedCore = new ItemBase("twisted_core", EnumRarity.EPIC).setMaxStackSize(1);
 
     //Armor
@@ -84,6 +84,8 @@ public class EnigmaticLegacy {
     public static Item etheriumPickaxe = new ItemEtheriumPick();
     public static Item etheriumSpade = new ItemEtheriumSpade();
     public static Item astralBreaker = new ItemAstralBreaker();
+    public static Item theAcknowledgment = new ItemTheAcknowledgment();
+    public static Item theTwist = new ItemTheTwist();
 
     public static SimpleNetworkWrapper packetInstance;
     @Mod.EventHandler
@@ -101,7 +103,8 @@ public class EnigmaticLegacy {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 0, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
 
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
@@ -143,6 +146,10 @@ public class EnigmaticLegacy {
             event.getRegistry().register(astralBreaker);
             event.getRegistry().register(megaSponge);
             event.getRegistry().register(twistedCore);
+            event.getRegistry().register(theAcknowledgment);
+            event.getRegistry().register(theTwist);
+            event.getRegistry().register(evilEssence);
+            event.getRegistry().register(ingotWitherite);
         }
 
         @SubscribeEvent
@@ -150,6 +157,7 @@ public class EnigmaticLegacy {
         {
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 0));
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 1));
+            OreDictionary.registerOre("ingotNetherite", new ItemStack(ingotWitherite, 1, 0));
         }
 
         @SubscribeEvent
@@ -182,8 +190,12 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(astralBreaker, 0, new ModelResourceLocation(astralBreaker.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(megaSponge, 0, new ModelResourceLocation(megaSponge.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(twistedCore, 0, new ModelResourceLocation(twistedCore.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(theAcknowledgment, 0, new ModelResourceLocation(theAcknowledgment.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(theTwist, 0, new ModelResourceLocation(theTwist.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(evilEssence, 0, new ModelResourceLocation(evilEssence.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
 
-            RenderingRegistry.registerEntityRenderingHandler(EntityItemIndestructible.class, manager -> new RenderEntityItemIndestructible(manager, Minecraft.getMinecraft().getRenderItem()));
+            //RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntityItemSoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }
     }
 

@@ -1,0 +1,29 @@
+{
+    "name": "Ring of Ender",
+    "icon": "enigmaticlegacy:ender_ring",
+    "category": "enigmaticlegacy:accessories",
+    "secret": false,
+    "priority": false,
+    "read_by_default": false,
+    "sortnum": 30,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Ender Chest has proven to be extremely useful thing, allowing you to access items of your choice across any distances and dimensions. Unlike items you may carry on yourself, those in your ender chest are not endangered when your physical shell gets destroyed.<br2/>There is a slight inconvenience to it, however -"
+        },
+		{
+            "type": "crafting",
+			"recipe": "enigmaticlegacy:ender_ring",
+            "title": " ",
+            "text": "the need to carry around that massive chest, chucking it down whenever you want to pull something out of it's extradimensional depths, and then removing it with incredibly delicate tool, unless you want it to be"
+        },
+		{
+            "type": "text",
+            "text": "shattered into obsidian pieces you once so carefully fused together.<br2/>Ring of Ender is designed exactly to solve this issue, allowing you to tear the fabric of space and access contents of your ender chest with nothing but sheer force of will.<br2/>Just don't forget to pull your hand out of when you release the rift."
+        },
+		{
+            "type": "empty",
+            "draw_filler": false
+        }
+    ]
+}
