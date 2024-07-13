@@ -10,6 +10,7 @@ item.monster_charm.name=Emblem of Monster Slayer
 item.mining_charm.name=Charm of Treasure Hunter
 item.berserk_emblem.name=Emblem of Bloodstained Valor
 item.mega_sponge.name=Mega Sponge
+item.enchanter_pearl.name=Enchanter's Pearl
 
 #material
 item.astral_dust.name=Astral dust
@@ -164,6 +165,13 @@ tooltip.enigmaticlegacy.megaSponge2=§5around you, when you enter it.
 tooltip.enigmaticlegacy.witherite1=§5Can be obtained through
 tooltip.enigmaticlegacy.witherite2=§5killing a wither when
 tooltip.enigmaticlegacy.witherite3=§5tortured by weakness.
+
+tooltip.enigmaticlegacy.enchanterPearl1=§5While equipped or in your inventory, you
+tooltip.enigmaticlegacy.enchanterPearl2=§5receive greater amount and power of
+tooltip.enigmaticlegacy.enchanterPearl3=§5enchantments when using §6Enchanting Table.
+tooltip.enigmaticlegacy.enchanterPearl4=§5Enchanting has chance to produce both
+tooltip.enigmaticlegacy.enchanterPearl5=§5curses and treasure enchantments.
+tooltip.enigmaticlegacy.enchanterPearl6=§5You do not require §6Lapis Lazuli§5 to enchant.
 
 tooltip.enigmaticlegacy.add=§6+
 

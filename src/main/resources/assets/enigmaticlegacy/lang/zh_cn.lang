@@ -1,14 +1,60 @@
+#bauble
 item.cursed_ring.name=七咒之戒
 item.soul_crystal.name=灵魂水晶
+item.iron_ring.name=铁指环
+item.gem_ring.name=精美戒指
+item.ender_ring.name=末影之戒
+item.magnet_ring.name=磁力之戒
+item.super_magnet_ring.name=错位之戒
+item.monster_charm.name=怪物猎人勋章
+item.mining_charm.name=猎宝者护符
+item.berserk_emblem.name=血战沙场之证
+item.mega_sponge.name=超级海绵
+item.enchanter_pearl.name=附魔师的珍珠
 
-tooltip.enigmaticlegacy.holdShift=§5按住 §6Shift §5查看详情。
+#material
+item.astral_dust.name=星尘
+item.ender_rod.name=末影棍
+item.etherium_ore.name=以太矿石
+item.etherium_ingot.name=以太锭
+item.earth_heart.name=大地之心
+item.twisted_core.name=扭曲之心
+item.witherite_ingot.name=凋灵下界合金锭
+item.evil_essence.name=邪恶精髓
 
-tooltip.enigmaticlegacy.cursedRing1=§5一旦佩戴，它便成为你的一部分。
-tooltip.enigmaticlegacy.cursedRing2=§4这枚戒指将永远陪伴着你。
-tooltip.enigmaticlegacy.cursedRing2_creative=§6需要神的能力才能取下它。
+#armor & tools
+item.the_acknowledgment.name=启示之证
+item.the_twist.name=倒转之启
+item.etherium_helm.name=以太头盔
+item.etherium_chest.name=以太胸甲
+item.etherium_legs.name=以太护腿
+item.etherium_boots.name=以太靴子
+item.etherium_pickaxe.name=以太镐
+item.etherium_axe.name=以太斧
+item.etherium_spade.name=以太锹
+item.etherium_sword.name=以太阔剑
+item.etherium_scythe.name=以太镰刀
+item.astral_breaker.name=星光破坏锤
+
+tooltip.enigmaticlegacy.holdShift=§5按住 §6Shift§5 查看详情
+
+tooltip.enigmaticlegacy.theAcknowledgment1=§5那来自于启示的眩目光晕，
+tooltip.enigmaticlegacy.theAcknowledgment2=§5将会焚化那些拒绝承启之人
+
+tooltip.enigmaticlegacy.theTwist1=§5在这条弃绝凡尘的道路上，
+tooltip.enigmaticlegacy.theTwist2=§5没有比这更好的知晓方式了...
+tooltip.enigmaticlegacy.theTwist3=§5对 Boss 和玩家：
+tooltip.enigmaticlegacy.theTwist4=§d修正§6第四诅咒§d的方法：
+tooltip.enigmaticlegacy.theTwist5=§d- 总能造成全额的伤害
+tooltip.enigmaticlegacy.theTwist6=§5 对Boss和玩家的§d伤害
+tooltip.enigmaticlegacy.theTwist7=§d 击退§5
+
+tooltip.enigmaticlegacy.cursedRing1=§5一旦佩戴，它便成为你的一部分
+tooltip.enigmaticlegacy.cursedRing2=§4这枚戒指将永远陪伴着你
+tooltip.enigmaticlegacy.cursedRing2_creative=§6需要神的能力才能取下它
 tooltip.enigmaticlegacy.cursedRing3=§d七个诅咒将会降临到佩戴者身上：
 tooltip.enigmaticlegacy.cursedRing4=§5- 使受到的§6任何§5来源的伤害加倍
-tooltip.enigmaticlegacy.cursedRing4_alt=§5- 使受到的§6任何§5来源的伤害加倍
+tooltip.enigmaticlegacy.cursedRing4_alt=§5- 使受到的§6任何§5来源的伤害变化为原先的 §6
 tooltip.enigmaticlegacy.cursedRing5=§5- 中立生物会主动攻击你
 tooltip.enigmaticlegacy.cursedRing6=§5- 盔甲效力降低 §6
 tooltip.enigmaticlegacy.cursedRing6_1=
@@ -26,15 +72,124 @@ tooltip.enigmaticlegacy.cursedRing14=§5- §6+
 tooltip.enigmaticlegacy.cursedRing14_1=§5 §d经验§5 掉落
 tooltip.enigmaticlegacy.cursedRing15=§5- §6+
 tooltip.enigmaticlegacy.cursedRing15_1=§5在附魔台中的§d附魔能力
-tooltip.enigmaticlegacy.cursedRing16=§5- 一些生物开始产出独特掉落物。
+tooltip.enigmaticlegacy.cursedRing16=§5- 一些生物开始产出独特掉落物
 tooltip.enigmaticlegacy.cursedRing17=§5- 可以随时打开你的§6末影箱
 tooltip.enigmaticlegacy.cursedRing18=§5- 你可以使用独特的物品
 
+tooltip.enigmaticlegacy.enderRing1=§5允许你用绑定按键或
+tooltip.enigmaticlegacy.enderRing2=§5物品栏开启§6末影箱§5
+
+tooltip.enigmaticlegacy.currentKeybind=§6绑定按键：§d
+
+tooltip.enigmaticlegacy.magnetRing1=§5吸引§6
+tooltip.enigmaticlegacy.magnetRing1_1=§6§5个方块内的物品
+tooltip.enigmaticlegacy.magnetRing2=§5按住 §6Shift§5 时停用
+tooltip.enigmaticlegacy.magnetRing2_alt=§5按住 §6Shift§5 时生效
+
+tooltip.enigmaticlegacy.superMagnetRing1=§5立即收集掉落物
+tooltip.enigmaticlegacy.superMagnetRing2=§5范围：§6
+tooltip.enigmaticlegacy.superMagnetRing2_2=§6§5个方块
+tooltip.enigmaticlegacy.superMagnetRing3=§5按住 §6Shift§5 时停用
+tooltip.enigmaticlegacy.superMagnetRing3_alt=§5按住 §6Shift§5 时生效
+
+tooltip.enigmaticlegacy.miningCharm1=§6+
+tooltip.enigmaticlegacy.miningCharm1_1=§d 挖掘速度
+tooltip.enigmaticlegacy.miningCharm2=§6+
+tooltip.enigmaticlegacy.miningCharm2_1=§d 时运等级
+tooltip.enigmaticlegacy.miningCharm3=§5当你在地下时，
+tooltip.enigmaticlegacy.miningCharm4=§5给予你§6夜视§5效果
+tooltip.enigmaticlegacy.miningCharm5=§5该效果可通过将护符
+tooltip.enigmaticlegacy.miningCharm6=§5拿在手上§6右击§5关闭
+tooltip.enigmaticlegacy.miningCharmNightVision=§d夜视：
+
+tooltip.enigmaticlegacy.monsterCharm1=§6+
+tooltip.enigmaticlegacy.monsterCharm1_1=§5对亡灵生物的§d伤害
+tooltip.enigmaticlegacy.monsterCharm2=§6+
+tooltip.enigmaticlegacy.monsterCharm2_1=§5对其他敌对生物的§d伤害
+tooltip.enigmaticlegacy.monsterCharm3=§6+1 §d抢夺等级
+tooltip.enigmaticlegacy.monsterCharm4=§5击杀怪物掉落双倍经验
+
+tooltip.enigmaticlegacy.berserk_emblem1=§d攻击伤害
+tooltip.enigmaticlegacy.berserk_emblem2=§d攻击速度
+tooltip.enigmaticlegacy.berserk_emblem3=§d移动速度
+tooltip.enigmaticlegacy.berserk_emblem4= §d伤害抗性
+tooltip.enigmaticlegacy.berserk_emblem5=§5这些效果将乘以你当前
+tooltip.enigmaticlegacy.berserk_emblem6=§5所损失的生命值百分比
+tooltip.enigmaticlegacy.berserk_emblem7=§d当前效果：
+tooltip.enigmaticlegacy.berserk_emblem8=§d攻击伤害
+tooltip.enigmaticlegacy.berserk_emblem9=§d攻击速度
+tooltip.enigmaticlegacy.berserk_emblem10=§d移动速度
+tooltip.enigmaticlegacy.berserk_emblem11=§d伤害抗性
+
+tooltip.enigmaticlegacy.etheriumArmor1=§5装备时不可见
+tooltip.enigmaticlegacy.etheriumHelmet1=§5装备时不可见
+tooltip.enigmaticlegacy.etheriumChestplate1=§5装备时不可见
+tooltip.enigmaticlegacy.etheriumLeggings1=§5装备时不可见
+tooltip.enigmaticlegacy.etheriumBoots1=§5装备时不可见
+tooltip.enigmaticlegacy.etheriumArmorSetBonus1=§d套装效果：
+tooltip.enigmaticlegacy.etheriumArmorSetBonus2=§5- 当你的生命值低于 §6
+tooltip.enigmaticlegacy.etheriumArmorSetBonus2_1=§5 时
+tooltip.enigmaticlegacy.etheriumArmorSetBonus3=§5  生成一个强力护盾并会反弹大部分弹射物
+tooltip.enigmaticlegacy.etheriumArmorSetBonus4=§5  提供 §6
+tooltip.enigmaticlegacy.etheriumArmorSetBonus4_1=§6 伤害抗性§5
+tooltip.enigmaticlegacy.etheriumArmorSetBonus5=§5  击退攻击你的生物
+tooltip.enigmaticlegacy.etheriumArmorSetBonus6=§5
+
+tooltip.enigmaticlegacy.etheriumPickaxe1=§5挖掘 §63*3*1§5 的区域
+tooltip.enigmaticlegacy.etheriumPickaxe2=§6潜行§5时不生效
+tooltip.enigmaticlegacy.etheriumPickaxe3=§6潜行状态下右击§5可以切换开关
+
+tooltip.enigmaticlegacy.etheriumAxe1=§5§5挖掘 §63*3*1§5 的区域的木头与树叶.
+tooltip.enigmaticlegacy.etheriumAxe2=§6潜行§5时不生效
+tooltip.enigmaticlegacy.etheriumAxe3=§6潜行状态下右击§5可以切换开关
+
+tooltip.enigmaticlegacy.etheriumShovel1=§5挖掘 §63*3*1§5 的区域
+tooltip.enigmaticlegacy.etheriumShovel2=§6潜行§5时不生效
+tooltip.enigmaticlegacy.etheriumShovel3=§6潜行状态下右击§5可以切换开关
+
+tooltip.enigmaticlegacy.etheriumSword1=§5手持这把剑时
+tooltip.enigmaticlegacy.etheriumSword2=§5右击即可将你抛掷向
+tooltip.enigmaticlegacy.etheriumSword3=§5你视线的相反方向
+tooltip.enigmaticlegacy.etheriumSword4=§5冷却时间为 §6
+tooltip.enigmaticlegacy.etheriumSword4_1= §6 秒
+tooltip.enigmaticlegacy.etheriumSword5=§6潜行状态下右击§5可以切换开关
+
+tooltip.enigmaticlegacy.astralBreaker1=§5破坏 §63*3*1§5 的区域
+tooltip.enigmaticlegacy.astralBreaker2=§6潜行§5时不生效
+tooltip.enigmaticlegacy.astralBreaker3=§6潜行状态下右击§5可以切换开关
+tooltip.enigmaticlegacy.astralBreaker4=§5对大多数方块有效
+
+tooltip.enigmaticlegacy.megaSponge1=§5在你进入水中的时候
+tooltip.enigmaticlegacy.megaSponge2=§5瞬间吸收小范围内的水
+
+tooltip.enigmaticlegacy.witherite1=§5虚弱状态下
+tooltip.enigmaticlegacy.witherite2=§5杀死凋灵
+tooltip.enigmaticlegacy.witherite3=§5来获得
+
+tooltip.enigmaticlegacy.enchanterPearl1=§5While equipped or in your inventory, you
+tooltip.enigmaticlegacy.enchanterPearl2=§5receive greater amount and power of
+tooltip.enigmaticlegacy.enchanterPearl3=§5enchantments when using §6Enchanting Table.
+tooltip.enigmaticlegacy.enchanterPearl4=§5Enchanting has chance to produce both
+tooltip.enigmaticlegacy.enchanterPearl5=§5curses and treasure enchantments.
+tooltip.enigmaticlegacy.enchanterPearl6=§5You do not require §6Lapis Lazuli§5 to enchant.
+
+tooltip.enigmaticlegacy.add=§6+
+
+tooltip.enigmaticlegacy.aoeDisabled=§c区域效果已关闭
+tooltip.enigmaticlegacy.abilityDisabled=§c特殊技能已关闭
+
+tooltip.enigmaticlegacy.tainted1=§5被受诅咒之存在轻微污染了
+tooltip.enigmaticlegacy.tainted2=§5被受诅咒之存在污染了
+
+tooltip.enigmaticlegacy.enabled=§6启用
+tooltip.enigmaticlegacy.disabled=§6停用
+
 tooltip.enigmaticlegacy.cursedOnesOnly1=承受七咒之人，
-tooltip.enigmaticlegacy.cursedOnesOnly2=才能使用该物品。
+tooltip.enigmaticlegacy.cursedOnesOnly2=才能使用该物品
 
 tooltip.enigmaticlegacy.soulCrystal1=§6右击§5吸收水晶，
-tooltip.enigmaticlegacy.soulCrystal2=§5并恢复一颗破碎的§6灵魂水晶§5。
+tooltip.enigmaticlegacy.soulCrystal2=§5并恢复一颗破碎的§6灵魂水晶
 
 key.categories.enigmaticlegacy=亘古遗物
-key.ender_chest_gui=末影箱
+key.enderRing=打开末影箱
+enigmaticlegacy.ender_chest_gui=末影箱

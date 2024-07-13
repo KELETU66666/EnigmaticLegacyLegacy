@@ -49,7 +49,9 @@ public class ELConfigs {
     public static int radius;
     public static boolean spawnWithBook;
     public static boolean enableWitherite;
+    public static boolean useWhitelist;
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
+    public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
 
 
@@ -74,7 +76,7 @@ public class ELConfigs {
 
         enchantingBonus = config.getInt("EnchantingBonus", "The Seven Curses", 10, 0, 100, "How much additional Enchanting Power ring provides in Enchanting Table.");
 
-
+        useWhitelist = config.getBoolean("UseWhitelist", "The Seven Curses", false, "If true, use whitelist for cursed ring");
 
         enableSpecialDrops = config.getBoolean("EnableSpecialDrops", "The Seven Curses", true, "Set to false to disable ALL special drops that can be obtained from vanilla mobs when "
                 + "bearing Ring of the Seven Curses.");
@@ -150,8 +152,14 @@ public class ELConfigs {
 
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
+        neutralAngerWhitelist.clear();
+        String[] whitelist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should be affected"
+                + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
+
+        Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
+
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem"}, "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl"}, "List of item needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

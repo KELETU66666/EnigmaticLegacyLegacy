@@ -551,11 +551,6 @@ public class ELEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerLogout(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event) {
-        dropStoredItems(event.player);
-    }
-
-    @SubscribeEvent
     public static void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
@@ -596,17 +591,6 @@ public class ELEvents {
             EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(player);
         }
 
-    }
-
-    private static void dropStoredItems(EntityPlayer player) {
-        NonNullList<ItemStack> baubles = playerKeepsMapBaubles.remove(player.getUniqueID());
-        if (baubles != null) {
-            for (ItemStack itemStack : baubles) {
-                if (!itemStack.isEmpty()) {
-                    player.dropItem(itemStack, true, false);
-                }
-            }
-        }
     }
 
 
@@ -684,6 +668,10 @@ public class ELEvents {
 
     public static boolean hasCursed(EntityPlayer player) {
         return !player.isEntityAlive() || BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
+    }
+
+    public static boolean hasPearl(EntityPlayer player) {
+        return !hasCursed(player) || player.inventory.hasItemStack(new ItemStack(enchanterPearl));
     }
 
     public static boolean hasEnderRing(EntityPlayer player) {

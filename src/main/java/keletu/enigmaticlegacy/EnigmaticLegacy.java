@@ -5,6 +5,7 @@ import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
+import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
@@ -40,13 +41,13 @@ import net.minecraftforge.oredict.OreDictionary;
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
         version = EnigmaticLegacy.VERSION,
-        dependencies = "required-after:baubles;after:patchouli"
+        dependencies = "required-after:baubles;after:patchouli;after:grimoire"
 )
 public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.0.4";
+    public static final String VERSION = "0.0.5";
 
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
@@ -61,6 +62,7 @@ public class EnigmaticLegacy {
     public static Item monsterCharm = new ItemMonsterCharm();
     public static Item berserkEmblem = new ItemBerserkEmblem();
     public static Item megaSponge = new ItemMegasponge();
+    public static Item enchanterPearl = new ItemEnchanterPearl();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
@@ -96,6 +98,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
+        packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
 
         if (event.getSide().isClient())
             EnderChestRingHandler.registerKeybinds();
@@ -150,6 +153,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
             event.getRegistry().register(ingotWitherite);
+            event.getRegistry().register(enchanterPearl);
         }
 
         @SubscribeEvent
@@ -194,6 +198,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(theTwist, 0, new ModelResourceLocation(theTwist.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(evilEssence, 0, new ModelResourceLocation(evilEssence.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(enchanterPearl, 0, new ModelResourceLocation(enchanterPearl.getRegistryName(), "inventory"));
 
             //RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntityItemSoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }

@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " M ",
+    "BEB",
+    "VOV"
+  ],
+  "key": {
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "V": {
+      "item": "enigmaticlegacy:evil_essence"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:enchanter_pearl"
+    }
+}

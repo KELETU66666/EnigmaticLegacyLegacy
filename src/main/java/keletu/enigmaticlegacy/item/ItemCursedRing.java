@@ -137,7 +137,11 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 			if (checkedEntity instanceof EntityLiving) {
 				EntityLiving neutral = (EntityLiving) checkedEntity;
 
-				if (neutralAngerBlacklist.contains(EntityList.getKey(checkedEntity))) {
+				if (useWhitelist && !neutralAngerWhitelist.contains(EntityList.getKey(checkedEntity))) {
+					continue;
+				}
+
+				if (!useWhitelist && neutralAngerBlacklist.contains(EntityList.getKey(checkedEntity))) {
 					continue;
 				}
 
