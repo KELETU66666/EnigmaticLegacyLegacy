@@ -1,0 +1,43 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CVB",
+    "AEW",
+    "RLN"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:brown_mushroom"
+    },
+    "A": {
+      "item": "minecraft:apple"
+    },
+    "V": {
+      "item": "minecraft:vine"
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "coreEarth"
+    },
+    "C": {
+      "item": "minecraft:dye",
+      "data": 3
+    },
+    "W": {
+      "item": "minecraft:wheat"
+    },
+    "R": {
+      "item": "minecraft:red_flower",
+      "data": 0
+    },
+    "L": {
+      "item": "minecraft:waterlily"
+    },
+    "N": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+    "result": {
+      "item": "enigmaticlegacy:infinimeal"
+    }
+}

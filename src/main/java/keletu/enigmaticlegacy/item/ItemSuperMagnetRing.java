@@ -50,7 +50,7 @@ public class ItemSuperMagnetRing extends ItemBaseBauble {
 
 	@Override
 	public void onWornTick(ItemStack stack, EntityLivingBase living) {
-		if ((invertShift != GuiScreen.isShiftKeyDown()) || !(living instanceof EntityPlayer))
+		if ((invertShift != living.isSneaking()) || !(living instanceof EntityPlayer))
 			return;
 
 		double x = living.posX;

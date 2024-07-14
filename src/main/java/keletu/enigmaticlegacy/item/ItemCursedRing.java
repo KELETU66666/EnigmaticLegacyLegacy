@@ -145,6 +145,10 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 					continue;
 				}
 
+				if (neutral.isOnSameTeam(player)) {
+					continue;
+				}
+
 				if (neutral instanceof EntityTameable) {
 					if (((EntityTameable)neutral).isTamed()) {
 						continue;

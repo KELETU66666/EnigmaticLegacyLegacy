@@ -1,5 +1,6 @@
 #bauble
 item.cursed_ring.name=Ring of Seven Curses
+item.cursed_stone.name=Unholy Stone
 item.soul_crystal.name=Soul Crystal
 item.iron_ring.name=Iron Ring
 item.gem_ring.name=Gem Ring
@@ -35,6 +36,7 @@ item.etherium_spade.name=Etherium Shovel
 item.etherium_sword.name=Etherium Broadsword
 item.etherium_scythe.name=Etherium Scythe
 item.astral_breaker.name=Astral Breaker
+item.infinimeal.name=Essence of Raging Life
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -172,6 +174,17 @@ tooltip.enigmaticlegacy.enchanterPearl3=§5enchantments when using §6Enchanting
 tooltip.enigmaticlegacy.enchanterPearl4=§5Enchanting has chance to produce both
 tooltip.enigmaticlegacy.enchanterPearl5=§5curses and treasure enchantments.
 tooltip.enigmaticlegacy.enchanterPearl6=§5You do not require §6Lapis Lazuli§5 to enchant.
+
+tooltip.enigmaticlegacy.cursedStone1=§5If you die in the §6Nether§5, in the middle of
+tooltip.enigmaticlegacy.cursedStone2=§5sufficiently large lava lake with this stone
+tooltip.enigmaticlegacy.cursedStone3=§5in your inventory, §6Ring of the Seven Curses
+tooltip.enigmaticlegacy.cursedStone4=§5will be permanently destroyed, along with
+tooltip.enigmaticlegacy.cursedStone5=§5one of your §6Soul Crystals.
+tooltip.enigmaticlegacy.cursedStone6=§4This cannot be undone.
+
+tooltip.enigmaticlegacy.infinimeal1=§5Functions as infinite §6Bone Meal.
+tooltip.enigmaticlegacy.infinimeal2=§5Effective on §6Cactuses§5, §6Vines§5,
+tooltip.enigmaticlegacy.infinimeal3=§6Nether Wart§5 and §6Sugar Cane.
 
 tooltip.enigmaticlegacy.add=§6+
 

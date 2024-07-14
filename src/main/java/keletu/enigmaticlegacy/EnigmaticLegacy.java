@@ -9,6 +9,7 @@ import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
+import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.LootHandler;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -47,11 +49,15 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.0.5";
+    public static final String VERSION = "0.0.6";
+
+    @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
+    public static CommonProxy proxy;
 
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
     public static Item cursedRing = new ItemCursedRing();
+    //public static Item cursedStone = new ItemCursedStone();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
     public static Item ironRing = new ItemIronRing();
     public static Item enderRing = new ItemEnderRing();
@@ -88,6 +94,7 @@ public class EnigmaticLegacy {
     public static Item astralBreaker = new ItemAstralBreaker();
     public static Item theAcknowledgment = new ItemTheAcknowledgment();
     public static Item theTwist = new ItemTheTwist();
+    public static Item infinimeal = new ItemInfinimeal();
 
     public static SimpleNetworkWrapper packetInstance;
     @Mod.EventHandler
@@ -124,6 +131,7 @@ public class EnigmaticLegacy {
         @SubscribeEvent
         public static void addItems(RegistryEvent.Register<Item> event) {
             event.getRegistry().register(cursedRing);
+            //event.getRegistry().register(cursedStone);
             event.getRegistry().register(soulCrystal);
             event.getRegistry().register(ironRing);
             event.getRegistry().register(gemRing);
@@ -154,6 +162,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(evilEssence);
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
+            event.getRegistry().register(infinimeal);
         }
 
         @SubscribeEvent
@@ -168,6 +177,7 @@ public class EnigmaticLegacy {
         @SideOnly(Side.CLIENT)
         public static void modelRegistryEvent(ModelRegistryEvent event) {
             ModelLoader.setCustomModelResourceLocation(cursedRing, 0, new ModelResourceLocation(cursedRing.getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(cursedStone, 0, new ModelResourceLocation(cursedStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(soulCrystal, 0, new ModelResourceLocation(soulCrystal.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ironRing, 0, new ModelResourceLocation(ironRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(gemRing, 0, new ModelResourceLocation(gemRing.getRegistryName(), "inventory"));
@@ -199,6 +209,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(evilEssence, 0, new ModelResourceLocation(evilEssence.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enchanterPearl, 0, new ModelResourceLocation(enchanterPearl.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(infinimeal, 0, new ModelResourceLocation(infinimeal.getRegistryName(), "inventory"));
 
             //RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntityItemSoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }

@@ -88,7 +88,7 @@ public class PacketEnchantedWithPearl implements IMessage {
 				int i = message.id + 1;
 
 				rand.setSeed(container.xpSeed + message.id);
-				List<EnchantmentData> list = EnchantmentHelper.buildEnchantmentList(rand, itemstack, container.enchantLevels[message.id], hasCursed(playerIn));
+				List<EnchantmentData> list = EnchantmentHelper.buildEnchantmentList(rand, itemstack, container.enchantLevels[message.id], hasPearl(playerIn));
 
 				if (itemstack.getItem() == Items.BOOK && list.size() > 1) {
 					list.remove(rand.nextInt(list.size()));
