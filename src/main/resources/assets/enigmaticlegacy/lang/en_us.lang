@@ -12,6 +12,9 @@ item.mining_charm.name=Charm of Treasure Hunter
 item.berserk_emblem.name=Emblem of Bloodstained Valor
 item.mega_sponge.name=Mega Sponge
 item.enchanter_pearl.name=Enchanter's Pearl
+item.xp_scroll.name=Scroll of Ageless Wisdom
+item.cursed_scroll.name=Scroll of a Thousand Curses
+item.animal_guide.name=Guide to Animal Companionship
 
 #material
 item.astral_dust.name=Astral dust
@@ -22,6 +25,7 @@ item.earth_heart.name=Heart of The Earth
 item.twisted_core.name=Twisted Heart
 item.witherite_ingot.name=Witherite Ingot
 item.evil_essence.name=Nefarious Essence
+item.thicc_scroll.name=Thicc Scroll
 
 #armor & tools
 item.the_acknowledgment.name=The Acknowledgment
@@ -186,6 +190,40 @@ tooltip.enigmaticlegacy.infinimeal1=§5Functions as infinite §6Bone Meal.
 tooltip.enigmaticlegacy.infinimeal2=§5Effective on §6Cactuses§5, §6Vines§5,
 tooltip.enigmaticlegacy.infinimeal3=§6Nether Wart§5 and §6Sugar Cane.
 
+tooltip.enigmaticlegacy.animalGuide1=§5While in your inventory, your attacks can't
+tooltip.enigmaticlegacy.animalGuide2=§5deal damage to animals.
+tooltip.enigmaticlegacy.animalGuide3=§dAlteration of the §6Second Curse§d:
+tooltip.enigmaticlegacy.animalGuide4=§5- Wolves stay neutral towards you.
+
+tooltip.enigmaticlegacy.cursed_scroll1= §dAttack Damage
+tooltip.enigmaticlegacy.cursed_scroll2= §dMining Speed
+tooltip.enigmaticlegacy.cursed_scroll3= §dHealth Regeneration
+tooltip.enigmaticlegacy.cursed_scroll4=§5These traits are multiplied by total amount of
+tooltip.enigmaticlegacy.cursed_scroll5=§5curses that all items of your equipment bear.
+tooltip.enigmaticlegacy.cursed_scroll6=§dCurrent traits:
+tooltip.enigmaticlegacy.cursed_scroll7= §dAttack Damage
+tooltip.enigmaticlegacy.cursed_scroll8= §dMining Speed
+tooltip.enigmaticlegacy.cursed_scroll9= §dHealth Regeneration
+
+tooltip.enigmaticlegacy.xpTome1=§5Can store limitless amount of experience.
+tooltip.enigmaticlegacy.xpTome2=§5Press §6Shift§5+§6Right-Click§5 while holding it
+tooltip.enigmaticlegacy.xpTome3=§5to toggle it active.
+tooltip.enigmaticlegacy.xpTome4=§5Press §6Right-Click§5 to switch modes.
+tooltip.enigmaticlegacy.xpTome5=§5In §6Absorption mode§5, it will consume all your
+tooltip.enigmaticlegacy.xpTome6=§5experience, as long as it remains in inventory.
+tooltip.enigmaticlegacy.xpTome7=§5In §6Extraction mode§5, this behavior is reversed,
+tooltip.enigmaticlegacy.xpTome8=§5and the tome transfers all stored experience
+tooltip.enigmaticlegacy.xpTome9=§5back to you.
+tooltip.enigmaticlegacy.xpTome10=5While active, collects experience orbs
+tooltip.enigmaticlegacy.xpTome11=5within §6%1$s§6 blocks§5 radius.
+tooltip.enigmaticlegacy.xpTomeMode=§dCurrent Mode:
+tooltip.enigmaticlegacy.xpTomeExp=§dExperience Stored:
+tooltip.enigmaticlegacy.xpTomeUnits=§6units, or
+tooltip.enigmaticlegacy.xpTomeLevels=§6levels.
+tooltip.enigmaticlegacy.xpTomeAbsorption=§6Absorption
+tooltip.enigmaticlegacy.xpTomeExtraction=§6Extraction
+tooltip.enigmaticlegacy.xpTomeDeactivated=§6Deactivated
+
 tooltip.enigmaticlegacy.add=§6+
 
 tooltip.enigmaticlegacy.aoeDisabled=§cArea effects are suppressed.
@@ -204,6 +242,7 @@ tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
 #Misc
+button.extra=Extra
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 enigmaticlegacy.ender_chest_gui=Ender Chest

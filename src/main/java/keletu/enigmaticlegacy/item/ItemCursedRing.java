@@ -5,6 +5,8 @@ import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
+import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
@@ -18,6 +20,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
@@ -148,6 +151,10 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 				if (neutral.isOnSameTeam(player)) {
 					continue;
 				}
+
+				if(neutral instanceof EntityAnimal)
+					if(ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1)
+						continue;
 
 				if (neutral instanceof EntityTameable) {
 					if (((EntityTameable)neutral).isTamed()) {

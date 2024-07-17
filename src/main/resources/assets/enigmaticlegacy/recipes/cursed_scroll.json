@@ -1,0 +1,35 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "MHM",
+    "IXF",
+    "RBR"
+  ],
+  "key": {
+    "X": {
+      "item": "enigmaticlegacy:thicc_scroll"
+    },
+    "M": {
+      "item": "minecraft:ender_pearl"
+    },
+    "B": {
+      "item": "minecraft:enchanted_book"
+    },
+    "H": {
+      "item": "enigmaticlegacy:twisted_core"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "I": {
+      "item": "minecraft:dye",
+      "data": 4
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:cursed_scroll"
+  }
+}

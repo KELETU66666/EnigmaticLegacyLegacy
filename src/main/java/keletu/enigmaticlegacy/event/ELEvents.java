@@ -2,27 +2,31 @@ package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
+import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.packet.PacketOpenExtendedBaublesInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -49,6 +53,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -60,6 +65,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.lwjgl.input.Keyboard;
 
 import java.util.*;
 
@@ -70,6 +76,63 @@ public class ELEvents {
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+    public static final KeyBinding KEY_EXTRA = new KeyBinding("keybind.extra", Keyboard.KEY_V, "key.categories.enigmaticlegacy");
+
+
+    public static int getCurseAmount(ItemStack stack) {
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+        int totalCurses = 0;
+
+        for (Enchantment enchantment : enchantments.keySet()) {
+            if (enchantment.isCurse() && enchantments.get(enchantment) > 0) {
+                totalCurses += 1;
+            }
+        }
+
+        if (stack.getItem() == EnigmaticLegacy.cursedRing) {
+            totalCurses += 7;
+        }
+
+        return totalCurses;
+    }
+
+    public static int getCurseAmount(EntityPlayer player) {
+        int count = 0;
+        boolean ringCounted = false;
+
+        for (ItemStack theStack : getFullEquipment(player)) {
+            if (theStack != null) {
+                if (theStack.getItem() != EnigmaticLegacy.cursedRing || !ringCounted) {
+                    count += getCurseAmount(theStack);
+
+                    if (theStack.getItem() == EnigmaticLegacy.cursedRing) {
+                        ringCounted = true;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static List<ItemStack> getFullEquipment(EntityPlayer player) {
+        List<ItemStack> equipmentStacks = Lists.newArrayList();
+
+        equipmentStacks.add(player.getHeldItemMainhand());
+        equipmentStacks.add(player.getHeldItemOffhand());
+        equipmentStacks.addAll(player.inventory.armorInventory);
+
+        return equipmentStacks;
+    }
+
+    @SubscribeEvent
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
+        if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START) {
+            if (KEY_EXTRA.isPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
+                packetInstance.sendToServer(new PacketOpenExtendedBaublesInventory());
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone evt) {
@@ -97,6 +160,14 @@ public class ELEvents {
         entity.motionX = finalVector.x * modifier;
         entity.motionY = finalVector.y * modifier;
         entity.motionZ = finalVector.z * modifier;
+    }
+
+    /**
+     * Creates and returns simple bounding box of given radius around the entity.
+     */
+
+    public static AxisAlignedBB getBoundingBoxAroundEntity(final Entity entity, final double radius) {
+        return new AxisAlignedBB(entity.posX - radius, entity.posY - radius, entity.posZ - radius, entity.posX + radius, entity.posY + radius, entity.posZ + radius);
     }
 
     /**
@@ -303,6 +374,60 @@ public class ELEvents {
         enforce(event);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void miningStuff(PlayerEvent.BreakSpeed event) {
+
+        /*
+         * Handler for calculating mining speed boost from wearing Charm of Treasure Hunter.
+         */
+
+        float originalSpeed = event.getOriginalSpeed();
+        float correctedSpeed = originalSpeed;
+
+        float miningBoost = 1.0F;
+        if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.miningCharm) != -1) {
+            miningBoost += ELConfigs.breakSpeedBonus;
+        }
+
+        if (ExtendedBaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1)  {
+            miningBoost += cursedScrollMiningBoost * getCurseAmount(event.getEntityPlayer());
+        }
+
+        correctedSpeed = correctedSpeed * miningBoost;
+        correctedSpeed -= event.getOriginalSpeed();
+
+        event.setNewSpeed(event.getNewSpeed() + correctedSpeed);
+    }
+
+    @SubscribeEvent
+    public static void onLivingHeal(LivingHealEvent event) {
+
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+			/*
+			 * Regeneration slowdown handler for Pearl of the Void.
+			 * Removed as of Release 2.5.0.
+
+			if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.voidPearl)) {
+				if (event.getAmount() <= 1.0F) {
+					event.setAmount((float) (event.getAmount() / (1.5F * ConfigHandler.VOID_PEARL_REGENERATION_MODIFIER.getValue())));
+				}
+			}
+			 */
+
+            if (event.getAmount() <= 1.0F)
+                //if (forbiddenFruit.haveConsumedFruit(player)) {
+                //    event.setAmount(event.getAmount()*ForbiddenFruit.regenerationSubtraction.getValue().asModifierInverted());
+                //}
+
+                if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+                    event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
+                }
+        }
+
+    }
+
     @SubscribeEvent(priority = HIGH)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.isCanceled()) {
@@ -465,9 +590,9 @@ public class ELEvents {
                 damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) ELConfigs.attackDamage);
             }
 
-            //if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.cursedScroll)) {
-            //    damageBoost += event.getAmount()*(CursedScroll.damageBoost.getValue().asModifier()*SuperpositionHandler.getCurseAmount(player));
-            //}
+            if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+                damageBoost += event.getAmount()*(cursedScrollDamageBoost * getCurseAmount(player));
+            }
 
             event.setAmount(event.getAmount() + damageBoost);
         }
@@ -510,6 +635,35 @@ public class ELEvents {
                         event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
                     }
                 }
+            }
+        }
+
+        if (event.getEntityLiving() instanceof EntityAnimal) {
+            if (event.getSource().getTrueSource() instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+
+                if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1) {
+                    if (!(event.getEntityLiving() instanceof EntityWolf)) {
+                        event.setCanceled(true);
+                    }
+                }
+
+            }
+        }
+
+
+        if (event.getEntityLiving() instanceof EntityTameable) {
+            EntityTameable pet = (EntityTameable) event.getEntityLiving();
+
+            if (pet.isTamed()) {
+                EntityLivingBase owner = pet.getOwner();
+
+                //if (owner instanceof EntityPlayer && SuperpositionHandler.hasItem((EntityPlayer)owner, EnigmaticLegacy.hunterGuide)) {
+                //    if (owner.level == pet.level && owner.distanceTo(pet) <= HunterGuide.effectiveDistance.getValue()) {
+                //        event.setCanceled(true);
+                //        owner.hurt(event.getSource(), SuperpositionHandler.hasItem((PlayerEntity)owner, EnigmaticLegacy.animalGuide) ? (event.getAmount()*HunterGuide.synergyDamageReduction.getValue().asModifierInverted()) : event.getAmount());
+                //    }
+                //}
             }
         }
     }
@@ -555,8 +709,7 @@ public class ELEvents {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
-        if(!data.getBoolean(SPAWN_WITH_BOOK))
-        {
+        if (!data.getBoolean(SPAWN_WITH_BOOK)) {
             ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(theAcknowledgment));
             data.setBoolean(SPAWN_WITH_BOOK, true);
         }
@@ -569,7 +722,7 @@ public class ELEvents {
                 else
                     ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
             }
-        } else if(!ultraNoobMode){
+        } else if (!ultraNoobMode) {
             if (!data.getBoolean(SPAWN_WITH_CURSE))
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
         }

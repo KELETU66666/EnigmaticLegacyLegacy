@@ -1,7 +1,10 @@
 package keletu.enigmaticlegacy.proxy;
 
+import keletu.enigmaticlegacy.container.gui.GuiExtraBaubles;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,5 +47,15 @@ public class ClientProxy extends CommonProxy{
                 worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (float)pos.getX() + random.nextFloat(), (double)pos.getY() + (double)random.nextFloat() * 1.0f, (float)pos.getZ() + random.nextFloat(), d0, d1, d2);
             }
         }
+    }
+
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (world instanceof WorldClient) {
+            switch (ID) {
+                case 0: return new GuiExtraBaubles(player);
+            }
+        }
+        return null;
     }
 }

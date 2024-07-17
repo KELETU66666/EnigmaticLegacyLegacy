@@ -1,14 +1,19 @@
 package keletu.enigmaticlegacy;
 
+import keletu.enigmaticlegacy.api.ExtendedBaubleType;
+import keletu.enigmaticlegacy.api.IExtendedBauble;
+import keletu.enigmaticlegacy.api.cap.ExtendedBaubleItem;
+import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
+import keletu.enigmaticlegacy.api.cap.ExtendedBaublesContainer;
+import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
+import keletu.enigmaticlegacy.event.EventHandlerEntity;
+import keletu.enigmaticlegacy.event.EventHandlerItem;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
-import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
-import keletu.enigmaticlegacy.packet.PacketEnderRingKey;
-import keletu.enigmaticlegacy.packet.PacketPortalParticles;
-import keletu.enigmaticlegacy.packet.PacketRecallParticles;
+import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.LootHandler;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -69,9 +75,13 @@ public class EnigmaticLegacy {
     public static Item berserkEmblem = new ItemBerserkEmblem();
     public static Item megaSponge = new ItemMegasponge();
     public static Item enchanterPearl = new ItemEnchanterPearl();
+    public static Item xpScroll = new ItemExperienceScroll();
+    public static Item cursedScroll = new ItemCursedScroll();
+    public static Item animalGuide = new ItemAnimalGuide();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
+    public static Item thiccScroll = new ItemBase("thicc_scroll", EnumRarity.COMMON);
     public static Item etheriumOre = new ItemBaseFireProof("etherium_ore", EnumRarity.RARE);
     public static Item etheriumIngot = new ItemBaseFireProof("etherium_ingot", EnumRarity.RARE);
     public static Item enderRod = new ItemBase("ender_rod", EnumRarity.EPIC);
@@ -97,15 +107,28 @@ public class EnigmaticLegacy {
     public static Item infinimeal = new ItemInfinimeal();
 
     public static SimpleNetworkWrapper packetInstance;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ELConfigs.onConfig(event);
+
+        CapabilityManager.INSTANCE.register(IExtendedBaublesItemHandler.class,
+                new ExtendedBaublesCapabilities.CapabilityBaubles<IExtendedBaublesItemHandler>(), ExtendedBaublesContainer.class);
+
+        CapabilityManager.INSTANCE
+                .register(IExtendedBauble.class, new ExtendedBaublesCapabilities.CapabilityItemBaubleStorage(), () -> new ExtendedBaubleItem(ExtendedBaubleType.SCROLL));
+
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
+        packetInstance.registerMessage(PacketOpenExtendedBaublesInventory.class, PacketOpenExtendedBaublesInventory.class, 4, Side.SERVER);
+        packetInstance.registerMessage(PacketSyncExtended.Handler.class, PacketSyncExtended.class, 5, Side.CLIENT);
+
+        MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerItem());
 
         if (event.getSide().isClient())
             EnderChestRingHandler.registerKeybinds();
@@ -113,6 +136,8 @@ public class EnigmaticLegacy {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        NetworkRegistry.INSTANCE.registerGuiHandler(MODID, proxy);
+
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
@@ -163,6 +188,10 @@ public class EnigmaticLegacy {
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(infinimeal);
+            event.getRegistry().register(xpScroll);
+            event.getRegistry().register(cursedScroll);
+            event.getRegistry().register(animalGuide);
+            event.getRegistry().register(thiccScroll);
         }
 
         @SubscribeEvent
@@ -210,6 +239,10 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enchanterPearl, 0, new ModelResourceLocation(enchanterPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(infinimeal, 0, new ModelResourceLocation(infinimeal.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(xpScroll, 0, new ModelResourceLocation(xpScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(cursedScroll, 0, new ModelResourceLocation(cursedScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(animalGuide, 0, new ModelResourceLocation(animalGuide.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(thiccScroll, 0, new ModelResourceLocation(thiccScroll.getRegistryName(), "inventory"));
 
             //RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntityItemSoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }

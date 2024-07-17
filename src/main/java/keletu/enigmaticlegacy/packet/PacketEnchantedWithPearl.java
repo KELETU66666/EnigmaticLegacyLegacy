@@ -1,7 +1,6 @@
 package keletu.enigmaticlegacy.packet;
 
 import io.netty.buffer.ByteBuf;
-import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
 import static keletu.enigmaticlegacy.event.ELEvents.hasPearl;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.EnchantmentData;

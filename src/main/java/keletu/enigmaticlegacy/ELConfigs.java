@@ -46,10 +46,14 @@ public class ELConfigs {
     public static float twistAttackSpeed;
     public static float bossDamageBonus;
     public static float knockbackBonus;
+    public static float xpCollectionRange;
     public static int radius;
     public static boolean spawnWithBook;
     public static boolean enableWitherite;
     public static boolean useWhitelist;
+    public static float cursedScrollDamageBoost;
+    public static float cursedScrollMiningBoost;
+    public static float cursedScrollRegenBoost;
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
@@ -137,6 +141,8 @@ public class ELConfigs {
 
         knockbackBonus = config.getFloat("KnockbackPowerBonus", "The Twist", 3, 0, 10, "Knockback bonus of The Twist. For Phantoms, this value is multiplied by 1.5.");
 
+        xpCollectionRange = config.getFloat("CollectionRange", "Experience Scroll", 16.0F, 1, 128, "Range in which Scroll of Ageless Wisdom collects experience orbs when active.");
+
         //builder.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
         //        + Configuration.NEW_LINE + "Btw Jusey, when I said 'very cute though', I meant you. Bees are cute either of course.");
 
@@ -145,6 +151,12 @@ public class ELConfigs {
         //        .getBoolean("DontTouchMyBees", false);
 
         // Ugly but gets the job done
+
+        cursedScrollDamageBoost = config.getFloat("DamageBoost", "Cursed Scroll", 0.04F, 0, 1, "Damage increase provided by Scroll of a Thousand Curses for each curse, as percentage.");
+
+        cursedScrollMiningBoost = config.getFloat("MiningBoost", "Cursed Scroll", 0.07F, 0, 1, "Mining speed increase provided by Scroll of a Thousand Curses for each curse, as percentage.");
+
+        cursedScrollRegenBoost = config.getFloat("RegenBoost", "Cursed Scroll", 0.04F, 0, 1, "Health regeneration increase provided by Scroll of a Thousand Curses for each curse, as percentage.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should never be affected"
@@ -159,7 +171,7 @@ public class ELConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl"}, "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll"}, "List of item needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

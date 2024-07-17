@@ -1,0 +1,20 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "nX ",
+    " X ",
+    " Xn"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:paper"
+    },
+    "n": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:thicc_scroll"
+  }
+}

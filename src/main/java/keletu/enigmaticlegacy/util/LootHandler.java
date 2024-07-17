@@ -15,7 +15,7 @@ public final class LootHandler {
     private static final List<String> TABLES = ImmutableList.of(
             "inject/abandoned_mineshaft", "inject/desert_pyramid",
             "inject/jungle_temple", "inject/simple_dungeon",
-            "inject/stronghold_corridor", "inject/end_city_treasure"
+            "inject/stronghold_corridor", "inject/end_city_treasure", "inject/stronghold_library"
     );
 
     public LootHandler() {
@@ -38,6 +38,7 @@ public final class LootHandler {
                 case "simple_dungeon":
                 case "stronghold_corridor":
                 case "end_city_treasure":
+                case "stronghold_library":
                     evt.getTable().addPool(getInjectPool(file));
                     break;
                 default:

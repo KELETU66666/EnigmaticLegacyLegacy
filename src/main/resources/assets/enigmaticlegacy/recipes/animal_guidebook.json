@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " n ",
+    "fXf",
+    " a "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:book"
+    },
+    "n": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "f": {
+      "item": "minecraft:yellow_flower",
+      "data": 0
+    },
+    "a": {
+      "item": "minecraft:apple"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:animal_guide"
+  }
+}
