@@ -24,7 +24,7 @@ import com.google.common.base.Optional;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.item.ItemSoulCrystal;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,27 +42,41 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityItemSoulCrystal extends EntityItem {
+public class EntityItemSoulCrystal extends Entity {
 
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityItemSoulCrystal.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntityItemSoulCrystal.class, DataSerializers.ITEM_STACK);
+    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityItemSoulCrystal.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+
+    private int health;
+    public float hoverStart;
 
     protected void entityInit() {
-        super.entityInit();
+        this.dataManager.register(ITEM, ItemStack.EMPTY);
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
     }
 
 
     public EntityItemSoulCrystal(World world) {
         super(world);
-        this.pickupDelay = 32767;
+        this.health = 5;
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
     }
 
     public EntityItemSoulCrystal(World world, double x, double y, double z) {
-        super(world, x, y, z);
+        super(world);
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
+        this.setSize(0.25F, 0.25F);
+        this.setPosition(x, y, z);
+        this.rotationYaw = (float)(Math.random() * 360.0D);
+        this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.motionY = 0.20000000298023224D;
+        this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
     }
 
-    public EntityItemSoulCrystal(World world, double x, double y, double z, ItemStack stack) {
-        super(world, x, y, z, stack);
+    public EntityItemSoulCrystal(World worldIn, double x, double y, double z, ItemStack stack)
+    {
+        this(worldIn, x, y, z);
+        this.setItem(stack);
     }
 
     @Override
@@ -72,8 +86,7 @@ public class EntityItemSoulCrystal extends EntityItem {
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
-
+        compound.setShort("Health", (short)this.health);
         if (this.getOwnerId() == null) {
             compound.setString("OwnerUUID", "");
         } else {
@@ -83,7 +96,7 @@ public class EntityItemSoulCrystal extends EntityItem {
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
+        this.health = compound.getShort("Health");
         String s;
 
         if (compound.hasKey("OwnerUUID", 8)) {
@@ -104,7 +117,6 @@ public class EntityItemSoulCrystal extends EntityItem {
 
     @Override
     public void onUpdate() {
-        this.setNoDespawn();
         this.setGlowing(true);
         //motionX *= 0.9;
         //motionY *= 0.9;
@@ -125,6 +137,23 @@ public class EntityItemSoulCrystal extends EntityItem {
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
     }
 
+    /**
+     * Gets the item that this entity represents.
+     */
+    public ItemStack getItem()
+    {
+        return this.getDataManager().get(ITEM);
+    }
+
+    /**
+     * Sets the item that this entity represents.
+     */
+    public void setItem(ItemStack stack)
+    {
+        this.getDataManager().set(ITEM, stack);
+        this.getDataManager().setDirty(ITEM);
+    }
+
     @Override
     public void onCollideWithPlayer(EntityPlayer player) {
         if (!this.world.isRemote) {
@@ -135,11 +164,6 @@ public class EntityItemSoulCrystal extends EntityItem {
             ItemStack itemstack = this.getItem();
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
-
-            int hook = ForgeEventFactory.onItemPickup(this, player);
-            if (hook < 0) {
-                return;
-            }
 
 
             ItemStack clone = itemstack.copy();

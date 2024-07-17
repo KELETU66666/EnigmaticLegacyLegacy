@@ -8,6 +8,7 @@ import keletu.enigmaticlegacy.api.cap.ExtendedBaublesContainer;
 import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
+import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.event.EventHandlerItem;
 import keletu.enigmaticlegacy.item.*;
@@ -18,6 +19,7 @@ import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.LootHandler;
 import keletu.enigmaticlegacy.util.ModCompat;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
@@ -33,6 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -247,7 +250,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(animalGuide, 0, new ModelResourceLocation(animalGuide.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(thiccScroll, 0, new ModelResourceLocation(thiccScroll.getRegistryName(), "inventory"));
 
-            //RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntityItemSoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
+            RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntitySoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }
     }
 
