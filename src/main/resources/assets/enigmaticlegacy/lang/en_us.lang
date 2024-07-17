@@ -250,3 +250,7 @@ button.extra=Extra
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 enigmaticlegacy.ender_chest_gui=Ender Chest
+
+#Compat
+tooltip.enigmaticlegacy.compatXat1=§dAlteration of the §6'Secret' Curse§d:
+tooltip.enigmaticlegacy.compatXat2=§5- Endermen no longer teleport to you.

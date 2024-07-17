@@ -8,6 +8,7 @@ import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
+import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
@@ -498,6 +499,18 @@ public class ELEvents {
                     player.dropItem(stack, false);
                 }
                 baublesHandler.setStackInSlot(i, ItemStack.EMPTY);
+                player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+            }
+        }
+
+        IExtendedBaublesItemHandler extraBaublesHandler = ExtendedBaublesApi.getBaublesHandler(player);
+        for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
+            ItemStack stack = extraBaublesHandler.getStackInSlot(i);
+            if (isCursed(stack) && !hasCursed(player)) {
+                if (!player.inventory.addItemStackToInventory(stack)) {
+                    player.dropItem(stack, false);
+                }
+                extraBaublesHandler.setStackInSlot(i, ItemStack.EMPTY);
                 player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
             }
         }

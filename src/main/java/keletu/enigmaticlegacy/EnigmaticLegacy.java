@@ -16,6 +16,8 @@ import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.LootHandler;
+import keletu.enigmaticlegacy.util.ModCompat;
+import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
@@ -147,7 +149,8 @@ public class EnigmaticLegacy {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
+        if(ModCompat.COMPAT_TRINKETS)
+            MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
     }
 
     @Mod.EventBusSubscriber

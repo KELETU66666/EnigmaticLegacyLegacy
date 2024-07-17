@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -10,6 +11,7 @@ import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
+import keletu.enigmaticlegacy.util.ModCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -25,10 +27,12 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -122,6 +126,9 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 		List<EntityEnderman> endermen = livingPlayer.world.getEntitiesWithinAABB(EntityEnderman.class, getBoundingBoxAroundEntity(player, endermenRandomportRange));
 
 		for (EntityEnderman enderman : endermen) {
+			if(ModCompat.COMPAT_TRINKETS && BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "ender_tiara"))) != -1)
+				continue;
+
 			if (itemRand.nextDouble() <= (0.002 * endermenRandomportFrequency)) {
 				if (enderman.attemptTeleport(player.posX, player.posY, player.posZ) && player.canEntityBeSeen(enderman)) {
 					enderman.setAttackTarget(player);
@@ -154,6 +161,10 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 
 				if(neutral instanceof EntityAnimal)
 					if(ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1)
+						continue;
+
+				if(neutral instanceof EntityEnderman)
+					if(ModCompat.COMPAT_TRINKETS && BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "ender_tiara"))) != -1)
 						continue;
 
 				if (neutral instanceof EntityTameable) {

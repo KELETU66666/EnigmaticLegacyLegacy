@@ -54,6 +54,7 @@ public class EntityItemSoulCrystal extends EntityItem {
 
     public EntityItemSoulCrystal(World world) {
         super(world);
+        this.pickupDelay = 32767;
     }
 
     public EntityItemSoulCrystal(World world, double x, double y, double z) {
