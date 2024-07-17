@@ -241,6 +241,10 @@ tooltip.enigmaticlegacy.cursedOnesOnly2=hold power to obtain and use this item.
 tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
+# Description
+name.SCROLL=Bauble (Scroll)
+name.BOOK=Bauble (Book)
+
 #Misc
 button.extra=Extra
 key.categories.enigmaticlegacy=Enigmatic Legacy²

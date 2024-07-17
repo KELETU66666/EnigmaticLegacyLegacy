@@ -2,19 +2,23 @@ package keletu.enigmaticlegacy.event;
 
 import baubles.client.gui.GuiPlayerExpanded;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
 import keletu.enigmaticlegacy.container.gui.GuiExtendedBaublesButton;
 import keletu.enigmaticlegacy.container.gui.GuiExtraBaubles;
 import keletu.enigmaticlegacy.container.gui.GuiPlayerButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,6 +74,16 @@ public class EventHandlerItem
 		}else if (event.getGui() instanceof GuiExtraBaubles) {
 			GuiContainer gui = (GuiContainer) event.getGui();
 			event.getButtonList().add(new GuiPlayerButton(55, gui, 64, 9, 10, 10));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void tooltipEvent(ItemTooltipEvent event) {
+		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			IExtendedBauble bauble = event.getItemStack().getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+			ExtendedBaubleType bt = bauble.getBaubleType(event.getItemStack());
+			event.getToolTip().add(TextFormatting.GOLD + I18n.format("name." + bt));
 		}
 	}
 }

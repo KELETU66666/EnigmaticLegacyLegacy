@@ -12,13 +12,11 @@ import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.packet.PacketOpenExtendedBaublesInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -53,7 +51,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -65,7 +62,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.lwjgl.input.Keyboard;
 
 import java.util.*;
 
@@ -76,8 +72,6 @@ public class ELEvents {
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
-    public static final KeyBinding KEY_EXTRA = new KeyBinding("keybind.extra", Keyboard.KEY_V, "key.categories.enigmaticlegacy");
-
 
     public static int getCurseAmount(ItemStack stack) {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
@@ -111,6 +105,8 @@ public class ELEvents {
                 }
             }
         }
+        if(hasCursed(player))
+            count += 7;
 
         return count;
     }
@@ -123,15 +119,6 @@ public class ELEvents {
         equipmentStacks.addAll(player.inventory.armorInventory);
 
         return equipmentStacks;
-    }
-
-    @SubscribeEvent
-    public static void playerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START) {
-            if (KEY_EXTRA.isPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
-                packetInstance.sendToServer(new PacketOpenExtendedBaublesInventory());
-            }
-        }
     }
 
     @SubscribeEvent
