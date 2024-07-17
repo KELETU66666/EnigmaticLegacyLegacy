@@ -7,7 +7,6 @@ import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -40,7 +39,7 @@ public class ItemSoulCrystal extends Item {
 		this.setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "soul_crystal"));
 		this.setTranslationKey("soul_crystal");
 
-		this.setCreativeTab(CreativeTabs.MISC);
+		this.setCreativeTab(EnigmaticLegacy.tabEnigmaticLegacy);
 	}
 
 	@SideOnly(Side.CLIENT)

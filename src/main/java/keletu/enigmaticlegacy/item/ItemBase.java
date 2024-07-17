@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import net.minecraft.creativetab.CreativeTabs;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ public class ItemBase extends Item {
         this.setTranslationKey(name);
 
         this.rare = rare;
-        this.setCreativeTab(CreativeTabs.MISC);
+        this.setCreativeTab(tabEnigmaticLegacy);
     }
 
     @Override

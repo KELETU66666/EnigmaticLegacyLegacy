@@ -32,9 +32,9 @@ public class ItemCursedScroll extends ItemBase implements IExtendedBauble {
         list.add("");
 
         if (GuiScreen.isShiftKeyDown()) {
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollDamageBoost + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll1"));
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollMiningBoost + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll2"));
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollRegenBoost + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll3"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollDamageBoost * 100+ "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll1"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollMiningBoost * 100+ "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll2"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollRegenBoost * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll3"));
 
             list.add("");
             list.add(I18n.format("tooltip.enigmaticlegacy.cursed_scroll4"));
@@ -49,9 +49,9 @@ public class ItemCursedScroll extends ItemBase implements IExtendedBauble {
 
                 list.add("");
                 list.add(I18n.format("tooltip.enigmaticlegacy.cursed_scroll6"));
-                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollDamageBoost * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll7"));
-                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollMiningBoost * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll8"));
-                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollRegenBoost * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll9"));
+                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollDamageBoost * 100 * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll7"));
+                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollMiningBoost * 100 * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll8"));
+                list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollRegenBoost * 100 * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll9"));
 
             }
     }

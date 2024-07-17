@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -40,7 +39,7 @@ public class ItemEtheriumAxe extends ItemAxe implements IEtheriumTool {
         setTranslationKey("etherium_axe");
         setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "etherium_axe"));
 
-        setCreativeTab(CreativeTabs.TOOLS);
+        this.setCreativeTab(EnigmaticLegacy.tabEnigmaticLegacy);
     }
 
     @Override

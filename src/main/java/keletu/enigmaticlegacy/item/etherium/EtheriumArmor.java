@@ -35,6 +35,7 @@ public class EtheriumArmor extends ItemArmor {
 		MinecraftForge.EVENT_BUS.register(new EtheriumEventHandler());
 
 		this.maxStackSize = 1;
+		this.setCreativeTab(EnigmaticLegacy.tabEnigmaticLegacy);
 	}
 
 	@Override

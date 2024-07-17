@@ -16,11 +16,13 @@ import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
+import keletu.enigmaticlegacy.util.LoggerWrapper;
 import keletu.enigmaticlegacy.util.LootHandler;
 import keletu.enigmaticlegacy.util.ModCompat;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -64,9 +66,18 @@ public class EnigmaticLegacy {
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
-
+    public static final LoggerWrapper logger = new LoggerWrapper("Enigmatic Legacy");
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
+
+
+    public static CreativeTabs tabEnigmaticLegacy = new CreativeTabs("tabEnigmaticLegacy") {
+        @SideOnly(Side.CLIENT)
+        public ItemStack createIcon() {
+            return new ItemStack(theAcknowledgment);
+        }
+    };
+
     public static Item cursedRing = new ItemCursedRing();
     //public static Item cursedStone = new ItemCursedStone();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
@@ -161,22 +172,34 @@ public class EnigmaticLegacy {
 
         @SubscribeEvent
         public static void addItems(RegistryEvent.Register<Item> event) {
-            event.getRegistry().register(cursedRing);
-            //event.getRegistry().register(cursedStone);
-            event.getRegistry().register(soulCrystal);
+            event.getRegistry().register(theAcknowledgment);
             event.getRegistry().register(ironRing);
             event.getRegistry().register(gemRing);
             event.getRegistry().register(enderRing);
             event.getRegistry().register(magnetRing);
             event.getRegistry().register(superMagnetRing);
+            event.getRegistry().register(cursedRing);
+            //event.getRegistry().register(cursedStone);
+            event.getRegistry().register(soulCrystal);
             event.getRegistry().register(miningCharm);
             event.getRegistry().register(monsterCharm);
             event.getRegistry().register(berserkEmblem);
+            event.getRegistry().register(megaSponge);
             event.getRegistry().register(earthHeart);
+            event.getRegistry().register(infinimeal);
+            event.getRegistry().register(twistedCore);
+            event.getRegistry().register(theTwist);
+            event.getRegistry().register(evilEssence);
+            event.getRegistry().register(ingotWitherite);
+            event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(etheriumOre);
             event.getRegistry().register(etheriumIngot);
             event.getRegistry().register(enderRod);
             event.getRegistry().register(astralDust);
+            event.getRegistry().register(thiccScroll);
+            event.getRegistry().register(xpScroll);
+            event.getRegistry().register(cursedScroll);
+            event.getRegistry().register(animalGuide);
             event.getRegistry().register(etheriumHelm);
             event.getRegistry().register(etheriumChest);
             event.getRegistry().register(etheriumLegs);
@@ -186,18 +209,6 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumPickaxe);
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
-            event.getRegistry().register(megaSponge);
-            event.getRegistry().register(twistedCore);
-            event.getRegistry().register(theAcknowledgment);
-            event.getRegistry().register(theTwist);
-            event.getRegistry().register(evilEssence);
-            event.getRegistry().register(ingotWitherite);
-            event.getRegistry().register(enchanterPearl);
-            event.getRegistry().register(infinimeal);
-            event.getRegistry().register(xpScroll);
-            event.getRegistry().register(cursedScroll);
-            event.getRegistry().register(animalGuide);
-            event.getRegistry().register(thiccScroll);
         }
 
         @SubscribeEvent

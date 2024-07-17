@@ -246,6 +246,7 @@ name.SCROLL=Bauble (Scroll)
 name.BOOK=Bauble (Book)
 
 #Misc
+itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²
 button.extra=Extra
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest

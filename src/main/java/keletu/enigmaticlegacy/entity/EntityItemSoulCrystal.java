@@ -36,7 +36,7 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
@@ -47,14 +47,32 @@ public class EntityItemSoulCrystal extends Entity {
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntityItemSoulCrystal.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityItemSoulCrystal.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
+    private int age;
+    private int pickupDelay;
+    /** The health of this EntityItem. (For example, damage for tools) */
     private int health;
+    private String thrower;
+    private String owner;
+    /** The EntityItem's random initial float height. */
     public float hoverStart;
+
+    /**
+     * The maximum age of this EntityItem.  The item is expired once this is reached.
+     */
+    public int lifespan = 6000;
 
     protected void entityInit() {
         this.dataManager.register(ITEM, ItemStack.EMPTY);
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
     }
-
+    
+    /**
+     * Returns true if it's possible to attack this entity with an item.
+     */
+    public boolean canBeAttackedWithItem()
+    {
+        return false;
+    }
 
     public EntityItemSoulCrystal(World world) {
         super(world);
@@ -68,15 +86,16 @@ public class EntityItemSoulCrystal extends Entity {
         this.setSize(0.25F, 0.25F);
         this.setPosition(x, y, z);
         this.rotationYaw = (float)(Math.random() * 360.0D);
-        this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.motionX = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
         this.motionY = 0.20000000298023224D;
-        this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.motionZ = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
     }
 
     public EntityItemSoulCrystal(World worldIn, double x, double y, double z, ItemStack stack)
     {
         this(worldIn, x, y, z);
         this.setItem(stack);
+        this.lifespan = (stack.getItem() == null ? 6000 : stack.getItem().getEntityLifespan(stack, worldIn));
     }
 
     @Override
@@ -87,6 +106,25 @@ public class EntityItemSoulCrystal extends Entity {
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         compound.setShort("Health", (short)this.health);
+        compound.setShort("Age", (short)this.age);
+        compound.setShort("PickupDelay", (short)this.pickupDelay);
+        compound.setInteger("Lifespan", lifespan);
+
+        if (this.getThrower() != null)
+        {
+            compound.setString("Thrower", this.thrower);
+        }
+
+        if (this.getOwner() != null)
+        {
+            compound.setString("Owner", this.owner);
+        }
+
+        if (!this.getItem().isEmpty())
+        {
+            compound.setTag("Item", this.getItem().writeToNBT(new NBTTagCompound()));
+        }
+
         if (this.getOwnerId() == null) {
             compound.setString("OwnerUUID", "");
         } else {
@@ -97,6 +135,32 @@ public class EntityItemSoulCrystal extends Entity {
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         this.health = compound.getShort("Health");
+        this.age = compound.getShort("Age");
+
+        if (compound.hasKey("PickupDelay"))
+        {
+            this.pickupDelay = compound.getShort("PickupDelay");
+        }
+
+        if (compound.hasKey("Owner"))
+        {
+            this.owner = compound.getString("Owner");
+        }
+
+        if (compound.hasKey("Thrower"))
+        {
+            this.thrower = compound.getString("Thrower");
+        }
+
+        NBTTagCompound nbttagcompound = compound.getCompoundTag("Item");
+        this.setItem(new ItemStack(nbttagcompound));
+
+        if (this.getItem().isEmpty())
+        {
+            this.setDead();
+        }
+        if (compound.hasKey("Lifespan")) lifespan = compound.getInteger("Lifespan");
+
         String s;
 
         if (compound.hasKey("OwnerUUID", 8)) {
@@ -117,15 +181,47 @@ public class EntityItemSoulCrystal extends Entity {
 
     @Override
     public void onUpdate() {
+        super.onUpdate();
         this.setGlowing(true);
-        //motionX *= 0.9;
-        //motionY *= 0.9;
-        //motionZ *= 0.9;
+        motionX *= 0.9;
+        motionY *= 0.9;
+        motionZ *= 0.9;
+    }
+
+    @Override
+    public void onRemovedFromWorld() {
+        EnigmaticLegacy.logger.warn("[WARN] Removing Permanent Item Entity: " + this);
+        super.onRemovedFromWorld();
+    }
+
+    @Override
+    public Entity changeDimension(int server, ITeleporter teleporter) {
+        return null;
     }
 
     @Override
     public boolean hasNoGravity() {
         return true;
+    }
+
+    public String getOwner()
+    {
+        return this.owner;
+    }
+
+    public void setOwner(String owner)
+    {
+        this.owner = owner;
+    }
+
+    public String getThrower()
+    {
+        return this.thrower;
+    }
+
+    public void setThrower(String thrower)
+    {
+        this.thrower = thrower;
     }
 
     @Nullable

@@ -1,5 +1,6 @@
 #bauble
 item.cursed_ring.name=七咒之戒
+item.cursed_stone.name=邪恶之石
 item.soul_crystal.name=灵魂水晶
 item.iron_ring.name=铁指环
 item.gem_ring.name=精美戒指
@@ -11,6 +12,9 @@ item.mining_charm.name=猎宝者护符
 item.berserk_emblem.name=血战沙场之证
 item.mega_sponge.name=超级海绵
 item.enchanter_pearl.name=附魔师的珍珠
+item.xp_scroll.name=永恒智慧卷轴
+item.cursed_scroll.name=千咒卷轴
+item.animal_guide.name=动物友好指南
 
 #material
 item.astral_dust.name=星尘
@@ -21,6 +25,7 @@ item.earth_heart.name=大地之心
 item.twisted_core.name=扭曲之心
 item.witherite_ingot.name=凋灵下界合金锭
 item.evil_essence.name=邪恶精髓
+item.thicc_scroll.name=空白卷轴
 
 #armor & tools
 item.the_acknowledgment.name=启示之证
@@ -35,6 +40,7 @@ item.etherium_spade.name=以太锹
 item.etherium_sword.name=以太阔剑
 item.etherium_scythe.name=以太镰刀
 item.astral_breaker.name=星光破坏锤
+item.infinimeal.name=狂野生长精华
 
 tooltip.enigmaticlegacy.holdShift=§5按住 §6Shift§5 查看详情
 
@@ -166,12 +172,57 @@ tooltip.enigmaticlegacy.witherite1=§5虚弱状态下
 tooltip.enigmaticlegacy.witherite2=§5杀死凋灵
 tooltip.enigmaticlegacy.witherite3=§5来获得
 
-tooltip.enigmaticlegacy.enchanterPearl1=§5While equipped or in your inventory, you
-tooltip.enigmaticlegacy.enchanterPearl2=§5receive greater amount and power of
-tooltip.enigmaticlegacy.enchanterPearl3=§5enchantments when using §6Enchanting Table.
-tooltip.enigmaticlegacy.enchanterPearl4=§5Enchanting has chance to produce both
-tooltip.enigmaticlegacy.enchanterPearl5=§5curses and treasure enchantments.
-tooltip.enigmaticlegacy.enchanterPearl6=§5You do not require §6Lapis Lazuli§5 to enchant.
+tooltip.enigmaticlegacy.enchanterPearl1=§5当装备或放在物品栏时
+tooltip.enigmaticlegacy.enchanterPearl2=§5若你去使用§6附魔台
+tooltip.enigmaticlegacy.enchanterPearl3=§5你所获得的附魔数量会更多，且等级更高
+tooltip.enigmaticlegacy.enchanterPearl4=§5并有机会出现
+tooltip.enigmaticlegacy.enchanterPearl5=§d诅咒与宝藏附魔
+tooltip.enigmaticlegacy.enchanterPearl6=§5附魔操作不再需要§6青金石
+
+tooltip.enigmaticlegacy.cursedStone1=§5带上此石头前往§6下界
+tooltip.enigmaticlegacy.cursedStone2=§5并在一个足够大的熔岩湖中结束自己的生命
+tooltip.enigmaticlegacy.cursedStone3=§5你所佩戴的§6七咒之戒§5与你的
+tooltip.enigmaticlegacy.cursedStone4=§5任一§6灵魂水晶
+tooltip.enigmaticlegacy.cursedStone5=§5将会被一同永久摧毁
+tooltip.enigmaticlegacy.cursedStone6=§4此操作无法撤销
+
+tooltip.enigmaticlegacy.infinimeal1=§5作用类似于无限§6骨粉§5
+tooltip.enigmaticlegacy.infinimeal2=§5可以作用于§6仙人掌§5、§6藤蔓
+tooltip.enigmaticlegacy.infinimeal3=§6下界疣§5和§6甘蔗
+
+tooltip.enigmaticlegacy.animalGuide1=§5放在物品栏中时，你的攻击
+tooltip.enigmaticlegacy.animalGuide2=§5不会伤害动物。
+tooltip.enigmaticlegacy.animalGuide3=§d修正 §6第二诅咒§d 的效果:
+tooltip.enigmaticlegacy.animalGuide4=§- 可驯服的生物对你保持中立
+
+tooltip.enigmaticlegacy.cursed_scroll1= §d攻击伤害
+tooltip.enigmaticlegacy.cursed_scroll2= §d挖掘速度
+tooltip.enigmaticlegacy.cursed_scroll3= §d生命回复
+tooltip.enigmaticlegacy.cursed_scroll4=§5这些效果将乘以你所有
+tooltip.enigmaticlegacy.cursed_scroll5=§5装备物品中诅咒附魔的数量。
+tooltip.enigmaticlegacy.cursed_scroll6=§d当前效果：
+tooltip.enigmaticlegacy.cursed_scroll7= §d攻击伤害
+tooltip.enigmaticlegacy.cursed_scroll8= §d挖掘速度
+tooltip.enigmaticlegacy.cursed_scroll9= §d生命回复
+
+tooltip.enigmaticlegacy.xpTome1=§5可以存储无限量的经验。
+tooltip.enigmaticlegacy.xpTome2=§5手拿状态时按 §6Shift§5+§6鼠标右键§5
+tooltip.enigmaticlegacy.xpTome3=§5来切换激活状态。
+tooltip.enigmaticlegacy.xpTome4=§5按 §6鼠标右键§5 可以切换模式。
+tooltip.enigmaticlegacy.xpTome5=§5在 §6吸收模式§5时, 且卷轴放在物品栏里
+tooltip.enigmaticlegacy.xpTome6=§5它便会吸收你的经验。
+tooltip.enigmaticlegacy.xpTome7=§5而 §6释放模式§5下, 效果会反转,
+tooltip.enigmaticlegacy.xpTome8=§5它会将所有储存在内的经验
+tooltip.enigmaticlegacy.xpTome9=§5返还给你。
+tooltip.enigmaticlegacy.xpTome10=5当激活时，自动收集
+tooltip.enigmaticlegacy.xpTome11=5范围 §6%1$s§6 方块§5 经验球
+tooltip.enigmaticlegacy.xpTomeMode=§d模式:
+tooltip.enigmaticlegacy.xpTomeExp=§d储存的经验:
+tooltip.enigmaticlegacy.xpTomeUnits=§6点数, 或
+tooltip.enigmaticlegacy.xpTomeLevels=§6等级.
+tooltip.enigmaticlegacy.xpTomeAbsorption=§6吸收
+tooltip.enigmaticlegacy.xpTomeExtraction=§6释放
+tooltip.enigmaticlegacy.xpTomeDeactivated=§6已停用
 
 tooltip.enigmaticlegacy.add=§6+
 
@@ -190,6 +241,14 @@ tooltip.enigmaticlegacy.cursedOnesOnly2=才能使用该物品
 tooltip.enigmaticlegacy.soulCrystal1=§6右击§5吸收水晶，
 tooltip.enigmaticlegacy.soulCrystal2=§5并恢复一颗破碎的§6灵魂水晶
 
-key.categories.enigmaticlegacy=亘古遗物
+name.SCROLL=饰品 (卷轴)
+name.BOOK=饰品 (书籍)
+
+itemGroup.tabEnigmaticLegacy=神秘²遗物
+button.extra=附加
+key.categories.enigmaticlegacy=神秘²遗物
 key.enderRing=打开末影箱
 enigmaticlegacy.ender_chest_gui=末影箱
+
+tooltip.enigmaticlegacy.compatXat1=§d修正 §6'隐藏' 诅咒§d:
+tooltip.enigmaticlegacy.compatXat2=§5- 末影人不再远距离传送到你周围

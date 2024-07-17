@@ -6,7 +6,6 @@ import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +29,7 @@ public class ItemEtheriumSword extends ItemSword implements IEtheriumTool {
         this.setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "etherium_sword"));
         this.setTranslationKey("etherium_sword");
 
-        setCreativeTab(CreativeTabs.COMBAT);
+        this.setCreativeTab(EnigmaticLegacy.tabEnigmaticLegacy);
     }
     
     @Override
