@@ -6,9 +6,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import xzeroair.trinkets.items.baubles.BaubleEnderTiara;
 
 public class CompatTrinketEvent {
+
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void addEnderTiaraInformation(ItemTooltipEvent event){
         if(event.getEntityPlayer() == null)
