@@ -634,7 +634,7 @@ public class ELEvents {
     public static void keepRingCurses(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
 
-        if(!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer){
+        if (!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
             if (hasCursed(player)) {
@@ -678,20 +678,22 @@ public class ELEvents {
             data.setBoolean(SPAWN_WITH_BOOK, true);
         }
 
-        if (ultraHardcore) {
-            if (!data.getBoolean(SPAWN_WITH_CURSE)) {
-                IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
-                if (ExtendedBaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
-                    baubles.setStackInSlot(2, new ItemStack(cursedRing));
-                else
-                    ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
-            }
-        } else if (!ultraNoobMode) {
-            if (!data.getBoolean(SPAWN_WITH_CURSE))
+        if (!data.getBoolean(SPAWN_WITH_CURSE)) {
+            if (ultraHardcore) {
+                {
+                    IExtendedBaublesItemHandler baubles = ExtendedBaublesApi.getBaublesHandler(event.player);
+                    if (ExtendedBaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
+                        baubles.setStackInSlot(2, new ItemStack(cursedRing));
+                    else
+                        ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
+                }
+            } else if (!ultraNoobMode) {
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
+            }
+
+            data.setBoolean(SPAWN_WITH_CURSE, true);
         }
 
-        data.setBoolean(SPAWN_WITH_CURSE, true);
         playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
         if (event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
@@ -714,7 +716,7 @@ public class ELEvents {
         if (!player.world.isRemote) {
             IPlaytimeCounter counter = IPlaytimeCounter.get(player);
             counter.matchStats();
-            EnigmaticLegacy.packetInstance.sendToAllAround(new PacketSyncPlayTime(player.getUniqueID().hashCode(), counter.getTimeWithCurses(), counter.getTimeWithoutCurses()),
+            EnigmaticLegacy.packetInstance.sendToAllAround(new PacketSyncPlayTime(player.getUniqueID(), counter.getTimeWithCurses(), counter.getTimeWithoutCurses()),
                     new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 64));
         }
     }

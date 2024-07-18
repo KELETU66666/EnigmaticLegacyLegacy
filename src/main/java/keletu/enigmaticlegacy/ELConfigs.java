@@ -96,7 +96,7 @@ public class ELConfigs {
 
         ultraNoobMode = config.getBoolean("UltraNoobMode", "The Seven Curses", false, "If true, Player's will not received Ring of Seven Curses when entering a new world.");
 
-        ultraHardcore = config.getBoolean("UltraHardcode", "The Seven Curses", false, "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when "
+        ultraHardcore = config.getBoolean("UltraHardcore", "The Seven Curses", false, "If true, Ring of the Seven Curses will be equipped into player's ring slot right away when "
                 + "entering a new world, instead of just being added to their inventory.");
 
         knockbackDebuff = config.getFloat("KnockbackDebuff", "The Seven Curses", 2F, 0, 1, "How much knockback bearers of the ring take, measured in percents.");

@@ -145,6 +145,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketOpenExtendedBaublesInventory.class, PacketOpenExtendedBaublesInventory.class, 4, Side.SERVER);
         packetInstance.registerMessage(PacketSyncExtended.Handler.class, PacketSyncExtended.class, 5, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 6, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 7, Side.SERVER);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
         MinecraftForge.EVENT_BUS.register(new EventHandlerItem());

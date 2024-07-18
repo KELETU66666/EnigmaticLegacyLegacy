@@ -4,34 +4,40 @@ import io.netty.buffer.ByteBuf;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.UUID;
 
 public class PacketSyncPlayTime implements IMessage {
-    private int playerID;
+    private UUID playerUUID;
     private long timeWithCurses, timeWithoutCurses;
 
-    public PacketSyncPlayTime() {
-    }
+    public PacketSyncPlayTime() {}
 
-    public PacketSyncPlayTime(int playerID, long timeWithCurses, long timeWithoutCurses) {
-        this.playerID = playerID;
+    public PacketSyncPlayTime(UUID playerUUID, long timeWithCurses, long timeWithoutCurses) {
+        this.playerUUID = playerUUID;
         this.timeWithCurses = timeWithCurses;
         this.timeWithoutCurses = timeWithoutCurses;
     }
 
-
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.playerID = buf.readInt();
+        long mostSigBits = buf.readLong();
+        long leastSigBits = buf.readLong();
+        this.playerUUID = new UUID(mostSigBits, leastSigBits);
         this.timeWithCurses = buf.readLong();
         this.timeWithoutCurses = buf.readLong();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(this.playerID);
+        buf.writeLong(this.playerUUID.getMostSignificantBits());
+        buf.writeLong(this.playerUUID.getLeastSignificantBits());
         buf.writeLong(this.timeWithCurses);
         buf.writeLong(this.timeWithoutCurses);
     }
@@ -40,16 +46,35 @@ public class PacketSyncPlayTime implements IMessage {
 
         @Override
         public IMessage onMessage(PacketSyncPlayTime message, MessageContext ctx) {
-            if (Minecraft.getMinecraft().world == null)
-                return null;
-
-            EntityPlayer player = Minecraft.getMinecraft().player;
-
-            IPlaytimeCounter counter = IPlaytimeCounter.get(player);
-            counter.setTimeWithCurses(message.timeWithCurses);
-            counter.setTimeWithoutCurses(message.timeWithoutCurses);
-
+            if (ctx.side == Side.CLIENT) {
+                handleClientSide(message);
+            } else {
+                handleServerSide(message, ctx.getServerHandler().player);
+            }
             return null;
+        }
+
+        @SideOnly(Side.CLIENT)
+        private void handleClientSide(PacketSyncPlayTime message) {
+            Minecraft mc = Minecraft.getMinecraft();
+            if (mc.world == null) {
+                return; // 如果世界为空，则直接返回
+            }
+
+            EntityPlayer player = mc.world.getPlayerEntityByUUID(message.playerUUID);
+            if (player != null) {
+                IPlaytimeCounter counter = IPlaytimeCounter.get(player);
+                counter.setTimeWithCurses(message.timeWithCurses);
+                counter.setTimeWithoutCurses(message.timeWithoutCurses);
+            }
+        }
+
+        private void handleServerSide(PacketSyncPlayTime message, EntityPlayerMP player) {
+            if (player.getUniqueID().equals(message.playerUUID)) {
+                IPlaytimeCounter counter = IPlaytimeCounter.get(player);
+                counter.setTimeWithCurses(message.timeWithCurses);
+                counter.setTimeWithoutCurses(message.timeWithoutCurses);
+            }
         }
     }
 }
