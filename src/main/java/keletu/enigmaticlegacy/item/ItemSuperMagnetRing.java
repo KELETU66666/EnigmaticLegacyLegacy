@@ -5,6 +5,7 @@ import static keletu.enigmaticlegacy.ELConfigs.invertShift;
 import static keletu.enigmaticlegacy.ELConfigs.superRange;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.event.ELEvents;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.setEntityMotionFromVector;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -69,7 +70,7 @@ public class ItemSuperMagnetRing extends ItemBaseBauble {
 				//	continue;
 				//}
 
-				ELEvents.setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
+				setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
 
 				//for (int counter = 0; counter <= 2; counter++)
 				//	living.world.addParticle(ParticleTypes.WITCH, item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ(), (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D, (Math.random() - 0.5D) * 0.1D);

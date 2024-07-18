@@ -54,9 +54,18 @@ public class ELConfigs {
     public static float cursedScrollDamageBoost;
     public static float cursedScrollMiningBoost;
     public static float cursedScrollRegenBoost;
+
+    public static float infinitumAttackDamage;
+    public static float infinitumAttackSpeed;
+    public static float infinitumBossDamageBonus;
+    public static float infinitumKnockbackBonus;
+    public static float infinitumLifestealBonus;
+    public static float infinitumUndeadProbability;
+
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
+    public static final List<ResourceLocation> eldritchItemList = new ArrayList<>();
 
 
     public static void onConfig(FMLPreInitializationEvent builder) {
@@ -158,6 +167,19 @@ public class ELConfigs {
 
         cursedScrollRegenBoost = config.getFloat("RegenBoost", "Cursed Scroll", 0.04F, 0, 1, "Health regeneration increase provided by Scroll of a Thousand Curses for each curse, as percentage.");
 
+        infinitumAttackDamage = config.getInt("AttackDamage", "The Infinitum", 15, 0, 32768, "Attack damage of The Infinitum, actual damage shown in tooltip will be is 1 + this_value.");
+
+        infinitumAttackSpeed = config.getFloat("AttackSpeed", "The Infinitum", -2.0F, -32768, 32768, "Attack speed of The Infinitum.");
+
+        infinitumBossDamageBonus = config.getInt("BossDamageBonus", "The Infinitum", 2, 0, 10, "Attack damage bonus of The Infinitum against players and bosses.");
+
+        infinitumKnockbackBonus = config.getFloat("KnockbackBonus", "The Infinitum", 2, 0, 10, "Knockback bonus of The Infinitum. For Phantoms, this value is multiplied by 1.5");
+
+        infinitumLifestealBonus = config.getFloat("LifestealBonus", "The Infinitum", 0.1F, 0, 1, "Attack damage bonus of The Infinitum against players and bossess.");
+
+        infinitumUndeadProbability = config.getFloat("UndeadProbability", "The Infinitum", 0.85F, 0, 1, "Knockback bonus of The Infinitum. For Phantoms, this value is multiplied by 1.5.");
+
+
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should never be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect.");
@@ -171,10 +193,16 @@ public class ELConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll"}, "List of item needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
+
+        eldritchItemList.clear();
+        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:the_infinitum"}, "List of items needs ware ring during gameplay 99.5% times to use"
+                + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
+
+        Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));
 
 
         config.save();

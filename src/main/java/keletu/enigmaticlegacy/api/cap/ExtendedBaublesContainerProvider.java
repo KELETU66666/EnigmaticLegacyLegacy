@@ -16,13 +16,13 @@ public class ExtendedBaublesContainerProvider implements INBTSerializable<NBTTag
 
 	@Override
 	public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
-		return capability == ExtendedBaublesCapabilities.CAPABILITY_BAUBLES;
+		return capability == EnigmaticCapabilities.CAPABILITY_BAUBLES;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getCapability (Capability<T> capability, EnumFacing facing) {
-		if (capability == ExtendedBaublesCapabilities.CAPABILITY_BAUBLES) return (T) this.container;
+		if (capability == EnigmaticCapabilities.CAPABILITY_BAUBLES) return (T) this.container;
 		return null;
 	}
 

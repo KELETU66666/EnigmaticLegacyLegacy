@@ -2,28 +2,27 @@ package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
-import keletu.enigmaticlegacy.core.Vector3;
-import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
-import keletu.enigmaticlegacy.item.ItemCursedRing;
+import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.entity.EntityItemImportant;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,9 +31,9 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -54,11 +53,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import static net.minecraftforge.fml.common.eventhandler.EventPriority.HIGH;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -74,54 +73,6 @@ public class ELEvents {
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
 
-    public static int getCurseAmount(ItemStack stack) {
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-        int totalCurses = 0;
-
-        for (Enchantment enchantment : enchantments.keySet()) {
-            if (enchantment.isCurse() && enchantments.get(enchantment) > 0) {
-                totalCurses += 1;
-            }
-        }
-
-        if (stack.getItem() == EnigmaticLegacy.cursedRing) {
-            totalCurses += 7;
-        }
-
-        return totalCurses;
-    }
-
-    public static int getCurseAmount(EntityPlayer player) {
-        int count = 0;
-        boolean ringCounted = false;
-
-        for (ItemStack theStack : getFullEquipment(player)) {
-            if (theStack != null) {
-                if (theStack.getItem() != EnigmaticLegacy.cursedRing || !ringCounted) {
-                    count += getCurseAmount(theStack);
-
-                    if (theStack.getItem() == EnigmaticLegacy.cursedRing) {
-                        ringCounted = true;
-                    }
-                }
-            }
-        }
-        if(hasCursed(player))
-            count += 7;
-
-        return count;
-    }
-
-    public static List<ItemStack> getFullEquipment(EntityPlayer player) {
-        List<ItemStack> equipmentStacks = Lists.newArrayList();
-
-        equipmentStacks.add(player.getHeldItemMainhand());
-        equipmentStacks.add(player.getHeldItemOffhand());
-        equipmentStacks.addAll(player.inventory.armorInventory);
-
-        return equipmentStacks;
-    }
-
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone evt) {
         EntityPlayer newPlayer = evt.getEntityPlayer();
@@ -130,69 +81,6 @@ public class ELEvents {
         EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(newPlayer);
     }
 
-    /**
-     * Accelerates the entity towards specific point.
-     *
-     * @param originalPosVector Absolute coordinates of the point entity should move
-     *                          towards.
-     * @param modifier          Applied velocity modifier.
-     */
-
-    public static void setEntityMotionFromVector(Entity entity, Vector3 originalPosVector, float modifier) {
-        Vector3 entityVector = Vector3.fromEntityCenter(entity);
-        Vector3 finalVector = originalPosVector.subtract(entityVector);
-
-        if (finalVector.mag() > 1)
-            finalVector = finalVector.normalize();
-
-        entity.motionX = finalVector.x * modifier;
-        entity.motionY = finalVector.y * modifier;
-        entity.motionZ = finalVector.z * modifier;
-    }
-
-    /**
-     * Creates and returns simple bounding box of given radius around the entity.
-     */
-
-    public static AxisAlignedBB getBoundingBoxAroundEntity(final Entity entity, final double radius) {
-        return new AxisAlignedBB(entity.posX - radius, entity.posY - radius, entity.posZ - radius, entity.posX + radius, entity.posY + radius, entity.posZ + radius);
-    }
-
-    /**
-     * @return True if ItemStack can be added to player's inventory (fully or
-     * partially), false otherwise.
-     */
-
-    public static boolean canPickStack(EntityPlayer player, ItemStack stack) {
-
-        if (player.inventory.getSlotFor(ItemStack.EMPTY) >= 0)
-            return true;
-        else {
-            List<ItemStack> allInventories = new ArrayList<ItemStack>();
-
-            // allInventories.addAll(player.inventory.armorInventory);
-            allInventories.addAll(player.inventory.mainInventory);
-            allInventories.addAll(player.inventory.offHandInventory);
-
-            for (ItemStack invStack : allInventories) {
-                if (ELEvents.canMergeStacks(invStack, stack, player.inventory.getInventoryStackLimit()))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean canMergeStacks(ItemStack stack1, ItemStack stack2, int invStackLimit) {
-        return !stack1.isEmpty() && ELEvents.stackEqualExact(stack1, stack2) && stack1.isStackable() && stack1.getCount() < stack1.getMaxStackSize() && stack1.getCount() < invStackLimit;
-    }
-
-    /**
-     * Checks item, NBT, and meta if the item is not damageable
-     */
-    public static boolean stackEqualExact(ItemStack stack1, ItemStack stack2) {
-        return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2);
-    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDrops(LivingDropsEvent event) {
@@ -261,7 +149,7 @@ public class ELEvents {
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
                     addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("futuremc", "netherite_scrap")), 1), 7);
                 } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
-                    addDropWithChance(event, ELEvents.getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
+                    addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
                     //    addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 4));
                 } else if (killed.getClass() == EntityVex.class) {
@@ -294,10 +182,15 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             genericEnforce(event, player, player.getHeldItemMainhand());
 
+            float knockbackPower = 1F;
+
             if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == EnigmaticLegacy.theTwist && hasCursed(player)) {
-                float knockbackPower = ELConfigs.knockbackBonus;
-                knockbackThatBastard.put(event.getEntityLiving(), knockbackPower);
+                knockbackPower += knockbackBonus;
+            } else if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == EnigmaticLegacy.theTwist && isTheWorthyOne(player)) {
+                knockbackPower += infinitumKnockbackBonus;
             }
+
+            knockbackThatBastard.put(event.getEntityLiving(), knockbackPower);
         }
     }
 
@@ -322,12 +215,6 @@ public class ELEvents {
         genericEnforce(event, event.getEntityPlayer(), stack);
     }
 
-    public static boolean shouldPlayerDropSoulCrystal(EntityPlayer player) {
-        if (Loader.isModLoaded("gokistats")) {
-            return false;
-        }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss;
-    }
 
     @SubscribeEvent(priority = HIGH)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
@@ -362,9 +249,37 @@ public class ELEvents {
         enforce(event);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onEntityDamaged(LivingDamageEvent event) {
+        if (event.getSource().getTrueSource() instanceof EntityPlayer && !event.getSource().getTrueSource().world.isRemote) {
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+
+            float lifesteal = 0;
+/*
+            if (EnigmaticItems.ENIGMATIC_AMULET.hasColor(player, AmuletColor.BLACK)) {
+                lifesteal += event.getAmount() * 0.1F;
+            }
+
+            if (SuperpositionHandler.hasCurio(player, EnigmaticItems.ELDRITCH_AMULET)) {
+                if (SuperpositionHandler.isTheWorthyOne(player)) {
+                    lifesteal += event.getAmount() * 0.15F;
+                }
+            }
+*/
+            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum) {
+                if (SuperpositionHandler.isTheWorthyOne(player)) {
+                    lifesteal += event.getAmount() * 0.1F;
+                }
+            }
+
+            if (lifesteal > 0) {
+                player.heal(lifesteal);
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void miningStuff(PlayerEvent.BreakSpeed event) {
-
         /*
          * Handler for calculating mining speed boost from wearing Charm of Treasure Hunter.
          */
@@ -377,7 +292,7 @@ public class ELEvents {
             miningBoost += ELConfigs.breakSpeedBonus;
         }
 
-        if (ExtendedBaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1)  {
+        if (ExtendedBaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1) {
             miningBoost += cursedScrollMiningBoost * getCurseAmount(event.getEntityPlayer());
         }
 
@@ -440,7 +355,7 @@ public class ELEvents {
                 EntityEquipmentSlot slot = event.getSlot();
                 if (slot.getSlotType().equals(EntityEquipmentSlot.Type.ARMOR)) {
                     ItemStack stack = player.inventory.armorInventory.get(slot.getIndex());
-                    if (isCursed(stack) && !hasCursed(player)) {
+                    if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
                         if (!player.inventory.addItemStackToInventory(stack)) {
                             player.dropItem(stack, false);
                         }
@@ -491,10 +406,22 @@ public class ELEvents {
 
         EntityPlayer player = event.player;
 
+        IPlaytimeCounter counter = IPlaytimeCounter.get(player);
+
+        if (SuperpositionHandler.hasCursed(player)) {
+            counter.incrementTimeWithCurses();
+        } else {
+            counter.incrementTimeWithoutCurses();
+        }
+
+        if (player.ticksExisted % 100 == 0) {
+            syncPlayTime(player);
+        }
+
         IBaublesItemHandler baublesHandler = BaublesApi.getBaublesHandler(player);
         for (int i = 0; i < baublesHandler.getSlots(); i++) {
             ItemStack stack = baublesHandler.getStackInSlot(i);
-            if (isCursed(stack) && !hasCursed(player)) {
+            if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
                 if (!player.inventory.addItemStackToInventory(stack)) {
                     player.dropItem(stack, false);
                 }
@@ -506,7 +433,7 @@ public class ELEvents {
         IExtendedBaublesItemHandler extraBaublesHandler = ExtendedBaublesApi.getBaublesHandler(player);
         for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
             ItemStack stack = extraBaublesHandler.getStackInSlot(i);
-            if (isCursed(stack) && !hasCursed(player)) {
+            if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
                 if (!player.inventory.addItemStackToInventory(stack)) {
                     player.dropItem(stack, false);
                 }
@@ -581,6 +508,22 @@ public class ELEvents {
                     } else {
                         event.setCanceled(true);
                     }
+                } else if (mainhandStack.getItem() == theInfinitum) {
+                    if (SuperpositionHandler.isTheWorthyOne(player)) {
+                        if (!event.getEntityLiving().isNonBoss() || event.getEntityLiving() instanceof EntityPlayer) {
+                            //event.setAmount(10000000);
+                            event.setAmount(event.getAmount() * infinitumBossDamageBonus);
+                        }
+                    } else {
+                        event.setCanceled(true);
+
+                        player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 160, 3, false, true));
+                        player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 500, 3, false, true));
+                        player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 300, 3, false, true));
+                        player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 3, false, true));
+                        player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 300, 3, false, true));
+                        player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 3, false, true));
+                    }
                 }
             }
 
@@ -591,7 +534,7 @@ public class ELEvents {
             }
 
             if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
-                damageBoost += event.getAmount()*(cursedScrollDamageBoost * getCurseAmount(player));
+                damageBoost += event.getAmount() * (cursedScrollDamageBoost * getCurseAmount(player));
             }
 
             event.setAmount(event.getAmount() + damageBoost);
@@ -631,7 +574,7 @@ public class ELEvents {
                     }
                 }
                 if (hasCursed(player)) {
-                    if (event.getSource().getImmediateSource() != player || player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist) {
+                    if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum)) {
                         event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
                     }
                 }
@@ -690,8 +633,38 @@ public class ELEvents {
     public static void keepRingCurses(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
 
-        if (!living.world.isRemote && living instanceof EntityPlayer)
+        if(!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer){
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+
+            if (hasCursed(player)) {
+                if (SuperpositionHandler.isTheWorthyOne(player)) {
+                    EntityItemImportant abyssalHeart = new EntityItemImportant(living.world, living.posX, living.posY, living.posZ, new ItemStack(EnigmaticLegacy.abyssalHeart));
+                    living.world.spawnEntity(abyssalHeart);
+                }
+            }
+        }
+        if (!living.world.isRemote && living instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) living;
             playerKeepsMapBaubles.put(living.getUniqueID(), keepBaubles((EntityPlayer) living));
+
+            if (SuperpositionHandler.isTheWorthyOne((EntityPlayer) living)) {
+                boolean infinitum = false;
+
+                if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum) {
+                    infinitum = true;
+                } else if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum) {
+                    infinitum = true;
+                }
+
+                if (infinitum) {
+                    if (Math.random() <= infinitumUndeadProbability) {
+                        event.setCanceled(true);
+                        player.setHealth(1);
+                    }
+                }
+            }
+        }
+
     }
 
     @SubscribeEvent
@@ -746,118 +719,12 @@ public class ELEvents {
 
     }
 
-
-    public static NonNullList<ItemStack> keepBaubles(EntityPlayer player) {
-
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-        NonNullList<ItemStack> kept = NonNullList.withSize(baubles.getSlots(), ItemStack.EMPTY);
-
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            ItemStack stack = baubles.getStackInSlot(i);
-            if (stack.getItem() instanceof ItemCursedRing) {
-                kept.set(i, baubles.getStackInSlot(i).copy());
-                baubles.setStackInSlot(i, ItemStack.EMPTY);
-                if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
-                    ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                    EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
-                    droppedSoulCrystal.setOwnerId(player.getUniqueID());
-                    player.world.spawnEntity(droppedSoulCrystal);
-                }
-            }
-        }
-
-        return kept;
-    }
-
-    public static void returnBaubles(EntityPlayer player, NonNullList<ItemStack> items) {
-
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-
-        if (items.size() != baubles.getSlots()) {
-            giveItems(player, items);
-            return;
-        }
-
-        NonNullList<ItemStack> displaced = NonNullList.create();
-
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            ItemStack kept = items.get(i);
-            if (!kept.isEmpty()) {
-                ItemStack existing = baubles.getStackInSlot(i);
-                baubles.setStackInSlot(i, kept);
-                if (!existing.isEmpty()) {
-                    displaced.add(existing);
-                }
-            }
-        }
-
-        giveItems(player, displaced);
-    }
-
-    private static void giveItems(EntityPlayer player, NonNullList<ItemStack> items) {
-        for (ItemStack stack : items) {
-            ItemHandlerHelper.giveItemToPlayer(player, stack);
+    private static void syncPlayTime(EntityPlayer player) {
+        if (!player.world.isRemote) {
+            IPlaytimeCounter counter = IPlaytimeCounter.get(player);
+            counter.matchStats();
+            EnigmaticLegacy.packetInstance.sendToAllAround(new PacketSyncPlayTime(player.getUniqueID().hashCode(), counter.getTimeWithCurses(), counter.getTimeWithoutCurses()),
+                    new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 64));
         }
     }
-
-    public static void genericEnforce(Event event, EntityPlayer player, ItemStack stack) {
-        if (!event.isCancelable() || event.isCanceled() || player == null || stack == null || stack.isEmpty() || player.isCreative())
-            return;
-
-        if (!hasCursed(player) && isCursed(stack)) {
-            event.setCanceled(true);
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
-
-        }
-    }
-
-    public static void enforce(PlayerInteractEvent event) {
-        genericEnforce(event, event.getEntityPlayer(), event.getItemStack());
-    }
-
-    private static boolean isCursed(ItemStack stack) {
-        return ELConfigs.cursedItemList.contains(stack.getItem().getRegistryName());
-    }
-
-    public static boolean hasCursed(EntityPlayer player) {
-        return !player.isEntityAlive() || BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
-    }
-
-    public static boolean hasPearl(EntityPlayer player) {
-        return !hasCursed(player) || player.inventory.hasItemStack(new ItemStack(enchanterPearl));
-    }
-
-    public static boolean hasEnderRing(EntityPlayer player) {
-        return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enderRing) != -1;
-    }
-
-    public static void addDrop(LivingDropsEvent event, ItemStack drop) {
-        if (drop == null || drop.getItem() == null)
-            return;
-
-        EntityItem entityitem = new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, drop);
-        entityitem.setPickupDelay(10);
-        event.getDrops().add(entityitem);
-    }
-
-    public static void addDropWithChance(LivingDropsEvent event, ItemStack drop, int chance) {
-        if (new Random().nextInt(100) < chance) {
-            addDrop(event, drop);
-        }
-    }
-
-    public static ItemStack getRandomSizeStack(Item item, int minAmount, int maxAmount) {
-        return new ItemStack(item, minAmount + new Random().nextInt(maxAmount - minAmount + 1));
-    }
-
-    public static ItemStack getRandomSizeStack(Item item, int minAmount, int maxAmount, int meta) {
-        return new ItemStack(item, minAmount + new Random().nextInt(maxAmount - minAmount + 1), meta);
-    }
-
-    public static void addOneOf(LivingDropsEvent event, ItemStack... itemStacks) {
-        int chosenStack = new Random().nextInt(itemStacks.length);
-        addDrop(event, itemStacks[chosenStack]);
-    }
-
-
 }

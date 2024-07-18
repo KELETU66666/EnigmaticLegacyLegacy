@@ -6,6 +6,7 @@ import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.event.ELEvents;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -217,7 +218,7 @@ public class ItemExperienceScroll extends ItemBase implements IExtendedBauble {
 
         }
 
-        List<EntityXPOrb> orbs = world.getEntitiesWithinAABB(EntityXPOrb.class, ELEvents.getBoundingBoxAroundEntity(player, ELConfigs.xpCollectionRange));
+        List<EntityXPOrb> orbs = world.getEntitiesWithinAABB(EntityXPOrb.class, SuperpositionHandler.getBoundingBoxAroundEntity(player, ELConfigs.xpCollectionRange));
         for (EntityXPOrb processed : orbs) {
             if (processed.isDead) {
                 continue;

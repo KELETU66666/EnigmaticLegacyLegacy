@@ -3,8 +3,8 @@ package keletu.enigmaticlegacy.item;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.event.ELEvents;
-import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.getCurseAmount;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -45,7 +45,7 @@ public class ItemCursedScroll extends ItemBase implements IExtendedBauble {
 
         if (Minecraft.getMinecraft().player != null)
             if (hasCursed(Minecraft.getMinecraft().player)) {
-                int curses = ELEvents.getCurseAmount(Minecraft.getMinecraft().player);
+                int curses = getCurseAmount(Minecraft.getMinecraft().player);
 
                 list.add("");
                 list.add(I18n.format("tooltip.enigmaticlegacy.cursed_scroll6"));

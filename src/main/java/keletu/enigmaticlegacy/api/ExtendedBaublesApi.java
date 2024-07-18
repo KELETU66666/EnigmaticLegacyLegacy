@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.api;
 
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
+import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.api.inv.ExtendedBaublesInventoryWrapper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,7 @@ public class ExtendedBaublesApi
 	 */
 	public static IExtendedBaublesItemHandler getBaublesHandler(EntityPlayer player)
 	{
-		IExtendedBaublesItemHandler handler = player.getCapability(ExtendedBaublesCapabilities.CAPABILITY_BAUBLES, null);
+		IExtendedBaublesItemHandler handler = player.getCapability(EnigmaticCapabilities.CAPABILITY_BAUBLES, null);
 		handler.setPlayer(player);
 		return handler;
 	}
@@ -28,7 +28,7 @@ public class ExtendedBaublesApi
 	@Deprecated
 	public static IInventory getBaubles(EntityPlayer player)
 	{
-		IExtendedBaublesItemHandler handler = player.getCapability(ExtendedBaublesCapabilities.CAPABILITY_BAUBLES, null);
+		IExtendedBaublesItemHandler handler = player.getCapability(EnigmaticCapabilities.CAPABILITY_BAUBLES, null);
 		handler.setPlayer(player);
 		return new ExtendedBaublesInventoryWrapper(handler, player);
 	}

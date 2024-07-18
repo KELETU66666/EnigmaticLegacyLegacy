@@ -4,10 +4,7 @@ import baubles.common.Baubles;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesContainer;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesContainerProvider;
-import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
+import keletu.enigmaticlegacy.api.cap.*;
 import keletu.enigmaticlegacy.packet.PacketSyncExtended;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -30,7 +27,7 @@ import java.util.*;
 
 public class EventHandlerEntity {
 
-	private HashMap<UUID,ItemStack[]> ExtendedBaublesSync = new HashMap<UUID,ItemStack[]>();
+	private final HashMap<UUID,ItemStack[]> ExtendedBaublesSync = new HashMap<UUID,ItemStack[]>();
 
 	@SubscribeEvent
 	public void cloneCapabilitiesEvent(PlayerEvent.Clone event)
@@ -48,8 +45,8 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
-			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"container"),
-					new ExtendedBaublesContainerProvider(new ExtendedBaublesContainer()));
+			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"container"), new ExtendedBaublesContainerProvider(new ExtendedBaublesContainer()));
+			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"playtime_counter"), new PlayerPlaytimeCounter.Provider(new PlayerPlaytimeCounter((EntityPlayer) event.getObject())));
 		}
 	}
 
@@ -84,7 +81,7 @@ public class EventHandlerEntity {
 			IExtendedBaublesItemHandler ExtendedBaubles = ExtendedBaublesApi.getBaublesHandler(player);
 			for (int i = 0; i < ExtendedBaubles.getSlots(); i++) {
 				ItemStack stack = ExtendedBaubles.getStackInSlot(i);
-				IExtendedBauble ExtendedBauble = stack.getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+				IExtendedBauble ExtendedBauble = stack.getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 				if (ExtendedBauble != null) {
 					ExtendedBauble.onWornTick(stack, player);
 				}
@@ -111,7 +108,7 @@ public class EventHandlerEntity {
 		Set<EntityPlayer> receivers = null;
 		for (int i = 0; i < ExtendedBaubles.getSlots(); i++) {
 			ItemStack stack = ExtendedBaubles.getStackInSlot(i);
-			IExtendedBauble ExtendedBauble = stack.getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+			IExtendedBauble ExtendedBauble = stack.getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 			if (ExtendedBaubles.isChanged(i) || ExtendedBauble != null && ExtendedBauble.willAutoSync(stack, player) && !ItemStack.areItemStacksEqual(stack, items[i])) {
 				if (receivers == null) {
 					receivers = new HashSet<>(((WorldServer) player.world).getEntityTracker().getTrackingPlayers(player));
@@ -157,8 +154,8 @@ public class EventHandlerEntity {
 				ei.setPickupDelay(40);
 				float f1 = e.world.rand.nextFloat() * 0.5F;
 				float f2 = e.world.rand.nextFloat() * (float) Math.PI * 2.0F;
-				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
-				ei.motionZ = (double) (MathHelper.cos(f2) * f1);
+				ei.motionX = -MathHelper.sin(f2) * f1;
+				ei.motionZ = MathHelper.cos(f2) * f1;
 				ei.motionY = 0.20000000298023224D;
 				drops.add(ei);
 				ExtendedBaubles.setStackInSlot(i, ItemStack.EMPTY);

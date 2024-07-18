@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.packet;
 
 import io.netty.buffer.ByteBuf;
-import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
-import static keletu.enigmaticlegacy.event.ELEvents.hasEnderRing;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasEnderRing;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;

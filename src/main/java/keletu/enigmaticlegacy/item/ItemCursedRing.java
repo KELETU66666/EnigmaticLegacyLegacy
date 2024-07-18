@@ -8,7 +8,7 @@ import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
-import static keletu.enigmaticlegacy.event.ELEvents.hasCursed;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
 import keletu.enigmaticlegacy.util.ModCompat;
@@ -92,7 +92,7 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 
 	@Override
 	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-		return player instanceof EntityPlayer && !hasCursed((EntityPlayer) player);
+		return player instanceof EntityPlayer && !SuperpositionHandler.hasCursed((EntityPlayer) player);
 	}
 
 	@Override

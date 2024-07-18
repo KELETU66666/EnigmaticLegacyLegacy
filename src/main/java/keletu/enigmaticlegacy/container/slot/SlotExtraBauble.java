@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.container.slot;
 
 import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
+import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,15 +34,15 @@ public class SlotExtraBauble extends SlotItemHandler
 		if(stack.isEmpty())
 			return false;
 
-		IExtendedBauble bauble = stack.getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+		IExtendedBauble bauble = stack.getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 		return bauble.canUnequip(stack, player);
 	}
 
 	@Override
 	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
 		if (!getHasStack() && !((IExtendedBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				stack.hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			stack.getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
+				stack.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			stack.getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
 		}
 		super.onTake(playerIn, stack);
 		return stack;
@@ -52,8 +52,8 @@ public class SlotExtraBauble extends SlotItemHandler
 	public void putStack(ItemStack stack) {
 		if (getHasStack() && !ItemStack.areItemStacksEqual(stack,getStack()) &&
 				!((IExtendedBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				getStack().hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			getStack().getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(getStack(), player);
+				getStack().hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			getStack().getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(getStack(), player);
 		}
 
 		ItemStack oldstack = getStack().copy();
@@ -61,8 +61,8 @@ public class SlotExtraBauble extends SlotItemHandler
 
 		if (getHasStack() && !ItemStack.areItemStacksEqual(oldstack,getStack())
 				&& !((IExtendedBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				getStack().hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			getStack().getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
+				getStack().hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			getStack().getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
 		}
 	}
 

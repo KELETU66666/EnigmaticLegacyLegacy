@@ -1,15 +1,21 @@
 package keletu.enigmaticlegacy.event;
 
 import baubles.client.gui.GuiPlayerExpanded;
+import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
+import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
+import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.container.gui.GuiExtendedBaublesButton;
 import keletu.enigmaticlegacy.container.gui.GuiExtraBaubles;
 import keletu.enigmaticlegacy.container.gui.GuiPlayerButton;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.isTheWorthyOne;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +27,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,22 +50,22 @@ public class EventHandlerItem
  	public void itemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event)
  	{
 		ItemStack stack = event.getObject();
-		if (stack.isEmpty() || !(stack.getItem() instanceof IExtendedBauble) || stack.hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)
-				|| event.getCapabilities().values().stream().anyMatch(c -> c.hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)))
+		if (stack.isEmpty() || !(stack.getItem() instanceof IExtendedBauble) || stack.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)
+				|| event.getCapabilities().values().stream().anyMatch(c -> c.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)))
 			return;
 
 		event.addCapability(capabilityResourceLocation, new ICapabilityProvider() {
 
 			@Override
 			public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-				return capability == ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
+				return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE;
 			}
 
 			@Nullable
 			@Override
 			public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-				return capability == ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE
-						? ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE.cast((IExtendedBauble) stack.getItem())
+				return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE
+						? EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE.cast((IExtendedBauble) stack.getItem())
 						: null;
 			}
 		});
@@ -80,10 +87,28 @@ public class EventHandlerItem
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent event) {
-		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			IExtendedBauble bauble = event.getItemStack().getCapability(ExtendedBaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			IExtendedBauble bauble = event.getItemStack().getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 			ExtendedBaubleType bt = bauble.getBaubleType(event.getItemStack());
 			event.getToolTip().add(TextFormatting.GOLD + I18n.format("name." + bt));
 		}
+
+		TextFormatting format = TextFormatting.DARK_RED;
+		EntityPlayer player = Minecraft.getMinecraft().player;
+
+		for (ResourceLocation rl : ELConfigs.eldritchItemList) {
+			if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
+				if (player != null) {
+					format = isTheWorthyOne(Minecraft.getMinecraft().player) ? TextFormatting.GOLD : TextFormatting.DARK_RED;
+				}
+
+				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly1"));
+				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly2"));
+				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly3"));
+				event.getToolTip().add("");
+				event.getToolTip().add(TextFormatting.LIGHT_PURPLE + I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly4") + format + " " + SuperpositionHandler.getSufferingTime(player));
+			}
+		}
 	}
+
 }

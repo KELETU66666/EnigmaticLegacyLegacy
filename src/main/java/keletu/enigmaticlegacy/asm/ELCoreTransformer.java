@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.asm;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import static keletu.enigmaticlegacy.event.ELEvents.hasPearl;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;

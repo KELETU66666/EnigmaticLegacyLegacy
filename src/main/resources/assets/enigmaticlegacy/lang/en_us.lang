@@ -30,6 +30,8 @@ item.thicc_scroll.name=Thicc Scroll
 #armor & tools
 item.the_acknowledgment.name=The Acknowledgment
 item.the_twist.name=The Twist
+item.the_infinitum.name=The Infinitum
+item.abyssal_heart.name=Heart of the Abyssal
 item.etherium_helm.name=Etherium Helmet
 item.etherium_chest.name=Etherium Cuirass
 item.etherium_legs.name=Etherium Greaves
@@ -241,6 +243,23 @@ tooltip.enigmaticlegacy.cursedOnesOnly2=hold power to obtain and use this item.
 tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
+#1.18+
+tooltip.enigmaticlegacy.theInfinitum1=§5The abyss returns even the boldest gaze.
+tooltip.enigmaticlegacy.theInfinitum2=§dAlteration of the §6Fourth Curse§d:
+tooltip.enigmaticlegacy.theInfinitum3=§5- Always deals its full damage.
+tooltip.enigmaticlegacy.theInfinitum4= §dDamage§5 against bosses and players.
+tooltip.enigmaticlegacy.theInfinitum5= §dKnockback
+tooltip.enigmaticlegacy.theInfinitum6= §dLifesteal
+tooltip.enigmaticlegacy.theInfinitum7=§5Can bear most sword enchantments.
+tooltip.enigmaticlegacy.theInfinitum8=§5Each attack inflicts horrific debuffs.
+tooltip.enigmaticlegacy.theInfinitum9=§5When held, provides §6
+tooltip.enigmaticlegacy.theInfinitum9_1=§dChance§5 that otherwise
+tooltip.enigmaticlegacy.theInfinitum10=§5lethal damage won't kill you.
+
+tooltip.enigmaticlegacy.worthyOnesOnly1=§5The sacrifice neccessary to aquire this item
+tooltip.enigmaticlegacy.worthyOnesOnly2=§5is immense - you have to spend §699.5%%§5 of your
+tooltip.enigmaticlegacy.worthyOnesOnly3=§5time in the world suffering the §6Seven Curses§5.
+tooltip.enigmaticlegacy.worthyOnesOnly4=For now, your time measures at:
 # Description
 name.SCROLL=Bauble (Scroll)
 name.BOOK=Bauble (Book)

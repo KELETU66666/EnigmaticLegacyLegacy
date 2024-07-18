@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.packet;
 
 import io.netty.buffer.ByteBuf;
-import static keletu.enigmaticlegacy.event.ELEvents.hasPearl;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;

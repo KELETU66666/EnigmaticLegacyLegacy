@@ -2,10 +2,8 @@ package keletu.enigmaticlegacy;
 
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaubleItem;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesCapabilities;
-import keletu.enigmaticlegacy.api.cap.ExtendedBaublesContainer;
-import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
+import keletu.enigmaticlegacy.api.cap.*;
+import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
@@ -105,6 +103,7 @@ public class EnigmaticLegacy {
     public static Item evilEssence = new ItemBaseFireProof("evil_essence", EnumRarity.EPIC);
     public static Item ingotWitherite = new ItemIngotWitherite();
     public static Item twistedCore = new ItemBase("twisted_core", EnumRarity.EPIC).setMaxStackSize(1);
+    public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -120,6 +119,7 @@ public class EnigmaticLegacy {
     public static Item astralBreaker = new ItemAstralBreaker();
     public static Item theAcknowledgment = new ItemTheAcknowledgment();
     public static Item theTwist = new ItemTheTwist();
+    public static Item theInfinitum = new ItemTheInfinitum();
     public static Item infinimeal = new ItemInfinimeal();
 
     public static SimpleNetworkWrapper packetInstance;
@@ -129,10 +129,13 @@ public class EnigmaticLegacy {
         ELConfigs.onConfig(event);
 
         CapabilityManager.INSTANCE.register(IExtendedBaublesItemHandler.class,
-                new ExtendedBaublesCapabilities.CapabilityBaubles<IExtendedBaublesItemHandler>(), ExtendedBaublesContainer.class);
+                new EnigmaticCapabilities.CapabilityBaubles<IExtendedBaublesItemHandler>(), ExtendedBaublesContainer.class);
 
         CapabilityManager.INSTANCE
-                .register(IExtendedBauble.class, new ExtendedBaublesCapabilities.CapabilityItemBaubleStorage(), () -> new ExtendedBaubleItem(ExtendedBaubleType.SCROLL));
+                .register(IExtendedBauble.class, new EnigmaticCapabilities.CapabilityItemBaubleStorage(), () -> new ExtendedBaubleItem(ExtendedBaubleType.SCROLL));
+
+        CapabilityManager.INSTANCE
+                .register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), PlayerPlaytimeCounter.class);
 
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
@@ -142,6 +145,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketOpenExtendedBaublesInventory.class, PacketOpenExtendedBaublesInventory.class, 4, Side.SERVER);
         packetInstance.registerMessage(PacketSyncExtended.Handler.class, PacketSyncExtended.class, 5, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 6, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
         MinecraftForge.EVENT_BUS.register(new EventHandlerItem());
@@ -156,6 +160,7 @@ public class EnigmaticLegacy {
 
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
 
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
@@ -209,6 +214,8 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumPickaxe);
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
+            event.getRegistry().register(abyssalHeart);
+            event.getRegistry().register(theInfinitum);
         }
 
         @SubscribeEvent
@@ -260,6 +267,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(cursedScroll, 0, new ModelResourceLocation(cursedScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(animalGuide, 0, new ModelResourceLocation(animalGuide.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(thiccScroll, 0, new ModelResourceLocation(thiccScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(theInfinitum, 0, new ModelResourceLocation(theInfinitum.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(abyssalHeart, 0, new ModelResourceLocation(abyssalHeart.getRegistryName(), "inventory"));
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntitySoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }

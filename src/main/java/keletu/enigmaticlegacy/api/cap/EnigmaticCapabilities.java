@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
-public class ExtendedBaublesCapabilities {
+public class EnigmaticCapabilities {
 	/**
 	 * Access to the baubles capability. 
 	 */
@@ -16,6 +16,9 @@ public class ExtendedBaublesCapabilities {
 
 	@CapabilityInject(IExtendedBauble.class)
 	public static final Capability<IExtendedBauble> CAPABILITY_ITEM_BAUBLE = null;
+
+	@CapabilityInject(IPlaytimeCounter.class)
+	public static final Capability<IPlaytimeCounter> PLAYTIME_COUNTER = null;
 
 	public static class CapabilityBaubles<T extends IExtendedBaublesItemHandler> implements IStorage<IExtendedBaublesItemHandler> {
 
@@ -37,6 +40,19 @@ public class ExtendedBaublesCapabilities {
 
 		@Override
 		public void readNBT (Capability<IExtendedBauble> capability, IExtendedBauble instance, EnumFacing side, NBTBase nbt) {
+
+		}
+	}
+
+	public static class CapabilityPlayerPlayTime implements IStorage<IPlaytimeCounter> {
+
+		@Override
+		public NBTBase writeNBT (Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side) {
+			return null;
+		}
+
+		@Override
+		public void readNBT (Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side, NBTBase nbt) {
 
 		}
 	}
