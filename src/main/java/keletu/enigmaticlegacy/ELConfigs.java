@@ -199,7 +199,7 @@ public class ELConfigs {
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
 
         eldritchItemList.clear();
-        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:the_infinitum"}, "List of items needs ware ring during gameplay 99.5% times to use"
+        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum"}, "List of items needs ware ring during gameplay 99.5% times to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));
