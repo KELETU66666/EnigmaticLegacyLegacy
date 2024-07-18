@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
@@ -134,9 +135,7 @@ public class EnigmaticLegacy {
         CapabilityManager.INSTANCE
                 .register(IExtendedBauble.class, new EnigmaticCapabilities.CapabilityItemBaubleStorage(), () -> new ExtendedBaubleItem(ExtendedBaubleType.SCROLL));
 
-        CapabilityManager.INSTANCE
-                .register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), PlayerPlaytimeCounter.class);
-
+        CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter((EntityPlayer) null));
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);

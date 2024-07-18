@@ -3,7 +3,6 @@ package keletu.enigmaticlegacy.item;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
-import static keletu.enigmaticlegacy.ELConfigs.infinitumLifestealBonus;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.Minecraft;
@@ -124,15 +123,15 @@ public class ItemTheInfinitum extends ItemBaseFireProof {
                 list.add("");
             }
 
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumBossDamageBonus + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum4"));
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumKnockbackBonus + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum5"));
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumLifestealBonus + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum6"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumBossDamageBonus * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum4"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumKnockbackBonus * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum5"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.add") + infinitumLifestealBonus * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum6"));
             list.add("");
             list.add(I18n.format("tooltip.enigmaticlegacy.theInfinitum7"));
             list.add("");
             list.add(I18n.format("tooltip.enigmaticlegacy.theInfinitum8"));
             list.add("");
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.theInfinitum9") + infinitumUndeadProbability + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum9_1"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.theInfinitum9") + infinitumUndeadProbability * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.theInfinitum9_1"));
             list.add(I18n.format("tooltip.enigmaticlegacy.theInfinitum10"));
             list.add("");
         } else {

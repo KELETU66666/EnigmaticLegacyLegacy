@@ -17,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -46,7 +47,7 @@ public class EventHandlerEntity {
 	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"container"), new ExtendedBaublesContainerProvider(new ExtendedBaublesContainer()));
-			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"playtime_counter"), new PlayerPlaytimeCounter.Provider(new PlayerPlaytimeCounter((EntityPlayer) event.getObject())));
+			event.addCapability(new ResourceLocation(EnigmaticLegacy.MODID,"playtime_counter"), new PlayerPlaytimeCounter.Provider((EntityPlayer) event.getObject()));
 		}
 	}
 
@@ -147,7 +148,7 @@ public class EventHandlerEntity {
 	public void dropItemsAt(EntityPlayer player, List<EntityItem> drops, Entity e) {
 		IExtendedBaublesItemHandler ExtendedBaubles = ExtendedBaublesApi.getBaublesHandler(player);
 		for (int i = 0; i < ExtendedBaubles.getSlots(); ++i) {
-			if (ExtendedBaubles.getStackInSlot(i) != null && !ExtendedBaubles.getStackInSlot(i).isEmpty()) {
+			if (ExtendedBaubles.getStackInSlot(i) != null && !ExtendedBaubles.getStackInSlot(i).isEmpty() && ExtendedBaubles.getStackInSlot(i).getItem() != EnigmaticLegacy.cursedRing) {
 				EntityItem ei = new EntityItem(e.world,
 						e.posX, e.posY + e.getEyeHeight(), e.posZ,
 						ExtendedBaubles.getStackInSlot(i).copy());
@@ -159,6 +160,32 @@ public class EventHandlerEntity {
 				ei.motionY = 0.20000000298023224D;
 				drops.add(ei);
 				ExtendedBaubles.setStackInSlot(i, ItemStack.EMPTY);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerDeath(LivingDeathEvent event) {
+		if (event.getEntity() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.getEntity();
+			IPlaytimeCounter counter = player.getCapability(EnigmaticCapabilities.PLAYTIME_COUNTER, null);
+			if (counter != null) {
+				NBTTagCompound data = counter.serializeNBT();
+				player.getEntityData().setTag("PlaytimeData", data);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerClone(PlayerEvent.Clone event) {
+		if (event.isWasDeath()) {
+			EntityPlayer original = event.getOriginal();
+			EntityPlayer player = event.getEntityPlayer();
+			IPlaytimeCounter oldCounter = original.getCapability(EnigmaticCapabilities.PLAYTIME_COUNTER, null);
+			IPlaytimeCounter newCounter = player.getCapability(EnigmaticCapabilities.PLAYTIME_COUNTER, null);
+			if (oldCounter != null && newCounter != null) {
+				NBTTagCompound data = original.getEntityData().getCompoundTag("PlaytimeData");
+				newCounter.deserializeNBT(data);
 			}
 		}
 	}

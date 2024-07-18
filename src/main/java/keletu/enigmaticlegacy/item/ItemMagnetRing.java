@@ -4,7 +4,6 @@ import baubles.api.BaubleType;
 import static keletu.enigmaticlegacy.ELConfigs.invertShift;
 import static keletu.enigmaticlegacy.ELConfigs.range;
 import keletu.enigmaticlegacy.core.Vector3;
-import keletu.enigmaticlegacy.event.ELEvents;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.setEntityMotionFromVector;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

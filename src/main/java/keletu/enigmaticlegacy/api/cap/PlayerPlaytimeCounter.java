@@ -91,33 +91,28 @@ public class PlayerPlaytimeCounter implements IPlaytimeCounter {
 		private final PlayerPlaytimeCounter counter;
 
 		public Provider(EntityPlayer player) {
-			this(new PlayerPlaytimeCounter(player));
-		}
-
-		public Provider(PlayerPlaytimeCounter counter) {
-			this.counter = counter;
+			this.counter = new PlayerPlaytimeCounter(player);
 		}
 
 		@Override
-		public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
+		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 			return capability == EnigmaticCapabilities.PLAYTIME_COUNTER;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public <T> T getCapability (Capability<T> capability, EnumFacing facing) {
-			if (capability == EnigmaticCapabilities.PLAYTIME_COUNTER) return (T) this.counter;
-			return null;
+		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+			return capability == EnigmaticCapabilities.PLAYTIME_COUNTER ? (T) this.counter : null;
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT () {
-			return this.counter.serializeNBT();
+		public NBTTagCompound serializeNBT() {
+			return (NBTTagCompound) EnigmaticCapabilities.PLAYTIME_COUNTER.getStorage().writeNBT(EnigmaticCapabilities.PLAYTIME_COUNTER, this.counter, null);
 		}
 
 		@Override
-		public void deserializeNBT (NBTTagCompound nbt) {
-			this.counter.deserializeNBT(nbt);
+		public void deserializeNBT(NBTTagCompound nbt) {
+			EnigmaticCapabilities.PLAYTIME_COUNTER.getStorage().readNBT(EnigmaticCapabilities.PLAYTIME_COUNTER, this.counter, null, nbt);
 		}
 	}
 

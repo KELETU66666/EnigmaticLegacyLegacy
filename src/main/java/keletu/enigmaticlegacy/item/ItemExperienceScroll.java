@@ -5,7 +5,6 @@ import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
-import keletu.enigmaticlegacy.event.ELEvents;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

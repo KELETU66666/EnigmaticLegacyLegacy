@@ -17,5 +17,6 @@ public class ContainerExtraBaubles extends ContainerPlayerExpanded {
 
         this.addSlotToContainer(new SlotExtraBauble(player, extra, 0, 115, 62));
         this.addSlotToContainer(new SlotExtraBauble(player, extra, 1, 134, 62));
+        this.addSlotToContainer(new SlotExtraBauble(player, extra, 2, 153, 62));
     }
 }

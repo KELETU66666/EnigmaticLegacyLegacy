@@ -1,16 +1,14 @@
 package keletu.enigmaticlegacy.item;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
+import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
-import keletu.enigmaticlegacy.util.IFortuneBonus;
-import keletu.enigmaticlegacy.util.ILootingBonus;
 import keletu.enigmaticlegacy.util.ModCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -41,13 +39,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingBonus, IFortuneBonus {
+public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 
 	protected final Multimap<String, AttributeModifier> attributeMap = HashMultimap.create();
 
 	public ItemCursedRing() {
 		super("cursed_ring", EnumHelper.addRarity("Curses", TextFormatting.DARK_RED, "Curses"));
 
+		this.maxStackSize = 1;
 		this.attributeMap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
 		this.attributeMap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
 	}
@@ -98,6 +97,20 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 	@Override
 	public boolean canUnequip(ItemStack stack, EntityLivingBase living) {
 		return living instanceof EntityPlayer && ((EntityPlayer) living).isCreative();
+	}
+
+	@Override
+	public void onEquipped(ItemStack stack, EntityLivingBase player) {
+		if (!player.world.isRemote) {
+			player.getAttributeMap().applyAttributeModifiers(attributeMap);
+		}
+	}
+
+	@Override
+	public void onUnequipped(ItemStack stack, EntityLivingBase player) {
+		if (!player.world.isRemote) {
+			player.getAttributeMap().removeAttributeModifiers(attributeMap);
+		}
 	}
 
 	public boolean isItemDeathPersistent(ItemStack stack) {
@@ -208,17 +221,7 @@ public class ItemCursedRing extends ItemBaseBauble implements IBauble, ILootingB
 	}
 
 	@Override
-	public BaubleType getBaubleType(ItemStack itemStack) {
-		return BaubleType.RING;
-	}
-
-	@Override
-	public int bonusLevelLooting() {
-		return lootingBonus;
-	}
-
-	@Override
-	public int bonusLevelFortune() {
-		return fortuneBonus;
+	public ExtendedBaubleType getBaubleType(ItemStack itemStack) {
+		return ExtendedBaubleType.CURSE;
 	}
 }

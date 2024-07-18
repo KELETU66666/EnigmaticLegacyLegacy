@@ -1,6 +1,5 @@
 package keletu.enigmaticlegacy.item;
 
-import keletu.enigmaticlegacy.event.ELEvents;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

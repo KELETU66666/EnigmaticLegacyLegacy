@@ -2,6 +2,7 @@ package keletu.enigmaticlegacy.api.cap;
 
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
@@ -47,13 +48,18 @@ public class EnigmaticCapabilities {
 	public static class CapabilityPlayerPlayTime implements IStorage<IPlaytimeCounter> {
 
 		@Override
-		public NBTBase writeNBT (Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side) {
-			return null;
+		public NBTBase writeNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side) {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setLong("timeWithCurses", instance.getTimeWithCurses());
+			tag.setLong("timeWithoutCurses", instance.getTimeWithoutCurses());
+			return tag;
 		}
 
 		@Override
-		public void readNBT (Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side, NBTBase nbt) {
-
+		public void readNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side, NBTBase nbt) {
+			NBTTagCompound tag = (NBTTagCompound) nbt;
+			instance.setTimeWithCurses(tag.getLong("timeWithCurses"));
+			instance.setTimeWithoutCurses(tag.getLong("timeWithoutCurses"));
 		}
 	}
 }

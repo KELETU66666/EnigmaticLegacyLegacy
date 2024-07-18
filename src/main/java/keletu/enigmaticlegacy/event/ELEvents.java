@@ -36,7 +36,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -63,12 +62,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class ELEvents {
 
-    private static final Map<UUID, NonNullList<ItemStack>> playerKeepsMapBaubles = new HashMap<>();
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
@@ -645,7 +646,7 @@ public class ELEvents {
         }
         if (!living.world.isRemote && living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
-            playerKeepsMapBaubles.put(living.getUniqueID(), keepBaubles((EntityPlayer) living));
+            loseSoul(player);
 
             if (SuperpositionHandler.isTheWorthyOne((EntityPlayer) living)) {
                 boolean infinitum = false;
@@ -668,16 +669,6 @@ public class ELEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerRespawn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.isEndConquered()) {
-            NonNullList<ItemStack> baubles = playerKeepsMapBaubles.remove(event.player.getUniqueID());
-            if (baubles != null) {
-                returnBaubles(event.player, baubles);
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
@@ -690,7 +681,7 @@ public class ELEvents {
         if (ultraHardcore) {
             if (!data.getBoolean(SPAWN_WITH_CURSE)) {
                 IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
-                if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
+                if (ExtendedBaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
                     baubles.setStackInSlot(2, new ItemStack(cursedRing));
                 else
                     ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));

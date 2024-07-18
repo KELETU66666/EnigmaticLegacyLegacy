@@ -2,6 +2,7 @@ package keletu.enigmaticlegacy.api;
 
 import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
+import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.inv.ExtendedBaublesInventoryWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -44,4 +45,12 @@ public class ExtendedBaublesApi
 		}
 		return -1;
 	}
+
+	public static IPlaytimeCounter getPlayerPlayTime(EntityPlayer player)
+	{
+		IPlaytimeCounter handler = player.getCapability(EnigmaticCapabilities.PLAYTIME_COUNTER, null);
+		IPlaytimeCounter.get(player);
+		return handler;
+	}
+
 }

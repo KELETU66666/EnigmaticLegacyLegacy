@@ -260,9 +260,11 @@ tooltip.enigmaticlegacy.worthyOnesOnly1=§5The sacrifice neccessary to aquire th
 tooltip.enigmaticlegacy.worthyOnesOnly2=§5is immense - you have to spend §699.5%%§5 of your
 tooltip.enigmaticlegacy.worthyOnesOnly3=§5time in the world suffering the §6Seven Curses§5.
 tooltip.enigmaticlegacy.worthyOnesOnly4=For now, your time measures at:
+
 # Description
 name.SCROLL=Bauble (Scroll)
 name.BOOK=Bauble (Book)
+name.CURSE=Bauble (???)
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²

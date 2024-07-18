@@ -7,10 +7,10 @@ import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
+import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
-import keletu.enigmaticlegacy.item.ItemCursedRing;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -69,7 +69,7 @@ public class SuperpositionHandler {
                 }
             }
         }
-        if(hasCursed(player))
+        if (hasCursed(player))
             count += 7;
 
         return count;
@@ -92,26 +92,15 @@ public class SuperpositionHandler {
         return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss;
     }
 
-    public static NonNullList<ItemStack> keepBaubles(EntityPlayer player) {
-
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-        NonNullList<ItemStack> kept = NonNullList.withSize(baubles.getSlots(), ItemStack.EMPTY);
-
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            ItemStack stack = baubles.getStackInSlot(i);
-            if (stack.getItem() instanceof ItemCursedRing) {
-                kept.set(i, baubles.getStackInSlot(i).copy());
-                baubles.setStackInSlot(i, ItemStack.EMPTY);
-                if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
-                    ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                    EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
-                    droppedSoulCrystal.setOwnerId(player.getUniqueID());
-                    player.world.spawnEntity(droppedSoulCrystal);
-                }
+    public static void loseSoul(EntityPlayer player) {
+        if (hasCursed(player)) {
+            if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
+                ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
+                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
+                droppedSoulCrystal.setOwnerId(player.getUniqueID());
+                player.world.spawnEntity(droppedSoulCrystal);
             }
         }
-
-        return kept;
     }
 
     /**
@@ -233,7 +222,7 @@ public class SuperpositionHandler {
     }
 
     public static boolean hasCursed(EntityPlayer player) {
-        return !player.isEntityAlive() || BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
+        return ExtendedBaublesApi.isBaubleEquipped(player, cursedRing) != -1;
     }
 
     public static boolean hasPearl(EntityPlayer player) {
@@ -283,7 +272,7 @@ public class SuperpositionHandler {
             else if (timeWithoutRing <= 0)
                 return true;
 
-            return timeWithRing/timeWithoutRing >= 199L;
+            return timeWithRing / timeWithoutRing >= 199L;
         } else
             return false;
     }
@@ -312,11 +301,11 @@ public class SuperpositionHandler {
 
             double total = timeWithRing + timeWithoutRing;
             double ringPercent = (timeWithRing / total) * 100;
-            ringPercent = Math.round(ringPercent * 10.0)/10.0;
+            ringPercent = Math.round(ringPercent * 10.0) / 10.0;
             String text = "";
 
             if (ringPercent - Math.round(ringPercent) == 0) {
-                text += ((int)ringPercent) + "%";
+                text += ((int) ringPercent) + "%";
             } else {
                 text += ringPercent + "%";
             }

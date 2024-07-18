@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.asm;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
@@ -166,28 +167,32 @@ public class ELCoreTransformer implements IClassTransformer {
             field.setAccessible(true);
             ThreadLocal<EntityPlayer> stupidForgeMethod = (ThreadLocal<EntityPlayer>) field.get(state.getBlock());
 
-            if (stupidForgeMethod.get() != null)
+            if (stupidForgeMethod.get() != null) {
+                int baseExtraFortune = 0;
+                if (hasCursed(stupidForgeMethod.get()))
+                    baseExtraFortune += ELConfigs.fortuneBonus;
                 for (int c = 0; c < BaublesApi.getBaubles(stupidForgeMethod.get()).getSizeInventory(); c++) {
                     ItemStack bStack = BaublesApi.getBaubles(stupidForgeMethod.get()).getStackInSlot(c);
                     if (!bStack.isEmpty() && bStack.getItem() instanceof IFortuneBonus) {
+                        baseExtraFortune += ((IFortuneBonus)bStack.getItem()).bonusLevelFortune();
+                        break;
+                    }
+                }
+                int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
+                for (int j = 0; j < i; ++j) {
+                    if (worldIn.rand.nextFloat() <= chance) {
+                        Item item = state.getBlock().getItemDropped(state, worldIn.rand, fortune + baseExtraFortune);
 
-                        int i = state.getBlock().quantityDroppedWithBonus(fortune + (stupidForgeMethod.get() != null ? ((IFortuneBonus) bStack.getItem()).bonusLevelFortune() : 0), worldIn.rand) - 1;
-                        for (int j = 0; j < i; ++j) {
-                            if (worldIn.rand.nextFloat() <= chance) {
-                                Item item = state.getBlock().getItemDropped(state, worldIn.rand, fortune + (stupidForgeMethod.get() != null ? ((IFortuneBonus) bStack.getItem()).bonusLevelFortune() : 0));
-
-                                if (item != Items.AIR) {
-                                    Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
-                                }
-                            }
+                        if (item != Items.AIR) {
+                            Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
                         }
                     }
                 }
+            }
         }
     }
 
-    public static int containerEnchantment_getLapisAmount(ContainerEnchantment container)
-    {
+    public static int containerEnchantment_getLapisAmount(ContainerEnchantment container) {
         EntityPlayer containerUser = null;
 
         for (Slot slot : container.inventorySlots) {
@@ -212,8 +217,7 @@ public class ELCoreTransformer implements IClassTransformer {
         ItemStack itemstack1 = container.tableInventory.getStackInSlot(1);  // Lapis lazuli stack
         int i = id + 1;
 
-        if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.capabilities.isCreativeMode && !hasPearl(playerIn))
-        {
+        if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.capabilities.isCreativeMode && !hasPearl(playerIn)) {
             return false;
         }
         // Remove the check for lapis lazuli stack and its count
@@ -228,7 +232,10 @@ public class ELCoreTransformer implements IClassTransformer {
 
     public static int enchantment_getLootingLevel(EntityLivingBase living) {
         int base = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOOTING, living.getHeldItemMainhand());
-        if (ELConfigs.lootingBonus > 0 && living instanceof EntityPlayer) {
+        if (living instanceof EntityPlayer) {
+            if (ELConfigs.lootingBonus > 0 && hasCursed((EntityPlayer) living))
+                base += ELConfigs.lootingBonus;
+
             for (int i = 0; i < BaublesApi.getBaubles((EntityPlayer) living).getSizeInventory(); i++) {
                 ItemStack bStack = BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(i);
                 if (!bStack.isEmpty() && bStack.getItem() instanceof ILootingBonus) {
