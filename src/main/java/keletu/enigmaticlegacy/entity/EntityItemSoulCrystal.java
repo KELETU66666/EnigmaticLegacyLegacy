@@ -22,7 +22,9 @@ package keletu.enigmaticlegacy.entity;
 
 import com.google.common.base.Optional;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.item.ItemSoulCrystal;
+import keletu.enigmaticlegacy.item.ItemStorageCrystal;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -264,13 +266,37 @@ public class EntityItemSoulCrystal extends Entity {
 
             ItemStack clone = itemstack.copy();
             boolean isPlayerOwner = player.getUniqueID().equals(this.getOwnerId());
-            boolean allowPickUp = item instanceof ItemSoulCrystal && isPlayerOwner;
+            boolean allowPickUp = false;
+
+            if (item instanceof ItemStorageCrystal && (isPlayerOwner/* || !EnigmaticLegacy.enigmaticAmulet.isVesselOwnerOnly()*/)) {
+                allowPickUp = true;
+            } else if (item instanceof ItemSoulCrystal && isPlayerOwner) {
+                allowPickUp = true;
+            }
 
             if (allowPickUp) {
 
-                if (!EnigmaticLegacy.soulCrystal.retrieveSoulFromCrystal(player, itemstack))
-                    return;
+                if (item instanceof ItemStorageCrystal) {
+                    NBTTagCompound crystalNBT = ItemNBTHelper.getNBT(itemstack);
+                    ItemStack embeddedSoul = crystalNBT.hasKey("embeddedSoul") ? new ItemStack(crystalNBT.getCompoundTag("embeddedSoul")) : null;
 
+                    if (!isPlayerOwner && embeddedSoul != null)
+                        return;
+
+                    EnigmaticLegacy.storageCrystal.retrieveDropsFromCrystal(itemstack, player, embeddedSoul);
+					/*
+					if (!isPlayerOwner && embeddedSoul != null) {
+						PermanentItemEntity droppedSoulCrystal = new PermanentItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), embeddedSoul);
+						droppedSoulCrystal.setOwnerId(this.getOwnerId());
+						this.world.addEntity(droppedSoulCrystal);
+					}
+					 */
+
+                } else if (item instanceof ItemSoulCrystal) {
+                    if (!EnigmaticLegacy.soulCrystal.retrieveSoulFromCrystal(player, itemstack))
+                        return;
+
+                }
                 EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(this.posX, this.posY + (this.getEyeHeight() / 2), this.posZ, 48, false), new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), this.posX, this.posY + (this.getEyeHeight() / 2), this.posZ, 64));
 
                 player.addStat(StatList.getObjectsPickedUpStats(item), i);

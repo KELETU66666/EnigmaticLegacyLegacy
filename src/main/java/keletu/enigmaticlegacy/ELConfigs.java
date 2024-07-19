@@ -61,6 +61,8 @@ public class ELConfigs {
     public static float infinitumKnockbackBonus;
     public static float infinitumLifestealBonus;
     public static float infinitumUndeadProbability;
+    public static float enigmaticAmuletDamageBonus;
+    public static boolean vesselEnabled;
 
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
@@ -179,6 +181,9 @@ public class ELConfigs {
 
         infinitumUndeadProbability = config.getFloat("UndeadProbability", "The Infinitum", 0.85F, 0, 1, "Knockback bonus of The Infinitum. For Phantoms, this value is multiplied by 1.5.");
 
+        enigmaticAmuletDamageBonus = config.getFloat("DamageBonus", "Enigamtic Amulet", 1.5F, 0, 32768, "The damage bonus stat provided by red Enigmatic Amulet.");
+
+        vesselEnabled = config.getBoolean("VesselEnabled", "Enigamtic Amulet", true, "Whether or not Enigmatic Amulet should be summoning Extradimensional Vessel on owner's death.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should never be affected"

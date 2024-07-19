@@ -1,0 +1,50 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "enigmaticlegacy:items/unwitnessed_amulet"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "meta": 1
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_red"
+        },
+        {
+            "predicate": {
+                "meta": 2
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_aqua"
+        },
+        {
+            "predicate": {
+                "meta": 3
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_violet"
+        },
+        {
+            "predicate": {
+                "meta": 4
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_magenta"
+        },
+        {
+            "predicate": {
+                "meta": 5
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_green"
+        },
+        {
+            "predicate": {
+                "meta": 6
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_black"
+        },
+        {
+            "predicate": {
+                "meta": 7
+            },
+            "model": "enigmaticlegacy:item/enigmatic_amulet_blue"
+        }
+    ]
+}

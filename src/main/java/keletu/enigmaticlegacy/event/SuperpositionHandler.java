@@ -1,7 +1,6 @@
 package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
@@ -36,7 +35,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class SuperpositionHandler {
-
+    
     public static int getCurseAmount(ItemStack stack) {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
         int totalCurses = 0;
@@ -89,7 +88,7 @@ public class SuperpositionHandler {
         if (Loader.isModLoaded("gokistats")) {
             return false;
         }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss;
+        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss && hasCursed(player);
     }
 
     public static void loseSoul(EntityPlayer player) {
@@ -165,31 +164,6 @@ public class SuperpositionHandler {
      */
     public static boolean stackEqualExact(ItemStack stack1, ItemStack stack2) {
         return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2);
-    }
-
-    public static void returnBaubles(EntityPlayer player, NonNullList<ItemStack> items) {
-
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-
-        if (items.size() != baubles.getSlots()) {
-            giveItems(player, items);
-            return;
-        }
-
-        NonNullList<ItemStack> displaced = NonNullList.create();
-
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            ItemStack kept = items.get(i);
-            if (!kept.isEmpty()) {
-                ItemStack existing = baubles.getStackInSlot(i);
-                baubles.setStackInSlot(i, kept);
-                if (!existing.isEmpty()) {
-                    displaced.add(existing);
-                }
-            }
-        }
-
-        giveItems(player, displaced);
     }
 
     private static void giveItems(EntityPlayer player, NonNullList<ItemStack> items) {

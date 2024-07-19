@@ -17,6 +17,7 @@ import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.LoggerWrapper;
 import keletu.enigmaticlegacy.util.LootHandler;
 import keletu.enigmaticlegacy.util.ModCompat;
+import keletu.enigmaticlegacy.util.compat.CompatTombManyGraves;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -77,6 +78,7 @@ public class EnigmaticLegacy {
         }
     };
 
+    public static ItemEnigmaticAmulet enigmaticAmulet = new ItemEnigmaticAmulet();
     public static Item cursedRing = new ItemCursedRing();
     //public static Item cursedStone = new ItemCursedStone();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
@@ -93,6 +95,7 @@ public class EnigmaticLegacy {
     public static Item xpScroll = new ItemExperienceScroll();
     public static Item cursedScroll = new ItemCursedScroll();
     public static Item animalGuide = new ItemAnimalGuide();
+    public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
@@ -170,6 +173,9 @@ public class EnigmaticLegacy {
     public void postInit(FMLPostInitializationEvent event) {
         if(ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
+
+        if(ModCompat.COMPAT_TOMBMANYGRAVES)
+            new CompatTombManyGraves();
     }
 
     @Mod.EventBusSubscriber
@@ -178,6 +184,7 @@ public class EnigmaticLegacy {
         @SubscribeEvent
         public static void addItems(RegistryEvent.Register<Item> event) {
             event.getRegistry().register(theAcknowledgment);
+            event.getRegistry().register(enigmaticAmulet);
             event.getRegistry().register(ironRing);
             event.getRegistry().register(gemRing);
             event.getRegistry().register(enderRing);
@@ -186,6 +193,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(cursedRing);
             //event.getRegistry().register(cursedStone);
             event.getRegistry().register(soulCrystal);
+            event.getRegistry().register(storageCrystal);
             event.getRegistry().register(miningCharm);
             event.getRegistry().register(monsterCharm);
             event.getRegistry().register(berserkEmblem);
@@ -269,6 +277,10 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(thiccScroll, 0, new ModelResourceLocation(thiccScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(theInfinitum, 0, new ModelResourceLocation(theInfinitum.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(abyssalHeart, 0, new ModelResourceLocation(abyssalHeart.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(storageCrystal, 0, new ModelResourceLocation(storageCrystal.getRegistryName(), "inventory"));
+
+            for(int i = 0; i< 8; i++)
+                ModelLoader.setCustomModelResourceLocation(enigmaticAmulet, i, new ModelResourceLocation(enigmaticAmulet.getRegistryName(), "inventory"));
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntitySoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }
