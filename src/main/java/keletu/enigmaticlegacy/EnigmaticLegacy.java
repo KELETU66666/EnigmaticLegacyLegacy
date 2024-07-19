@@ -56,7 +56,7 @@ import net.minecraftforge.oredict.OreDictionary;
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
         version = EnigmaticLegacy.VERSION,
-        dependencies = "required-after:baubles;after:patchouli;after:grimoire"
+        dependencies = "required-after:baubles;after:patchouli"
 )
 public class EnigmaticLegacy {
 
@@ -125,6 +125,7 @@ public class EnigmaticLegacy {
     public static Item theTwist = new ItemTheTwist();
     public static Item theInfinitum = new ItemTheInfinitum();
     public static Item infinimeal = new ItemInfinimeal();
+    public static Item infernalShield = new ItemInfernalShield();
 
     public static SimpleNetworkWrapper packetInstance;
 
@@ -205,6 +206,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(evilEssence);
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
+            event.getRegistry().register(infernalShield);
             event.getRegistry().register(etheriumOre);
             event.getRegistry().register(etheriumIngot);
             event.getRegistry().register(enderRod);
@@ -278,6 +280,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(theInfinitum, 0, new ModelResourceLocation(theInfinitum.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(abyssalHeart, 0, new ModelResourceLocation(abyssalHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(storageCrystal, 0, new ModelResourceLocation(storageCrystal.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(infernalShield, 0, new ModelResourceLocation(infernalShield.getRegistryName(), "inventory"));
 
             for(int i = 0; i< 8; i++)
                 ModelLoader.setCustomModelResourceLocation(enigmaticAmulet, i, new ModelResourceLocation(enigmaticAmulet.getRegistryName(), "inventory"));

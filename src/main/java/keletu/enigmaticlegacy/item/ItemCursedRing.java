@@ -143,7 +143,7 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 				continue;
 
 			if (itemRand.nextDouble() <= (0.002 * endermenRandomportFrequency)) {
-				if (enderman.attemptTeleport(player.posX, player.posY, player.posZ) && player.canEntityBeSeen(enderman)) {
+				if (enderman.teleportToEntity(player) && player.canEntityBeSeen(enderman)) {
 					enderman.setAttackTarget(player);
 				}
 			}

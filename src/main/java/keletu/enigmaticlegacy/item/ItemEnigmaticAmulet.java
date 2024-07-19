@@ -91,8 +91,7 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
     }
 
     public boolean ifHasColor(EntityPlayer player, int meta) {
-        ItemStack stack = new ItemStack(this, 1, meta);
-        return BaublesApi.isBaubleEquipped(player, this) != -1 && stack.getMetadata() == meta;
+        return BaublesApi.isBaubleEquipped(player, this) != -1 && BaublesApi.getBaubles(player).getStackInSlot(0).getMetadata() == meta;
     }
 
     public Multimap<String, AttributeModifier> getCurrentModifiers(ItemStack stack, EntityPlayer player) {

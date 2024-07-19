@@ -178,8 +178,8 @@ public class ELCoreTransformer implements IClassTransformer {
                         break;
                     }
                 }
-                int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
-                for (int j = 0; j < i; ++j) {
+                //int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
+                //for (int j = 0; j < i; ++j) {
                     if (worldIn.rand.nextFloat() <= chance) {
                         Item item = state.getBlock().getItemDropped(state, worldIn.rand, fortune + baseExtraFortune);
 
@@ -187,7 +187,7 @@ public class ELCoreTransformer implements IClassTransformer {
                             Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
                         }
                     }
-                }
+                //}
             }
         }
     }
