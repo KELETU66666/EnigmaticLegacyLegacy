@@ -7,16 +7,12 @@ import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
-import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumAction;
@@ -25,15 +21,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 
 public class ELCoreTransformer implements IClassTransformer {
@@ -42,10 +34,10 @@ public class ELCoreTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String className, String newClassName, byte[] origCode) {
         isDeobfEnvironment = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
-        if (newClassName.equals("net.minecraft.block.Block")) {
+        /*if (newClassName.equals("net.minecraft.block.Block")) {
             byte[] newCode = patchGetFortuneModifier(origCode);
             return newCode;
-        }
+        }*/
         if (newClassName.equals("net.minecraft.enchantment.EnchantmentHelper")) {
             byte[] newCode = patchGetLootModifier(origCode);
             return newCode;
@@ -60,12 +52,12 @@ public class ELCoreTransformer implements IClassTransformer {
         }
         return origCode;
     }
-
+/*
     private byte[] patchGetFortuneModifier(byte[] origCode) {
-        final String methodToPatch1 = "dropBlockAsItemWithChance";
-        final String methodToPatch_srg1 = "func_180653_a";
+        final String methodToPatch1 = "quantityDropped";
+        final String methodToPatch_srg1 = "func_149745_a";
 
-        final String desc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;FI)V";
+        final String desc = "(Lnet/minecraft/block/state/IBlockState;FI)I";
 
         ClassReader cr = new ClassReader(origCode);
         ClassNode classNode = new ClassNode();
@@ -79,12 +71,10 @@ public class ELCoreTransformer implements IClassTransformer {
 
                     if (insn.getOpcode() == Opcodes.RETURN) {
                         InsnList endList = new InsnList();
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 1)); // World
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 2)); // BlockPos
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 3)); // IBlockState
-                        endList.add(new VarInsnNode(Opcodes.FLOAD, 4)); // Chance
-                        endList.add(new VarInsnNode(Opcodes.ILOAD, 5)); // Fortune
-                        endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "block_dropBlockAsItemWithChance", desc, false));
+                        endList.add(new VarInsnNode(Opcodes.ALOAD, 1)); // IBlockState
+                        endList.add(new VarInsnNode(Opcodes.ILOAD, 2)); // Fortune
+                        endList.add(new VarInsnNode(Opcodes.ALOAD, 0)); // Random
+                        endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "block_quantityDropped", "(Lnet/minecraft/block/state/IBlockState;ILjava/util/Random;)I", false));
                         methodNode.instructions.insertBefore(insn, endList);
                     }
                 }
@@ -95,7 +85,7 @@ public class ELCoreTransformer implements IClassTransformer {
 
         return cw.toByteArray();
     }
-
+*/
     private byte[] patchGetLootModifier(byte[] origCode) {
         final String methodToPatch2 = "getLootingModifier";
         final String methodToPatch_srg2 = "func_185283_h";
@@ -167,38 +157,24 @@ public class ELCoreTransformer implements IClassTransformer {
 
         return cw.toByteArray();
     }
-
-    public static void block_dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) throws IllegalAccessException {
-        if (!worldIn.isRemote) {
+/*
+    public static int block_quantityDropped(IBlockState state, int fortune, Random random) {
+        try {
             Field field = ReflectionHelper.findField(Block.class, "harvesters");
             field.setAccessible(true);
             ThreadLocal<EntityPlayer> stupidForgeMethod = (ThreadLocal<EntityPlayer>) field.get(state.getBlock());
 
             if (stupidForgeMethod.get() != null) {
-                int baseExtraFortune = 0;
-                if (hasCursed(stupidForgeMethod.get()))
-                    baseExtraFortune += ELConfigs.fortuneBonus;
-                for (int c = 0; c < BaublesApi.getBaubles(stupidForgeMethod.get()).getSizeInventory(); c++) {
-                    ItemStack bStack = BaublesApi.getBaubles(stupidForgeMethod.get()).getStackInSlot(c);
-                    if (!bStack.isEmpty() && bStack.getItem() instanceof IFortuneBonus) {
-                        baseExtraFortune += ((IFortuneBonus)bStack.getItem()).bonusLevelFortune();
-                        break;
-                    }
-                }
-                int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
-                for (int j = 0; j < i; ++j) {
-                    if (worldIn.rand.nextFloat() <= chance) {
-                        Item item = state.getBlock().getItemDropped(state, worldIn.rand, state.getBlock().quantityDropped(worldIn.rand) != state.getBlock().quantityDroppedWithBonus(fortune, worldIn.rand) ? fortune + baseExtraFortune : 0);
-
-                        if (item != Items.AIR) {
-                            Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
-                        }
-                    }
-                }
+                int baseFortune = fortune + ELConfigs.fortuneBonus;
+                return state.getBlock().quantityDroppedWithBonus(baseFortune, random);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
 
+        return state.getBlock().quantityDroppedWithBonus(fortune, random);
+    }
+*/
     public static int containerEnchantment_getLapisAmount(ContainerEnchantment container) {
         EntityPlayer containerUser = null;
 

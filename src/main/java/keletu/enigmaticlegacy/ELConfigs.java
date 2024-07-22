@@ -108,7 +108,7 @@ public class ELConfigs {
         neutralXRayRange = config.getFloat("NeutralXRayRange", "The Seven Curses", 4, 0, 100, "Range in which neutral creatures can see and target bearers of the ring even if they can't directly see them.");
 
         endermenRandomportFrequency = config.getFloat("EndermenRandomportFrequency", "The Seven Curses", 1, 0.01F, 100, "Allows to adjust how frequently Endermen will try to randomly teleport to player bearing the ring, even "
-                        + "if they can't see the player and are not angered yet. Lower value = less probability of this happening.");
+                + "if they can't see the player and are not angered yet. Lower value = less probability of this happening.");
 
         endermenRandomportRange = config.getFloat("EndermenRandomportRange", "The Seven Curses", 32, 8, 100, "Range in which Endermen can try to randomly teleport to bearers of the ring.");
 
@@ -138,7 +138,7 @@ public class ELConfigs {
 
         attackSpeed = config.getFloat("AttackSpeedBoost", "Emblem of Bloodstained Valor", 1, 0, 100, "Attack speed increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
 
-        movementSpeed = config.getFloat("SpeedBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100 ,"Movement speed increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
+        movementSpeed = config.getFloat("SpeedBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100, "Movement speed increase provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
 
         damageResistance = config.getFloat("ResistanceBoost", "Emblem of Bloodstained Valor", 0.5F, 0, 100, "Damage resistance provided by Emblem of Bloodstained Valor for each missing percent of health. Measured as percentage.");
 
@@ -186,13 +186,13 @@ public class ELConfigs {
         vesselEnabled = config.getBoolean("VesselEnabled", "Enigamtic Amulet", true, "Whether or not Enigmatic Amulet should be summoning Extradimensional Vessel on owner's death.");
 
         neutralAngerBlacklist.clear();
-        String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should never be affected"
+        String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:wisp", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect.");
 
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         neutralAngerWhitelist.clear();
-        String[] whitelist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman"}, "List of entities that should be affected"
+        String[] whitelist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem"}, "List of entities that should be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
 
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
