@@ -13,6 +13,7 @@ import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
+import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import net.minecraft.block.Block;
@@ -46,6 +47,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.util.FakePlayer;
@@ -691,6 +693,20 @@ public class ELEvents {
             }
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
                 event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) ELConfigs.damageResistance)));
+            }
+
+            /*
+             * Handler for increasing damage on users of Bulwark of Blazing Pride.
+             */
+            if (event.getSource().getTrueSource() != null) {
+                if (player.getActiveItemStack().getItem() instanceof ItemInfernalShield && player.isActiveItemStackBlocking()) {
+                    Vec3d sourcePos = event.getSource().getDamageLocation();
+                    if (sourcePos != null) {
+                        if (lookPlayersBack(player.rotationYaw, event.getSource().getTrueSource().rotationYaw, 50.0D)) {
+                            event.setAmount(event.getAmount() * 1.5F);
+                        }
+                    }
+                }
             }
         }
 

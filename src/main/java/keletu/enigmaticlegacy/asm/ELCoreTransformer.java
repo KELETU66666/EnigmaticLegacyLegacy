@@ -3,12 +3,14 @@ package keletu.enigmaticlegacy.asm;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
 import net.minecraft.block.Block;
+import static net.minecraft.block.Block.spawnAsEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,12 +20,16 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -32,6 +38,7 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 
 public class ELCoreTransformer implements IClassTransformer {
     static boolean isDeobfEnvironment;
@@ -49,6 +56,10 @@ public class ELCoreTransformer implements IClassTransformer {
         }
         if (newClassName.equals("net.minecraft.inventory.ContainerEnchantment")) {
             byte[] newCode = patchEnchantmentMethods(origCode);
+            return newCode;
+        }
+        if (newClassName.equals("net.minecraft.entity.EntityLivingBase")) {
+            byte[] newCode = patchEntityLivingBase(origCode);
             return newCode;
         }
         return origCode;
@@ -162,32 +173,30 @@ public class ELCoreTransformer implements IClassTransformer {
     }
 
     public static void block_dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) throws IllegalAccessException {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
+        {
             Field field = ReflectionHelper.findField(Block.class, "harvesters");
             field.setAccessible(true);
             ThreadLocal<EntityPlayer> stupidForgeMethod = (ThreadLocal<EntityPlayer>) field.get(state.getBlock());
 
             if (stupidForgeMethod.get() != null) {
-                int baseExtraFortune = 0;
+                List<ItemStack> drops = worldIn.getBlockState(pos).getBlock().getDrops(worldIn, pos, state, fortune); // use the old method until it gets removed, for backward compatibility
+                chance = ForgeEventFactory.fireBlockHarvesting(drops, worldIn, pos, state, fortune, chance, false, stupidForgeMethod.get());
+
                 if (hasCursed(stupidForgeMethod.get()))
-                    baseExtraFortune += ELConfigs.fortuneBonus;
+                    chance += ELConfigs.fortuneBonus;
                 for (int c = 0; c < BaublesApi.getBaubles(stupidForgeMethod.get()).getSizeInventory(); c++) {
                     ItemStack bStack = BaublesApi.getBaubles(stupidForgeMethod.get()).getStackInSlot(c);
                     if (!bStack.isEmpty() && bStack.getItem() instanceof IFortuneBonus) {
-                        baseExtraFortune += ((IFortuneBonus)bStack.getItem()).bonusLevelFortune();
+                        chance += ((IFortuneBonus) bStack.getItem()).bonusLevelFortune();
                         break;
                     }
                 }
-                //int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
-                //for (int j = 0; j < i; ++j) {
+                for (ItemStack drop : drops) {
                     if (worldIn.rand.nextFloat() <= chance) {
-                        Item item = state.getBlock().getItemDropped(state, worldIn.rand, fortune + baseExtraFortune);
-
-                        if (item != Items.AIR) {
-                            Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
-                        }
+                        spawnAsEntity(worldIn, pos, drop);
                     }
-                //}
+                }
             }
         }
     }
@@ -230,6 +239,61 @@ public class ELCoreTransformer implements IClassTransformer {
         }
     }
 
+    private byte[] patchEntityLivingBase(byte[] origCode) {
+        final String methodToPatch2 = "canBlockDamageSource";
+        final String methodToPatch_srg2 = "func_184583_d";
+        final String methodToPatch3 = "isActiveItemStackBlocking";
+        final String methodToPatch_srg3 = "func_184585_cz";
+
+        ClassReader cr = new ClassReader(origCode);
+        ClassNode classNode = new ClassNode();
+        cr.accept(classNode, 0);
+
+        for (MethodNode methodNode : classNode.methods) {
+            if ((methodNode.name.equals(methodToPatch2) || methodNode.name.equals(methodToPatch_srg2)) && methodNode.desc.equals("(Lnet/minecraft/util/DamageSource;)Z")) {
+                Iterator<AbstractInsnNode> insnNodes = methodNode.instructions.iterator();
+                while (insnNodes.hasNext()) {
+                    AbstractInsnNode insn = insnNodes.next();
+                    if (insn.getOpcode() == Opcodes.IRETURN) {
+                        InsnList endList = new InsnList();
+                        endList.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                        endList.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                        endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "elb_canBlockDamageSource", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/util/DamageSource;)Z", false));
+                        methodNode.instructions.insertBefore(insn, endList);
+                    }
+                }
+            } else if ((methodNode.name.equals(methodToPatch3) || methodNode.name.equals(methodToPatch_srg3)) && methodNode.desc.equals("()Z")) {
+                InsnList startList = new InsnList();
+                startList.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                startList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "elb_isActiveItemBlocking", "(Lnet/minecraft/entity/EntityLivingBase;)Z", false));
+                methodNode.instructions.insert(startList);
+            }
+        }
+
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        classNode.accept(cw);
+
+        return cw.toByteArray();
+    }
+
+    public static boolean elb_canBlockDamageSource(EntityLivingBase elb, DamageSource damageSourceIn) {
+        return SuperpositionHandler.onDamageSourceBlocking(elb, elb.getActiveItemStack(), damageSourceIn);
+    }
+
+    public static boolean elb_isActiveItemBlocking(EntityLivingBase elb) {
+        if (elb.isHandActive() && !elb.getActiveItemStack().isEmpty()) {
+            Item item = elb.getActiveItemStack().getItem();
+
+            if (item.getItemUseAction(elb.getActiveItemStack()) != EnumAction.BLOCK) {
+                return false;
+            } else {
+                return item.getMaxItemUseDuration(elb.getActiveItemStack()) - elb.getItemInUseCount() >= 0;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public static int enchantment_getLootingLevel(EntityLivingBase living) {
         int base = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOOTING, living.getHeldItemMainhand());
         if (living instanceof EntityPlayer) {
@@ -246,4 +310,6 @@ public class ELCoreTransformer implements IClassTransformer {
         }
         return base;
     }
+
+
 }

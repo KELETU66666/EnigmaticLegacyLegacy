@@ -225,9 +225,5 @@
       "translation": [1.75, -5.25, 0.25],
       "scale": [0.75195, 0.75195, 0.75195]
     }
-  },
-  "overrides": [{
-    "predicate": { "blocking": 1 },
-    "model": "enigmaticlegacy:item/infernal_shield_blocking"
-  }]
+  }
 }

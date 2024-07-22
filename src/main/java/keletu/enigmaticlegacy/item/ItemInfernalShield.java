@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
+import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,10 +25,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemInfernalShield extends ItemBase {
+public class ItemInfernalShield extends ItemShield {
 
     public ItemInfernalShield() {
-        super("infernal_shield", EnumRarity.EPIC);
+        this.setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "infernal_shield"));
+        this.setTranslationKey("infernal_shield");
         this.maxStackSize = 1;
         this.setMaxDamage(10000);
         this.addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter()

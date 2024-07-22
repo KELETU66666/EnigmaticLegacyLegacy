@@ -10,18 +10,26 @@ import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
+import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -29,13 +37,65 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class SuperpositionHandler {
-    
+
+    public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source) {
+        if (blocker instanceof EntityPlayer && useItem != null) {
+            EntityPlayer player = (EntityPlayer) blocker;
+            boolean blocking = player.isActiveItemStackBlocking();
+
+            if (blocking && useItem.getItem() instanceof ItemInfernalShield) {
+
+                // defend against Piercing... for now
+
+                if (!source.isMagicDamage() && player.isActiveItemStackBlocking()) {
+                    Vec3d sourcePos = source.getDamageLocation();
+                    if (sourcePos != null && source.getTrueSource() != null) {
+                        if (!lookPlayersBack(player.rotationYaw, source.getTrueSource().rotationYaw, 50.0D)) {
+
+                            int strength = -1;
+
+                            if (player.isPotionActive(EnigmaticLegacy.blazingStrengthEffect)) {
+                                PotionEffect effectInstance = player.getActivePotionEffect(EnigmaticLegacy.blazingStrengthEffect);
+                                if (effectInstance != null) {
+                                    strength = effectInstance.getAmplifier();
+                                    player.removePotionEffect(EnigmaticLegacy.blazingStrengthEffect);
+                                    strength = Math.min(strength, 2);
+                                }
+                            }
+
+                            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.blazingStrengthEffect, 1200, strength + 1, true, true));
+
+                            if (source.getTrueSource() instanceof EntityLivingBase && !source.getTrueSource().isDead) {
+                                EntityLivingBase living = (EntityLivingBase) source.getTrueSource();
+                                if (!living.isImmuneToFire() && !(living instanceof EntityGuardian)) {
+                                    StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+
+                                    // Ensure that we will not be caught in any sort of StackOverflow because of thorns-like effects
+                                    if (Arrays.stream(stacktrace).filter(element -> {
+                                        return SuperpositionHandler.class.getName().equals(element.getClassName());
+                                    }).count() < 2) {
+                                        living.setEntityInvulnerable(false);
+                                        living.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.getDamageType(), player), 4F);
+                                        living.setFire(4);
+                                        ELEvents.knockbackThatBastard.remove(living);
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        return false;
+    }
+
     public static int getCurseAmount(ItemStack stack) {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
         int totalCurses = 0;
@@ -290,5 +350,14 @@ public class SuperpositionHandler {
 
             return text;
         }
+    }
+
+
+    public static boolean lookPlayersBack(double y1, double y2, double back) {
+        back = Math.abs(back);
+        double d = Math.abs(y1 - y2) % 360;
+        double dif = d > 180.0D ? 360.0D - d : d;
+
+        return dif < back;
     }
 }

@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.*;
+import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -30,6 +31,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -128,6 +130,7 @@ public class EnigmaticLegacy {
     public static Item infernalShield = new ItemInfernalShield();
 
     public static SimpleNetworkWrapper packetInstance;
+    public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -226,6 +229,11 @@ public class EnigmaticLegacy {
             event.getRegistry().register(astralBreaker);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
+        }
+
+        @SubscribeEvent
+        public static void registerEffects(final RegistryEvent.Register<Potion> event) {
+            event.getRegistry().register(blazingStrengthEffect);
         }
 
         @SubscribeEvent
