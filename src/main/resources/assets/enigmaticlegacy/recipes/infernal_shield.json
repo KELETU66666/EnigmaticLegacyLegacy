@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "PIP",
+    "RSR",
+    "OCO"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "R": {
+      "item": "minecraft:blaze_rod"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "S": {
+      "item": "minecraft:shield"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotNetherite"
+    },
+	"C": {
+      "item": "enigmaticlegacy:twisted_core"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:infernal_shield"
+  }
+}

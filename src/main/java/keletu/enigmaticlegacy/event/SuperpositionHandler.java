@@ -91,6 +91,7 @@ public class SuperpositionHandler {
                 }
                 return false;
             }
+            return blocker.isActiveItemStackBlocking();
         }
 
         return false;

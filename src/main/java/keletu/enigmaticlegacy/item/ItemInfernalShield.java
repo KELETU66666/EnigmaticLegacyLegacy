@@ -30,17 +30,13 @@ public class ItemInfernalShield extends ItemShield {
     public ItemInfernalShield() {
         this.setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "infernal_shield"));
         this.setTranslationKey("infernal_shield");
-        this.maxStackSize = 1;
         this.setMaxDamage(10000);
-        this.addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter()
-        {
+        this.addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
-            {
+            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
                 return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
             }
         });
-
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
@@ -123,4 +119,19 @@ public class ItemInfernalShield extends ItemShield {
         return 16;
     }
 
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return I18n.format("item.infernal_shield.name");
+    }
+
+    @Override
+    public boolean isShield(ItemStack stack, @Nullable EntityLivingBase entity) {
+        return true;
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        return EnumRarity.EPIC;
+    }
 }

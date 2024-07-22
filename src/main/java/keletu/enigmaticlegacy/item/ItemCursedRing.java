@@ -59,7 +59,7 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 			if (painMultiplier == 2.0) {
 				list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing4"));
 			} else {
-				list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing4_alt") + TextFormatting.GOLD + painMultiplier+"%");
+				list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing4_alt") + TextFormatting.GOLD + painMultiplier * 100 +"%");
 			}
 			list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing5"));
 			list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing6") + TextFormatting.GOLD + Math.round(armorDebuff * 100) + "%" + I18n.format("tooltip.enigmaticlegacy.cursedRing6_1"));

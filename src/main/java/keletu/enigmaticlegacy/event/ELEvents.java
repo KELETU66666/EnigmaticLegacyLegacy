@@ -40,10 +40,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -61,6 +58,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import static net.minecraftforge.fml.common.eventhandler.EventPriority.HIGH;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -708,6 +706,10 @@ public class ELEvents {
                     }
                 }
             }
+
+            if (player.isPotionActive(blazingStrengthEffect) && event.getAmount() > 0) {
+                player.removePotionEffect(blazingStrengthEffect);
+            }
         }
 
         if (event.getEntityLiving() instanceof EntityMob) {
@@ -734,7 +736,7 @@ public class ELEvents {
                 }
                 if (hasCursed(player)) {
                     if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum)) {
-                        event.setAmount(event.getAmount() * ELConfigs.monsterDamageDebuff);
+                        event.setAmount(event.getAmount() * (1 - ELConfigs.monsterDamageDebuff));
                     }
                 }
             }

@@ -10,7 +10,6 @@ import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.util.IFortuneBonus;
 import keletu.enigmaticlegacy.util.ILootingBonus;
 import net.minecraft.block.Block;
-import static net.minecraft.block.Block.spawnAsEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,9 +26,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -38,7 +35,6 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
-import java.util.List;
 
 public class ELCoreTransformer implements IClassTransformer {
     static boolean isDeobfEnvironment;
@@ -173,28 +169,30 @@ public class ELCoreTransformer implements IClassTransformer {
     }
 
     public static void block_dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) throws IllegalAccessException {
-        if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
-        {
+        if (!worldIn.isRemote) {
             Field field = ReflectionHelper.findField(Block.class, "harvesters");
             field.setAccessible(true);
             ThreadLocal<EntityPlayer> stupidForgeMethod = (ThreadLocal<EntityPlayer>) field.get(state.getBlock());
 
             if (stupidForgeMethod.get() != null) {
-                List<ItemStack> drops = worldIn.getBlockState(pos).getBlock().getDrops(worldIn, pos, state, fortune); // use the old method until it gets removed, for backward compatibility
-                chance = ForgeEventFactory.fireBlockHarvesting(drops, worldIn, pos, state, fortune, chance, false, stupidForgeMethod.get());
-
+                int baseExtraFortune = 0;
                 if (hasCursed(stupidForgeMethod.get()))
-                    chance += ELConfigs.fortuneBonus;
+                    baseExtraFortune += ELConfigs.fortuneBonus;
                 for (int c = 0; c < BaublesApi.getBaubles(stupidForgeMethod.get()).getSizeInventory(); c++) {
                     ItemStack bStack = BaublesApi.getBaubles(stupidForgeMethod.get()).getStackInSlot(c);
                     if (!bStack.isEmpty() && bStack.getItem() instanceof IFortuneBonus) {
-                        chance += ((IFortuneBonus) bStack.getItem()).bonusLevelFortune();
+                        baseExtraFortune += ((IFortuneBonus)bStack.getItem()).bonusLevelFortune();
                         break;
                     }
                 }
-                for (ItemStack drop : drops) {
+                int i = state.getBlock().quantityDroppedWithBonus(fortune + baseExtraFortune, worldIn.rand) - 1;
+                for (int j = 0; j < i; ++j) {
                     if (worldIn.rand.nextFloat() <= chance) {
-                        spawnAsEntity(worldIn, pos, drop);
+                        Item item = state.getBlock().getItemDropped(state, worldIn.rand, state.getBlock().quantityDropped(worldIn.rand) != state.getBlock().quantityDroppedWithBonus(fortune, worldIn.rand) ? fortune + baseExtraFortune : 0);
+
+                        if (item != Items.AIR) {
+                            Block.spawnAsEntity(worldIn, pos, new ItemStack(item, 1, state.getBlock().damageDropped(state)));
+                        }
                     }
                 }
             }

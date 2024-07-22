@@ -79,7 +79,7 @@ public class ELConfigs {
 
         painMultiplier = config.getFloat("PainModifier", "The Seven Curses", 2F, 0, 100, "Defines how much damage bearers of the ring receive from any source. Measured as percentage.");
 
-        monsterDamageDebuff = config.getFloat("MonsterDamageDebuff", "The Seven Curses", 0.5F, 0, 100, "How much damage monsters receive from bearers of the ring will be decreased, in percents.");
+        monsterDamageDebuff = config.getFloat("MonsterDamageDebuff", "The Seven Curses", 0.5F, 0, 1, "How much damage monsters receive from bearers of the ring will be decreased, in percents.");
 
         armorDebuff = config.getFloat("ArmorDebuff", "The Seven Curses", 0.3F, 0, 1, "How much less effective armor will be for those who bear the ring. Measured as percetage.");
 
@@ -198,7 +198,7 @@ public class ELConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
