@@ -236,15 +236,15 @@ public class ELCoreTransformer implements IClassTransformer {
                         methodNode.instructions.insertBefore(insn, endList);
                     }
                 }
-            } else if ((methodNode.name.equals(methodToPatch3) || methodNode.name.equals(methodToPatch_srg3)) && methodNode.desc.equals("()Z")) {
+            } /*else if ((methodNode.name.equals(methodToPatch3) || methodNode.name.equals(methodToPatch_srg3)) && methodNode.desc.equals("()Z")) {
                 InsnList startList = new InsnList();
                 startList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 startList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "elb_isActiveItemBlocking", "(Lnet/minecraft/entity/EntityLivingBase;)Z", false));
                 methodNode.instructions.insert(startList);
-            }
+            }*/
         }
 
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
 
         return cw.toByteArray();

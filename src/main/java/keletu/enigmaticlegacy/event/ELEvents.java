@@ -831,7 +831,7 @@ public class ELEvents {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
-        if (!data.getBoolean(SPAWN_WITH_BOOK)) {
+        if (!data.getBoolean(SPAWN_WITH_BOOK) && spawnWithBook) {
             ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(theAcknowledgment));
             data.setBoolean(SPAWN_WITH_BOOK, true);
         }
