@@ -7,8 +7,6 @@ import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.container.gui.GuiExtendedBaublesButton;
-import keletu.enigmaticlegacy.container.gui.GuiExtraBaubles;
-import keletu.enigmaticlegacy.container.gui.GuiPlayerButton;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.isTheWorthyOne;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -76,9 +74,6 @@ public class EventHandlerItem
 		if (event.getGui() instanceof GuiPlayerExpanded) {
 			GuiContainer gui = (GuiContainer) event.getGui();
 			event.getButtonList().add(new GuiExtendedBaublesButton(55, gui, 114, 69, 10, 10));
-		}else if (event.getGui() instanceof GuiExtraBaubles) {
-			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiPlayerButton(55, gui, 64, 9, 10, 10));
 		}
 	}
 
