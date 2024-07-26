@@ -41,14 +41,26 @@ import java.util.UUID;
 
 public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 
-	protected final Multimap<String, AttributeModifier> attributeMap = HashMultimap.create();
-
 	public ItemCursedRing() {
 		super("cursed_ring", EnumHelper.addRarity("Curses", TextFormatting.DARK_RED, "Curses"));
 
 		this.maxStackSize = 1;
-		this.attributeMap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
-		this.attributeMap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
+		}
+
+	@Override
+	public void onUnequipped(ItemStack stack, EntityLivingBase living) {
+		if (living instanceof EntityPlayer) {
+			living.getAttributeMap().removeAttributeModifiers(this.createAttributeMap((EntityPlayer) living));
+		}
+	}
+
+	private Multimap<String, AttributeModifier> createAttributeMap(EntityPlayer player) {
+		Multimap<String, AttributeModifier> attributesDefault = HashMultimap.create();
+
+		attributesDefault.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
+		attributesDefault.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
+
+		return attributesDefault;
 	}
 
 	@Override
@@ -99,20 +111,6 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 		return living instanceof EntityPlayer && ((EntityPlayer) living).isCreative();
 	}
 
-	@Override
-	public void onEquipped(ItemStack stack, EntityLivingBase player) {
-		if (!player.world.isRemote) {
-			player.getAttributeMap().applyAttributeModifiers(attributeMap);
-		}
-	}
-
-	@Override
-	public void onUnequipped(ItemStack stack, EntityLivingBase player) {
-		if (!player.world.isRemote) {
-			player.getAttributeMap().removeAttributeModifiers(attributeMap);
-		}
-	}
-
 	public boolean isItemDeathPersistent(ItemStack stack) {
 		return stack.getItem().equals(this);
 	}
@@ -131,6 +129,7 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 			return;
 
 		EntityPlayer player = (EntityPlayer) livingPlayer;
+		player.getAttributeMap().applyAttributeModifiers(this.createAttributeMap(player));
 
 		if (player.isCreative() || player.isSpectator())
 			return;

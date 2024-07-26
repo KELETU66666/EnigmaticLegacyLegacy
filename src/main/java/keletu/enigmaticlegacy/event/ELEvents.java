@@ -119,7 +119,7 @@ public class ELEvents {
 
             for (EntityItem entityItem : event.getDrops()) {
                 ItemStack itemStack = entityItem.getItem();
-                if (itemStack.getItem() == enigmaticAmulet) {
+                if (itemStack.getItem() == enigmaticAmulet || itemStack.getItem() == ascensionAmulet) {
                     found = true;
                     break;
                 }
@@ -339,7 +339,7 @@ public class ELEvents {
                 }
             }
 
-            if (EnigmaticLegacy.enigmaticAmulet.ifHasColor(player, 6)) {
+            if (SuperpositionHandler.isWearEnigmaticAmulet(player, 6)) {
                     lifesteal += event.getAmount() * 0.1F;
             }
 
@@ -381,7 +381,7 @@ public class ELEvents {
                     boolean trigger = false;
                     double chance = 0.0D;
 
-                    if (EnigmaticLegacy.enigmaticAmulet.ifHasColor(player, 3)) {
+                    if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
                         trigger = true;
                         chance += 0.15;
                     }
@@ -428,7 +428,7 @@ public class ELEvents {
             miningBoost += cursedScrollMiningBoost * getCurseAmount(event.getEntityPlayer());
         }
 
-        if (EnigmaticLegacy.enigmaticAmulet.ifHasColor(event.getEntityPlayer(), 5)) {
+        if (SuperpositionHandler.isWearEnigmaticAmulet(event.getEntityPlayer(), 5)) {
             miningBoost += 0.25F;
         }
 
@@ -680,7 +680,7 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
             if (event.getSource() == DamageSource.FALL) {
-                if (EnigmaticLegacy.enigmaticAmulet.ifHasColor(player, 4) && event.getAmount() <= 2.0f) {
+                if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4) && event.getAmount() <= 2.0f) {
                     event.setCanceled(true);
                 }
             }

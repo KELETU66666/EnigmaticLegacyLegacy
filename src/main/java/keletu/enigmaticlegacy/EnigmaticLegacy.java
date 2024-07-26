@@ -15,6 +15,7 @@ import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
+import keletu.enigmaticlegacy.util.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.util.LoggerWrapper;
 import keletu.enigmaticlegacy.util.LootHandler;
 import keletu.enigmaticlegacy.util.ModCompat;
@@ -31,6 +32,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -53,6 +55,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(
         modid = EnigmaticLegacy.MODID,
@@ -97,6 +100,7 @@ public class EnigmaticLegacy {
     public static Item xpScroll = new ItemExperienceScroll();
     public static Item cursedScroll = new ItemCursedScroll();
     public static Item animalGuide = new ItemAnimalGuide();
+    public static Item ascensionAmulet = new ItemAscensionAmulet();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
 
     //Material
@@ -128,6 +132,7 @@ public class EnigmaticLegacy {
     public static Item theInfinitum = new ItemTheInfinitum();
     public static Item infinimeal = new ItemInfinimeal();
     public static Item infernalShield = new ItemInfernalShield();
+    public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -212,6 +217,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(infernalShield);
             event.getRegistry().register(etheriumOre);
             event.getRegistry().register(etheriumIngot);
+            event.getRegistry().register(enchantmentTransposer);
             event.getRegistry().register(enderRod);
             event.getRegistry().register(astralDust);
             event.getRegistry().register(thiccScroll);
@@ -227,6 +233,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumPickaxe);
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
+            event.getRegistry().register(ascensionAmulet);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
         }
@@ -242,6 +249,22 @@ public class EnigmaticLegacy {
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 0));
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 1));
             OreDictionary.registerOre("ingotNetherite", new ItemStack(ingotWitherite, 1, 0));
+
+
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 1));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 2));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 3));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 4));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 5));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 6));
+            OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 7));
+        }
+
+        @SubscribeEvent
+        public static void registerRecipes(RegistryEvent.Register<IRecipe> evt) {
+            IForgeRegistry<IRecipe> r = evt.getRegistry();
+
+            r.register(new EnchantmentTransposingRecipe().setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "baguette_fix")));
         }
 
         @SubscribeEvent
@@ -289,6 +312,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(abyssalHeart, 0, new ModelResourceLocation(abyssalHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(storageCrystal, 0, new ModelResourceLocation(storageCrystal.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(infernalShield, 0, new ModelResourceLocation(infernalShield.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(enchantmentTransposer, 0, new ModelResourceLocation(enchantmentTransposer.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(ascensionAmulet, 0, new ModelResourceLocation(ascensionAmulet.getRegistryName(), "inventory"));
 
             for(int i = 0; i< 8; i++)
                 ModelLoader.setCustomModelResourceLocation(enigmaticAmulet, i, new ModelResourceLocation(enigmaticAmulet.getRegistryName(), "inventory"));

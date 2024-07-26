@@ -1,6 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
+import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,6 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDurability;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -31,6 +34,7 @@ public class ItemInfernalShield extends ItemShield {
         this.setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "infernal_shield"));
         this.setTranslationKey("infernal_shield");
         this.setMaxDamage(10000);
+        this.setCreativeTab(tabEnigmaticLegacy);
         this.addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
@@ -40,6 +44,22 @@ public class ItemInfernalShield extends ItemShield {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
+    @Override
+    @Nullable
+    public Entity createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
+        item.setDefaultPickupDelay();
+        item.motionX = location.motionX;
+        item.motionY = location.motionY;
+        item.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            item.setThrower(((EntityItem) location).getThrower());
+            item.setOwner(((EntityItem) location).getOwner());
+        }
+
+        return item;
+    }
+    
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (GuiScreen.isShiftKeyDown()) {

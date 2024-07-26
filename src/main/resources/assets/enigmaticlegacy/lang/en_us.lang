@@ -18,6 +18,7 @@ item.enchanter_pearl.name=Enchanter's Pearl
 item.xp_scroll.name=Scroll of Ageless Wisdom
 item.cursed_scroll.name=Scroll of a Thousand Curses
 item.animal_guide.name=Guide to Animal Companionship
+item.ascension_amulet.name=Ascension Amulet
 
 #material
 item.astral_dust.name=Astral dust
@@ -48,6 +49,7 @@ item.etherium_scythe.name=Etherium Scythe
 item.astral_breaker.name=Astral Breaker
 item.infinimeal.name=Essence of Raging Life
 item.infernal_shield.name=Bulwark of Blazing Pride
+item.enchantment_transposer.name=Tome of Hungering Knowledge
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -233,6 +235,10 @@ tooltip.enigmaticlegacy.xpTomeLevels=§6levels.
 tooltip.enigmaticlegacy.xpTomeAbsorption=§6Absorption
 tooltip.enigmaticlegacy.xpTomeExtraction=§6Extraction
 tooltip.enigmaticlegacy.xpTomeDeactivated=§6Deactivated
+
+tooltip.enigmaticlegacy.enchantmentTransposer1=§5Combine with any enchanted item in a crafting grid
+tooltip.enigmaticlegacy.enchantmentTransposer2=§5to transfer all enchantments from item to the tome.
+tooltip.enigmaticlegacy.enchantmentTransposer3=§5The tome will be transformed into §6Enchanted Book§5.
 
 tooltip.enigmaticlegacy.add=§6+
 

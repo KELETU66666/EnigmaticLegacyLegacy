@@ -19,7 +19,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,6 +39,13 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+    public static boolean isWearEnigmaticAmulet(EntityPlayer player, int meta) {
+        if(BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.ascensionAmulet) != -1)
+            return true;
+        else
+            return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticAmulet) != -1 && BaublesApi.getBaubles(player).getStackInSlot(0).getMetadata() == meta;
+    }
 
     public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source) {
         if (blocker instanceof EntityPlayer && useItem != null) {

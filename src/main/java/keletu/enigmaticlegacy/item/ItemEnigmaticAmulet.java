@@ -1,7 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
@@ -88,10 +87,6 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
             AbstractAttributeMap map = player.getAttributeMap();
             map.removeAttributeModifiers(this.getAllModifiers());
         }
-    }
-
-    public boolean ifHasColor(EntityPlayer player, int meta) {
-        return BaublesApi.isBaubleEquipped(player, this) != -1 && BaublesApi.getBaubles(player).getStackInSlot(0).getMetadata() == meta;
     }
 
     public Multimap<String, AttributeModifier> getCurrentModifiers(ItemStack stack, EntityPlayer player) {
