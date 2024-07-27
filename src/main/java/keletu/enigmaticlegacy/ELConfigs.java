@@ -64,11 +64,23 @@ public class ELConfigs {
     public static float enigmaticAmuletDamageBonus;
     public static boolean vesselEnabled;
 
+    public static double defaultArmorBonus;
+    public static double superArmorBonus;
+    public static double superArmorToughnessBonus;
+    public static float knockbackResistance;
+    public static float meleeResistance;
+    public static float explosionResistance;
+    public static double vulnerabilityModifier;
+
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
     public static final List<ResourceLocation> eldritchItemList = new ArrayList<>();
 
+    public static int oceanStoneSpellstoneCooldown;
+    public static float oceanStoneSwimmingSpeedBoost;
+    public static float oceanStoneUnderwaterCreaturesResistance;
+    public static double oceanStoneXpCostModifier;
 
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
@@ -184,6 +196,29 @@ public class ELConfigs {
         enigmaticAmuletDamageBonus = config.getFloat("DamageBonus", "Enigamtic Amulet", 1.5F, 0, 32768, "The damage bonus stat provided by red Enigmatic Amulet.");
 
         vesselEnabled = config.getBoolean("VesselEnabled", "Enigamtic Amulet", true, "Whether or not Enigmatic Amulet should be summoning Extradimensional Vessel on owner's death.");
+
+        defaultArmorBonus = config.getFloat("DefaultArmor", "Golem Heart", 4.0F, 0, 256, "Default amount of armor points provided by Heart of the Golem.");
+
+        superArmorBonus = config.getFloat("SuperArmor", "Golem Heart", 16.0F, 0, 256, "The amount of armor points provided by Heart of the Golem when it's bearer has no armor equipped.");
+
+        superArmorToughnessBonus = config.getFloat("SuperArmorToughness", "Golem Heart", 4.0F, 0, 256, "The amount of armor toughness provided by Heart of the Golem when it's bearer has no armor equipped.");
+
+        meleeResistance = config.getFloat("MeleeResistance", "Golem Heart", 0.25F, 0, 1, "Resistance to melee attacks provided by Heart of the Golem. Defined as percentage.");
+
+        explosionResistance = config.getFloat("ExplosionResistance", "Golem Heart", 0.4F, 0, 1, "Resistance to explosion damage provided by Heart of the Golem. Defined as percentage.");
+
+        knockbackResistance = config.getFloat("KnockbackResistance", "Golem Heart", 1F, 0, 1, "Resistance to knockback provided by Heart of the Golem. Defined as percentage.");
+
+        vulnerabilityModifier = config.getFloat("VulnerabilityModifier", "Golem Heart", 2.0F, 1.0F, 256, "Modifier for Magic Damage vulnerability applied by Heart of the Golem. Default value of 2.0 means that player will receive twice as much damage from magic.");
+
+        oceanStoneSpellstoneCooldown = config.getInt("Cooldown", "Ocean Stone", 600, 1, 25565, "Active ability cooldown for Will of the Ocean. Measured in ticks. 20 ticks equal to 1 second.");
+
+        oceanStoneSwimmingSpeedBoost = config.getFloat("SwimBoost", "Ocean Stone", 2, 0, 10, "Swimming speed boost provided by Will of the Ocean. Defined as percentage.");
+
+        oceanStoneUnderwaterCreaturesResistance = config.getFloat("UnderwaterCreaturesResistance", "Ocean Stone", 0.4F, 0, 1, "Damage resistance against underwater creatures provided by Will of the Ocean. Defined as percentage.");
+
+        oceanStoneXpCostModifier = config.getFloat("UnderwaterCreaturesResistance", "Ocean Stone", 1.0F, 0, 1000, "Multiplier for experience consumption by active ability of Will of the Ocean.");
+
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:wisp", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"

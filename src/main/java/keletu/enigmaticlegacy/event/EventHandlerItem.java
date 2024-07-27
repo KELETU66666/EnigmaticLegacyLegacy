@@ -1,17 +1,15 @@
 package keletu.enigmaticlegacy.event;
 
-import baubles.client.gui.GuiPlayerExpanded;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.container.gui.GuiExtendedBaublesButton;
-import keletu.enigmaticlegacy.container.gui.GuiExtraBaubles;
-import keletu.enigmaticlegacy.container.gui.GuiPlayerButton;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.isTheWorthyOne;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -73,13 +71,13 @@ public class EventHandlerItem
 	@SubscribeEvent
 	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
 
-		if (event.getGui() instanceof GuiPlayerExpanded) {
+		if (event.getGui() instanceof GuiInventory) {
 			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiExtendedBaublesButton(55, gui, 114, 69, 10, 10));
-		}else if (event.getGui() instanceof GuiExtraBaubles) {
-			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiPlayerButton(55, gui, 64, 9, 10, 10));
-		}
+			event.getButtonList().add(new GuiExtendedBaublesButton(56, gui, 156, 6, 10, 10));
+		}//else if (event.getGui() instanceof GuiExtraBaubles) {
+		//	GuiContainer gui = (GuiContainer) event.getGui();
+		//	event.getButtonList().add(new GuiPlayerButton(55, gui, 64, 9, 10, 10));
+		//}//
 	}
 
 	@SideOnly(Side.CLIENT)

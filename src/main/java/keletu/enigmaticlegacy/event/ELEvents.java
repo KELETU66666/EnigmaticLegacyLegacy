@@ -15,6 +15,7 @@ import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
@@ -32,6 +34,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -40,7 +43,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -245,6 +251,34 @@ public class ELEvents {
 
     @SubscribeEvent(priority = HIGH)
     public static void hurtEvent(LivingAttackEvent event) {
+        if (event.getEntityLiving().world.isRemote)
+            return;
+
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+            ItemStack advancedCurioStack = SuperpositionHandler.getAdvancedBaubles(player);
+            if (advancedCurioStack != ItemStack.EMPTY) {
+                ItemSpellstoneBauble advancedCurio = (ItemSpellstoneBauble) advancedCurioStack.getItem();
+
+                if (advancedCurio.immunityList.contains(event.getSource().damageType)) {
+                    event.setCanceled(true);
+                }
+
+                /*
+                 * This used to heal player from debuff damage if they have Pearl of the Void.
+                 * Removed in 2.5.0 Release.
+                 */
+
+					/*
+					if (advancedCurio == EnigmaticLegacy.voidPearl && EnigmaticLegacy.voidPearl.healList.contains(event.getSource().damageType)) {
+						player.heal(event.getAmount());
+						event.setCanceled(true);
+					}
+					 */
+            }
+        }
+
         if (!event.isCanceled() && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             genericEnforce(event, player, player.getHeldItemMainhand());
@@ -340,7 +374,7 @@ public class ELEvents {
             }
 
             if (SuperpositionHandler.isWearEnigmaticAmulet(player, 6)) {
-                    lifesteal += event.getAmount() * 0.1F;
+                lifesteal += event.getAmount() * 0.1F;
             }
 
             if (lifesteal > 0) {
@@ -579,6 +613,21 @@ public class ELEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+            if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == oceanStone)
+                if (!player.capabilities.isFlying)
+                    if (player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER)
+                        if (!player.onGround) {
+                            player.motionY = 0;
+                            if (player.isSneaking())
+                                player.motionY -= 0.2;
+                        }
+        }
+    }
+
 
     @SubscribeEvent
     public static void onEnchantmentLevelSet(EnchantmentLevelSetEvent event) {
@@ -678,6 +727,26 @@ public class ELEvents {
 
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+            ItemStack advancedCurioStack = SuperpositionHandler.getAdvancedBaubles(player);
+            if (advancedCurioStack != ItemStack.EMPTY) {
+                ItemSpellstoneBauble advancedCurio = (ItemSpellstoneBauble) advancedCurioStack.getItem();
+                EntityCreature trueSource = event.getSource().getTrueSource() instanceof EntityCreature ? (EntityCreature) event.getSource().getTrueSource() : null;
+
+                if (event.getSource().damageType.startsWith("explosion") && advancedCurio == EnigmaticLegacy.golemHeart && SuperpositionHandler.hasAnyArmor(player)) {
+                    event.setCanceled(true);
+                } /*else if (advancedCurio == magmaHeart && trueSource != null && (trueSource.getMobType() == CreatureAttribute.WATER || trueSource instanceof DrownedEntity)) {
+                event.setAmount(event.getAmount() * 2F);
+            } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
+                event.setAmount(event.getAmount() * 2F);
+            } */ else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
+                    event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);
+                }
+
+                if (advancedCurio.resistanceList.containsKey(event.getSource().damageType)) {
+                    event.setAmount(event.getAmount() * advancedCurio.resistanceList.get(event.getSource().damageType).get());
+                }
+            }
 
             if (event.getSource() == DamageSource.FALL) {
                 if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4) && event.getAmount() <= 2.0f) {

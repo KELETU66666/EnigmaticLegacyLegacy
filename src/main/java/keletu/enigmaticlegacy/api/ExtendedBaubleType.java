@@ -3,7 +3,8 @@ package keletu.enigmaticlegacy.api;
 public enum ExtendedBaubleType {
 	SCROLL(0),
 	BOOK(1),
-	CURSE(2);
+	CURSE(2),
+	SPELLSTONE(3);
 
 	int[] validSlots;
 

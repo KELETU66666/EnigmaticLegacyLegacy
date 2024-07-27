@@ -7,6 +7,7 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
 import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
+import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -39,6 +40,31 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+    public static boolean hasAdvancedBaubles(final EntityLivingBase entity) {
+        return SuperpositionHandler.getAdvancedBaubles(entity) != ItemStack.EMPTY;
+    }
+
+    public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
+        IExtendedBaublesItemHandler handler = ExtendedBaublesApi.getBaublesHandler((EntityPlayer) entity);
+
+        return handler.getStackInSlot(3);
+    }
+
+    public static boolean hasAnyArmor(EntityLivingBase entity) {
+        int armorAmount = 0;
+
+        for (ItemStack stack : entity.getArmorInventoryList()) {
+            if (!stack.isEmpty()) {
+                armorAmount++;
+            }
+        }
+
+        if (armorAmount != 0)
+            return true;
+        else
+            return false;
+    }
 
     public static boolean isWearEnigmaticAmulet(EntityPlayer player, int meta) {
         if(BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.ascensionAmulet) != -1)

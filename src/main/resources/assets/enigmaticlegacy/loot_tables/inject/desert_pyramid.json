@@ -187,6 +187,16 @@
           "type": "item",
           "name": "enigmaticlegacy:earth_heart",
           "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:ocean_stone",
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:golem_heart",
+          "weight": 10
         }
       ]
     }

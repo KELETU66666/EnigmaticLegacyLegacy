@@ -1,12 +1,12 @@
 package keletu.enigmaticlegacy.container.gui;
 
-import baubles.client.gui.GuiPlayerExpanded;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.packet.PacketOpenExtendedBaublesInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +16,7 @@ public class GuiExtendedBaublesButton extends GuiButton {
 	private final GuiContainer parentGui;
 
 	public GuiExtendedBaublesButton(int buttonId, GuiContainer parentGui, int x, int y, int width, int height) {
-		super(buttonId, x, parentGui.getGuiTop() + y, width, height, "button.extra");
+		super(buttonId, x, parentGui.getGuiTop() + y, width, height, "button.enigmatic");
 		this.parentGui = parentGui;
 	}
 
@@ -24,7 +24,7 @@ public class GuiExtendedBaublesButton extends GuiButton {
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 		boolean pressed = super.mousePressed(mc, mouseX - this.parentGui.getGuiLeft(), mouseY);
 		if (pressed) {
-			if (parentGui instanceof GuiPlayerExpanded) {
+			if (parentGui instanceof GuiInventory) {
 				EnigmaticLegacy.packetInstance.sendToServer(new PacketOpenExtendedBaublesInventory());
 			}
 		}
@@ -50,9 +50,9 @@ public class GuiExtendedBaublesButton extends GuiButton {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, 0, 200);
 			if (k==1) {
-				this.drawTexturedModalRect(x, this.y, 200, 48, 10, 10);
+				this.drawTexturedModalRect(x, this.y, 233, 1, 16, 16);
 			} else {
-				this.drawTexturedModalRect(x, this.y, 210, 48, 10, 10);
+				this.drawTexturedModalRect(x, this.y, 233, 1, 16, 16);
 				this.drawCenteredString(fontrenderer, I18n.format(this.displayString), x + 5, this.y + this.height, 0xffffff);
 			}
 			GlStateManager.popMatrix();

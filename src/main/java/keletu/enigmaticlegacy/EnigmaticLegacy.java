@@ -92,7 +92,7 @@ public class EnigmaticLegacy {
     public static Item gemRing = new ItemGemRing();
     public static Item magnetRing = new ItemMagnetRing();
     public static Item superMagnetRing = new ItemSuperMagnetRing();
-    public static Item miningCharm = new ItemMiningCharm();
+    public static ItemMiningCharm miningCharm = new ItemMiningCharm();
     public static Item monsterCharm = new ItemMonsterCharm();
     public static Item berserkEmblem = new ItemBerserkEmblem();
     public static Item megaSponge = new ItemMegasponge();
@@ -101,6 +101,8 @@ public class EnigmaticLegacy {
     public static Item cursedScroll = new ItemCursedScroll();
     public static Item animalGuide = new ItemAnimalGuide();
     public static Item ascensionAmulet = new ItemAscensionAmulet();
+    public static Item golemHeart = new ItemGolemHeart();
+    public static Item oceanStone = new ItemOceanStone();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
 
     //Material
@@ -207,6 +209,8 @@ public class EnigmaticLegacy {
             event.getRegistry().register(monsterCharm);
             event.getRegistry().register(berserkEmblem);
             event.getRegistry().register(megaSponge);
+            event.getRegistry().register(golemHeart);
+            event.getRegistry().register(oceanStone);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
             event.getRegistry().register(twistedCore);
@@ -314,6 +318,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(infernalShield, 0, new ModelResourceLocation(infernalShield.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enchantmentTransposer, 0, new ModelResourceLocation(enchantmentTransposer.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ascensionAmulet, 0, new ModelResourceLocation(ascensionAmulet.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(golemHeart, 0, new ModelResourceLocation(golemHeart.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(oceanStone, 0, new ModelResourceLocation(oceanStone.getRegistryName(), "inventory"));
 
             for(int i = 0; i< 8; i++)
                 ModelLoader.setCustomModelResourceLocation(enigmaticAmulet, i, new ModelResourceLocation(enigmaticAmulet.getRegistryName(), "inventory"));

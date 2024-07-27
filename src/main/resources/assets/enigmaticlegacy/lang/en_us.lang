@@ -20,6 +20,10 @@ item.cursed_scroll.name=Scroll of a Thousand Curses
 item.animal_guide.name=Guide to Animal Companionship
 item.ascension_amulet.name=Ascension Amulet
 
+#SpellStone
+item.golem_heart.name=Heart of the Golem
+item.ocean_stone.name=Will of the Ocean
+
 #material
 item.astral_dust.name=Astral dust
 item.ender_rod.name=Ender Stick
@@ -227,7 +231,7 @@ tooltip.enigmaticlegacy.xpTome7=§5In §6Extraction mode§5, this behavior is re
 tooltip.enigmaticlegacy.xpTome8=§5and the tome transfers all stored experience
 tooltip.enigmaticlegacy.xpTome9=§5back to you.
 tooltip.enigmaticlegacy.xpTome10=5While active, collects experience orbs
-tooltip.enigmaticlegacy.xpTome11=5within §6%1$s§6 blocks§5 radius.
+tooltip.enigmaticlegacy.xpTome11=5within §6换§6 blocks§5 radius.
 tooltip.enigmaticlegacy.xpTomeMode=§dCurrent Mode:
 tooltip.enigmaticlegacy.xpTomeExp=§dExperience Stored:
 tooltip.enigmaticlegacy.xpTomeUnits=§6units, or
@@ -240,7 +244,42 @@ tooltip.enigmaticlegacy.enchantmentTransposer1=§5Combine with any enchanted ite
 tooltip.enigmaticlegacy.enchantmentTransposer2=§5to transfer all enchantments from item to the tome.
 tooltip.enigmaticlegacy.enchantmentTransposer3=§5The tome will be transformed into §6Enchanted Book§5.
 
+tooltip.enigmaticlegacy.golemHeart1=§dActive ability:
+tooltip.enigmaticlegacy.golemHeart2=§4- Absent.
+tooltip.enigmaticlegacy.golemHeartCooldown=§dСooldown: §60§6 seconds
+tooltip.enigmaticlegacy.golemHeart3=§dPassive abilities:
+tooltip.enigmaticlegacy.golemHeart4=§5- §6+
+tooltip.enigmaticlegacy.golemHeart4_1=§d Armor Points.
+tooltip.enigmaticlegacy.golemHeart5=§5- If nothing is equipped in armor slots, instead
+tooltip.enigmaticlegacy.golemHeart6=§5  gain §6+
+tooltip.enigmaticlegacy.golemHeart6_1=§d Armor Points§5, §6+
+tooltip.enigmaticlegacy.golemHeart6_2=§d Armor Toughness,
+tooltip.enigmaticlegacy.golemHeart7=§5  and §6+
+tooltip.enigmaticlegacy.golemHeart7_1=§d Explosion Damage Resistance.
+tooltip.enigmaticlegacy.golemHeart8=§5- §6+
+tooltip.enigmaticlegacy.golemHeart8_1=§d Melee Damage Resistance.
+tooltip.enigmaticlegacy.golemHeart9=§5- §6+
+tooltip.enigmaticlegacy.golemHeart9_1=§d Knockback Resistance.
+tooltip.enigmaticlegacy.golemHeart10=§5- Immunity to pressure and pricking damage.
+tooltip.enigmaticlegacy.golemHeart11=§5- You are vulnerable to §6Magic Damage.
+
+tooltip.enigmaticlegacy.oceanStone1=§dActive ability:
+tooltip.enigmaticlegacy.oceanStone2=§6- Starts thunderstorm, at great cost of experience. §1§l [WIP]
+tooltip.enigmaticlegacy.oceanStone3=§6
+tooltip.enigmaticlegacy.oceanStoneCooldown=§dСooldown: §660§6 seconds
+tooltip.enigmaticlegacy.oceanStone4=§dPassive abilities:
+tooltip.enigmaticlegacy.oceanStone5=§5- §6
+tooltip.enigmaticlegacy.oceanStone5_1=§d Damage Resistance§5 against underwater creatures.
+tooltip.enigmaticlegacy.oceanStone6=§5- You no longer need air to breathe underwater.
+tooltip.enigmaticlegacy.oceanStone7=§5- Provides §6Night Vision§5 effect when in water.
+tooltip.enigmaticlegacy.oceanStone8=§5- Provides effects of §6Aqua Affinity§5 enchantment.
+tooltip.enigmaticlegacy.oceanStone9=§5- Negates gravity when underwater.
+tooltip.enigmaticlegacy.oceanStone10=§5- Greatly increased swimming speed.
+tooltip.enigmaticlegacy.oceanStone11=§5- You are vulnerable to §6Fire Damage.
+
 tooltip.enigmaticlegacy.add=§6+
+
+key.spellstoneAbility=Spellstone Active Ability
 
 tooltip.enigmaticlegacy.aoeDisabled=§cArea effects are suppressed.
 tooltip.enigmaticlegacy.abilityDisabled=§cSpecial abilities are suppressed.
@@ -293,10 +332,11 @@ tooltip.enigmaticlegacy.worthyOnesOnly4=For now, your time measures at:
 name.SCROLL=Bauble (Scroll)
 name.BOOK=Bauble (Book)
 name.CURSE=Bauble (???)
+name.SPELLSTONE=Bauble (Spellstone)
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²
-button.extra=Extra
+button.enigmatic=Enigmatic Baubles
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 enigmaticlegacy.ender_chest_gui=Ender Chest
