@@ -26,6 +26,8 @@ public class ELConfigs {
     public static boolean saveTheBees;
     public static Boolean enableSpecialDrops;
     public static int iconOffset;
+    public static int xIconOffsetBauble;
+    public static int yIconOffsetBauble;
     public static int heartLoss;
     public static boolean ultraNoobMode;
     public static boolean ultraHardcore;
@@ -125,6 +127,10 @@ public class ELConfigs {
         endermenRandomportRange = config.getFloat("EndermenRandomportRange", "The Seven Curses", 32, 8, 100, "Range in which Endermen can try to randomly teleport to bearers of the ring.");
 
         iconOffset = config.getInt("IconOffset", "The Seven Curses", -51, -500, 500, "X Offset for EnderChest tab");
+
+        xIconOffsetBauble = config.getInt("IconOffset", "Special Baubles", 0, -500, 500, "X Offset for Enigmatic Baubles tab");
+
+        yIconOffsetBauble = config.getInt("IconOffset", "Special Baubles", 0, -500, 500, "Y Offset for Enigmatic Baubles tab");
 
         heartLoss = config.getInt("MaxHeartLoss", "The Seven Curses", 7, 0, 9, "Max amount of heart loss");
 
