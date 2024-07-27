@@ -128,9 +128,9 @@ public class ELConfigs {
 
         iconOffset = config.getInt("IconOffset", "The Seven Curses", -51, -500, 500, "X Offset for EnderChest tab");
 
-        xIconOffsetBauble = config.getInt("IconOffset", "Special Baubles", 0, -500, 500, "X Offset for Enigmatic Baubles tab");
+        xIconOffsetBauble = config.getInt("IconOffsetX", "Special Baubles", 0, -500, 500, "X Offset for Enigmatic Baubles tab");
 
-        yIconOffsetBauble = config.getInt("IconOffset", "Special Baubles", 0, -500, 500, "Y Offset for Enigmatic Baubles tab");
+        yIconOffsetBauble = config.getInt("IconOffsetY", "Special Baubles", 0, -500, 500, "Y Offset for Enigmatic Baubles tab");
 
         heartLoss = config.getInt("MaxHeartLoss", "The Seven Curses", 7, 0, 9, "Max amount of heart loss");
 
