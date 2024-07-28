@@ -13,6 +13,7 @@ import keletu.enigmaticlegacy.event.EventHandlerItem;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
+import keletu.enigmaticlegacy.key.ExtraBaublesKey;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.EnchantmentTransposingRecipe;
@@ -164,8 +165,10 @@ public class EnigmaticLegacy {
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
         MinecraftForge.EVENT_BUS.register(new EventHandlerItem());
 
-        if (event.getSide().isClient())
+        if (event.getSide().isClient()) {
             EnderChestRingHandler.registerKeybinds();
+            ExtraBaublesKey.registerKeybinds();
+        }
     }
 
     @Mod.EventHandler

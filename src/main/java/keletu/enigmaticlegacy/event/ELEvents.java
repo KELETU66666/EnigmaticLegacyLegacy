@@ -617,14 +617,20 @@ public class ELEvents {
     public static void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == oceanStone)
-                if (!player.capabilities.isFlying)
-                    if (player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER)
-                        if (!player.onGround) {
-                            player.motionY = 0;
-                            if (player.isSneaking())
-                                player.motionY -= 0.2;
-                        }
+            if (!player.capabilities.isFlying && !player.onGround) {
+                if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == oceanStone && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER) {
+                    player.motionY = 0;
+                    if (player.isSneaking())
+                        player.motionY -= 0.2;
+                }
+
+                else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
+                    if (player.motionY < 0)
+                        player.motionY *= 0.9;
+                    if(player.motionY > 0)
+                        player.motionY *= 1.1;
+                }
+            }
         }
     }
 

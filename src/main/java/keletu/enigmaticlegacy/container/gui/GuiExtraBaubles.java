@@ -105,18 +105,20 @@ public class GuiExtraBaubles extends GuiContainer {
         GL11.glBlendFunc(770, 771);
         GL11.glColor3f(1, 1, 1);
         this.mc.getTextureManager().bindTexture(background);
-        this.drawTexturedModalRect(120, 69, 215, 162, 9, 9);
-        this.drawTexturedModalRect(120, 79, 215, 171, 9, 9);
-        this.drawTexturedModalRect(120, 89, 215, 180, 9, 9);
-        this.drawTexturedModalRect(120, 99, 215, 189, 9, 9);
+        this.drawTexturedModalRect(120, 66, 215, 162, 9, 9);
+        this.drawTexturedModalRect(120, 76, 215, 171, 9, 9);
+        this.drawTexturedModalRect(120, 86, 215, 180, 9, 9);
+        this.drawTexturedModalRect(120, 96, 215, 189, 9, 9);
+        this.drawTexturedModalRect(120, 106, 215, 153, 9, 9);
 
-        this.fontRenderer.drawString("x" + this.player.getMaxHealth() / 2, 135, 69, 0x777777);
-        this.fontRenderer.drawString("x" + ForgeHooks.getTotalArmorValue(this.player), 135, 79, 0x777777);
+        this.fontRenderer.drawString("x" + this.player.getMaxHealth() / 2, 135, 66, 0x777777);
+        this.fontRenderer.drawString("x" + ForgeHooks.getTotalArmorValue(this.player), 135, 76, 0x777777);
         ModifiableAttributeInstance attr = ((ModifiableAttributeInstance) this.player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED));
-        this.fontRenderer.drawString((int) (attr.getAttributeValue() * 1000) + "%", 135, 90, 0x777777);
+        this.fontRenderer.drawString((int) (attr.getAttributeValue() * 1000) + "%", 135, 87, 0x777777);
         ModifiableAttributeInstance attrDmg = ((ModifiableAttributeInstance) this.player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE));
-        this.fontRenderer.drawString(Math.round(attrDmg.getAttributeValue() * 100) + "%", 135, 100, 0x777777);
-
+        this.fontRenderer.drawString(Math.round(attrDmg.getAttributeValue() * 100) + "%", 135, 97, 0x777777);
+        ModifiableAttributeInstance attrLuck = ((ModifiableAttributeInstance) this.player.getEntityAttribute(SharedMonsterAttributes.LUCK));
+        this.fontRenderer.drawString("+" + attrLuck.getAttributeValue(), 135, 107, 0x777777);
     }
 
     /**

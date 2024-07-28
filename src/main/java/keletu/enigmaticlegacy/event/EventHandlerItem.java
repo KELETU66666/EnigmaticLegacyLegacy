@@ -74,10 +74,7 @@ public class EventHandlerItem
 		if (event.getGui() instanceof GuiInventory) {
 			GuiContainer gui = (GuiContainer) event.getGui();
 			event.getButtonList().add(new GuiExtendedBaublesButton(56, gui, 150 + ELConfigs.xIconOffsetBauble, 61 + ELConfigs.yIconOffsetBauble, 20, 18));
-		}//else if (event.getGui() instanceof GuiExtraBaubles) {
-		//	GuiContainer gui = (GuiContainer) event.getGui();
-		//	event.getButtonList().add(new GuiPlayerButton(55, gui, 64, 9, 10, 10));
-		//}//
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -11,8 +11,6 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 
 public abstract class ItemBaseBauble extends ItemBase implements IBauble {
-
-    protected final Multimap<String, AttributeModifier> attributeMap = HashMultimap.create();
     public ItemBaseBauble(String name, EnumRarity rare){
         super(name, rare);
         this.maxStackSize = 1;
@@ -24,16 +22,33 @@ public abstract class ItemBaseBauble extends ItemBase implements IBauble {
     }
 
     @Override
+    public void onWornTick(ItemStack stack, EntityLivingBase player) {
+        onEquippedOrLoadedIntoWorld(stack, player);
+    }
+
+    @Override
     public void onEquipped(ItemStack stack, EntityLivingBase player) {
+        if (player != null) {
+            onEquippedOrLoadedIntoWorld(stack, player);
+        }
+    }
+
+    public void onEquippedOrLoadedIntoWorld(ItemStack stack, EntityLivingBase player) {
         if (!player.world.isRemote) {
-            player.getAttributeMap().applyAttributeModifiers(attributeMap);
+            Multimap<String, AttributeModifier> attributes = HashMultimap.create();
+            fillModifiers(attributes, stack);
+            player.getAttributeMap().applyAttributeModifiers(attributes);
         }
     }
 
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase player) {
         if (!player.world.isRemote) {
-            player.getAttributeMap().removeAttributeModifiers(attributeMap);
+            Multimap<String, AttributeModifier> attributes = HashMultimap.create();
+            fillModifiers(attributes, stack);
+            player.getAttributeMap().removeAttributeModifiers(attributes);
         }
     }
+
+    public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack){};
 }

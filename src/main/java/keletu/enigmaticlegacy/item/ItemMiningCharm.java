@@ -2,7 +2,6 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
@@ -12,6 +11,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -71,6 +71,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
 
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase living) {
+        super.onWornTick(stack, living);
         if (living instanceof EntityPlayer & !living.world.isRemote)
             if (BaublesApi.isBaubleEquipped((EntityPlayer) living, EnigmaticLegacy.miningCharm) != -1) {
                 EntityPlayer player = (EntityPlayer) living;
@@ -83,30 +84,19 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
                 }
 
             }
-
-        if (living instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) living;
-
-            living.getAttributeMap().applyAttributeModifiers(this.createAttributeMap(player));
-        }
     }
 
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase living) {
         super.onUnequipped(stack, living);
         if (living instanceof EntityPlayer) {
-            living.getAttributeMap().removeAttributeModifiers(this.createAttributeMap((EntityPlayer) living));
-
             this.removeNightVisionEffect((EntityPlayer) living, this.nightVisionDuration);
         }
     }
 
-    private Multimap<String, AttributeModifier> createAttributeMap(EntityPlayer player) {
-        Multimap<String, AttributeModifier> attributesDefault = HashMultimap.create();
-
-        attributesDefault.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64d2e"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
-
-        return attributesDefault;
+    public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
+        attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64d2e"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
+        attributes.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b53"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
     }
 
     public void removeNightVisionEffect(EntityPlayer player, int duration) {
