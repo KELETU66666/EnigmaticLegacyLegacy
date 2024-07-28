@@ -118,7 +118,7 @@ public class GuiExtraBaubles extends GuiContainer {
         ModifiableAttributeInstance attrDmg = ((ModifiableAttributeInstance) this.player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE));
         this.fontRenderer.drawString(Math.round(attrDmg.getAttributeValue() * 100) + "%", 135, 97, 0x777777);
         ModifiableAttributeInstance attrLuck = ((ModifiableAttributeInstance) this.player.getEntityAttribute(SharedMonsterAttributes.LUCK));
-        this.fontRenderer.drawString("+" + attrLuck.getAttributeValue(), 135, 107, 0x777777);
+        this.fontRenderer.drawString("+" + Math.round(attrLuck.getAttributeValue()), 135, 107, 0x777777);
     }
 
     /**
