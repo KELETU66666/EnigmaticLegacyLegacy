@@ -622,18 +622,24 @@ public class ELEvents {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
-                }
-
-                else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
+                } else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
                     if (player.motionY < 0)
                         player.motionY *= 0.9;
-                    if(player.motionY > 0)
-                        player.motionY *= 1.1;
                 }
             }
         }
     }
 
+    @SubscribeEvent
+    public static void onEntityJump(LivingEvent.LivingJumpEvent event) {
+        if (!(event.getEntityLiving() instanceof EntityPlayer))
+            return;
+
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
+            event.getEntityLiving().motionY *= 1.25F;
+        }
+    }
 
     @SubscribeEvent
     public static void onEnchantmentLevelSet(EnchantmentLevelSetEvent event) {
