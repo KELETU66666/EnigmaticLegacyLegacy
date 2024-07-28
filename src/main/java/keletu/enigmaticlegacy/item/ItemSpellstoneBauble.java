@@ -22,6 +22,7 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IExtended
 
     public ItemSpellstoneBauble(String props, EnumRarity rare) {
         super(props, rare);
+        this.maxStackSize = 1;
     }
 
     public boolean isResistantTo(String damageType) {
