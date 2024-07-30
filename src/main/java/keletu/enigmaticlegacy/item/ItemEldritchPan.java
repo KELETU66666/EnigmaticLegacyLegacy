@@ -198,10 +198,10 @@ public class ItemEldritchPan extends ItemShield {
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack)
-    {
+    public EnumRarity getRarity(ItemStack stack) {
         return EnumRarity.EPIC;
     }
+
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         return 72000;
@@ -334,18 +334,10 @@ public class ItemEldritchPan extends ItemShield {
         return false;
     }
 
-    /*public static Ingredient getRepairMaterial() {
-        return Ingredient.of(
-                Items.BEEF,
-                Items.PORKCHOP,
-                Items.MUTTON,
-                Items.ROTTEN_FLESH,
-                Items.APPLE,
-                Items.GOLDEN_APPLE,
-                Items.ENCHANTED_GOLDEN_APPLE,
-                Items.POISONOUS_POTATO
-        );
-    }*/
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return repair.getItem() == Items.BEEF || repair.getItem() == Items.PORKCHOP || repair.getItem() == Items.ROTTEN_FLESH || repair.getItem() == Items.APPLE || repair.getItem() == Items.GOLDEN_APPLE || repair.getItem() == Items.POISONOUS_POTATO || super.getIsRepairable(toRepair, repair);
+    }
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
