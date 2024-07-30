@@ -4,6 +4,7 @@ import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.*;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
+import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -41,7 +42,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -141,6 +141,7 @@ public class EnigmaticLegacy {
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
+    public static Potion growingHungerEffect = new GrowingHungerEffect();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -257,6 +258,7 @@ public class EnigmaticLegacy {
         @SubscribeEvent
         public static void registerEffects(final RegistryEvent.Register<Potion> event) {
             event.getRegistry().register(blazingStrengthEffect);
+            event.getRegistry().register(growingHungerEffect);
         }
 
         @SubscribeEvent

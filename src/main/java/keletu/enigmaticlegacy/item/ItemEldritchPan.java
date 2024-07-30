@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
-import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,7 +26,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 public class ItemEldritchPan extends ItemShield {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("2d5cac0e-598f-475b-97cb-c7ab4741d0f5");
 
+    public static final Map<EntityPlayer, Integer> HOLDING_DURATIONS = new WeakHashMap<>();
     //private final float panAttackDamage, panAttackSpeed, panArmorValue;
 
     public ItemEldritchPan() {

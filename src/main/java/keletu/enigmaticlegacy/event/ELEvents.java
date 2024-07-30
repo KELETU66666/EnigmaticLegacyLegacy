@@ -690,6 +690,17 @@ public class ELEvents {
                 player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
             }
         }
+
+        if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemEldritchPan) {
+            int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
+            int hungerAmplifier = currentTicks / 300;
+
+            hungerAmplifier = Math.min(hungerAmplifier, 9);
+            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 23333, hungerAmplifier, true, true));
+        } else {
+            ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
+            player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

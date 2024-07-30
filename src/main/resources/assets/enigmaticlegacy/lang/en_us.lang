@@ -325,6 +325,7 @@ tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystal
 
 #1.18+
 potion.blazing_strength=Blazing Might
+potion.growing_hunger=Growing Hunger
 
 tooltip.enigmaticlegacy.infernalShield1=§6When equipped:
 tooltip.enigmaticlegacy.infernalShield2=§5- Extinguishes you when on fire.
@@ -387,6 +388,7 @@ key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 key.baubleEnigmatic=Open Enigmatic Bauble Inventory
 enigmaticlegacy.ender_chest_gui=Ender Chest
+message.enigmaticlegacy.eldritch_pan_buff=With the taste of this new soul, The Voracious Pan grows ever stronger.
 
 #Compat
 tooltip.enigmaticlegacy.compatXat1=§dAlteration of the §6'Secret' Curse§d:
