@@ -13,6 +13,7 @@ import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
+import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
@@ -25,6 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
@@ -40,19 +42,19 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -74,10 +76,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.WeakHashMap;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class ELEvents {
@@ -356,6 +355,7 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
             float lifesteal = 0;
+            float hungersteal = 0;
 /*
             if (EnigmaticItems.ENIGMATIC_AMULET.hasColor(player, AmuletColor.BLACK)) {
                 lifesteal += event.getAmount() * 0.1F;
@@ -367,9 +367,16 @@ public class ELEvents {
                 }
             }
 */
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum) {
-                if (SuperpositionHandler.isTheWorthyOne(player)) {
+            if (SuperpositionHandler.isTheWorthyOne(player)) {
+                if (player.getHeldItemMainhand().getItem() == theInfinitum) {
+
                     lifesteal += event.getAmount() * 0.1F;
+
+                }
+
+                if (player.getHeldItemMainhand().getItem() == eldritchPan) {
+                    hungersteal += panHungerSteal;
+                    lifesteal += panLifeSteal;
                 }
             }
 
@@ -380,6 +387,78 @@ public class ELEvents {
             if (lifesteal > 0) {
                 player.heal(lifesteal);
             }
+
+            if (hungersteal > 0) {
+                //boolean noHunger = SuperpositionHandler.cannotHunger(player);
+
+                if (event.getEntity() instanceof EntityPlayerMP) {
+                    EntityPlayerMP victim = (EntityPlayerMP) event.getEntity();
+                    FoodStats victimFood = victim.getFoodStats();
+                    FoodStats attackerFood = player.getFoodStats();
+
+                    int foodSteal = Math.min((int) Math.ceil(hungersteal), victimFood.getFoodLevel());
+                    float saturationSteal = Math.min(hungersteal / 5F, victimFood.getSaturationLevel());
+
+                    victimFood.foodSaturationLevel = (victimFood.getSaturationLevel() - saturationSteal);
+                    victimFood.setFoodLevel(victimFood.getFoodLevel() - foodSteal);
+
+                    //if (noHunger) {
+                    //    player.heal((float) foodSteal / 2);
+                    //} else {
+                    attackerFood.addStats(foodSteal, saturationSteal);
+                    //}
+                } else {
+                    //if (noHunger) {
+                    //    player.heal(hungersteal / 2);
+                    //} else {
+                    player.getFoodStats().addStats((int) Math.ceil(hungersteal), hungersteal / 5F);
+                    //}
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void onConfirmedDeath(LivingDeathEvent event) {
+        if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
+            EntityPlayerMP attacker = (EntityPlayerMP) event.getSource().getTrueSource();
+            ItemStack weapon = attacker.getHeldItemMainhand();
+
+            if (weapon.getItem().equals(eldritchPan)) {
+                ResourceLocation killedType = EntityList.getKey(event.getEntity());
+
+                if (ItemEldritchPan.addKillIfNotPresent(weapon, killedType)) {
+                    attacker.sendStatusMessage(new TextComponentTranslation("message.enigmaticlegacy.eldritch_pan_buff"), false);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingDropsLowest(LivingDropsEvent event) {
+        /*
+         * Eldritch Pan cooking logic.
+         */
+
+        if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
+
+            EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
+            if (SuperpositionHandler.isTheWorthyOne(player))
+                if (player.getHeldItemMainhand().getItem() == eldritchPan
+                        || player.getHeldItemOffhand().getItem() == eldritchPan)
+                    for (EntityItem drop : new ArrayList<>(event.getDrops())) {
+                        ItemStack stack = drop.getItem();
+                        ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
+
+                        if (!smelted.isEmpty()) {
+                            ItemStack cooked = smelted.copy();
+                            cooked.setCount(smelted.getCount());
+
+                            event.getDrops().remove(drop);
+                            addDrop(event, smelted);
+                        }
+
+                    }
         }
     }
 
@@ -685,6 +764,21 @@ public class ELEvents {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void preRender(RenderGameOverlayEvent.Pre event) {
+        RenderGameOverlayEvent.ElementType type = event.getType();
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
+            if (ExtendedBaublesApi.isBaubleEquipped(mc.player, EnigmaticLegacy.oceanStone) != -1/* || SuperpositionHandler.hasCurio(mc.player, EnigmaticLegacy.voidPearl)*/) {
+                //  if (OceanStone.preventOxygenBarRender.getValue()) {
+                event.setCanceled(true);
+                // }
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
         if (event.getAmount() >= Float.MAX_VALUE)
@@ -815,7 +909,7 @@ public class ELEvents {
                     }
                 }
                 if (hasCursed(player)) {
-                    if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum)) {
+                    if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum && player.getHeldItemMainhand().getItem() != eldritchPan)) {
                         event.setAmount(event.getAmount() * (1 - ELConfigs.monsterDamageDebuff));
                     }
                 }

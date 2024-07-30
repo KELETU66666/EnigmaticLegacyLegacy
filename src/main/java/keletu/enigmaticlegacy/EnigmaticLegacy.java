@@ -16,10 +16,8 @@ import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.key.ExtraBaublesKey;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
-import keletu.enigmaticlegacy.util.EnchantmentTransposingRecipe;
-import keletu.enigmaticlegacy.util.LoggerWrapper;
-import keletu.enigmaticlegacy.util.LootHandler;
-import keletu.enigmaticlegacy.util.ModCompat;
+import keletu.enigmaticlegacy.util.*;
+import static keletu.enigmaticlegacy.util.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.compat.CompatTombManyGraves;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import net.minecraft.client.Minecraft;
@@ -43,6 +41,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -73,9 +72,9 @@ public class EnigmaticLegacy {
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
     public static final LoggerWrapper logger = new LoggerWrapper("Enigmatic Legacy");
-    public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[] { 4, 7, 9, 4 }, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
+    public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[]{4, 7, 9, 4}, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
-
+    public static Item.ToolMaterial ELDRITCH_PAN = EnumHelper.addToolMaterial("eldritch_pan", 0, 4000, 6.0F, 3.0F, 24);
 
     public static CreativeTabs tabEnigmaticLegacy = new CreativeTabs("tabEnigmaticLegacy") {
         @SideOnly(Side.CLIENT)
@@ -133,9 +132,12 @@ public class EnigmaticLegacy {
     public static Item theAcknowledgment = new ItemTheAcknowledgment();
     public static Item theTwist = new ItemTheTwist();
     public static Item theInfinitum = new ItemTheInfinitum();
+    public static Item eldritchPan = new ItemEldritchPan();
     public static Item infinimeal = new ItemInfinimeal();
     public static Item infernalShield = new ItemInfernalShield();
     public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
+    public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
+
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -179,16 +181,18 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
-
+        if(COMPAT_FORGOTTEN_RELICS)
+            MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
+        
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        if(ModCompat.COMPAT_TRINKETS)
+        if (ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
 
-        if(ModCompat.COMPAT_TOMBMANYGRAVES)
+        if (ModCompat.COMPAT_TOMBMANYGRAVES)
             new CompatTombManyGraves();
     }
 
@@ -243,6 +247,11 @@ public class EnigmaticLegacy {
             event.getRegistry().register(ascensionAmulet);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
+            event.getRegistry().register(eldritchPan);
+
+            if (COMPAT_FORGOTTEN_RELICS) {
+                event.getRegistry().register(oblivionStone);
+            }
         }
 
         @SubscribeEvent
@@ -251,8 +260,7 @@ public class EnigmaticLegacy {
         }
 
         @SubscribeEvent
-        public static void OreRegister(RegistryEvent.Register<Enchantment> event)
-        {
+        public static void OreRegister(RegistryEvent.Register<Enchantment> event) {
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 0));
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 1));
             OreDictionary.registerOre("ingotNetherite", new ItemStack(ingotWitherite, 1, 0));
@@ -271,7 +279,11 @@ public class EnigmaticLegacy {
         public static void registerRecipes(RegistryEvent.Register<IRecipe> evt) {
             IForgeRegistry<IRecipe> r = evt.getRegistry();
 
-            r.register(new EnchantmentTransposingRecipe().setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "baguette_fix")));
+            r.register(new EnchantmentTransposingRecipe().setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "enchantment_transport")));
+
+            if (COMPAT_FORGOTTEN_RELICS) {
+                r.register(new RecipeOblivionStone().setRegistryName(new ResourceLocation(EnigmaticLegacy.MODID, "oblivion_stone")));
+            }
         }
 
         @SubscribeEvent
@@ -323,8 +335,13 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(ascensionAmulet, 0, new ModelResourceLocation(ascensionAmulet.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(golemHeart, 0, new ModelResourceLocation(golemHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(oceanStone, 0, new ModelResourceLocation(oceanStone.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(eldritchPan, 0, new ModelResourceLocation(eldritchPan.getRegistryName(), "inventory"));
 
-            for(int i = 0; i< 8; i++)
+            if (COMPAT_FORGOTTEN_RELICS) {
+                oblivionStone.registerModels();
+            }
+
+            for (int i = 0; i < 8; i++)
                 ModelLoader.setCustomModelResourceLocation(enigmaticAmulet, i, new ModelResourceLocation(enigmaticAmulet.getRegistryName(), "inventory"));
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntitySoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));

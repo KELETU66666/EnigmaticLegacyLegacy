@@ -1,0 +1,114 @@
+{
+  "__comment": "This table is injected as its own pool into minecraft:chests/nether_bridge",
+  "pools": [
+    {
+      "name": "epic",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:golden_pickaxe",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_with_levels",
+              "treasure": true,
+              "levels": {
+                "min": 25,
+                "max": 30
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "item",
+          "name": "minecraft:golden_axe",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_with_levels",
+              "treasure": true,
+              "levels": {
+                "min": 25,
+                "max": 30
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "item",
+          "name": "minecraft:golden_sword",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_with_levels",
+              "treasure": true,
+              "levels": {
+                "min": 25,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_shovel",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_with_levels",
+              "treasure": true,
+              "levels": {
+                "min": 25,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:emerald",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 7
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:ghast_tear",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:lava_bucket",
+          "weight": 30
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:void_stone",
+          "weight": 8
+        }
+      ]
+    }
+  ]
+}

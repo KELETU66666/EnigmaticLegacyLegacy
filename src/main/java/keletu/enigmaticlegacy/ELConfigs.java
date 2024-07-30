@@ -74,6 +74,18 @@ public class ELConfigs {
     public static float explosionResistance;
     public static double vulnerabilityModifier;
 
+
+    public static double panAttackDamage;
+    public static double panAttackSpeed;
+    public static double panArmorValue;
+    public static double panLifeSteal;
+    public static double panHungerSteal;
+    public static double panUniqueDamageGain;
+    public static double panUniqueArmorGain;
+    public static int panUniqueGainLimit;
+    public static int oblivionStoneHardCap;
+    public static int oblivionStoneSoftCap;
+    
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
@@ -172,10 +184,10 @@ public class ELConfigs {
 
         xpCollectionRange = config.getFloat("CollectionRange", "Experience Scroll", 16.0F, 1, 128, "Range in which Scroll of Ageless Wisdom collects experience orbs when active.");
 
-        //builder.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
+        //config.getFloat("", "Eldritch Pan", x, 0, 32768, "");.pushCategory("Save the Bees", "This category exists solely because of Jusey1z who really wanted to protect his bees."
         //        + Configuration.NEW_LINE + "Btw Jusey, when I said 'very cute though', I meant you. Bees are cute either of course.");
 
-        //saveTheBees = builder
+        //saveTheBees = config.getFloat("", "Eldritch Pan", x, 0, 32768, "");
         //        .comment("If true, bees will never affected by the Second Curse of Ring of the Seven Curses.")
         //        .getBoolean("DontTouchMyBees", false);
 
@@ -225,6 +237,27 @@ public class ELConfigs {
 
         oceanStoneXpCostModifier = config.getFloat("UnderwaterCreaturesResistance", "Ocean Stone", 1.0F, 0, 1000, "Multiplier for experience consumption by active ability of Will of the Ocean.");
 
+        panAttackDamage = config.getFloat("AttackDamage", "Eldritch Pan", 31, 0, 32768, "The base attack damage of The Voracious Pan.");
+
+        panAttackSpeed = config.getFloat("AttackSpeed", "Eldritch Pan", -3.2F, -32768, 32768, "The base attack speed of The Voracious Pan.");
+
+        panArmorValue = config.getFloat("ArmorValue", "Eldritch Pan", 4, 0, 32768, "The base armor value of The Voracious Pan.");
+
+        panLifeSteal = config.getFloat("LifeSteal", "Eldritch Pan", 0.15F, 0, 32768, "Base Lifesteal fraction of The Voracious Pan.");
+
+        panHungerSteal = config.getFloat("HungerSteal", "Eldritch Pan", 2, 0, 32768, "Base Hungersteal value of The Voracious Pan.");
+
+        panUniqueDamageGain = config.getFloat("UniqueDamageGain", "Eldritch Pan", 0.5F, 0, 32768, "Base damage gain from unique mob kills for The Voracious Pan.");
+
+        panUniqueArmorGain = config.getFloat("UniqueArmorGain", "Eldritch Pan", 0.5F, 0, 32768, "Base armor gain from unique mob kills for The Voracious Pan.");
+
+        panUniqueGainLimit = config.getInt("UniqueGainLimit", "Eldritch Pan", 100, 0, 32768, "How many unique mob kills will count towards increasing the stats of The Voracious Pan.");
+
+        oblivionStoneHardCap = config.getInt("oblivionStoneHardCap", "Generic Config", 64, 0, 2048,
+                "How much items you can add into list of single Keystone of The Oblivion before you would be unable add nothing more. This limit exists to prevent players from occasional or intentional abusing, since multiple keystones with huge lists (like tens of thousands of items) may cause significant performance impact.");
+
+        oblivionStoneSoftCap = config.getInt("oblivionStoneSoftCap", "Oblivion Stone", 28, 0, 2048,
+                "Controls the amount of items that can be added into list of Keystone of The Oblivion, before displayble list in Ctrl tooltip stops expanding and becomes unreadable. You may want to increase or decrease it, depending on your screen resolution.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:wisp", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
@@ -245,7 +278,7 @@ public class ELConfigs {
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
 
         eldritchItemList.clear();
-        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum"}, "List of items needs ware ring during gameplay 99.5% times to use"
+        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum", "enigmaticlegacy:eldritch_pan"}, "List of items needs ware ring during gameplay 99.5% times to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));
