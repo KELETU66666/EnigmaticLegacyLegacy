@@ -143,6 +143,7 @@ public class ItemInfernalShield extends ItemShield {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
         return I18n.format("item.infernal_shield.name");
     }

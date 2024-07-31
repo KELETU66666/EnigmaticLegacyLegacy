@@ -32,6 +32,7 @@ public class ItemEnigmaticEye extends ItemBaseBauble {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
         return stack.getMetadata() == 0 ? I18n.format("item.enigmatic_eye_dormant.name") : I18n.format("item.enigmatic_eye_active.name");
     }
