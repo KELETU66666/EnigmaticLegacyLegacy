@@ -45,7 +45,10 @@ public class ItemInfernalShield extends ItemShield {
     }
 
     @Override
-    @Nullable
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+    @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
         EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
         item.setDefaultPickupDelay();

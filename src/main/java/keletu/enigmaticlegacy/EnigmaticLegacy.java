@@ -103,6 +103,7 @@ public class EnigmaticLegacy {
     public static Item ascensionAmulet = new ItemAscensionAmulet();
     public static Item golemHeart = new ItemGolemHeart();
     public static Item oceanStone = new ItemOceanStone();
+    public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
 
     //Material
@@ -116,6 +117,7 @@ public class EnigmaticLegacy {
     public static Item ingotWitherite = new ItemIngotWitherite();
     public static Item twistedCore = new ItemBase("twisted_core", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
+    public static Item evilIngot = new ItemBaseFireProof("evil_ingot", EnumRarity.EPIC);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -137,6 +139,7 @@ public class EnigmaticLegacy {
     public static Item infernalShield = new ItemInfernalShield();
     public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
     public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
+    public static ItemSoulCompass soulCompass = new ItemSoulCompass();
 
 
     public static SimpleNetworkWrapper packetInstance;
@@ -182,6 +185,7 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
+        //MinecraftForge.EVENT_BUS.register(new LootHandlerSpecial());
         if(COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
         
@@ -249,6 +253,9 @@ public class EnigmaticLegacy {
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
             event.getRegistry().register(eldritchPan);
+            event.getRegistry().register(enigmaticEye);
+            event.getRegistry().register(soulCompass);
+            event.getRegistry().register(evilIngot);
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 event.getRegistry().register(oblivionStone);
@@ -338,6 +345,10 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(golemHeart, 0, new ModelResourceLocation(golemHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(oceanStone, 0, new ModelResourceLocation(oceanStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(eldritchPan, 0, new ModelResourceLocation(eldritchPan.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(enigmaticEye, 0, new ModelResourceLocation(enigmaticEye.getRegistryName() + "_dormant", "inventory"));
+            ModelLoader.setCustomModelResourceLocation(enigmaticEye, 1, new ModelResourceLocation(enigmaticEye.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(soulCompass, 0, new ModelResourceLocation(soulCompass.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(evilIngot, 0, new ModelResourceLocation(evilIngot.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

@@ -16,8 +16,7 @@
       "item": "enigmaticlegacy:abyssal_heart"
     },
 	"I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotNetherite"
+      "item": "enigmaticlegacy:evil_ingot"
     },
 	"S": {
       "item": "enigmaticlegacy:void_stone"

@@ -23,6 +23,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -40,6 +43,40 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+    public static boolean hasPersistentTag(EntityPlayer player, String tag) {
+        NBTTagCompound data = player.getEntityData();
+        NBTTagCompound persistent;
+
+        if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+            data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
+        } else {
+            persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        }
+
+        if (persistent.hasKey(tag))
+            return true;
+        else
+            return false;
+
+    }
+
+    public static void setPersistentTag(EntityPlayer player, String tag, NBTBase value) {
+        NBTTagCompound data = player.getEntityData();
+        NBTTagCompound persistent;
+
+        if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+            data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
+        } else {
+            persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        }
+
+        persistent.setTag(tag, value);
+    }
+
+    public static void setPersistentBoolean(EntityPlayer player, String tag, boolean value) {
+        SuperpositionHandler.setPersistentTag(player, tag, new NBTTagByte((byte) (value ? 1 : 0)));
+    }
 
     /**
      * Basically, expands given int array to write given Integer into there.

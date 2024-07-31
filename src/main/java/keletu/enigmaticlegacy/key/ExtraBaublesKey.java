@@ -19,7 +19,7 @@ public class ExtraBaublesKey {
 
     @SideOnly(Side.CLIENT)
     public static void registerKeybinds() {
-        extraBaubles = new KeyBinding("key.baublesEnigmatic", Keyboard.KEY_V, "key.categories.enigmaticlegacy");
+        extraBaubles = new KeyBinding("key.baubleEnigmatic", Keyboard.KEY_V, "key.categories.enigmaticlegacy");
 
         ClientRegistry.registerKeyBinding(extraBaubles);
     }

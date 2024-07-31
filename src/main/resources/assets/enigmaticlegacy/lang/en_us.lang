@@ -19,6 +19,8 @@ item.xp_scroll.name=Scroll of Ageless Wisdom
 item.cursed_scroll.name=Scroll of a Thousand Curses
 item.animal_guide.name=Guide to Animal Companionship
 item.ascension_amulet.name=Ascension Amulet
+item.enigmatic_eye_dormant.name=Dormant Eye
+item.enigmatic_eye_active.name=Inscrutable Eye
 
 #SpellStone
 item.golem_heart.name=Heart of the Golem
@@ -35,6 +37,7 @@ item.witherite_scrap.name=Witherite Scrap
 item.witherite_ingot.name=Witherite Ingot
 item.evil_essence.name=Nefarious Essence
 item.thicc_scroll.name=Thicc Scroll
+item.evil_ingot.name=Nefarious Ingot
 
 #armor & tools
 item.the_acknowledgment.name=The Acknowledgment
@@ -56,6 +59,7 @@ item.infernal_shield.name=Bulwark of Blazing Pride
 item.enchantment_transposer.name=Tome of Hungering Knowledge
 item.eldritch_pan.name=The Voracious Pan
 item.void_stone.name=Keystone of The Oblivion
+item.soul_compass.name=Wayfinder of the Damned
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -326,6 +330,19 @@ tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystal
 #1.18+
 potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
+
+tooltip.enigmaticlegacy.soulCompass1=§5Points to the location of nearest §6Soul Crystal§5.
+
+tooltip.enigmaticlegacy.enigmaticEye1=§5It is connected to location beyond your space and
+tooltip.enigmaticlegacy.enigmaticEye2=§5time. You can awaken the eye, if you wish to risk
+tooltip.enigmaticlegacy.enigmaticEye3=§5drawing attention of someone... or something.
+
+tooltip.enigmaticlegacy.enigmaticEyeAwakened1=§5Now that you have drawn his attention, whoever uses
+tooltip.enigmaticlegacy.enigmaticEyeAwakened2=§5the eye to observe you and the world does not seem to
+tooltip.enigmaticlegacy.enigmaticEyeAwakened3=§5need it in order to reach you. Whether he is incapable
+tooltip.enigmaticlegacy.enigmaticEyeAwakened4=§5or simply unwilling to establish any contact beyond
+tooltip.enigmaticlegacy.enigmaticEyeAwakened5=§5mental remains a mystery.
+tooltip.enigmaticlegacy.enigmaticEyeAwakened6=§5Reveals true name of players bearing §6Charming Insignia§5.
 
 tooltip.enigmaticlegacy.infernalShield1=§6When equipped:
 tooltip.enigmaticlegacy.infernalShield2=§5- Extinguishes you when on fire.
