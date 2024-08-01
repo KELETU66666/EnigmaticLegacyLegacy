@@ -700,7 +700,7 @@ public class ELEvents {
             int hungerAmplifier = currentTicks / 300;
 
             hungerAmplifier = Math.min(hungerAmplifier, 9);
-            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 23333, hungerAmplifier, true, true));
+            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
         } else {
             ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
             player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
@@ -779,20 +779,20 @@ public class ELEvents {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public static void preRender(RenderGameOverlayEvent.Pre event) {
-        RenderGameOverlayEvent.ElementType type = event.getType();
-        Minecraft mc = Minecraft.getMinecraft();
-
-        if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
-            if (ExtendedBaublesApi.isBaubleEquipped(mc.player, EnigmaticLegacy.oceanStone) != -1/* || SuperpositionHandler.hasCurio(mc.player, EnigmaticLegacy.voidPearl)*/) {
-                //  if (OceanStone.preventOxygenBarRender.getValue()) {
-                event.setCanceled(true);
-                // }
-            }
-        }
-    }
+    //@SideOnly(Side.CLIENT)
+    //@SubscribeEvent
+    //public static void preRender(RenderGameOverlayEvent.Pre event) {
+    //    RenderGameOverlayEvent.ElementType type = event.getType();
+    //    Minecraft mc = Minecraft.getMinecraft();
+//
+    //    if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
+    //        if (ExtendedBaublesApi.isBaubleEquipped(mc.player, EnigmaticLegacy.oceanStone) != -1/* || SuperpositionHandler.hasCurio(mc.player, EnigmaticLegacy.voidPearl)*/) {
+    //            //  if (OceanStone.preventOxygenBarRender.getValue()) {
+    //            event.setCanceled(true);
+    //            // }
+    //        }
+    //    }
+    //}
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {

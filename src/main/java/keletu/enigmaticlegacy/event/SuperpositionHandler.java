@@ -11,15 +11,22 @@ import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
+import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,12 +36,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -166,6 +171,20 @@ public class SuperpositionHandler {
             return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticAmulet) != -1 && BaublesApi.getBaubles(player).getStackInSlot(0).getMetadata() == meta;
     }
 
+    public static Vec3d vectorTo(Vec3d vec1, Vec3d vec2) {
+        double x = vec2.x - vec1.x;
+        double y = vec2.y - vec1.y;
+        double z = vec2.z - vec1.z;
+        return new Vec3d(x, y, z);
+    }
+
+    public static Vec3d multiplyVector(Vec3d vec, double x, double y, double z) {
+        double newX = vec.x * x;
+        double newY = vec.y * y;
+        double newZ = vec.z * z;
+        return new Vec3d(newX, newY, newZ);
+    }
+
     public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source) {
         if (blocker instanceof EntityPlayer && useItem != null) {
             EntityPlayer player = (EntityPlayer) blocker;
@@ -215,6 +234,48 @@ public class SuperpositionHandler {
                     }
                 }
                 return false;
+            }else if (useItem.getItem() instanceof ItemEldritchPan) {
+                Entity projectile = source.getImmediateSource();
+
+                if (!(projectile instanceof EntityArrow) && !(projectile instanceof EntityFireball))
+                    return false;
+
+                if (!source.isUnblockable()) {
+                    Vec3d sourcePos = source.getDamageLocation();
+
+                    if (sourcePos != null) {
+                        Vec3d lookVec = blocker.getLook(1.0F);
+                        Vec3d sourceToSelf = vectorTo(sourcePos, new Vec3d(blocker.getPosition())).normalize();
+                        sourceToSelf = new Vec3d(sourceToSelf.x, 0.0D, sourceToSelf.z);
+
+                        if (sourceToSelf.dotProduct(lookVec) < 0.0D) {
+                            projectile.setDead();
+
+                            FoodStats data = player.getFoodStats();
+                            data.addStats(4, 0.5F);
+
+                            player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, player.world.rand.nextFloat() * 0.1F + 0.9F);
+
+                            //player.gameEvent(GameEvent.EAT);
+
+                            if (projectile instanceof EntityLargeFireball) {
+                                EntityLargeFireball fireball = (EntityLargeFireball) projectile;
+                                fireball.explosionPower = 0;
+                            }
+
+                            if (player.world instanceof WorldServer) {
+                                WorldServer level = (WorldServer) player.world;
+                                Vec3d angle = player.getLookVec();
+                                angle = multiplyVector(multiplyVector(angle, 1, 0, 1).normalize(), 0.5, 0.5, 0.5);
+
+                                CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)player,  new ItemStack(Items.ROTTEN_FLESH));
+                                level.spawnParticle(EnumParticleTypes.ITEM_CRACK, player.posX + angle.x, player.posY + player.getEyeHeight() - 0.1, player.posZ + angle.z, 10, 0.3D, 0.3D, 0.3D, 0.03D, Item.getIdFromItem(Items.FIRE_CHARGE), 0);
+                            }
+
+                            return true;
+                        }
+                    }
+                }
             }
             return blocker.isActiveItemStackBlocking();
         }

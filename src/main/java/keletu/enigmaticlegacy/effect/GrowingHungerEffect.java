@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,15 +23,15 @@ public class GrowingHungerEffect extends Potion {
 
     @Override
     public void performEffect(EntityLivingBase living, int amplifier) {
-        if (living instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) living;
+        if (living instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) living;
             player.addExhaustion((float) (0.5 * (1 + amplifier)));
         }
     }
 
     @Override
     public boolean isReady(int duration, int amplifier) {
-        return duration % 4 == 0;
+        return duration % 40 == 0;
     }
 
     @SideOnly(Side.CLIENT)
