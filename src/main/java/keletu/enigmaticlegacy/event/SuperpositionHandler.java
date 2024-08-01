@@ -27,6 +27,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.NonNullList;
@@ -44,6 +46,44 @@ import java.util.*;
 
 public class SuperpositionHandler {
 
+    /**
+     * Checks whether or on the player is within the range of any active beacon.
+     * @author Integral
+     */
+
+    public static boolean isInBeaconRange(EntityPlayer player) {
+        List<TileEntityBeacon> list = new ArrayList<TileEntityBeacon>();
+        boolean inRange = false;
+
+        for (TileEntity tile : player.world.loadedTileEntityList) {
+            if (tile instanceof TileEntityBeacon) {
+                list.add((TileEntityBeacon) tile);
+            }
+        }
+
+        if (list.size() > 0) {
+            for (TileEntityBeacon beacon : list)
+                if (beacon.getLevels() > 0) {
+                    try {
+                        if (beacon.getBeamSegments().isEmpty()) {
+                            continue;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                    int range = (beacon.getLevels() + 1) * 10;
+                    double distance = Math.sqrt(beacon.getPos().distanceSq(player.getPosition()));
+
+                    if (distance <= range) {
+                        inRange = true;
+                    }
+                }
+        }
+
+        return inRange;
+    }
+    
     public static boolean hasPersistentTag(EntityPlayer player, String tag) {
         NBTTagCompound data = player.getEntityData();
         NBTTagCompound persistent;

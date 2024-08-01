@@ -17,6 +17,7 @@ item.mega_sponge.name=Mega Sponge
 item.enchanter_pearl.name=Enchanter's Pearl
 item.xp_scroll.name=Scroll of Ageless Wisdom
 item.cursed_scroll.name=Scroll of a Thousand Curses
+item.heaven_scroll.name=Gift of the Heaven
 item.animal_guide.name=Guide to Animal Companionship
 item.ascension_amulet.name=Ascension Amulet
 item.enigmatic_eye_dormant.name=Dormant Eye
@@ -25,6 +26,7 @@ item.enigmatic_eye_active.name=Inscrutable Eye
 #SpellStone
 item.golem_heart.name=Heart of the Golem
 item.ocean_stone.name=Will of the Ocean
+item.angel_blessing.name=Angel's Blessing
 
 #material
 item.astral_dust.name=Astral dust
@@ -65,6 +67,24 @@ tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
 tooltip.enigmaticlegacy.theAcknowledgment1=§5The blinding light of revelation shall
 tooltip.enigmaticlegacy.theAcknowledgment2=§5incinerate those who refuse to embrace it.
+
+tooltip.enigmaticlegacy.heavenTome1=§5Provides you an ability to fly within the range
+tooltip.enigmaticlegacy.heavenTome2=§5of an active §6Beacon§5, at the cost of slowly
+tooltip.enigmaticlegacy.heavenTome3=§5consuming your experience.
+tooltip.enigmaticlegacy.heavenTome4=§5Compensates mining speed penalty when flying.
+
+tooltip.enigmaticlegacy.angelBlessing1=§dActive ability:
+tooltip.enigmaticlegacy.angelBlessing2=§6- Accelerates you in the direction of your sight. §1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessingCooldown=§dСooldown: §6
+tooltip.enigmaticlegacy.angelBlessingCooldown_1=§6 seconds
+tooltip.enigmaticlegacy.angelBlessing3=§dPassive abilities:
+tooltip.enigmaticlegacy.angelBlessing4=§5- Immunity to fall and collision damage.
+tooltip.enigmaticlegacy.angelBlessing5=§5- §6
+tooltip.enigmaticlegacy.angelBlessing5_1=§d Chance§5 to deflect incoming projectile.
+tooltip.enigmaticlegacy.angelBlessing6=§5- Your own projectiles are greatly accelerated.
+tooltip.enigmaticlegacy.angelBlessing7=§5- Active ability can be triggered by pressing jump
+tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air. §1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessing9=§5- You are vulnerable to §6Withering§5 and §6Void Damage§5.
 
 tooltip.enigmaticlegacy.theTwist1=§5On a path to take it all away,
 tooltip.enigmaticlegacy.theTwist2=§5there can be no better way of knowing...

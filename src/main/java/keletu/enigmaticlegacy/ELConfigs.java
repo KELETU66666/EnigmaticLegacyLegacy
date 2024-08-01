@@ -96,6 +96,12 @@ public class ELConfigs {
     public static float oceanStoneUnderwaterCreaturesResistance;
     public static double oceanStoneXpCostModifier;
 
+    public static int angelBlessingSpellstoneCooldown;
+    public static double angelBlessingAccelerationModifier;
+    public static double angelBlessingAccelerationModifierElytra;
+    public static float angelBlessingDeflectChance;
+    public static double flyingScrollXpCostModifier;
+
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
@@ -258,6 +264,16 @@ public class ELConfigs {
 
         oblivionStoneSoftCap = config.getInt("oblivionStoneSoftCap", "Oblivion Stone", 28, 0, 2048,
                 "Controls the amount of items that can be added into list of Keystone of The Oblivion, before displayble list in Ctrl tooltip stops expanding and becomes unreadable. You may want to increase or decrease it, depending on your screen resolution.");
+
+        angelBlessingSpellstoneCooldown = config.getInt("Cooldown", "Angel Blessing", 40, 0, 32768, "Active ability cooldown for Angel's Blessing. Measured in ticks. 20 ticks equal to 1 second.");
+
+        angelBlessingAccelerationModifier = config.getFloat("AccelerationModifier", "Angel Blessing", 1, 0, 256, "Acceleration modifier for active ability of Angel's Blessing. The greater it is, the more momentum you will gain.");
+
+        angelBlessingAccelerationModifierElytra = config.getFloat("AccelerationModifierElytra", "Angel Blessing", 0.6F, 0, 256, "Separate acceleration modifier for active ability of Angel's Blessing when player is flying with Elytra.");
+
+        angelBlessingDeflectChance = config.getFloat("DeflectChance", "Angel Blessing", 0.5F, 0, 1, "Chance to deflect projectile when having Angel's Blessing equipped. Measured in parents.");
+
+        flyingScrollXpCostModifier = config.getFloat("flyingScrollXpCostModifier", "Heaven Scroll", 1.0F, 0, 32768, "Multiplier for experience consumption by Gift of the Heaven.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"

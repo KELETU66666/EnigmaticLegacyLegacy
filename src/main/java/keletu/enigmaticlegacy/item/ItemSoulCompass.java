@@ -1,25 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
-import keletu.enigmaticlegacy.event.ELEvents;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-public class ItemSoulCompass extends ItemBaseFireProof {
+/*public class ItemSoulCompass extends ItemBaseFireProof {
     public ItemSoulCompass() {
         super("soul_compass", EnumRarity.EPIC);
         this.maxStackSize = 1;
@@ -75,7 +56,7 @@ public class ItemSoulCompass extends ItemBaseFireProof {
                 double d1 = flag ? (double) entity.rotationYaw : this.getFrameRotation((EntityItemFrame) entity);
                 d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
 
-                Entity target = getNearestEntity(entity, ELEvents.listEntityPos);
+                Entity target = getNearestEntity(entity, ELEvents.soulCrystalPos.get(entity));
 
                 if (target == null)
                     return Math.random();
@@ -85,20 +66,20 @@ public class ItemSoulCompass extends ItemBaseFireProof {
         });
     }
 
-    public static Entity getNearestEntity(Entity playerPos, List<Entity> targets) {
+    public static Entity getNearestEntity(Entity playerPos, Entity target) {
         Entity nearestEntity = null;
         double nearestDistance = Double.MAX_VALUE;
 
 
-        for (Entity target : targets) {
-            if (playerPos.dimension == target.dimension) {
+        if (target == null)
+            return null;
 
-                double distance = playerPos.getPosition().distanceSq(target.getPosition());
+        if (playerPos.dimension == target.dimension) {
 
-                if (distance < nearestDistance) {
-                    nearestDistance = distance;
-                    nearestEntity = target;
-                }
+            double distance = playerPos.getPosition().distanceSq(target.getPosition());
+
+            if (distance < nearestDistance) {
+                nearestEntity = target;
             }
         }
 
@@ -114,4 +95,4 @@ public class ItemSoulCompass extends ItemBaseFireProof {
             list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
         }
     }
-}
+}*/

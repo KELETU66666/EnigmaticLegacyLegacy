@@ -23,7 +23,6 @@ package keletu.enigmaticlegacy.entity;
 import com.google.common.base.Optional;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
-import static keletu.enigmaticlegacy.event.ELEvents.listEntityPos;
 import keletu.enigmaticlegacy.item.ItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemStorageCrystal;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
@@ -294,7 +293,6 @@ public class EntityItemSoulCrystal extends Entity {
 					 */
 
                 } else if (item instanceof ItemSoulCrystal) {
-                    listEntityPos.remove(this);
                     if (!EnigmaticLegacy.soulCrystal.retrieveSoulFromCrystal(player, itemstack))
                         return;
 

@@ -85,8 +85,6 @@ public class ELEvents {
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
-    public static final Map<EntityPlayer, Entity> soulCrystalPos = new WeakHashMap<>();
-    public static final List<Entity> listEntityPos = new ArrayList<>();
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone evt) {
         EntityPlayer newPlayer = evt.getEntityPlayer();
@@ -149,8 +147,6 @@ public class ELEvents {
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedSoulCrystal);
-                if(droppedSoulCrystal.getOwnerId() == player.getUniqueID())
-                    listEntityPos.add(droppedSoulCrystal);
                 EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
 
                 droppedCrystal = true;
@@ -496,6 +492,11 @@ public class ELEvents {
 
                     boolean trigger = false;
                     double chance = 0.0D;
+
+                    if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == EnigmaticLegacy.angelBlessing) {
+                        trigger = true;
+                        chance += angelBlessingDeflectChance;
+                    }
 
                     if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
                         trigger = true;

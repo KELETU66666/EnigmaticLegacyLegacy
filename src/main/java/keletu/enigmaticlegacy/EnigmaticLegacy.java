@@ -105,6 +105,8 @@ public class EnigmaticLegacy {
     public static Item oceanStone = new ItemOceanStone();
     public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
+    public static Item angelBlessing = new ItemAngelBlessing();
+    public static Item heavenScroll = new ItemHeavenScroll();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
@@ -139,7 +141,7 @@ public class EnigmaticLegacy {
     public static Item infernalShield = new ItemInfernalShield();
     public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
     public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
-    public static ItemSoulCompass soulCompass = new ItemSoulCompass();
+    //public static ItemSoulCompass soulCompass = new ItemSoulCompass();
 
 
     public static SimpleNetworkWrapper packetInstance;
@@ -223,6 +225,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(megaSponge);
             event.getRegistry().register(golemHeart);
             event.getRegistry().register(oceanStone);
+            event.getRegistry().register(angelBlessing);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
             event.getRegistry().register(twistedCore);
@@ -231,6 +234,8 @@ public class EnigmaticLegacy {
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(infernalShield);
+            //event.getRegistry().register(soulCompass);
+            event.getRegistry().register(evilIngot);
             event.getRegistry().register(etheriumOre);
             event.getRegistry().register(etheriumIngot);
             event.getRegistry().register(enchantmentTransposer);
@@ -239,6 +244,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(thiccScroll);
             event.getRegistry().register(xpScroll);
             event.getRegistry().register(cursedScroll);
+            event.getRegistry().register(heavenScroll);
             event.getRegistry().register(animalGuide);
             event.getRegistry().register(etheriumHelm);
             event.getRegistry().register(etheriumChest);
@@ -249,13 +255,11 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumPickaxe);
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
+            event.getRegistry().register(enigmaticEye);
             event.getRegistry().register(ascensionAmulet);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
             event.getRegistry().register(eldritchPan);
-            event.getRegistry().register(enigmaticEye);
-            event.getRegistry().register(soulCompass);
-            event.getRegistry().register(evilIngot);
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 event.getRegistry().register(oblivionStone);
@@ -347,8 +351,10 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(eldritchPan, 0, new ModelResourceLocation(eldritchPan.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enigmaticEye, 0, new ModelResourceLocation(enigmaticEye.getRegistryName() + "_dormant", "inventory"));
             ModelLoader.setCustomModelResourceLocation(enigmaticEye, 1, new ModelResourceLocation(enigmaticEye.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(soulCompass, 0, new ModelResourceLocation(soulCompass.getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(soulCompass, 0, new ModelResourceLocation(soulCompass.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(evilIngot, 0, new ModelResourceLocation(evilIngot.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(angelBlessing, 0, new ModelResourceLocation(angelBlessing.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(heavenScroll, 0, new ModelResourceLocation(heavenScroll.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();
