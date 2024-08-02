@@ -120,6 +120,7 @@ public class EnigmaticLegacy {
     public static Item twistedCore = new ItemBase("twisted_core", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item evilIngot = new ItemBaseFireProof("evil_ingot", EnumRarity.EPIC);
+    public static Item cosmicHeart = new ItemBaseFireProof("cosmic_heart", EnumRarity.EPIC);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -256,6 +257,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(etheriumSpade);
             event.getRegistry().register(astralBreaker);
             event.getRegistry().register(enigmaticEye);
+            event.getRegistry().register(cosmicHeart);
             event.getRegistry().register(ascensionAmulet);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
@@ -355,6 +357,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(evilIngot, 0, new ModelResourceLocation(evilIngot.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(angelBlessing, 0, new ModelResourceLocation(angelBlessing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(heavenScroll, 0, new ModelResourceLocation(heavenScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(cosmicHeart, 0, new ModelResourceLocation(cosmicHeart.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

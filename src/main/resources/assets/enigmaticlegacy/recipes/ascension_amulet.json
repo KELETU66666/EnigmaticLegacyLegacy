@@ -1,7 +1,7 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "prp",
+    "drd",
     "lXl",
     "bpb"
   ],
@@ -17,10 +17,14 @@
       "item": "enigmaticlegacy:etherium_ingot"
     },
 	"p": {
-      "item": "enigmaticlegacy:astral_dust"
+      "item": "enigmaticlegacy:cosmic_heart"
     },
 	"r": {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:astral_dust"
+    },
+    "d": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     }
   },
   "result": {

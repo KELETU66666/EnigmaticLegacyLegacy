@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "DSD",
+    "PXP",
+    "DED"
+  ],
+  "key": {
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "blockDiamond"
+    },
+    "D": {
+      "item": "enigmaticlegacy:astral_dust"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:cosmic_heart"
+  }
+}
