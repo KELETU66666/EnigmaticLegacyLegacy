@@ -20,7 +20,7 @@
       "item": "enigmaticlegacy:cosmic_heart"
     },
 	"r": {
-      "item": "minecraft:astral_dust"
+      "item": "enigmaticlegacy:astral_dust"
     },
     "d": {
       "type": "forge:ore_dict",

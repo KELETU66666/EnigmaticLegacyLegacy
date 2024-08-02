@@ -85,6 +85,7 @@ public class ELEvents {
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone evt) {
         EntityPlayer newPlayer = evt.getEntityPlayer();
@@ -831,6 +832,10 @@ public class ELEvents {
                         player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 3, false, true));
                         player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 300, 3, false, true));
                         player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 3, false, true));
+                    }
+                } else if (mainhandStack.getItem() == eldritchPan) {
+                    if (!SuperpositionHandler.isTheWorthyOne(player)) {
+                        event.setCanceled(true);
                     }
                 }
             }
