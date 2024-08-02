@@ -701,6 +701,8 @@ public class ELEvents {
 
             hungerAmplifier = Math.min(hungerAmplifier, 9);
             player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+
+            ItemEldritchPan.HOLDING_DURATIONS.put(player, currentTicks + 1);
         } else {
             ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
             player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);

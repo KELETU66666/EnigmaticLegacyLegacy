@@ -25,13 +25,13 @@ public class GrowingHungerEffect extends Potion {
     public void performEffect(EntityLivingBase living, int amplifier) {
         if (living instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) living;
-            player.addExhaustion((float) (0.5 * (1 + amplifier)));
+            player.addExhaustion((float) (0.5 * (1 + amplifier)) / 4);
         }
     }
 
     @Override
     public boolean isReady(int duration, int amplifier) {
-        return duration % 40 == 0;
+        return true;
     }
 
     @SideOnly(Side.CLIENT)
