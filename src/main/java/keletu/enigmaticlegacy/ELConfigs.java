@@ -25,7 +25,8 @@ public class ELConfigs {
     public static double endermenRandomportFrequency;
     public static boolean saveTheBees;
     public static Boolean enableSpecialDrops;
-    public static int iconOffset;
+    public static int xiconOffsetEnderChest;
+    public static int yiconOffsetEnderChest;
     public static int xIconOffsetBauble;
     public static int yIconOffsetBauble;
     public static int heartLoss;
@@ -144,7 +145,9 @@ public class ELConfigs {
 
         endermenRandomportRange = config.getFloat("EndermenRandomportRange", "The Seven Curses", 32, 8, 100, "Range in which Endermen can try to randomly teleport to bearers of the ring.");
 
-        iconOffset = config.getInt("IconOffset", "The Seven Curses", -51, -500, 500, "X Offset for EnderChest tab");
+        xiconOffsetEnderChest = config.getInt("IconOffsetXEnderChest", "The Seven Curses", 0, -500, 500, "X Offset for EnderChest tab");
+
+        yiconOffsetEnderChest = config.getInt("IconOffsetYEnderChest", "The Seven Curses", 0, -500, 500, "Y Offset for EnderChest tab");
 
         xIconOffsetBauble = config.getInt("IconOffsetX", "Special Baubles", 0, -500, 500, "X Offset for Enigmatic Baubles tab");
 

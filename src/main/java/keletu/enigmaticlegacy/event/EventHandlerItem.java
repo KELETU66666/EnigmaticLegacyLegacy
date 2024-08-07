@@ -5,8 +5,9 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.ExtendedBaubleType;
 import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
+import keletu.enigmaticlegacy.container.gui.GuiEnderChestInventoryButton;
 import keletu.enigmaticlegacy.container.gui.GuiExtendedBaublesButton;
-import static keletu.enigmaticlegacy.event.SuperpositionHandler.isTheWorthyOne;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -30,78 +31,82 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EventHandlerItem
-{
-	private static ResourceLocation capabilityResourceLocation = new ResourceLocation(EnigmaticLegacy.MODID, "bauble_cap");
+public class EventHandlerItem {
+    private static ResourceLocation capabilityResourceLocation = new ResourceLocation(EnigmaticLegacy.MODID, "bauble_cap");
 
-	/**
-	* Handles backwards compatibility with items that implement IBauble instead of exposing it as a capability.
-	* This adds a IBauble capability wrapper for all items, if the item:
-	* - does implement the IBauble interface
-	* - does not already have the capability
-	* - did not get the capability by another event handler earlier in the chain
-	* @param event
-	*/
-	@SubscribeEvent(priority = EventPriority.LOWEST)
- 	public void itemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event)
- 	{
-		ItemStack stack = event.getObject();
-		if (stack.isEmpty() || !(stack.getItem() instanceof IExtendedBauble) || stack.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)
-				|| event.getCapabilities().values().stream().anyMatch(c -> c.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)))
-			return;
+    /**
+     * Handles backwards compatibility with items that implement IBauble instead of exposing it as a capability.
+     * This adds a IBauble capability wrapper for all items, if the item:
+     * - does implement the IBauble interface
+     * - does not already have the capability
+     * - did not get the capability by another event handler earlier in the chain
+     *
+     * @param event
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void itemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event) {
+        ItemStack stack = event.getObject();
+        if (stack.isEmpty() || !(stack.getItem() instanceof IExtendedBauble) || stack.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)
+                || event.getCapabilities().values().stream().anyMatch(c -> c.hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)))
+            return;
 
-		event.addCapability(capabilityResourceLocation, new ICapabilityProvider() {
+        event.addCapability(capabilityResourceLocation, new ICapabilityProvider() {
 
-			@Override
-			public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-				return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE;
-			}
+            @Override
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+                return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE;
+            }
 
-			@Nullable
-			@Override
-			public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-				return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE
-						? EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE.cast((IExtendedBauble) stack.getItem())
-						: null;
-			}
-		});
-	}
+            @Nullable
+            @Override
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+                return capability == EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE
+                        ? EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE.cast((IExtendedBauble) stack.getItem())
+                        : null;
+            }
+        });
+    }
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
+        if (Minecraft.getMinecraft().player == null)
+            return;
 
-		if (event.getGui() instanceof GuiInventory) {
-			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiExtendedBaublesButton(56, gui, 150 + ELConfigs.xIconOffsetBauble, 61 + ELConfigs.yIconOffsetBauble, 20, 18));
-		}
-	}
+        if (event.getGui() instanceof GuiInventory) {
+            GuiContainer gui = (GuiContainer) event.getGui();
+            event.getButtonList().add(new GuiExtendedBaublesButton(56, gui, 150 + ELConfigs.xIconOffsetBauble, 61 + ELConfigs.yIconOffsetBauble, 20, 18));
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void tooltipEvent(ItemTooltipEvent event) {
-		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			IExtendedBauble bauble = event.getItemStack().getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-			ExtendedBaubleType bt = bauble.getBaubleType(event.getItemStack());
-			event.getToolTip().add(TextFormatting.GOLD + I18n.format("name." + bt));
-		}
+            if (hasCursed(Minecraft.getMinecraft().player) || hasEnderRing(Minecraft.getMinecraft().player))
+                event.getButtonList().add(new GuiEnderChestInventoryButton(56, gui, 127 + ELConfigs.xiconOffsetEnderChest, 61 + ELConfigs.yiconOffsetEnderChest, 20, 18));
+        }
+    }
 
-		TextFormatting format = TextFormatting.DARK_RED;
-		EntityPlayer player = Minecraft.getMinecraft().player;
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void tooltipEvent(ItemTooltipEvent event) {
+        if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+            IExtendedBauble bauble = event.getItemStack().getCapability(EnigmaticCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+            ExtendedBaubleType bt = bauble.getBaubleType(event.getItemStack());
+            event.getToolTip().add(TextFormatting.GOLD + I18n.format("name." + bt));
+        }
 
-		for (ResourceLocation rl : ELConfigs.eldritchItemList) {
-			if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
-				if (player != null) {
-					format = isTheWorthyOne(Minecraft.getMinecraft().player) ? TextFormatting.GOLD : TextFormatting.DARK_RED;
-				}
+        TextFormatting format = TextFormatting.DARK_RED;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
-				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly1"));
-				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly2"));
-				event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly3"));
-				event.getToolTip().add("");
-				event.getToolTip().add(TextFormatting.LIGHT_PURPLE + I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly4") + format + " " + SuperpositionHandler.getSufferingTime(player));
-			}
-		}
-	}
+        for (ResourceLocation rl : ELConfigs.eldritchItemList) {
+            if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
+                if (player != null) {
+                    format = isTheWorthyOne(Minecraft.getMinecraft().player) ? TextFormatting.GOLD : TextFormatting.DARK_RED;
+                }
+
+                event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly1"));
+                event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly2"));
+                event.getToolTip().add(I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly3"));
+                event.getToolTip().add("");
+                event.getToolTip().add(TextFormatting.LIGHT_PURPLE + I18n.format("tooltip.enigmaticlegacy.worthyOnesOnly4") + format + " " + SuperpositionHandler.getSufferingTime(player));
+            }
+        }
+    }
 
 }
