@@ -14,7 +14,6 @@ import keletu.enigmaticlegacy.event.KeepBaubles;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
-import keletu.enigmaticlegacy.key.ExtraBaublesKey;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.*;
@@ -176,7 +175,6 @@ public class EnigmaticLegacy {
 
         if (event.getSide().isClient()) {
             EnderChestRingHandler.registerKeybinds();
-            ExtraBaublesKey.registerKeybinds();
         }
     }
 

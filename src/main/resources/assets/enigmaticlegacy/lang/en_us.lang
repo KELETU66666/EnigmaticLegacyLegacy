@@ -421,11 +421,9 @@ name.SPELLSTONE=Bauble (Spellstone)
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²
-button.enigmatic=Enigmatic Baubles
 button.enderChest=Ender Chest
 key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
-key.baubleEnigmatic=Open Enigmatic Bauble Inventory
 message.enigmaticlegacy.eldritch_pan_buff=With the taste of this new soul, The Voracious Pan grows ever stronger.
 
 #Compat

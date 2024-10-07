@@ -385,9 +385,7 @@ name.SPELLSTONE=饰品（术石）
 itemGroup.tabEnigmaticLegacy=神秘²遗物
 key.categories.enigmaticlegacy=神秘²遗物
 key.enderRing=打开末影箱
-key.baubleEnigmatic=打开神秘护身符背包
 button.enderChest=末影箱
-button.enigmatic=神秘护身符
 message.enigmaticlegacy.eldritch_pan_buff=品尝了这份新的灵魂之后，贪婪之锅变得更加强大
 
 #Compat
