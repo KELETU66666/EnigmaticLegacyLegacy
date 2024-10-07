@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class ItemHeavenScroll extends ItemBase implements IExtendedBauble {
+public class ItemHeavenScroll extends ItemBase implements IBauble {
 
 	public Map<EntityPlayer, Integer> flyMap = new WeakHashMap<EntityPlayer, Integer>();
 	public final double baseXpConsumptionProbability = 0.025D/2D;
@@ -112,7 +112,7 @@ public class ItemHeavenScroll extends ItemBase implements IExtendedBauble {
 	}
 	
 	@Override
-	public ExtendedBaubleType getBaubleType(ItemStack itemstack) {
-		return ExtendedBaubleType.SCROLL;
+	public BaubleType getBaubleType(ItemStack itemstack) {
+		return BaubleType.TRINKET;
 	}
 }

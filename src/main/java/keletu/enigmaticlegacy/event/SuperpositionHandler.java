@@ -1,13 +1,12 @@
 package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
-import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
-import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -18,7 +17,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,6 +48,17 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+
+    public static boolean hasAdvancedBaubles(final EntityLivingBase entity) {
+        return SuperpositionHandler.getAdvancedBaubles(entity) != ItemStack.EMPTY;
+    }
+
+    public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
+        IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+
+        return handler.getStackInSlot(6);
+    }
 
     /**
      * Checks whether or on the player is within the range of any active beacon.
@@ -137,16 +146,6 @@ public class SuperpositionHandler {
         newSeries[newSeries.length - 1] = newInt;
         return newSeries;
 
-    }
-
-    public static boolean hasAdvancedBaubles(final EntityLivingBase entity) {
-        return SuperpositionHandler.getAdvancedBaubles(entity) != ItemStack.EMPTY;
-    }
-
-    public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
-        IExtendedBaublesItemHandler handler = ExtendedBaublesApi.getBaublesHandler((EntityPlayer) entity);
-
-        return handler.getStackInSlot(3);
     }
 
     public static boolean hasAnyArmor(EntityLivingBase entity) {
@@ -443,7 +442,7 @@ public class SuperpositionHandler {
     }
 
     public static boolean hasCursed(EntityPlayer player) {
-        return ExtendedBaublesApi.isBaubleEquipped(player, cursedRing) != -1;
+        return BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
     }
 
     public static boolean hasPearl(EntityPlayer player) {

@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemExperienceScroll extends ItemBase implements IExtendedBauble {
+public class ItemExperienceScroll extends ItemBase implements IBauble {
 
 
     public final String TAG_ABSORPTION = "AbsorptionMode";
@@ -177,8 +177,9 @@ public class ItemExperienceScroll extends ItemBase implements IExtendedBauble {
     }
 
     @Override
-    public ExtendedBaubleType getBaubleType(ItemStack itemStack) {
-        return ExtendedBaubleType.SCROLL;
+    public BaubleType getBaubleType(ItemStack itemStack) {
+        //todo
+        return BaubleType.TRINKET;
     }
 
     @Override

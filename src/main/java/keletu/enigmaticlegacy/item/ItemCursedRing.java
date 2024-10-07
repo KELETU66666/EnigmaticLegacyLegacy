@@ -1,13 +1,12 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
+import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.ModCompat;
 import net.minecraft.client.Minecraft;
@@ -39,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemCursedRing extends ItemBase implements IExtendedBauble {
+public class ItemCursedRing extends ItemBase implements IBauble {
 
     public ItemCursedRing() {
         super("cursed_ring", EnumHelper.addRarity("Curses", TextFormatting.DARK_RED, "Curses"));
@@ -62,6 +61,12 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
 		attributesDefault.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b52"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
 
 		return attributesDefault;
+    }
+
+    @Override
+    public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player)
+    {
+        return true;
     }
 
     @Override
@@ -130,6 +135,13 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
             return;
 
         EntityPlayer player = (EntityPlayer) livingPlayer;
+        if(BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.RING.getValidSlots()[1]).getItem() != this) {
+            BaublesApi.getBaublesHandler(player).setStackInSlot(BaublesApi.isBaubleEquipped(player, this), ItemStack.EMPTY);
+            ItemStack origin = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.RING.getValidSlots()[1]);
+            player.dropItem(origin, true);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(BaubleType.RING.getValidSlots()[1], stack.copy());
+        }
+
         player.getAttributeMap().applyAttributeModifiers(this.createAttributeMap(player));
 
         if (player.isCreative() || player.isSpectator())
@@ -173,7 +185,7 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
                 }
 
                 if (neutral instanceof EntityAnimal)
-                    if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1)
+                    if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1)
                         continue;
 
                 if (neutral instanceof EntityEnderman)
@@ -221,7 +233,7 @@ public class ItemCursedRing extends ItemBase implements IExtendedBauble {
     }
 
     @Override
-    public ExtendedBaubleType getBaubleType(ItemStack itemStack) {
-        return ExtendedBaubleType.CURSE;
+    public BaubleType getBaubleType(ItemStack itemStack) {
+        return BaubleType.RING;
     }
 }

@@ -1,9 +1,9 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.EnumRarity;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class ItemSpellstoneBauble extends ItemBase implements IExtendedBauble {
+public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
 
 
     public List<String> immunityList = new ArrayList<String>();
@@ -38,10 +38,9 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IExtended
     }
 
     @Override
-    public ExtendedBaubleType getBaubleType(ItemStack itemstack) {
-        return ExtendedBaubleType.SPELLSTONE;
+    public BaubleType getBaubleType(ItemStack itemStack) {
+        return BaubleType.CHARM;
     }
-
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase player) {
         onEquippedOrLoadedIntoWorld(stack, player);

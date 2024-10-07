@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy;
 
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
-import keletu.enigmaticlegacy.api.cap.*;
+import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
+import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.api.cap.PlayerPlaytimeCounter;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
@@ -10,7 +10,7 @@ import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
-import keletu.enigmaticlegacy.event.EventHandlerItem;
+import keletu.enigmaticlegacy.event.KeepBaubles;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
@@ -19,7 +19,6 @@ import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.*;
 import static keletu.enigmaticlegacy.util.ModCompat.COMPAT_FORGOTTEN_RELICS;
-import keletu.enigmaticlegacy.util.compat.CompatTombManyGraves;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -57,6 +56,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 @Mod(
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
@@ -67,7 +68,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.4.5";
+    public static final String VERSION = "0.5.0";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -149,17 +150,18 @@ public class EnigmaticLegacy {
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
     public static Potion growingHungerEffect = new GrowingHungerEffect();
 
+    public static ItemStack getBackpackStack(EntityPlayer player)
+    {
+        AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
+        backpack.set(KeepBaubles.getBackpackStack(player));
+        return backpack.get();
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ELConfigs.onConfig(event);
 
-        CapabilityManager.INSTANCE.register(IExtendedBaublesItemHandler.class,
-                new EnigmaticCapabilities.CapabilityBaubles<IExtendedBaublesItemHandler>(), ExtendedBaublesContainer.class);
-
-        CapabilityManager.INSTANCE
-                .register(IExtendedBauble.class, new EnigmaticCapabilities.CapabilityItemBaubleStorage(), () -> new ExtendedBaubleItem(ExtendedBaubleType.SCROLL));
-
-        CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter((EntityPlayer) null));
+        CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter(null));
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
@@ -167,12 +169,10 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketOpenExtendedBaublesInventory.class, PacketOpenExtendedBaublesInventory.class, 4, Side.SERVER);
-        packetInstance.registerMessage(PacketSyncExtended.Handler.class, PacketSyncExtended.class, 5, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 6, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 7, Side.SERVER);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 6, Side.SERVER);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
-        MinecraftForge.EVENT_BUS.register(new EventHandlerItem());
 
         if (event.getSide().isClient()) {
             EnderChestRingHandler.registerKeybinds();
@@ -182,8 +182,6 @@ public class EnigmaticLegacy {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(MODID, proxy);
-
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
@@ -199,9 +197,6 @@ public class EnigmaticLegacy {
     public void postInit(FMLPostInitializationEvent event) {
         if (ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
-
-        if (ModCompat.COMPAT_TOMBMANYGRAVES)
-            new CompatTombManyGraves();
     }
 
     @Mod.EventBusSubscriber

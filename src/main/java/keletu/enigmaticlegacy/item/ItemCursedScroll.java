@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
-import keletu.enigmaticlegacy.api.ExtendedBaubleType;
-import keletu.enigmaticlegacy.api.IExtendedBauble;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getCurseAmount;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCursedScroll extends ItemBase implements IExtendedBauble {
+public class ItemCursedScroll extends ItemBase implements IBauble {
 
     public ItemCursedScroll() {
         super("cursed_scroll", EnumRarity.EPIC);
@@ -57,7 +57,8 @@ public class ItemCursedScroll extends ItemBase implements IExtendedBauble {
     }
 
     @Override
-    public ExtendedBaubleType getBaubleType(ItemStack itemstack) {
-        return ExtendedBaubleType.SCROLL;
+    public BaubleType getBaubleType(ItemStack itemStack) {
+        //todo
+        return BaubleType.TRINKET;
     }
 }

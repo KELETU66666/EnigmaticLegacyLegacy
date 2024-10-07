@@ -7,8 +7,6 @@ import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
-import keletu.enigmaticlegacy.api.ExtendedBaublesApi;
-import keletu.enigmaticlegacy.api.cap.IExtendedBaublesItemHandler;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -490,7 +488,7 @@ public class ELEvents {
                     boolean trigger = false;
                     double chance = 0.0D;
 
-                    if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == EnigmaticLegacy.angelBlessing) {
+                    if (BaublesApi.isBaubleEquipped(player, angelBlessing) != -1) {
                         trigger = true;
                         chance += angelBlessingDeflectChance;
                     }
@@ -538,7 +536,7 @@ public class ELEvents {
             miningBoost += ELConfigs.breakSpeedBonus;
         }
 
-        if (ExtendedBaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1) {
+        if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1) {
             miningBoost += cursedScrollMiningBoost * getCurseAmount(event.getEntityPlayer());
         }
 
@@ -574,7 +572,7 @@ public class ELEvents {
                 //    event.setAmount(event.getAmount()*ForbiddenFruit.regenerationSubtraction.getValue().asModifierInverted());
                 //}
 
-                if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
                     event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
                 }
         }
@@ -668,7 +666,7 @@ public class ELEvents {
             }
         }
 
-        IExtendedBaublesItemHandler extraBaublesHandler = ExtendedBaublesApi.getBaublesHandler(player);
+        IBaublesItemHandler extraBaublesHandler = BaublesApi.getBaublesHandler(player);
         for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
             ItemStack stack = extraBaublesHandler.getStackInSlot(i);
             if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
@@ -699,7 +697,7 @@ public class ELEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (!player.capabilities.isFlying && !player.onGround) {
-                if (SuperpositionHandler.getAdvancedBaubles(player).getItem() == oceanStone && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER) {
+                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER) {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
@@ -773,7 +771,7 @@ public class ELEvents {
     //    Minecraft mc = Minecraft.getMinecraft();
 //
     //    if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
-    //        if (ExtendedBaublesApi.isBaubleEquipped(mc.player, EnigmaticLegacy.oceanStone) != -1/* || SuperpositionHandler.hasCurio(mc.player, EnigmaticLegacy.voidPearl)*/) {
+    //        if (BaublesApi.isBaubleEquipped(mc.player, EnigmaticLegacy.oceanStone) != -1/* || SuperpositionHandler.hasCurio(mc.player, EnigmaticLegacy.voidPearl)*/) {
     //            //  if (OceanStone.preventOxygenBarRender.getValue()) {
     //            event.setCanceled(true);
     //            // }
@@ -830,7 +828,7 @@ public class ELEvents {
                 damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) ELConfigs.attackDamage);
             }
 
-            if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
                 damageBoost += event.getAmount() * (cursedScrollDamageBoost * getCurseAmount(player));
             }
 
@@ -926,7 +924,7 @@ public class ELEvents {
             if (event.getSource().getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
-                if (ExtendedBaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1) {
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.animalGuide) != -1) {
                     if (!(event.getEntityLiving() instanceof EntityWolf)) {
                         event.setCanceled(true);
                     }
@@ -1025,8 +1023,8 @@ public class ELEvents {
         if (!data.getBoolean(SPAWN_WITH_CURSE)) {
             if (ultraHardcore) {
                 {
-                    IExtendedBaublesItemHandler baubles = ExtendedBaublesApi.getBaublesHandler(event.player);
-                    if (ExtendedBaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
+                    IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
+                    if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
                         baubles.setStackInSlot(2, new ItemStack(cursedRing));
                     else
                         ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
