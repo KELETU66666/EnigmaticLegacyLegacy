@@ -285,8 +285,8 @@ public class ELConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         neutralAngerWhitelist.clear();
-        String[] whitelist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem"}, "List of entities that should be affected"
-                + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
+        String[] whitelist = config.getStringList("CursedRingNeutralAngerWhiteList", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem", "minecraft:zombie_pigman"}, "List of entities that should be affected"
+                + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf, minecraft:zombie_pigman. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
 
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
@@ -297,7 +297,7 @@ public class ELConfigs {
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
 
         eldritchItemList.clear();
-        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum", "enigmaticlegacy:eldritch_pan"}, "List of items needs ware ring during gameplay 99.5% times to use"
+        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum", "enigmaticlegacy:eldritch_pan",  "enigmaticlegacy:eldritch_amulet"}, "List of items needs ware ring during gameplay 99.5% times to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));

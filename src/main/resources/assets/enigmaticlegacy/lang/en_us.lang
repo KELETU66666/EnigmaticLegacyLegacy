@@ -22,6 +22,7 @@ item.animal_guide.name=Guide to Animal Companionship
 item.ascension_amulet.name=Ascension Amulet
 item.enigmatic_eye_dormant.name=Dormant Eye
 item.enigmatic_eye_active.name=Inscrutable Eye
+item.eldritch_amulet.name=The Testament of Contempt
 
 #SpellStone
 item.golem_heart.name=Heart of the Golem
@@ -413,11 +414,11 @@ tooltip.enigmaticlegacy.eldritchPanLore1=§5Raw and primal hunger given form.
 tooltip.enigmaticlegacy.eldritchPanKills1=§dUnique Kills:
 tooltip.enigmaticlegacy.eldritchPanKillsMax=§6The pan is sated... but you are not.
 
-# Description
-name.SCROLL=Bauble (Scroll)
-name.BOOK=Bauble (Book)
-name.CURSE=Bauble (???)
-name.SPELLSTONE=Bauble (Spellstone)
+tooltip.enigmaticlegacy.eldritchAmulet1=§5When worn, your inventory persists with you
+tooltip.enigmaticlegacy.eldritchAmulet2=§5after death. §6Experience§5 and §6Soul Crystals§5 will
+tooltip.enigmaticlegacy.eldritchAmulet3=§5still be lost.
+tooltip.enigmaticlegacy.eldritchAmulet4=§5Creatures beneath your gaze will be slowed
+tooltip.enigmaticlegacy.eldritchAmulet5=§5down and weakened.
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²

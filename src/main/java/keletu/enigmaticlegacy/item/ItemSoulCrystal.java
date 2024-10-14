@@ -121,6 +121,21 @@ public class ItemSoulCrystal extends Item {
 		return theTag instanceof NBTTagInt ? ((NBTTagInt) theTag).getInt() : expectedValue;
 	}
 
+	public static void removePersistentTag(EntityPlayer player, String tag) {
+		NBTTagCompound data = player.getEntityData();
+		NBTTagCompound persistent;
+
+		if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+			data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
+		} else {
+			persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+		}
+
+		if (persistent.hasKey(tag)) {
+			persistent.removeTag(tag);
+		}
+	}
+
 	public void setLostCrystals(EntityPlayer player, int lost) {
 		setPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", lost);
 		this.updatePlayerSoulMap(player);

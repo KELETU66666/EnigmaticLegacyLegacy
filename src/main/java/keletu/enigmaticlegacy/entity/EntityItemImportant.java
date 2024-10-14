@@ -40,6 +40,7 @@ public class EntityItemImportant extends EntityItemIndestructible {
     @Override
     public void onUpdate() {
         super.onUpdate();
+        this.setGlowing(true);
         motionX *= 0.9;
         motionY *= 0.9;
         motionZ *= 0.9;

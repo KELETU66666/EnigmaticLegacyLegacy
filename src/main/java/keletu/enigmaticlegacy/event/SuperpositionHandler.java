@@ -36,7 +36,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -108,10 +110,7 @@ public class SuperpositionHandler {
             persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         }
 
-        if (persistent.hasKey(tag))
-            return true;
-        else
-            return false;
+        return persistent.hasKey(tag);
 
     }
 
@@ -139,9 +138,7 @@ public class SuperpositionHandler {
     public static int[] addInt(int[] series, int newInt) {
         int[] newSeries = new int[series.length + 1];
 
-        for (int i = 0; i < series.length; i++) {
-            newSeries[i] = series[i];
-        }
+        System.arraycopy(series, 0, newSeries, 0, series.length);
 
         newSeries[newSeries.length - 1] = newInt;
         return newSeries;
@@ -157,10 +154,7 @@ public class SuperpositionHandler {
             }
         }
 
-        if (armorAmount != 0)
-            return true;
-        else
-            return false;
+        return armorAmount != 0;
     }
 
     public static boolean isWearEnigmaticAmulet(EntityPlayer player, int meta) {
@@ -545,5 +539,41 @@ public class SuperpositionHandler {
         double dif = d > 180.0D ? 360.0D - d : d;
 
         return dif < back;
+    }
+
+    public static Entity getPointedEntity(World world, Entity entity, double minrange, double range, float padding, boolean nonCollide) {
+        return getPointedEntity(world, new RayTraceResult(entity, entity.getPositionVector().add(0.0, entity.getEyeHeight(), 0.0)), entity.getLookVec(), minrange, range, padding, nonCollide);
+    }
+
+    public static Entity getPointedEntity(World world, RayTraceResult ray, Vec3d lookVec, double minrange, double range, float padding, boolean nonCollide) {
+        Entity pointedEntity = null;
+        Vec3d entityVec = new Vec3d(ray.hitVec.x, ray.hitVec.y, ray.hitVec.z);
+        Vec3d vec3d2 = entityVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
+        AxisAlignedBB bb = ray.entityHit != null ? ray.entityHit.getEntityBoundingBox() : (new AxisAlignedBB(ray.hitVec.x, ray.hitVec.y, ray.hitVec.z, ray.hitVec.x, ray.hitVec.y, ray.hitVec.z)).grow(0.5);
+        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(ray.entityHit, bb.expand(lookVec.x * range, lookVec.y * range, lookVec.z * range).grow(padding, padding, padding));
+        double d2 = 0.0;
+
+        for(int i = 0; i < list.size(); ++i) {
+            Entity entity = list.get(i);
+            if (!(ray.hitVec.distanceTo(entity.getPositionVector()) < minrange) && (entity.canBeCollidedWith() || nonCollide) && world.rayTraceBlocks(ray.hitVec, new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null) {
+                float f2 = Math.max(0.8F, entity.getCollisionBorderSize());
+                AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(f2, f2, f2);
+                RayTraceResult RayTraceResult = axisalignedbb.calculateIntercept(entityVec, vec3d2);
+                if (axisalignedbb.contains(entityVec)) {
+                    if (0.0 < d2 || d2 == 0.0) {
+                        pointedEntity = entity;
+                        d2 = 0.0;
+                    }
+                } else if (RayTraceResult != null) {
+                    double d3 = entityVec.distanceTo(RayTraceResult.hitVec);
+                    if (d3 < d2 || d2 == 0.0) {
+                        pointedEntity = entity;
+                        d2 = d3;
+                    }
+                }
+            }
+        }
+
+        return pointedEntity;
     }
 }

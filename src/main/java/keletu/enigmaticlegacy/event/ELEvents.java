@@ -78,16 +78,21 @@ public class ELEvents {
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
+    public static boolean dropEldritchAmulet = false;
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
 
     @SubscribeEvent
-    public static void playerClone(PlayerEvent.Clone evt) {
-        EntityPlayer newPlayer = evt.getEntityPlayer();
-        EntityPlayer player = evt.getOriginal();
+    public static void playerClone(PlayerEvent.Clone event) {
+        EntityPlayer newPlayer = event.getEntityPlayer();
+        EntityPlayer oldPlayer = event.getOriginal();
 
         EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(newPlayer);
-    }
 
+        if (event.isWasDeath() && newPlayer instanceof EntityPlayerMP && oldPlayer instanceof EntityPlayerMP && dropEldritchAmulet) {
+            eldritchAmulet.reclaimInventory((EntityPlayerMP) oldPlayer, (EntityPlayerMP) newPlayer);
+            dropEldritchAmulet=false;
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDrops(LivingDropsEvent event) {
@@ -114,17 +119,27 @@ public class ELEvents {
                 dimPoint.world.playSound(null, new BlockPos(dimPoint.posX, dimPoint.posY, dimPoint.posZ), SoundEvents.ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2)));
                 EnigmaticLegacy.packetInstance.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(dimPoint.posX, dimPoint.posY, dimPoint.posZ, 128, dimPoint.world.dimension())), new PacketRecallParticles(dimPoint.posX, dimPoint.posY, dimPoint.posZ, 48, false));
             }*/
+            boolean hasEldritchAmulet = false;
             boolean found = false;
 
             for (EntityItem entityItem : event.getDrops()) {
                 ItemStack itemStack = entityItem.getItem();
-                if (itemStack.getItem() == enigmaticAmulet || itemStack.getItem() == ascensionAmulet) {
+                if (itemStack.getItem() == eldritchAmulet) {
+                    hasEldritchAmulet = true;
+                    break;
+                } else if (itemStack.getItem() == enigmaticAmulet || itemStack.getItem() == ascensionAmulet) {
                     found = true;
                     break;
                 }
             }
 
-            if (found && !event.getDrops().isEmpty() && ELConfigs.vesselEnabled) {
+            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player)) {
+                ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
+                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), soulCrystal);
+                droppedSoulCrystal.setOwnerId(player.getUniqueID());
+                dimPoint.world.spawnEntity(droppedSoulCrystal);
+                EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
+            } else if (found && !event.getDrops().isEmpty() && ELConfigs.vesselEnabled) {
                 ItemStack soulCrystal = SuperpositionHandler.shouldPlayerDropSoulCrystal(player) ? EnigmaticLegacy.soulCrystal.createCrystalFrom(player) : null;
                 ItemStack storageCrystal = EnigmaticLegacy.storageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
                 EntityItemSoulCrystal droppedStorageCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), storageCrystal);
@@ -251,7 +266,7 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
             ItemStack advancedCurioStack = SuperpositionHandler.getAdvancedBaubles(player);
-            if (advancedCurioStack != ItemStack.EMPTY) {
+            if (advancedCurioStack != ItemStack.EMPTY && advancedCurioStack.getItem() instanceof ItemSpellstoneBauble) {
                 ItemSpellstoneBauble advancedCurio = (ItemSpellstoneBauble) advancedCurioStack.getItem();
 
                 if (advancedCurio.immunityList.contains(event.getSource().damageType)) {
@@ -354,13 +369,13 @@ public class ELEvents {
             if (EnigmaticItems.ENIGMATIC_AMULET.hasColor(player, AmuletColor.BLACK)) {
                 lifesteal += event.getAmount() * 0.1F;
             }
-
-            if (SuperpositionHandler.hasCurio(player, EnigmaticItems.ELDRITCH_AMULET)) {
+*/
+            if (BaublesApi.isBaubleEquipped(player, eldritchAmulet) != -1) {
                 if (SuperpositionHandler.isTheWorthyOne(player)) {
                     lifesteal += event.getAmount() * 0.15F;
                 }
             }
-*/
+
             if (SuperpositionHandler.isTheWorthyOne(player)) {
                 if (player.getHeldItemMainhand().getItem() == theInfinitum) {
 
@@ -972,6 +987,12 @@ public class ELEvents {
     public static void keepRingCurses(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
 
+        if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1){
+            EntityPlayerMP player = (EntityPlayerMP) living;
+            dropEldritchAmulet = true;
+
+            eldritchAmulet.storeInventory(player);
+        }
         if (!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 

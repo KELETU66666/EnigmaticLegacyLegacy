@@ -375,12 +375,6 @@ tooltip.enigmaticlegacy.eldritchPanLore1=§5原始饥饿的具象化
 tooltip.enigmaticlegacy.eldritchPanKills1=§d独特击杀数：
 tooltip.enigmaticlegacy.eldritchPanKillsMax=§6它已满足..……但你还没有
 
-# Description
-name.SCROLL=饰品（卷轴）
-name.BOOK=饰品（书籍）
-name.CURSE=饰品（???）
-name.SPELLSTONE=饰品（术石）
-
 #Misc
 itemGroup.tabEnigmaticLegacy=神秘²遗物
 key.categories.enigmaticlegacy=神秘²遗物

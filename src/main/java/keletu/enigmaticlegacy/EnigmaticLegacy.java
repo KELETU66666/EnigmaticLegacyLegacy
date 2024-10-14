@@ -10,7 +10,6 @@ import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
-import keletu.enigmaticlegacy.event.KeepBaubles;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
@@ -23,7 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
@@ -54,8 +52,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @Mod(
         modid = EnigmaticLegacy.MODID,
@@ -143,18 +139,12 @@ public class EnigmaticLegacy {
     public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
     public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
     //public static ItemSoulCompass soulCompass = new ItemSoulCompass();
+    public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
 
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
     public static Potion growingHungerEffect = new GrowingHungerEffect();
-
-    public static ItemStack getBackpackStack(EntityPlayer player)
-    {
-        AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
-        backpack.set(KeepBaubles.getBackpackStack(player));
-        return backpack.get();
-    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -167,9 +157,8 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
-        packetInstance.registerMessage(PacketOpenExtendedBaublesInventory.class, PacketOpenExtendedBaublesInventory.class, 4, Side.SERVER);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 6, Side.SERVER);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
 
@@ -255,6 +244,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
             event.getRegistry().register(eldritchPan);
+            event.getRegistry().register(eldritchAmulet);
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 event.getRegistry().register(oblivionStone);
@@ -351,6 +341,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(angelBlessing, 0, new ModelResourceLocation(angelBlessing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(heavenScroll, 0, new ModelResourceLocation(heavenScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(cosmicHeart, 0, new ModelResourceLocation(cosmicHeart.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(eldritchAmulet, 0, new ModelResourceLocation(eldritchAmulet.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();
