@@ -3,13 +3,17 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -26,6 +30,13 @@ public class KeepBaubles {
     private static Map<UUID, ItemStack> baublesMap = new HashMap<>();
     private static Map<UUID, NonNullList<ItemStack>> worthyMap = new HashMap<>();
 
+    @SubscribeEvent
+    public static void disableSillyModItemRightClick(PlayerInteractEvent.RightClickItem event) {
+        for (String str : ELConfigs.stuipdModList)
+            if (event.getItemStack().getItem().getRegistryName().getNamespace().equals(str)) {
+                event.setCanceled(true);
+            }
+    }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
@@ -43,7 +54,6 @@ public class KeepBaubles {
         baublesMap.remove(player.getUniqueID());
         worthyMap.remove(player.getUniqueID());
         ItemStack stack = getBaubleStacks(player);
-        ItemStack stack1 = getBaubleStacksAll(player);
         if (ELEvents.dropEldritchAmulet) {
             IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
             NonNullList<ItemStack> list = NonNullList.create();
@@ -55,9 +65,10 @@ public class KeepBaubles {
         }
         if (stack.getItem() instanceof ItemCursedRing) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            int index = BaubleType.RING.getValidSlots()[1];
-            handler.setStackInSlot(index, ItemStack.EMPTY);
-            baublesMap.put(player.getUniqueID(), stack);
+            for (int index : BaubleType.RING.getValidSlots()) {
+                handler.setStackInSlot(index, ItemStack.EMPTY);
+                baublesMap.put(player.getUniqueID(), stack);
+            }
         }
     }
 
@@ -67,25 +78,26 @@ public class KeepBaubles {
         if (worthyMap.containsKey(player.getUniqueID())) {
             IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); ++i) {
-                //if (!baubles.getStackInSlot(i).isEmpty()) {
                 baubles.setStackInSlot(i, worthyMap.get(player.getUniqueID()).get(i));
-                //}
             }
             worthyMap.remove(player.getUniqueID());
         }
         if (baublesMap.containsKey(player.getUniqueID())) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            int index = BaubleType.RING.getValidSlots()[1];
-            handler.setStackInSlot(index, baublesMap.get(player.getUniqueID()));
+            for (int index : BaubleType.RING.getValidSlots()) {
+                handler.setStackInSlot(index, baublesMap.get(player.getUniqueID()));
+            }
             baublesMap.remove(player.getUniqueID());
         }
     }
 
     public static ItemStack getBaubleStack(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-        ItemStack stack = handler.getStackInSlot(BaubleType.RING.getValidSlots()[1]);
-        if (!stack.isEmpty() && stack.getItem() instanceof ItemCursedRing) {
-            return stack;
+        for (int index : BaubleType.RING.getValidSlots()) {
+            ItemStack stack = handler.getStackInSlot(index);
+            if (!stack.isEmpty() && stack.getItem() instanceof ItemCursedRing) {
+                return stack;
+            }
         }
         return ItemStack.EMPTY;
     }
@@ -117,10 +129,10 @@ public class KeepBaubles {
         IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
         for (int i = 0; i < baubles.getSlots(); ++i) {
             //if (baubles.isItemValidForSlot(i, stack, player)) {
-                ItemStack remainder = baubles.insertItem(i, stack.copy(), true);
-                if (remainder.getCount() < stack.getCount()) {
-                    baubles.insertItem(i, stack.copy(), false);
-                }
+            ItemStack remainder = baubles.insertItem(i, stack.copy(), true);
+            if (remainder.getCount() < stack.getCount()) {
+                baubles.insertItem(i, stack.copy(), false);
+            }
             //}
         }
         //}
@@ -129,12 +141,6 @@ public class KeepBaubles {
     public static ItemStack getBaubleStacks(EntityPlayer player) {
         AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
         backpack.set(KeepBaubles.getBaubleStack(player));
-        return backpack.get();
-    }
-
-    public static ItemStack getBaubleStacksAll(EntityPlayer player) {
-        AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
-        backpack.set(KeepBaubles.getBaubleStackAll(player));
         return backpack.get();
     }
 }
