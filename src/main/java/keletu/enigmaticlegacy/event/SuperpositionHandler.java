@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.event;
 
+import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
@@ -51,19 +52,17 @@ import java.util.*;
 
 public class SuperpositionHandler {
 
-
-    public static boolean hasAdvancedBaubles(final EntityLivingBase entity) {
-        return SuperpositionHandler.getAdvancedBaubles(entity) != ItemStack.EMPTY;
-    }
-
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
 
-        return handler.getStackInSlot(6);
+        for (int i : BaubleType.CHARM.getValidSlots())
+            return handler.getStackInSlot(i);
+        return ItemStack.EMPTY;
     }
 
     /**
      * Checks whether or on the player is within the range of any active beacon.
+     *
      * @author Integral
      */
 
@@ -99,7 +98,7 @@ public class SuperpositionHandler {
 
         return inRange;
     }
-    
+
     public static boolean hasPersistentTag(EntityPlayer player, String tag) {
         NBTTagCompound data = player.getEntityData();
         NBTTagCompound persistent;
@@ -158,7 +157,7 @@ public class SuperpositionHandler {
     }
 
     public static boolean isWearEnigmaticAmulet(EntityPlayer player, int meta) {
-        if(BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.ascensionAmulet) != -1)
+        if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.ascensionAmulet) != -1)
             return true;
         else
             return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticAmulet) != -1 && BaublesApi.getBaubles(player).getStackInSlot(0).getMetadata() == meta;
@@ -227,7 +226,7 @@ public class SuperpositionHandler {
                     }
                 }
                 return false;
-            }else if (useItem.getItem() instanceof ItemEldritchPan) {
+            } else if (useItem.getItem() instanceof ItemEldritchPan) {
                 Entity projectile = source.getImmediateSource();
 
                 if (!(projectile instanceof EntityArrow) && !(projectile instanceof EntityFireball))
@@ -261,7 +260,7 @@ public class SuperpositionHandler {
                                 Vec3d angle = player.getLookVec();
                                 angle = multiplyVector(multiplyVector(angle, 1, 0, 1).normalize(), 0.5, 0.5, 0.5);
 
-                                CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)player,  new ItemStack(Items.ROTTEN_FLESH));
+                                CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) player, new ItemStack(Items.ROTTEN_FLESH));
                                 level.spawnParticle(EnumParticleTypes.ITEM_CRACK, player.posX + angle.x, player.posY + player.getEyeHeight() - 0.1, player.posZ + angle.z, 10, 0.3D, 0.3D, 0.3D, 0.03D, Item.getIdFromItem(Items.FIRE_CHARGE), 0);
                             }
 
@@ -553,9 +552,9 @@ public class SuperpositionHandler {
         List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(ray.entityHit, bb.expand(lookVec.x * range, lookVec.y * range, lookVec.z * range).grow(padding, padding, padding));
         double d2 = 0.0;
 
-        for(int i = 0; i < list.size(); ++i) {
+        for (int i = 0; i < list.size(); ++i) {
             Entity entity = list.get(i);
-            if (!(ray.hitVec.distanceTo(entity.getPositionVector()) < minrange) && (entity.canBeCollidedWith() || nonCollide) && world.rayTraceBlocks(ray.hitVec, new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null) {
+            if (!(ray.hitVec.distanceTo(entity.getPositionVector()) < minrange) && (entity.canBeCollidedWith() || nonCollide) && world.rayTraceBlocks(ray.hitVec, new Vec3d(entity.posX, entity.posY + (double) entity.getEyeHeight(), entity.posZ), false, true, false) == null) {
                 float f2 = Math.max(0.8F, entity.getCollisionBorderSize());
                 AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(f2, f2, f2);
                 RayTraceResult RayTraceResult = axisalignedbb.calculateIntercept(entityVec, vec3d2);

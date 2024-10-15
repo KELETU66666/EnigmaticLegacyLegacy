@@ -1,11 +1,13 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 
@@ -35,6 +37,11 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
 
     public Supplier<Float> getResistanceModifier(String damageType) {
         return this.resistanceList.get(damageType);
+    }
+
+    @Override
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+        return BaublesApi.isBaubleEquipped((EntityPlayer) player, this) == -1;
     }
 
     @Override
