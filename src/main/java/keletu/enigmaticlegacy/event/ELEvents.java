@@ -854,7 +854,7 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
             ItemStack advancedCurioStack = SuperpositionHandler.getAdvancedBaubles(player);
-            if (advancedCurioStack != ItemStack.EMPTY) {
+            if (advancedCurioStack != ItemStack.EMPTY && advancedCurioStack.getItem() instanceof ItemSpellstoneBauble) {
                 ItemSpellstoneBauble advancedCurio = (ItemSpellstoneBauble) advancedCurioStack.getItem();
                 EntityCreature trueSource = event.getSource().getTrueSource() instanceof EntityCreature ? (EntityCreature) event.getSource().getTrueSource() : null;
 
