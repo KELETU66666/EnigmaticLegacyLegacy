@@ -3,14 +3,12 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,14 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class KeepBaubles {
     private static Map<UUID, ItemStack> baublesMap = new HashMap<>();
     private static Map<UUID, NonNullList<ItemStack>> worthyMap = new HashMap<>();
-
-    @SubscribeEvent
-    public static void disableSillyModItemRightClick(PlayerInteractEvent.RightClickItem event) {
-        for (String str : ELConfigs.stuipdModList)
-            if (event.getItemStack().getItem().getRegistryName().getNamespace().equals(str)) {
-                event.setCanceled(true);
-            }
-    }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {

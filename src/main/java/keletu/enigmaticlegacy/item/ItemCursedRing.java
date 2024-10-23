@@ -135,6 +135,12 @@ public class ItemCursedRing extends ItemBase implements IBauble {
             return;
 
         EntityPlayer player = (EntityPlayer) livingPlayer;
+        if(BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.RING.getValidSlots()[1]).getItem() != this) {
+            BaublesApi.getBaublesHandler(player).setStackInSlot(BaublesApi.isBaubleEquipped(player, this), ItemStack.EMPTY);
+            ItemStack origin = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.RING.getValidSlots()[1]);
+            player.dropItem(origin, true);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(BaubleType.RING.getValidSlots()[1], stack.copy());
+        }
 
         player.getAttributeMap().applyAttributeModifiers(this.createAttributeMap(player));
 

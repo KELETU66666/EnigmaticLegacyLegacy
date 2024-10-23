@@ -91,7 +91,6 @@ public class ELConfigs {
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
     public static final List<ResourceLocation> eldritchItemList = new ArrayList<>();
-    public static final List<String> stuipdModList = new ArrayList<>();
 
     public static int oceanStoneSpellstoneCooldown;
     public static float oceanStoneSwimmingSpeedBoost;
@@ -302,12 +301,6 @@ public class ELConfigs {
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));
-
-        stuipdModList.clear();
-        String[] stupid = config.getStringList("ModStupid", "Generic Config", new String[]{"botania", "forgotten_relics"}, "List of Mods allow player replace un-unequipable baubles such as cursed ring etc." +
-                "Default: botania, forgotten_relics");
-
-        stuipdModList.addAll(Arrays.asList(stupid));
 
         config.save();
     }
