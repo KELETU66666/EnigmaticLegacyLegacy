@@ -63,7 +63,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.5.5";
+    public static final String VERSION = "0.6.0";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -140,6 +140,7 @@ public class EnigmaticLegacy {
     public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
     //public static ItemSoulCompass soulCompass = new ItemSoulCompass();
     public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
+    public static Item voidPearl = new ItemVoidPearl();
 
 
     public static SimpleNetworkWrapper packetInstance;
@@ -209,6 +210,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(golemHeart);
             event.getRegistry().register(oceanStone);
             event.getRegistry().register(angelBlessing);
+            event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
             event.getRegistry().register(twistedCore);
@@ -342,6 +344,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(heavenScroll, 0, new ModelResourceLocation(heavenScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(cosmicHeart, 0, new ModelResourceLocation(cosmicHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(eldritchAmulet, 0, new ModelResourceLocation(eldritchAmulet.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

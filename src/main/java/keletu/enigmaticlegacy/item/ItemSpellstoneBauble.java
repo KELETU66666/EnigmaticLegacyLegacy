@@ -46,7 +46,7 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
 
     @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
-        return BaubleType.CHARM;
+        return BaubleType.TRINKET;
     }
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase player) {

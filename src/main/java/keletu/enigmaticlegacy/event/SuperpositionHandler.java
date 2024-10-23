@@ -55,7 +55,7 @@ public class SuperpositionHandler {
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
 
-        for (int i : BaubleType.CHARM.getValidSlots())
+        for (int i : BaubleType.TRINKET.getValidSlots())
             return handler.getStackInSlot(i);
         return ItemStack.EMPTY;
     }

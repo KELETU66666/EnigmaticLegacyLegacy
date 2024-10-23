@@ -28,6 +28,7 @@ item.eldritch_amulet.name=The Testament of Contempt
 item.golem_heart.name=Heart of the Golem
 item.ocean_stone.name=Will of the Ocean
 item.angel_blessing.name=Angel's Blessing
+item.void_pearl.name=Pearl of the Void
 
 #material
 item.astral_dust.name=Astral dust
@@ -329,6 +330,23 @@ tooltip.enigmaticlegacy.oceanStone8=§5- Provides effects of §6Aqua Affinity§5
 tooltip.enigmaticlegacy.oceanStone9=§5- Negates gravity when underwater.
 tooltip.enigmaticlegacy.oceanStone10=§5- Greatly increased swimming speed.
 tooltip.enigmaticlegacy.oceanStone11=§5- You are vulnerable to §6Fire Damage.
+
+tooltip.enigmaticlegacy.voidPearl1=§dActive ability:
+tooltip.enigmaticlegacy.voidPearl2=§4- Absent.
+tooltip.enigmaticlegacy.voidPearlCooldown=§dСooldown: §60§6 seconds
+tooltip.enigmaticlegacy.voidPearl3=§dPassive abilities:
+tooltip.enigmaticlegacy.voidPearl4=§5- You experience no hunger, but regenerate
+tooltip.enigmaticlegacy.voidPearl5=§5  at much slower rate.
+tooltip.enigmaticlegacy.voidPearl6=§5- You no longer need air to breathe.
+tooltip.enigmaticlegacy.voidPearl7=§5- Immunity to any status effects.
+tooltip.enigmaticlegacy.voidPearl8=§5- Your attacks inflict §6Withering§5.
+tooltip.enigmaticlegacy.voidPearl9=§5- Any creatures nearby you, if they are
+tooltip.enigmaticlegacy.voidPearl10=§5  exposed to darkness, receive massive
+tooltip.enigmaticlegacy.voidPearl11=§5  damage and heavy debuffs. §6Skyflaps§5 are
+tooltip.enigmaticlegacy.voidPearl12=§5  affected regardless of light level.
+tooltip.enigmaticlegacy.voidPearl13=§5- §6
+tooltip.enigmaticlegacy.voidPearl13_1=§d Chance§5 that otherwise lethal damage
+tooltip.enigmaticlegacy.voidPearl14=§5  won't kill you.
 
 tooltip.enigmaticlegacy.add=§6+
 

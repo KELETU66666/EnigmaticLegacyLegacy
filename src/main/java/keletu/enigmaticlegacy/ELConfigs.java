@@ -86,7 +86,16 @@ public class ELConfigs {
     public static int panUniqueGainLimit;
     public static int oblivionStoneHardCap;
     public static int oblivionStoneSoftCap;
-    
+
+    public static int spellstoneCooldown;
+    public static double baseDarknessDamage;
+    public static double regenerationDemodifier;
+    public static double shadowRange;
+    public static float voidPearlUndeadProbability;
+    public static int witheringTime;
+    public static int witheringLevel;
+
+
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
@@ -278,6 +287,21 @@ public class ELConfigs {
 
         flyingScrollXpCostModifier = config.getFloat("flyingScrollXpCostModifier", "Heaven Scroll", 1.0F, 0, 32768, "Multiplier for experience consumption by Gift of the Heaven.");
 
+        spellstoneCooldown = config.getInt("Cooldown", "Void Pearl", 0, 0, 1, "Active ability cooldown for Pearl of the Void. Measured in ticks. 20 ticks equal to 1 second.");
+
+        baseDarknessDamage = config.getFloat("DarknessDamage", "Void Pearl", 4.0F, 0, 1000, "Base damage dealt by Darkness every half a second, when it devours a creature in proximity of bearer of the pearl.");
+
+        regenerationDemodifier = config.getFloat("RegenerationModifier", "Void Pearl", 1.0F, 0, 1000, "Modifier for slowing down player's regeneration when bearing the pearl. This includes natural regeneration, as well as artificial healing effects that work over time. The greater it is, the slower player will regenerate.");
+
+        shadowRange = config.getFloat("ShadowRange", "Void Pearl", 16.0F, 0, 128, "Range in which Pearl of the Void will force darkness to devour living creatures.");
+
+        voidPearlUndeadProbability = config.getFloat("UndeadChance", "Void Pearl", 0.35F, 0, 1, "Chance for Pearl of the Void to prevent it's bearer death from receiving lethal amout of damage. Defined as percentage.");
+
+        witheringTime = config.getInt("WitheringTime", "Void Pearl", 35, 0, 100, "Amout of ticks for which bearer of the pearl will apply Withering effect to entities they attack. 20 ticks equals to 1 second.");
+
+        witheringLevel = config.getInt("WitheringLevel", "Void Pearl", 2, 0, 3, "Level of Withering that bearer of the pearl will apply to entitities they attack.");
+
+
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect.");
@@ -297,7 +321,7 @@ public class ELConfigs {
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
 
         eldritchItemList.clear();
-        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum", "enigmaticlegacy:eldritch_pan",  "enigmaticlegacy:eldritch_amulet"}, "List of items needs ware ring during gameplay 99.5% times to use"
+        String[] eldritch = config.getStringList("ItemBeDeeplyCursed", "The Seven Curses", new String[]{"enigmaticlegacy:abyssal_heart", "enigmaticlegacy:the_infinitum", "enigmaticlegacy:eldritch_pan", "enigmaticlegacy:eldritch_amulet"}, "List of items needs ware ring during gameplay 99.5% times to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));

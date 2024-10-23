@@ -90,7 +90,7 @@ public class ELEvents {
 
         if (event.isWasDeath() && newPlayer instanceof EntityPlayerMP && oldPlayer instanceof EntityPlayerMP && dropEldritchAmulet) {
             eldritchAmulet.reclaimInventory((EntityPlayerMP) oldPlayer, (EntityPlayerMP) newPlayer);
-            dropEldritchAmulet=false;
+            dropEldritchAmulet = false;
         }
     }
 
@@ -801,6 +801,11 @@ public class ELEvents {
 
         if (event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.voidPearl) != -1) {
+                event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.WITHER, witheringTime, witheringLevel, false, true));
+            }
+
             Entity immediateSource = event.getSource().getImmediateSource();
 
             if (player.getHeldItemMainhand() != ItemStack.EMPTY) {
@@ -983,30 +988,17 @@ public class ELEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusExp);
     }
 
-    @SubscribeEvent(priority = HIGH)
-    public static void keepRingCurses(LivingDeathEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onLivingDeath(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
 
-        if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1){
-            EntityPlayerMP player = (EntityPlayerMP) living;
-            dropEldritchAmulet = true;
-
-            eldritchAmulet.storeInventory(player);
-        }
-        if (!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-
-            if (hasCursed(player)) {
-                if (SuperpositionHandler.isTheWorthyOne(player)) {
-                    EntityItemImportant abyssalHeart = new EntityItemImportant(living.world, living.posX, living.posY, living.posZ, new ItemStack(EnigmaticLegacy.abyssalHeart));
-                    living.world.spawnEntity(abyssalHeart);
-                }
-            }
-        }
         if (!living.world.isRemote && living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
 
-            if (SuperpositionHandler.isTheWorthyOne((EntityPlayer) living)) {
+            if (BaublesApi.isBaubleEquipped(player, voidPearl) != -1 && Math.random() <= voidPearlUndeadProbability) {
+                event.setCanceled(true);
+                player.setHealth(1);
+            } else if (SuperpositionHandler.isTheWorthyOne((EntityPlayer) living)) {
                 boolean infinitum = false;
 
                 if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum) {
@@ -1023,7 +1015,28 @@ public class ELEvents {
                 }
             }
         }
+    }
 
+    @SubscribeEvent(priority = HIGH)
+    public static void keepRingCurses(LivingDeathEvent event) {
+        EntityLivingBase living = event.getEntityLiving();
+
+        if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1) {
+            EntityPlayerMP player = (EntityPlayerMP) living;
+            dropEldritchAmulet = true;
+
+            eldritchAmulet.storeInventory(player);
+        }
+
+        if (!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+            EntityDragon dragon = (EntityDragon) event.getEntity();
+
+            if (hasCursed(player) && SuperpositionHandler.isTheWorthyOne(player) && dragon.deathTicks == 199) {
+                EntityItemImportant abyssalHeart = new EntityItemImportant(living.world, living.posX, living.posY, living.posZ, new ItemStack(EnigmaticLegacy.abyssalHeart));
+                living.world.spawnEntity(abyssalHeart);
+            }
+        }
     }
 
     @SubscribeEvent
