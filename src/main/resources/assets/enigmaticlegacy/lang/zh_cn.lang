@@ -446,7 +446,7 @@ tooltip.enigmaticlegacy.eldritchAmulet4=§5你所注视的生物将会受到
 tooltip.enigmaticlegacy.eldritchAmulet5=§5缓慢与虚弱效果的折磨
 
 tooltip.enigmaticlegacy.desolationRing1=§6铁傀儡§5, §6末影人§5 和 §6僵尸猪人§5
-tooltip.enigmaticlegacy.desolationRing2=不会在你身边生成
+tooltip.enigmaticlegacy.desolationRing2=§6不会在你身边生成
 
 #Misc
 itemGroup.tabEnigmaticLegacy=神秘²遗物
