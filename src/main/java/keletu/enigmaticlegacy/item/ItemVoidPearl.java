@@ -71,7 +71,7 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
             list.add(I18n.format("tooltip.enigmaticlegacy.voidPearl10"));
             list.add(I18n.format("tooltip.enigmaticlegacy.voidPearl11"));
             list.add(I18n.format("tooltip.enigmaticlegacy.voidPearl12"));
-            list.add(I18n.format("tooltip.enigmaticlegacy.voidPearl13") + TextFormatting.GOLD + Math.round(voidPearlUndeadProbability) * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.voidPearl13_1"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.voidPearl13") + TextFormatting.GOLD + Math.round(voidPearlUndeadProbability * 100) + "%" + I18n.format("tooltip.enigmaticlegacy.voidPearl13_1"));
         } else {
             list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
         }
