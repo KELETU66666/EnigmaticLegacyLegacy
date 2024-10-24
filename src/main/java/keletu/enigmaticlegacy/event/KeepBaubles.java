@@ -4,6 +4,7 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
+import keletu.enigmaticlegacy.item.ItemDesolationRing;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Mod.EventBusSubscriber
 public class KeepBaubles {
-    private static Map<UUID, ItemStack> baublesMap = new HashMap<>();
+    private static Map<UUID, NonNullList<ItemStack>> baublesMap = new HashMap<>();
     private static Map<UUID, NonNullList<ItemStack>> worthyMap = new HashMap<>();
 
     @SubscribeEvent
@@ -51,12 +52,15 @@ public class KeepBaubles {
             }
             worthyMap.put(player.getUniqueID(), list);
         }
-        if (stack.getItem() instanceof ItemCursedRing) {
+        if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            for (int index : BaubleType.RING.getValidSlots()) {
-                handler.setStackInSlot(index, ItemStack.EMPTY);
-                baublesMap.put(player.getUniqueID(), stack);
+            NonNullList<ItemStack> list = NonNullList.create();
+
+            for (int i = 0; i < BaubleType.RING.getValidSlots().length; i++) {
+                list.add(i, handler.getStackInSlot(BaubleType.RING.getValidSlots()[i]));
+                handler.setStackInSlot(BaubleType.RING.getValidSlots()[i], ItemStack.EMPTY);
             }
+            baublesMap.put(player.getUniqueID(), list);
         }
     }
 
@@ -72,8 +76,9 @@ public class KeepBaubles {
         }
         if (baublesMap.containsKey(player.getUniqueID())) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            for (int index : BaubleType.RING.getValidSlots()) {
-                handler.setStackInSlot(index, baublesMap.get(player.getUniqueID()));
+
+            for (int i = 0; i < BaubleType.RING.getValidSlots().length; i++) {
+                handler.setStackInSlot(BaubleType.RING.getValidSlots()[i], baublesMap.get(player.getUniqueID()).get(i));
             }
             baublesMap.remove(player.getUniqueID());
         }
@@ -82,8 +87,8 @@ public class KeepBaubles {
     public static ItemStack getBaubleStack(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
         for (int index : BaubleType.RING.getValidSlots()) {
-            ItemStack stack = handler.getStackInSlot(index);
-            if (!stack.isEmpty() && stack.getItem() instanceof ItemCursedRing) {
+            ItemStack stack = handler.getStackInSlot(BaubleType.RING.getValidSlots()[index]);
+            if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
                 return stack;
             }
         }
@@ -102,12 +107,15 @@ public class KeepBaubles {
     }
 
     public static void setBaubleStack(EntityPlayer player, ItemStack stack) {
-        if (stack.getItem() instanceof ItemCursedRing) {
-            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            int index = BaubleType.RING.getValidSlots()[1];
-            ItemStack remainder = handler.insertItem(index, stack.copy(), true);
-            if (remainder.getCount() < stack.getCount()) {
-                handler.insertItem(index, stack.copy(), false);
+        if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
+            IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < BaubleType.RING.getValidSlots().length; i++) {
+                if (baubles.isItemValidForSlot(BaubleType.RING.getValidSlots()[i], stack, player)) {
+                    ItemStack remainder = baubles.insertItem(BaubleType.RING.getValidSlots()[i], stack.copy(), true);
+                    if (remainder.getCount() < stack.getCount()) {
+                        baubles.insertItem(BaubleType.RING.getValidSlots()[i], stack.copy(), false);
+                    }
+                }
             }
         }
     }

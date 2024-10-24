@@ -16,10 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
@@ -56,6 +53,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import static net.minecraftforge.fml.common.eventhandler.EventPriority.HIGH;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,6 +72,7 @@ public class ELEvents {
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
+    public static final Map<EntityPlayer, AxisAlignedBB> DESOLATION_BOXES = new WeakHashMap<>();
     public static boolean dropEldritchAmulet = false;
     private static EntityPlayer abyssalHeartOwner;
 
@@ -644,6 +643,20 @@ public class ELEvents {
     }
 
     @SubscribeEvent
+    public static void onEntitySpawn(LivingSpawnEvent event) {
+        if (event.getEntityLiving().isCreatureType(EnumCreatureType.MONSTER, false)) {
+            EntityLivingBase entity = event.getEntityLiving();
+
+            if (/*entity instanceof Piglin || */entity instanceof EntityPigZombie || entity instanceof EntityIronGolem || entity instanceof EntityEnderman) {
+                if (DESOLATION_BOXES.values().stream().anyMatch(entity.getEntityBoundingBox()::intersects)) {
+                    event.setResult(Event.Result.DENY);
+                    //event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void onTooltip(ItemTooltipEvent event) {
         if (event.getEntityPlayer() == null)
@@ -671,6 +684,12 @@ public class ELEvents {
             counter.incrementTimeWithCurses();
         } else {
             counter.incrementTimeWithoutCurses();
+        }
+
+        if (BaublesApi.isBaubleEquipped(player, desolationRing) != -1 && SuperpositionHandler.isTheWorthyOne(player)) {
+            DESOLATION_BOXES.put(player, SuperpositionHandler.getBoundingBoxAroundEntity(player, 128));
+        } else {
+            DESOLATION_BOXES.remove(player);
         }
 
         if (player.ticksExisted % 100 == 0) {

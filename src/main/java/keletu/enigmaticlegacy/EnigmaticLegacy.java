@@ -142,6 +142,7 @@ public class EnigmaticLegacy {
     //public static ItemSoulCompass soulCompass = new ItemSoulCompass();
     public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
     public static Item voidPearl = new ItemVoidPearl();
+    public static Item desolationRing = new ItemDesolationRing();
 
 
     public static SimpleNetworkWrapper packetInstance;
@@ -248,6 +249,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
             event.getRegistry().register(eldritchPan);
+            event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
 
             if (COMPAT_FORGOTTEN_RELICS) {
@@ -348,6 +350,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(eldritchAmulet, 0, new ModelResourceLocation(eldritchAmulet.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

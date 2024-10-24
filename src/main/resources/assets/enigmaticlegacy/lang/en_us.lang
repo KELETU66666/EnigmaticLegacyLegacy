@@ -24,6 +24,7 @@ item.ascension_amulet.name=Ascension Amulet
 item.enigmatic_eye_dormant.name=Dormant Eye
 item.enigmatic_eye_active.name=Inscrutable Eye
 item.eldritch_amulet.name=The Testament of Contempt
+item.desolation_ring.name=The Burden of Desolation
 
 #SpellStone
 item.golem_heart.name=Heart of the Golem
@@ -444,6 +445,9 @@ tooltip.enigmaticlegacy.eldritchAmulet2=§5after death. §6Experience§5 and §6
 tooltip.enigmaticlegacy.eldritchAmulet3=§5still be lost.
 tooltip.enigmaticlegacy.eldritchAmulet4=§5Creatures beneath your gaze will be slowed
 tooltip.enigmaticlegacy.eldritchAmulet5=§5down and weakened.
+
+tooltip.enigmaticlegacy.desolationRing1=§6Iron Golems§5, §6Endermen§5 and §6Zombie Pigman§5
+tooltip.enigmaticlegacy.desolationRing2= will not spawn in your proximity.
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²

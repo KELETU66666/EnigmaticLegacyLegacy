@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "EAE",
+    "NCN",
+    "XSX"
+  ],
+  "key": {
+    "X": {
+      "item": "enigmaticlegacy:evil_essence"
+    },
+    "S": {
+      "item": "enigmaticlegacy:void_pearl"
+    },
+    "C": {
+      "item": "enigmaticlegacy:gem_ring"
+    },
+    "E": {
+      "item": "enigmaticlegacy:cosmic_heart"
+    },
+    "A": {
+      "item": "enigmaticlegacy:abyssal_heart"
+    },
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "ingotNetherite"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:desolation_ring"
+  }
+}
