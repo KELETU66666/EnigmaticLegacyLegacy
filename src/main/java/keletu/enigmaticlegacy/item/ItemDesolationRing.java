@@ -33,7 +33,7 @@ public class ItemDesolationRing extends ItemBaseBauble {
 			list.add("");
 			//ItemLoreHelper.indicateWorthyOnesOnly(list);
 		} else {
-			list.add(I18n.format("tooltip.enigmaticlegacy.eternallyBound1"));
+			list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing1"));
 
 			if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
 				list.add(I18n.format("tooltip.enigmaticlegacy.cursedRing2_creative"));
