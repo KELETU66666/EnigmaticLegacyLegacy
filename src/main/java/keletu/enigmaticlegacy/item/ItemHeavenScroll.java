@@ -1,8 +1,10 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,8 +29,8 @@ public class ItemHeavenScroll extends ItemBase implements IBauble {
 	public Map<EntityPlayer, Integer> flyMap = new WeakHashMap<EntityPlayer, Integer>();
 	public final double baseXpConsumptionProbability = 0.025D/2D;
 
-	public ItemHeavenScroll() {
-		super("heaven_scroll", EnumRarity.EPIC);
+	public ItemHeavenScroll(String name, EnumRarity rare) {
+		super(name, rare);
 		this.maxStackSize = 1;
 	}
 	
@@ -46,6 +48,10 @@ public class ItemHeavenScroll extends ItemBase implements IBauble {
 		} else {
 			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
 		}
+	}
+
+	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+		return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.fabulousScroll) == -1;
 	}
 
 	@Override

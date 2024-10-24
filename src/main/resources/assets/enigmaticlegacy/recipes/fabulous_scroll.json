@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "GFG",
+    "FXF",
+    "LAL"
+  ],
+  "key": {
+    "X": {
+      "item": "enigmaticlegacy:heaven_scroll"
+    },
+	"F": {
+      "item": "enigmaticlegacy:astral_dust"
+    },
+	"G": {
+      "item": "enigmaticlegacy:etherium_ingot"
+    },
+	"L": {
+      "item": "minecraft:dragon_breath"
+    },
+	"A": {
+      "item": "minecraft:elytra"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:fabulous_scroll"
+  }
+}

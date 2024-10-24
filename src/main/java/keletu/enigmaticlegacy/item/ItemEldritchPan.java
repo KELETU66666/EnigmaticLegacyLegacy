@@ -6,8 +6,10 @@ import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -157,9 +159,12 @@ public class ItemEldritchPan extends ItemShield {
 
             //boolean noHunger = SuperpositionHandler.cannotHunger((EnigmaticLegacy.PROXY.getClientPlayer()));
 
-            tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan1"));
-            tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan2"));
-            tooltip.add("");
+            if (Minecraft.getMinecraft().player != null && SuperpositionHandler.hasCursed(Minecraft.getMinecraft().player)) {
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan1"));
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan2"));
+                tooltip.add("");
+            }
+
             tooltip.add(TextFormatting.GOLD + life + I18n.format("tooltip.enigmaticlegacy.eldritchPan3"));
 
             //  if (!noHunger) {
@@ -280,7 +285,7 @@ public class ItemEldritchPan extends ItemShield {
         return stack.getTagCompound();
     }
 
-    public static List<ResourceLocation> getUniqueKills(ItemStack pan) {
+    public static List<String> getUniqueKills(ItemStack pan) {
         NBTTagCompound tag = pan.getTagCompound();
 
         if (tag == null || !tag.hasKey("PanUniqueKills", TAG_LIST))
@@ -288,7 +293,7 @@ public class ItemEldritchPan extends ItemShield {
 
         NBTTagList list = tag.getTagList("PanUniqueKills", TAG_STRING);
         List<NBTBase> tag1 = convertNBTTagListToList(list);
-        return tag1.stream().map(e -> new ResourceLocation(((NBTTagString) e).getString())).collect(Collectors.toList());
+        return tag1.stream().map(e -> ((NBTTagString) e).getString()).collect(Collectors.toList());
     }
 
     public static void setUniqueKills(ItemStack pan, List<ResourceLocation> mobs) {
@@ -327,9 +332,9 @@ public class ItemEldritchPan extends ItemShield {
     }
 
     public static boolean addKillIfNotPresent(ItemStack pan, ResourceLocation mob) {
-        List<ResourceLocation> kills = getUniqueKills(pan);
+        List<String> kills = getUniqueKills(pan);
 
-        if (kills.size() < 100 && !kills.contains(mob)) {
+        if (kills.size() < 100 && !kills.contains(mob.getPath())) {
             addUniqueKill(pan, mob);
             return true;
         }

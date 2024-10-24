@@ -195,7 +195,7 @@ public class ELCoreTransformer implements IClassTransformer {
         return itemstack.isEmpty() ? 0 : itemstack.getCount();
     }
 
-    public static boolean containerEnchantment_enchantItem(ContainerEnchantment container, EntityPlayer playerIn, int id) throws IllegalAccessException {
+    public static boolean containerEnchantment_enchantItem(ContainerEnchantment container, EntityPlayer playerIn, int id) {
         ItemStack itemstack = container.tableInventory.getStackInSlot(0);
         ItemStack itemstack1 = container.tableInventory.getStackInSlot(1);  // Lapis lazuli stack
         int i = id + 1;

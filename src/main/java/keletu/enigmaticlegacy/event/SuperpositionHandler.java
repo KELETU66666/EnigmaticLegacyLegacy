@@ -307,8 +307,6 @@ public class SuperpositionHandler {
                 }
             }
         }
-        if (hasCursed(player))
-            count += 7;
 
         return count;
     }
@@ -319,7 +317,9 @@ public class SuperpositionHandler {
         equipmentStacks.add(player.getHeldItemMainhand());
         equipmentStacks.add(player.getHeldItemOffhand());
         equipmentStacks.addAll(player.inventory.armorInventory);
-
+        for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++)
+            equipmentStacks.add(BaublesApi.getBaubles(player).getStackInSlot(i));
+        
         return equipmentStacks;
     }
 
@@ -439,7 +439,7 @@ public class SuperpositionHandler {
     }
 
     public static boolean hasPearl(EntityPlayer player) {
-        return !hasCursed(player) || player.inventory.hasItemStack(new ItemStack(enchanterPearl));
+        return hasCursed(player) && player.inventory.hasItemStack(new ItemStack(enchanterPearl));
     }
 
     public static boolean hasEnderRing(EntityPlayer player) {

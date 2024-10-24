@@ -51,11 +51,15 @@ public class EntityItemSoulCrystal extends Entity {
 
     private int age;
     private int pickupDelay;
-    /** The health of this EntityItem. (For example, damage for tools) */
+    /**
+     * The health of this EntityItem. (For example, damage for tools)
+     */
     private int health;
     private String thrower;
     private String owner;
-    /** The EntityItem's random initial float height. */
+    /**
+     * The EntityItem's random initial float height.
+     */
     public float hoverStart;
 
     /**
@@ -67,34 +71,32 @@ public class EntityItemSoulCrystal extends Entity {
         this.dataManager.register(ITEM, ItemStack.EMPTY);
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
     }
-    
+
     /**
      * Returns true if it's possible to attack this entity with an item.
      */
-    public boolean canBeAttackedWithItem()
-    {
+    public boolean canBeAttackedWithItem() {
         return false;
     }
 
     public EntityItemSoulCrystal(World world) {
         super(world);
         this.health = 5;
-        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
     }
 
     public EntityItemSoulCrystal(World world, double x, double y, double z) {
         super(world);
-        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.setPosition(x, y, z);
-        this.rotationYaw = (float)(Math.random() * 360.0D);
-        this.motionX = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
+        this.rotationYaw = (float) (Math.random() * 360.0D);
+        this.motionX = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
         this.motionY = 0.20000000298023224D;
-        this.motionZ = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
+        this.motionZ = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
     }
 
-    public EntityItemSoulCrystal(World worldIn, double x, double y, double z, ItemStack stack)
-    {
+    public EntityItemSoulCrystal(World worldIn, double x, double y, double z, ItemStack stack) {
         this(worldIn, x, y, z);
         this.setItem(stack);
         this.lifespan = (stack.getItem() == null ? 6000 : stack.getItem().getEntityLifespan(stack, worldIn));
@@ -107,23 +109,20 @@ public class EntityItemSoulCrystal extends Entity {
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
-        compound.setShort("Health", (short)this.health);
-        compound.setShort("Age", (short)this.age);
-        compound.setShort("PickupDelay", (short)this.pickupDelay);
+        compound.setShort("Health", (short) this.health);
+        compound.setShort("Age", (short) this.age);
+        compound.setShort("PickupDelay", (short) this.pickupDelay);
         compound.setInteger("Lifespan", lifespan);
 
-        if (this.getThrower() != null)
-        {
+        if (this.getThrower() != null) {
             compound.setString("Thrower", this.thrower);
         }
 
-        if (this.getOwner() != null)
-        {
+        if (this.getOwner() != null) {
             compound.setString("Owner", this.owner);
         }
 
-        if (!this.getItem().isEmpty())
-        {
+        if (!this.getItem().isEmpty()) {
             compound.setTag("Item", this.getItem().writeToNBT(new NBTTagCompound()));
         }
 
@@ -139,26 +138,22 @@ public class EntityItemSoulCrystal extends Entity {
         this.health = compound.getShort("Health");
         this.age = compound.getShort("Age");
 
-        if (compound.hasKey("PickupDelay"))
-        {
+        if (compound.hasKey("PickupDelay")) {
             this.pickupDelay = compound.getShort("PickupDelay");
         }
 
-        if (compound.hasKey("Owner"))
-        {
+        if (compound.hasKey("Owner")) {
             this.owner = compound.getString("Owner");
         }
 
-        if (compound.hasKey("Thrower"))
-        {
+        if (compound.hasKey("Thrower")) {
             this.thrower = compound.getString("Thrower");
         }
 
         NBTTagCompound nbttagcompound = compound.getCompoundTag("Item");
         this.setItem(new ItemStack(nbttagcompound));
 
-        if (this.getItem().isEmpty())
-        {
+        if (this.getItem().isEmpty()) {
             this.setDead();
         }
         if (compound.hasKey("Lifespan")) lifespan = compound.getInteger("Lifespan");
@@ -206,23 +201,19 @@ public class EntityItemSoulCrystal extends Entity {
         return true;
     }
 
-    public String getOwner()
-    {
+    public String getOwner() {
         return this.owner;
     }
 
-    public void setOwner(String owner)
-    {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
-    public String getThrower()
-    {
+    public String getThrower() {
         return this.thrower;
     }
 
-    public void setThrower(String thrower)
-    {
+    public void setThrower(String thrower) {
         this.thrower = thrower;
     }
 
@@ -238,16 +229,14 @@ public class EntityItemSoulCrystal extends Entity {
     /**
      * Gets the item that this entity represents.
      */
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         return this.getDataManager().get(ITEM);
     }
 
     /**
      * Sets the item that this entity represents.
      */
-    public void setItem(ItemStack stack)
-    {
+    public void setItem(ItemStack stack) {
         this.getDataManager().set(ITEM, stack);
         this.getDataManager().setDirty(ITEM);
     }
@@ -268,9 +257,7 @@ public class EntityItemSoulCrystal extends Entity {
             boolean isPlayerOwner = player.getUniqueID().equals(this.getOwnerId());
             boolean allowPickUp = false;
 
-            if (item instanceof ItemStorageCrystal && (isPlayerOwner/* || !EnigmaticLegacy.enigmaticAmulet.isVesselOwnerOnly()*/)) {
-                allowPickUp = true;
-            } else if (item instanceof ItemSoulCrystal && isPlayerOwner) {
+            if (isPlayerOwner) {
                 allowPickUp = true;
             }
 
@@ -296,7 +283,8 @@ public class EntityItemSoulCrystal extends Entity {
                     if (!EnigmaticLegacy.soulCrystal.retrieveSoulFromCrystal(player, itemstack))
                         return;
 
-                }
+                } else
+                    player.inventory.addItemStackToInventory(this.getItem());
 
 
                 EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(this.posX, this.posY + (this.getEyeHeight() / 2), this.posZ, 48, false), new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), this.posX, this.posY + (this.getEyeHeight() / 2), this.posZ, 64));

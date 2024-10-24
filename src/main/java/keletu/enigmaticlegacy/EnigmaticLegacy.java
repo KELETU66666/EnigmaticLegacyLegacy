@@ -63,7 +63,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.6.0";
+    public static final String VERSION = "0.7.0";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -102,7 +102,8 @@ public class EnigmaticLegacy {
     public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
-    public static Item heavenScroll = new ItemHeavenScroll();
+    public static Item heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
+    public static Item fabulousScroll = new ItemFabulousScroll();
 
     //Material
     public static Item earthHeart = new ItemEarthHeart();
@@ -230,6 +231,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(xpScroll);
             event.getRegistry().register(cursedScroll);
             event.getRegistry().register(heavenScroll);
+            event.getRegistry().register(fabulousScroll);
             event.getRegistry().register(animalGuide);
             event.getRegistry().register(etheriumHelm);
             event.getRegistry().register(etheriumChest);
@@ -345,6 +347,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(cosmicHeart, 0, new ModelResourceLocation(cosmicHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(eldritchAmulet, 0, new ModelResourceLocation(eldritchAmulet.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

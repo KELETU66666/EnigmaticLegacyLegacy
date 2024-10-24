@@ -18,6 +18,7 @@ item.enchanter_pearl.name=Enchanter's Pearl
 item.xp_scroll.name=Scroll of Ageless Wisdom
 item.cursed_scroll.name=Scroll of a Thousand Curses
 item.heaven_scroll.name=Gift of the Heaven
+item.fabulous_scroll.name=Grace of the Creator
 item.animal_guide.name=Guide to Animal Companionship
 item.ascension_amulet.name=Ascension Amulet
 item.enigmatic_eye_dormant.name=Dormant Eye
@@ -75,6 +76,12 @@ tooltip.enigmaticlegacy.heavenTome1=§5Provides you an ability to fly within the
 tooltip.enigmaticlegacy.heavenTome2=§5of an active §6Beacon§5, at the cost of slowly
 tooltip.enigmaticlegacy.heavenTome3=§5consuming your experience.
 tooltip.enigmaticlegacy.heavenTome4=§5Compensates mining speed penalty when flying.
+
+tooltip.enigmaticlegacy.fabulousScroll1=§5Provides you an ability to freely fly, at the
+tooltip.enigmaticlegacy.fabulousScroll2=§5cost of quickly consuming your experience.
+tooltip.enigmaticlegacy.fabulousScroll3=§5Experience consumption is completely negated
+tooltip.enigmaticlegacy.fabulousScroll4=§5within the range of an active §6Beacon§5.
+tooltip.enigmaticlegacy.fabulousScroll5=§5Compensates mining speed penalty when flying.
 
 tooltip.enigmaticlegacy.angelBlessing1=§dActive ability:
 tooltip.enigmaticlegacy.angelBlessing2=§6- Accelerates you in the direction of your sight. §1§l [WIP]

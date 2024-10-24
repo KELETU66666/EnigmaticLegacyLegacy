@@ -8,13 +8,9 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
-import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
-import keletu.enigmaticlegacy.item.ItemEldritchPan;
-import keletu.enigmaticlegacy.item.ItemInfernalShield;
-import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -79,6 +75,8 @@ public class ELEvents {
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static boolean dropEldritchAmulet = false;
+    private static EntityPlayer abyssalHeartOwner;
+
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
 
     @SubscribeEvent
@@ -178,6 +176,16 @@ public class ELEvents {
 
                 if (!ELConfigs.enableSpecialDrops)
                     return;
+
+                if (killed instanceof EntityDragon) {
+                    if (SuperpositionHandler.isTheWorthyOne(player)) {
+                        int heartsGained = ItemSoulCrystal.getPersistentInteger(player, "AbyssalHeartsGained", 0);
+
+                        if (heartsGained < 4) { // Only as many as there are unique items from them, +1
+                            abyssalHeartOwner = player;
+                        }
+                    }
+                }
 
                 if (killed.getClass() == EntityShulker.class) {
                     addDropWithChance(event, new ItemStack(EnigmaticLegacy.astralDust, 1), 20);
@@ -1017,6 +1025,26 @@ public class ELEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
+        if (event.getEntity() instanceof EntityDragon && !event.getEntity().world.isRemote) {
+            EntityDragon dragon = (EntityDragon) event.getEntity();
+            // final burst of XP/actual death is at 200 ticks
+            if (dragon.deathTicks == 199 && abyssalHeartOwner != null) {
+                int heartsGained = ItemSoulCrystal.getPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", 0);
+
+                Vec3d center = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
+                EntityItemSoulCrystal heart = new EntityItemSoulCrystal(event.getEntity().world, center.x, center.y, center.z, new ItemStack(abyssalHeart, 1));
+                heart.setOwnerId(abyssalHeartOwner.getUniqueID());
+                event.getEntity().world.spawnEntity(heart);
+
+                ItemSoulCrystal.setPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", heartsGained + 1);
+                abyssalHeartOwner = null;
+
+            }
+        }
+    }
+
     @SubscribeEvent(priority = HIGH)
     public static void keepRingCurses(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
@@ -1026,16 +1054,6 @@ public class ELEvents {
             dropEldritchAmulet = true;
 
             eldritchAmulet.storeInventory(player);
-        }
-
-        if (!living.world.isRemote && living instanceof EntityDragon && event.getSource().getTrueSource() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-            EntityDragon dragon = (EntityDragon) event.getEntity();
-
-            if (hasCursed(player) && SuperpositionHandler.isTheWorthyOne(player) && dragon.deathTicks == 199) {
-                EntityItemImportant abyssalHeart = new EntityItemImportant(living.world, living.posX, living.posY, living.posZ, new ItemStack(EnigmaticLegacy.abyssalHeart));
-                living.world.spawnEntity(abyssalHeart);
-            }
         }
     }
 
