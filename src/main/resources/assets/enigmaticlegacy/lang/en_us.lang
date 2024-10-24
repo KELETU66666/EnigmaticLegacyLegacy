@@ -447,7 +447,7 @@ tooltip.enigmaticlegacy.eldritchAmulet4=§5Creatures beneath your gaze will be s
 tooltip.enigmaticlegacy.eldritchAmulet5=§5down and weakened.
 
 tooltip.enigmaticlegacy.desolationRing1=§6Iron Golems§5, §6Endermen§5 and §6Zombie Pigman§5
-tooltip.enigmaticlegacy.desolationRing2=§6will not spawn in your proximity.
+tooltip.enigmaticlegacy.desolationRing2=§5will not spawn in your proximity.
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²

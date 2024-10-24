@@ -180,7 +180,7 @@ public class ELEvents {
                     if (SuperpositionHandler.isTheWorthyOne(player)) {
                         int heartsGained = ItemSoulCrystal.getPersistentInteger(player, "AbyssalHeartsGained", 0);
 
-                        if (heartsGained < 4) { // Only as many as there are unique items from them, +1
+                        if (heartsGained < 5) { // Only as many as there are unique items from them, +1
                             abyssalHeartOwner = player;
                         }
                     }
