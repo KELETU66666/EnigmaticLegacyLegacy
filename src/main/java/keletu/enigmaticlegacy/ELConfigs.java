@@ -52,6 +52,7 @@ public class ELConfigs {
     public static float xpCollectionRange;
     public static int radius;
     public static boolean spawnWithBook;
+    public static boolean spawnWithAmulet;
     public static boolean enableWitherite;
     public static boolean useWhitelist;
     public static float cursedScrollDamageBoost;
@@ -116,6 +117,8 @@ public class ELConfigs {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
         spawnWithBook = config.getBoolean("SpawnWithBook", "Generic Config", true, "If true, When player entering a new world will give the acknowledgment guidebook");
+
+        spawnWithAmulet = config.getBoolean("SpawnWithAmulet", "Generic Config", true, "If true, When player entering a new world will give the enigmatic amulet");
 
         enableWitherite = config.getBoolean("EnableWitherite", "Generic Config", true, "If true, wither will drop witherite ingot (with ore 'ingotNetherite') when killed by player, you can disable it if your pack have other ways to get netherite");
 

@@ -1,8 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
@@ -24,101 +22,96 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class ItemHeavenScroll extends ItemBase implements IBauble {
+public class ItemHeavenScroll extends ItemScrollBauble {
 
-	public Map<EntityPlayer, Integer> flyMap = new WeakHashMap<EntityPlayer, Integer>();
-	public final double baseXpConsumptionProbability = 0.025D/2D;
+    public Map<EntityPlayer, Integer> flyMap = new WeakHashMap<EntityPlayer, Integer>();
+    public final double baseXpConsumptionProbability = 0.025D / 2D;
 
-	public ItemHeavenScroll(String name, EnumRarity rare) {
-		super(name, rare);
-		this.maxStackSize = 1;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.add("");
+    public ItemHeavenScroll(String name, EnumRarity rare) {
+        super(name, rare);
+        this.maxStackSize = 1;
+    }
 
-		if (GuiScreen.isShiftKeyDown()) {
-			list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome1"));
-			list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome2"));
-			list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome3"));
-			list.add("");
-			list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome4"));
-		} else {
-			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
-		}
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+        list.add("");
 
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-		return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.fabulousScroll) == -1;
-	}
+        if (GuiScreen.isShiftKeyDown()) {
+            list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome1"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome2"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome3"));
+            list.add("");
+            list.add(I18n.format("tooltip.enigmaticlegacy.heavenTome4"));
+        } else {
+            list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
+        }
+    }
 
-	@Override
-	public void onWornTick(ItemStack stack, EntityLivingBase entityLivingBase) {
-		if (entityLivingBase.world.isRemote)
-			return;
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+        return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.fabulousScroll) == -1;
+    }
 
-		if (entityLivingBase instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLivingBase;
+    @Override
+    public void onWornTick(ItemStack stack, EntityLivingBase entityLivingBase) {
+        if (entityLivingBase.world.isRemote)
+            return;
 
-			if (Math.random() <= (this.baseXpConsumptionProbability * ELConfigs.flyingScrollXpCostModifier) && player.capabilities.isFlying) {
-				ExperienceHelper.drainPlayerXP(player, 1);
-			}
+        if (entityLivingBase instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entityLivingBase;
 
-			this.handleFlight(player);
-		}
+            if (Math.random() <= (this.baseXpConsumptionProbability * ELConfigs.flyingScrollXpCostModifier) && player.capabilities.isFlying) {
+                ExperienceHelper.drainPlayerXP(player, 1);
+            }
 
-	}
+            this.handleFlight(player);
+        }
 
-	protected void handleFlight(EntityPlayer player) {
-		try {
-			if (ExperienceHelper.getPlayerXP(player) > 0 && SuperpositionHandler.isInBeaconRange(player)) {
+    }
 
-				if (!player.capabilities.allowFlying) {
-					player.capabilities.allowFlying = true;
-				}
+    protected void handleFlight(EntityPlayer player) {
+        try {
+            if (ExperienceHelper.getPlayerXP(player) > 0 && SuperpositionHandler.isInBeaconRange(player)) {
 
-				player.sendPlayerAbilities();
-				this.flyMap.put(player, 100);
+                if (!player.capabilities.allowFlying) {
+                    player.capabilities.allowFlying = true;
+                }
 
-			} else if (this.flyMap.get(player) > 1) {
-				this.flyMap.put(player, this.flyMap.get(player)-1);
-			} else if (this.flyMap.get(player) == 1) {
-				if (!player.isCreative()) {
-					player.capabilities.allowFlying = false;
-					player.capabilities.isFlying = false;
-					player.sendPlayerAbilities();
-					player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 60, 100, true, false));
-				}
+                player.sendPlayerAbilities();
+                this.flyMap.put(player, 100);
 
-				this.flyMap.put(player, 0);
-			}
+            } else if (this.flyMap.get(player) > 1) {
+                this.flyMap.put(player, this.flyMap.get(player) - 1);
+            } else if (this.flyMap.get(player) == 1) {
+                if (!player.isCreative()) {
+                    player.capabilities.allowFlying = false;
+                    player.capabilities.isFlying = false;
+                    player.sendPlayerAbilities();
+                    player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 60, 100, true, false));
+                }
 
-		} catch (NullPointerException ex) {
-			this.flyMap.put(player, 0);
-		}
-	}
+                this.flyMap.put(player, 0);
+            }
 
-	@Override
-	public void onUnequipped(ItemStack stack, EntityLivingBase entityLivingBase) {
+        } catch (NullPointerException ex) {
+            this.flyMap.put(player, 0);
+        }
+    }
 
-		if (entityLivingBase instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLivingBase;
+    @Override
+    public void onUnequipped(ItemStack stack, EntityLivingBase entityLivingBase) {
 
-			if (!player.isCreative() && !player.isSpectator()) {
-				player.capabilities.allowFlying = false;
-				player.capabilities.isFlying = false;
-				player.sendPlayerAbilities();
-			}
+        if (entityLivingBase instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entityLivingBase;
 
-			this.flyMap.put(player, 0);
+            if (!player.isCreative() && !player.isSpectator()) {
+                player.capabilities.allowFlying = false;
+                player.capabilities.isFlying = false;
+                player.sendPlayerAbilities();
+            }
 
-		}
-	}
-	
-	@Override
-	public BaubleType getBaubleType(ItemStack itemstack) {
-		return BaubleType.TRINKET;
-	}
+            this.flyMap.put(player, 0);
+
+        }
+    }
 }

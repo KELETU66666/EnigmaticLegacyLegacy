@@ -57,8 +57,10 @@ public class KeepBaubles {
             NonNullList<ItemStack> list = NonNullList.create();
 
             for (int i = 0; i < BaubleType.RING.getValidSlots().length; i++) {
-                list.add(i, handler.getStackInSlot(BaubleType.RING.getValidSlots()[i]));
-                handler.setStackInSlot(BaubleType.RING.getValidSlots()[i], ItemStack.EMPTY);
+                if(handler.getStackInSlot(BaubleType.RING.getValidSlots()[i]).getItem() instanceof ItemCursedRing || handler.getStackInSlot(BaubleType.RING.getValidSlots()[i]).getItem() instanceof ItemDesolationRing) {
+                    list.add(handler.getStackInSlot(BaubleType.RING.getValidSlots()[i]));
+                    handler.setStackInSlot(BaubleType.RING.getValidSlots()[i], ItemStack.EMPTY);
+                }
             }
             baublesMap.put(player.getUniqueID(), list);
         }
@@ -77,7 +79,7 @@ public class KeepBaubles {
         if (baublesMap.containsKey(player.getUniqueID())) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
 
-            for (int i = 0; i < BaubleType.RING.getValidSlots().length; i++) {
+            for (int i = 0; i < baublesMap.get(player.getUniqueID()).size(); i++) {
                 handler.setStackInSlot(BaubleType.RING.getValidSlots()[i], baublesMap.get(player.getUniqueID()).get(i));
             }
             baublesMap.remove(player.getUniqueID());
@@ -87,7 +89,7 @@ public class KeepBaubles {
     public static ItemStack getBaubleStack(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
         for (int index : BaubleType.RING.getValidSlots()) {
-            ItemStack stack = handler.getStackInSlot(BaubleType.RING.getValidSlots()[index]);
+            ItemStack stack = handler.getStackInSlot(index);
             if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
                 return stack;
             }

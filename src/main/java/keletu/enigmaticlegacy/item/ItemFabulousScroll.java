@@ -41,7 +41,7 @@ public class ItemFabulousScroll extends ItemHeavenScroll {
 			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
 		}
 	}
-
+	
 	@Override
 	public void onWornTick(ItemStack stack, EntityLivingBase living) {
 		if (living.world.isRemote)

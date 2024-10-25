@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.event;
 
+import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.ELConfigs;
@@ -1086,21 +1087,21 @@ public class ELEvents {
             data.setBoolean(SPAWN_WITH_BOOK, true);
         }
 
-        if (!data.getBoolean(SPAWN_WITH_AMULET)) {
+        if (!data.getBoolean(SPAWN_WITH_AMULET) && spawnWithAmulet) {
             ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(enigmaticAmulet, 1, 0));
             data.setBoolean(SPAWN_WITH_AMULET, true);
         }
 
-        if (!data.getBoolean(SPAWN_WITH_CURSE)) {
+        if (!data.getBoolean(SPAWN_WITH_CURSE) && !ultraNoobMode) {
             if (ultraHardcore) {
                 {
                     IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
-                    if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(2) == ItemStack.EMPTY)
-                        baubles.setStackInSlot(2, new ItemStack(cursedRing));
+                    if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(BaubleType.RING.getValidSlots()[0]) == ItemStack.EMPTY)
+                        baubles.setStackInSlot(BaubleType.RING.getValidSlots()[0], new ItemStack(cursedRing));
                     else
                         ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
                 }
-            } else if (!ultraNoobMode) {
+            } else {
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
             }
 

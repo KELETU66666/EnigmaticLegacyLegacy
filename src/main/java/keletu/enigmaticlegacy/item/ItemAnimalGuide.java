@@ -1,7 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemAnimalGuide extends ItemBase implements IBauble {
+public class ItemAnimalGuide extends ItemBaseBauble {
     public ItemAnimalGuide() {
         super("animal_guide", EnumRarity.UNCOMMON);
         this.maxStackSize = 1;
@@ -38,9 +37,9 @@ public class ItemAnimalGuide extends ItemBase implements IBauble {
         }
 
     }
+
     @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
-        //todo
         return BaubleType.TRINKET;
     }
 }

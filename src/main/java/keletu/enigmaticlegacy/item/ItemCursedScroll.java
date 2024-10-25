@@ -1,7 +1,5 @@
 package keletu.enigmaticlegacy.item;
 
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getCurseAmount;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
@@ -19,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCursedScroll extends ItemBase implements IBauble {
+public class ItemCursedScroll extends ItemScrollBauble {
 
     public ItemCursedScroll() {
         super("cursed_scroll", EnumRarity.EPIC);
@@ -32,9 +30,9 @@ public class ItemCursedScroll extends ItemBase implements IBauble {
         list.add("");
 
         if (GuiScreen.isShiftKeyDown()) {
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollDamageBoost * 100+ "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll1"));
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollMiningBoost * 100+ "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll2"));
-            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD +  ELConfigs.cursedScrollRegenBoost * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll3"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + ELConfigs.cursedScrollDamageBoost * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll1"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + ELConfigs.cursedScrollMiningBoost * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll2"));
+            list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + ELConfigs.cursedScrollRegenBoost * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll3"));
 
             list.add("");
             list.add(I18n.format("tooltip.enigmaticlegacy.cursed_scroll4"));
@@ -54,11 +52,5 @@ public class ItemCursedScroll extends ItemBase implements IBauble {
                 list.add(I18n.format("tooltip.enigmaticlegacy.add") + TextFormatting.GOLD + (ELConfigs.cursedScrollRegenBoost * 100 * curses) + "%" + I18n.format("tooltip.enigmaticlegacy.cursed_scroll9"));
 
             }
-    }
-
-    @Override
-    public BaubleType getBaubleType(ItemStack itemStack) {
-        //todo
-        return BaubleType.TRINKET;
     }
 }

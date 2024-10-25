@@ -3,8 +3,10 @@ package keletu.enigmaticlegacy.item;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import keletu.enigmaticlegacy.util.ISpellstone;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
+public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble, ISpellstone {
 
 
     public List<String> immunityList = new ArrayList<String>();
@@ -25,6 +27,20 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
     public ItemSpellstoneBauble(String props, EnumRarity rare) {
         super(props, rare);
         this.maxStackSize = 1;
+    }
+
+    @Override
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) player);
+
+        for (int slot = 0; slot < baubles.getSlots(); slot++) {
+            ItemStack equipped = baubles.getStackInSlot(slot);
+            if (!equipped.isEmpty() && equipped.getItem() instanceof ISpellstone) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean isResistantTo(String damageType) {
@@ -40,14 +56,10 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble {
     }
 
     @Override
-    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return BaublesApi.isBaubleEquipped((EntityPlayer) player, this) == -1;
-    }
-
-    @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
         return BaubleType.TRINKET;
     }
+
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase player) {
         onEquippedOrLoadedIntoWorld(stack, player);

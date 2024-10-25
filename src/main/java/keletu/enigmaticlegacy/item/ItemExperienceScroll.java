@@ -1,7 +1,5 @@
 package keletu.enigmaticlegacy.item;
 
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
@@ -25,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemExperienceScroll extends ItemBase implements IBauble {
+public class ItemExperienceScroll extends ItemScrollBauble {
 
 
     public final String TAG_ABSORPTION = "AbsorptionMode";
@@ -48,7 +46,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
         else
             cMode = I18n.format("tooltip.enigmaticlegacy.xpTomeExtraction");
 
-        if(GuiScreen.isShiftKeyDown()){
+        if (GuiScreen.isShiftKeyDown()) {
             par3List.add(I18n.format("tooltip.enigmaticlegacy.xpTome1"));
             par3List.add("");
             par3List.add(I18n.format("tooltip.enigmaticlegacy.xpTome2"));
@@ -62,8 +60,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             par3List.add(I18n.format("tooltip.enigmaticlegacy.xpTome8"));
             par3List.add(I18n.format("tooltip.enigmaticlegacy.xpTome9"));
 
-        }
-        else {
+        } else {
             par3List.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
 
         }
@@ -74,7 +71,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
         par3List.add(ItemNBTHelper.getInt(par1ItemStack, "XPStored", 0) + " " + I18n.format("tooltip.enigmaticlegacy.xpTomeUnits") + " " + ExperienceHelper.getLevelForExperience(ItemNBTHelper.getInt(par1ItemStack, "XPStored", 0)) + " " + I18n.format("tooltip.enigmaticlegacy.xpTomeLevels"));
 
     }
-    
+
     @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean b) {
 
@@ -91,8 +88,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
                 ExperienceHelper.drainPlayerXP(player, this.xpPortion);
                 ItemNBTHelper.setInt(itemstack, "XPStored", ItemNBTHelper.getInt(itemstack, "XPStored", 0) + this.xpPortion);
                 action = true;
-            }
-            else if (ExperienceHelper.getPlayerXP(player) > 0 & ExperienceHelper.getPlayerXP(player) < this.xpPortion) {
+            } else if (ExperienceHelper.getPlayerXP(player) > 0 & ExperienceHelper.getPlayerXP(player) < this.xpPortion) {
                 int exp = ExperienceHelper.getPlayerXP(player);
                 ExperienceHelper.drainPlayerXP(player, exp);
                 ItemNBTHelper.setInt(itemstack, "XPStored", ItemNBTHelper.getInt(itemstack, "XPStored", 0) + exp);
@@ -105,7 +101,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             int xp = ItemNBTHelper.getInt(itemstack, "XPStored", 0);
 
             if (xp >= this.xpPortion) {
-                ItemNBTHelper.setInt(itemstack, "XPStored", xp-this.xpPortion);
+                ItemNBTHelper.setInt(itemstack, "XPStored", xp - this.xpPortion);
                 ExperienceHelper.addPlayerXP(player, this.xpPortion);
                 action = true;
             } else if (xp > 0 & xp < this.xpPortion) {
@@ -130,8 +126,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             if (ItemNBTHelper.getBoolean(stack, this.TAG_ABSORPTION, true)) {
                 ItemNBTHelper.setBoolean(stack, this.TAG_ABSORPTION, false);
                 world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, (float) (0.4F + (Math.random() * 0.1F)));
-            }
-            else {
+            } else {
                 ItemNBTHelper.setBoolean(stack, this.TAG_ABSORPTION, true);
                 world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, (float) (0.4F + (Math.random() * 0.1F)));
             }
@@ -140,17 +135,14 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             if (ItemNBTHelper.getBoolean(stack, "IsActive", false)) {
                 ItemNBTHelper.setBoolean(stack, "IsActive", false);
                 world.playSound(null, player.getPosition(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2F)));
-            }
-            else {
+            } else {
                 ItemNBTHelper.setBoolean(stack, "IsActive", true);
                 world.playSound(null, player.getPosition(), SoundEvents.BLOCK_NOTE_PLING, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2F)));
             }
         }
 
 
-
         player.swingArm(hand);
-
 
 
         return super.onItemRightClick(world, player, hand);
@@ -169,17 +161,9 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
 
     }
 
-
     @Override
-    public EnumRarity getRarity(ItemStack itemStack)
-    {
+    public EnumRarity getRarity(ItemStack itemStack) {
         return EnumRarity.EPIC;
-    }
-
-    @Override
-    public BaubleType getBaubleType(ItemStack itemStack) {
-        //todo
-        return BaubleType.TRINKET;
     }
 
     @Override
@@ -196,8 +180,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             if (ExperienceHelper.getPlayerXP(player) >= this.xpPortion) {
                 ExperienceHelper.drainPlayerXP(player, this.xpPortion);
                 ItemNBTHelper.setInt(itemstack, "XPStored", ItemNBTHelper.getInt(itemstack, "XPStored", 0) + this.xpPortion);
-            }
-            else if (ExperienceHelper.getPlayerXP(player) > 0 & ExperienceHelper.getPlayerXP(player) < this.xpPortion) {
+            } else if (ExperienceHelper.getPlayerXP(player) > 0 & ExperienceHelper.getPlayerXP(player) < this.xpPortion) {
                 int exp = ExperienceHelper.getPlayerXP(player);
                 ExperienceHelper.drainPlayerXP(player, exp);
                 ItemNBTHelper.setInt(itemstack, "XPStored", ItemNBTHelper.getInt(itemstack, "XPStored", 0) + exp);
@@ -209,7 +192,7 @@ public class ItemExperienceScroll extends ItemBase implements IBauble {
             int xp = ItemNBTHelper.getInt(itemstack, "XPStored", 0);
 
             if (xp >= this.xpPortion) {
-                ItemNBTHelper.setInt(itemstack, "XPStored", xp-this.xpPortion);
+                ItemNBTHelper.setInt(itemstack, "XPStored", xp - this.xpPortion);
                 ExperienceHelper.addPlayerXP(player, this.xpPortion);
             } else if (xp > 0 & xp < this.xpPortion) {
                 ItemNBTHelper.setInt(itemstack, "XPStored", 0);
