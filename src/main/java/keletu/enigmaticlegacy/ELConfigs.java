@@ -101,6 +101,7 @@ public class ELConfigs {
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
     public static final List<ResourceLocation> cursedItemList = new ArrayList<>();
     public static final List<ResourceLocation> eldritchItemList = new ArrayList<>();
+    public static final List<ResourceLocation> desolationRingExtraMonstersList = new ArrayList<>();
 
     public static int oceanStoneSpellstoneCooldown;
     public static float oceanStoneSwimmingSpeedBoost;
@@ -328,6 +329,13 @@ public class ELConfigs {
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(eldritch).forEach(entry -> eldritchItemList.add(new ResourceLocation(entry)));
+
+        desolationRingExtraMonstersList.clear();
+        String[] desolation = config.getStringList("DesolationRingExtraMonstersList", "Ring of Desolation", new String[]{"keletucraft:keletu"}, "List of monsters can prevent spawning from desolation ring"
+                + "Examples: keletucraft:keletu, minecraft:zombie. Changing this option required game restart to take effect.");
+
+        Arrays.stream(desolation).forEach(entry -> desolationRingExtraMonstersList.add(new ResourceLocation(entry)));
+
 
         config.save();
     }

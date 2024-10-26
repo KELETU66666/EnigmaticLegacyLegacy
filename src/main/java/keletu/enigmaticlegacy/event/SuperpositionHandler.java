@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -113,6 +114,7 @@ public class SuperpositionHandler {
 
     }
 
+
     public static void setPersistentTag(EntityPlayer player, String tag, NBTBase value) {
         NBTTagCompound data = player.getEntityData();
         NBTTagCompound persistent;
@@ -126,8 +128,56 @@ public class SuperpositionHandler {
         persistent.setTag(tag, value);
     }
 
+    public static NBTBase getPersistentTag(EntityPlayer player, String tag, NBTBase expectedValue) {
+        NBTTagCompound data = player.getEntityData();
+        NBTTagCompound persistent;
+
+        if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+            data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
+        } else {
+            persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        }
+
+        if (persistent.hasKey(tag))
+            return persistent.getTag(tag);
+        else {
+            persistent.setTag(tag, expectedValue);
+            return expectedValue;
+        }
+
+    }
+
+    public static void setPersistentInteger(EntityPlayer player, String tag, int value) {
+        setPersistentTag(player, tag, new NBTTagInt(value));
+    }
+
+    public static int getPersistentInteger(EntityPlayer player, String tag, int expectedValue) {
+        NBTBase theTag = getPersistentTag(player, tag, new NBTTagInt(expectedValue));
+        return theTag instanceof NBTTagInt ? ((NBTTagInt) theTag).getInt() : expectedValue;
+    }
+
+    public static void removePersistentTag(EntityPlayer player, String tag) {
+        NBTTagCompound data = player.getEntityData();
+        NBTTagCompound persistent;
+
+        if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+            data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
+        } else {
+            persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        }
+
+        if (persistent.hasKey(tag)) {
+            persistent.removeTag(tag);
+        }
+    }
+
+
     public static void setPersistentBoolean(EntityPlayer player, String tag, boolean value) {
         SuperpositionHandler.setPersistentTag(player, tag, new NBTTagByte((byte) (value ? 1 : 0)));
+    }
+
+    public static boolean getPersistentBoolean(EntityPlayer player, String tag, boolean value) {
+        return Objects.equals(SuperpositionHandler.getPersistentTag(player, tag, new NBTTagByte((byte) (value ? 1 : 0))), new NBTTagByte((byte) (1)));
     }
 
     /**

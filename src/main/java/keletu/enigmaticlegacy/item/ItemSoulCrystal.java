@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.item;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -15,9 +16,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -80,69 +78,13 @@ public class ItemSoulCrystal extends Item {
 			return false;
 	}
 
-	public static void setPersistentTag(EntityPlayer player, String tag, NBTBase value) {
-		NBTTagCompound data = player.getEntityData();
-		NBTTagCompound persistent;
-
-		if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
-			data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
-		} else {
-			persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-		}
-
-		persistent.setTag(tag, value);
-	}
-
-	public static NBTBase getPersistentTag(EntityPlayer player, String tag, NBTBase expectedValue) {
-		NBTTagCompound data = player.getEntityData();
-		NBTTagCompound persistent;
-
-		if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
-			data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
-		} else {
-			persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-		}
-
-		if (persistent.hasKey(tag))
-			return persistent.getTag(tag);
-		else {
-			persistent.setTag(tag, expectedValue);
-			return expectedValue;
-		}
-
-	}
-	
-	public static void setPersistentInteger(EntityPlayer player, String tag, int value) {
-		setPersistentTag(player, tag, new NBTTagInt(value));
-	}
-
-	public static int getPersistentInteger(EntityPlayer player, String tag, int expectedValue) {
-		NBTBase theTag = getPersistentTag(player, tag, new NBTTagInt(expectedValue));
-		return theTag instanceof NBTTagInt ? ((NBTTagInt) theTag).getInt() : expectedValue;
-	}
-
-	public static void removePersistentTag(EntityPlayer player, String tag) {
-		NBTTagCompound data = player.getEntityData();
-		NBTTagCompound persistent;
-
-		if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
-			data.setTag(EntityPlayer.PERSISTED_NBT_TAG, (persistent = new NBTTagCompound()));
-		} else {
-			persistent = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-		}
-
-		if (persistent.hasKey(tag)) {
-			persistent.removeTag(tag);
-		}
-	}
-
 	public void setLostCrystals(EntityPlayer player, int lost) {
-		setPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", lost);
+		SuperpositionHandler.setPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", lost);
 		this.updatePlayerSoulMap(player);
 	}
 
 	public int getLostCrystals(EntityPlayer player) {
-		return getPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", 0);
+		return SuperpositionHandler.getPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", 0);
 	}
 
 	public Multimap<String, AttributeModifier> getOrCreateSoulMap(EntityPlayer player) {
@@ -170,7 +112,7 @@ public class ItemSoulCrystal extends Item {
 
 		soulMap.clear();
 
-		int lostFragments = getPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", 0);
+		int lostFragments = SuperpositionHandler.getPersistentInteger(player, "enigmaticlegacy.lostsoulfragments", 0);
 
 		if (lostFragments > 0) {
 			soulMap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(UUID.fromString("66a2aa2d-7e3c-4af4-882f-bd2b2ded8e7b"), "Lost Soul Health Modifier", -0.1F * lostFragments, 2));

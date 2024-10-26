@@ -145,12 +145,12 @@ public class ItemEldritchAmulet extends ItemBaseBauble {
 
     public boolean reclaimInventory(EntityPlayerMP oldPlayer, EntityPlayerMP newPlayer) {
         Map<String, NonNullList<ItemStack>> inventories = this.inventoryMap(newPlayer);
-        NBTBase maybeTag = ItemSoulCrystal.getPersistentTag(oldPlayer, "ELPersistentInventory", null);
+        NBTBase maybeTag = SuperpositionHandler.getPersistentTag(oldPlayer, "ELPersistentInventory", null);
         boolean hadTag = false;
 
         if (maybeTag instanceof NBTTagCompound) {
             NBTTagCompound tag = (NBTTagCompound) maybeTag;
-            ItemSoulCrystal.removePersistentTag(newPlayer, "ELPersistentInventory");
+            SuperpositionHandler.removePersistentTag(newPlayer, "ELPersistentInventory");
             hadTag = true;
 
             inventories.entrySet().forEach(entry -> {

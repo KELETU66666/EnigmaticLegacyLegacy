@@ -11,7 +11,10 @@ import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
-import keletu.enigmaticlegacy.item.*;
+import keletu.enigmaticlegacy.item.ItemEldritchPan;
+import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -86,9 +89,9 @@ public class ELEvents {
 
         EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(newPlayer);
 
-        if (event.isWasDeath() && newPlayer instanceof EntityPlayerMP && oldPlayer instanceof EntityPlayerMP && dropEldritchAmulet) {
-            eldritchAmulet.reclaimInventory((EntityPlayerMP) oldPlayer, (EntityPlayerMP) newPlayer);
-            dropEldritchAmulet = false;
+        if (event.isWasDeath() && newPlayer instanceof EntityPlayerMP && oldPlayer instanceof EntityPlayerMP && getPersistentBoolean(oldPlayer, "dropEldritchAmulet", true)) {
+            //dropEldritchAmulet = false;
+            SuperpositionHandler.setPersistentBoolean(newPlayer, "dropEldritchAmulet", false);
         }
     }
 
@@ -179,7 +182,7 @@ public class ELEvents {
 
                 if (killed instanceof EntityDragon) {
                     if (SuperpositionHandler.isTheWorthyOne(player)) {
-                        int heartsGained = ItemSoulCrystal.getPersistentInteger(player, "AbyssalHeartsGained", 0);
+                        int heartsGained = SuperpositionHandler.getPersistentInteger(player, "AbyssalHeartsGained", 0);
 
                         if (heartsGained < 5) { // Only as many as there are unique items from them, +1
                             abyssalHeartOwner = player;
@@ -648,7 +651,7 @@ public class ELEvents {
         if (event.getEntityLiving().isCreatureType(EnumCreatureType.MONSTER, false)) {
             EntityLivingBase entity = event.getEntityLiving();
 
-            if (/*entity instanceof Piglin || */entity instanceof EntityPigZombie || entity instanceof EntityIronGolem || entity instanceof EntityEnderman) {
+            if (desolationRingExtraMonstersList.contains(EntityList.getKey(entity)) || /*entity instanceof Piglin || */entity instanceof EntityPigZombie || entity instanceof EntityIronGolem || entity instanceof EntityEnderman) {
                 if (DESOLATION_BOXES.values().stream().anyMatch(entity.getEntityBoundingBox()::intersects)) {
                     event.setResult(Event.Result.DENY);
                     //event.setCanceled(true);
@@ -1051,14 +1054,14 @@ public class ELEvents {
             EntityDragon dragon = (EntityDragon) event.getEntity();
             // final burst of XP/actual death is at 200 ticks
             if (dragon.deathTicks == 199 && abyssalHeartOwner != null) {
-                int heartsGained = ItemSoulCrystal.getPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", 0);
+                int heartsGained = SuperpositionHandler.getPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", 0);
 
                 Vec3d center = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
                 EntityItemSoulCrystal heart = new EntityItemSoulCrystal(event.getEntity().world, center.x, center.y, center.z, new ItemStack(abyssalHeart, 1));
                 heart.setOwnerId(abyssalHeartOwner.getUniqueID());
                 event.getEntity().world.spawnEntity(heart);
 
-                ItemSoulCrystal.setPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", heartsGained + 1);
+                SuperpositionHandler.setPersistentInteger(abyssalHeartOwner, "AbyssalHeartsGained", heartsGained + 1);
                 abyssalHeartOwner = null;
 
             }
@@ -1071,7 +1074,8 @@ public class ELEvents {
 
         if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1) {
             EntityPlayerMP player = (EntityPlayerMP) living;
-            dropEldritchAmulet = true;
+            SuperpositionHandler.setPersistentBoolean(player, "dropEldritchAmulet", true);
+            //dropEldritchAmulet = true;
 
             eldritchAmulet.storeInventory(player);
         }
