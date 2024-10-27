@@ -19,8 +19,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -127,7 +130,7 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
                 }
 
                 for (EntityLivingBase victim : entities) {
-                    if (victim.world.getCombinedLight(victim.getPosition(), 0) < 3) {
+                    if (this.getCombinedLight(victim.world, victim.getPosition(), 0) < 3) {
 
                         if (victim instanceof EntityPlayer) {
                             EntityPlayer playerVictim = (EntityPlayer) victim;
@@ -158,6 +161,78 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
             }
         }
 
+    }
+
+    public int getCombinedLight(World world, BlockPos pos, int lightValue)
+    {
+        int i = this.getLightFromNeighborsFor(world, EnumSkyBlock.SKY, pos);
+        int j = this.getLightFromNeighborsFor(world, EnumSkyBlock.BLOCK, pos);
+
+        if (j < lightValue)
+        {
+            j = lightValue;
+        }
+
+        return i << 20 | j << 4;
+    }
+
+    public int getLightFromNeighborsFor(World world, EnumSkyBlock type, BlockPos pos)
+    {
+        if (!world.provider.hasSkyLight() && type == EnumSkyBlock.SKY)
+        {
+            return 0;
+        }
+        else
+        {
+            if (pos.getY() < 0)
+            {
+                pos = new BlockPos(pos.getX(), 0, pos.getZ());
+            }
+
+            if (!world.isValid(pos))
+            {
+                return type.defaultLightValue;
+            }
+            else if (!world.isBlockLoaded(pos))
+            {
+                return type.defaultLightValue;
+            }
+            else if (world.getBlockState(pos).useNeighborBrightness())
+            {
+                int i1 = world.getLightFor(type, pos.up());
+                int i = world.getLightFor(type, pos.east());
+                int j = world.getLightFor(type, pos.west());
+                int k = world.getLightFor(type, pos.south());
+                int l = world.getLightFor(type, pos.north());
+
+                if (i > i1)
+                {
+                    i1 = i;
+                }
+
+                if (j > i1)
+                {
+                    i1 = j;
+                }
+
+                if (k > i1)
+                {
+                    i1 = k;
+                }
+
+                if (l > i1)
+                {
+                    i1 = l;
+                }
+
+                return i1;
+            }
+            else
+            {
+                Chunk chunk = world.getChunk(pos);
+                return chunk.getLightFor(type, pos);
+            }
+        }
     }
 
     @Override
