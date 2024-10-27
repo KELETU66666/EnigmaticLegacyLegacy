@@ -1,7 +1,6 @@
 #Blocks
 tile.astral_block.name=Sack of Astral Dust
 tile.etherium_block.name=Block of Etherium
-tile.end_anchor.name=Block of Etherium
 
 #bauble
 item.enigmatic_amulet.name=Enigmatic Amulet
