@@ -3,12 +3,10 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.eldritchAmulet;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getPersistentBoolean;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.item.ItemDesolationRing;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -35,7 +33,6 @@ public class KeepBaubles {
         EntityPlayer oldPlayer = event.getOriginal();
         if (getPersistentBoolean(oldPlayer, "dropEldritchAmulet", true)) {
             KeepBaubles.setBaubleStackAll(event.getEntityPlayer(), KeepBaubles.getBaubleStackAll(oldPlayer));
-            eldritchAmulet.reclaimInventory((EntityPlayerMP) oldPlayer, (EntityPlayerMP) event.getEntityPlayer());
         } else
             KeepBaubles.setBaubleStack(event.getEntityPlayer(), KeepBaubles.getBaubleStack(oldPlayer));
 
@@ -55,8 +52,7 @@ public class KeepBaubles {
                 baubles.setStackInSlot(i, ItemStack.EMPTY);
             }
             worthyMap.put(player.getUniqueID(), list);
-        }
-        else if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
+        } else if (stack.getItem() instanceof ItemCursedRing || stack.getItem() instanceof ItemDesolationRing) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
             NonNullList<ItemStack> list = NonNullList.create();
 
@@ -79,8 +75,7 @@ public class KeepBaubles {
                 baubles.setStackInSlot(i, worthyMap.get(player.getUniqueID()).get(i));
             }
             worthyMap.remove(player.getUniqueID());
-        }
-        else if (baublesMap.containsKey(player.getUniqueID())) {
+        } else if (baublesMap.containsKey(player.getUniqueID())) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
 
             for (int i = 0; i < baublesMap.get(player.getUniqueID()).size(); i++) {

@@ -112,7 +112,7 @@ public class ItemInfinimeal extends ItemBase {
 
             if (world instanceof WorldServer) {
                 for (int i = 0; i <= cycles; i++) {
-                    block.randomTick((WorldServer) world, target, iblockstate, world.rand);
+                    block.randomTick(world, target, iblockstate, world.rand);
                 }
             }
 
@@ -174,7 +174,7 @@ public class ItemInfinimeal extends ItemBase {
                 double d0 = itemRand.nextGaussian() * 0.02D;
                 double d1 = itemRand.nextGaussian() * 0.02D;
                 double d2 = itemRand.nextGaussian() * 0.02D;
-                worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (double)((float)pos.getX() + itemRand.nextFloat()), (double)pos.getY() + (double)itemRand.nextFloat() * iblockstate.getBoundingBox(worldIn, pos).maxY, (double)((float)pos.getZ() + itemRand.nextFloat()), d0, d1, d2);
+                worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (float)pos.getX() + itemRand.nextFloat(), (double)pos.getY() + (double)itemRand.nextFloat() * iblockstate.getBoundingBox(worldIn, pos).maxY, (float)pos.getZ() + itemRand.nextFloat(), d0, d1, d2);
             }
         }
         else
@@ -184,7 +184,7 @@ public class ItemInfinimeal extends ItemBase {
                 double d0 = itemRand.nextGaussian() * 0.02D;
                 double d1 = itemRand.nextGaussian() * 0.02D;
                 double d2 = itemRand.nextGaussian() * 0.02D;
-                worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (double)((float)pos.getX() + itemRand.nextFloat()), (double)pos.getY() + (double)itemRand.nextFloat() * 1.0f, (double)((float)pos.getZ() + itemRand.nextFloat()), d0, d1, d2, new int[0]);
+                worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (float)pos.getX() + itemRand.nextFloat(), (double)pos.getY() + (double)itemRand.nextFloat() * 1.0f, (float)pos.getZ() + itemRand.nextFloat(), d0, d1, d2);
             }
         }
     }

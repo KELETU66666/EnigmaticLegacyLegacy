@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": [
+      { "model": "enigmaticlegacy:astral_block" },
+      { "model": "enigmaticlegacy:astral_block", "y": 90 },
+      { "model": "enigmaticlegacy:astral_block", "y": 180 },
+      { "model": "enigmaticlegacy:astral_block", "y": 270 }
+    ]
+  }
+}

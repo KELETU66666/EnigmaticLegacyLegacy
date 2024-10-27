@@ -1,0 +1,12 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "enigmaticlegacy:etherium_block"
+    }
+  ],
+  "result": {
+    "item": "enigmaticlegacy:etherium_ingot",
+    "count": 9
+  }
+}

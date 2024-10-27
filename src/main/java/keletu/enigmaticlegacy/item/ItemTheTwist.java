@@ -28,6 +28,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -78,10 +79,11 @@ public class ItemTheTwist extends ItemBaseFireProof {
         if(playerIn.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemShield)
             return new ActionResult<>(EnumActionResult.PASS, stack);
 
-        if (playerIn instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) playerIn;
-            PatchouliAPI.instance.openBookGUI((EntityPlayerMP) playerIn, bookID);
-        }
+        if (Loader.isModLoaded("patchouli")) {
+            if (playerIn instanceof EntityPlayerMP)
+                PatchouliAPI.instance.openBookGUI((EntityPlayerMP) playerIn, bookID);
+        } else
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
 
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }

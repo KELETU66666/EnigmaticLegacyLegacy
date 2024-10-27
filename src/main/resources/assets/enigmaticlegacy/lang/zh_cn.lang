@@ -1,3 +1,7 @@
+#Blocks
+tile.astral_block.name=袋装星尘
+tile.etherium_block.name=以太合金块
+
 #bauble
 item.enigmatic_amulet.name=神秘护身符
 item.storage_crystal.name=超维容器

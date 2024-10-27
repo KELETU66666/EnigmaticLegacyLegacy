@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "DDD",
+    "DDD",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "enigmaticlegacy:etherium_ingot"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:etherium_block"
+  }
+}

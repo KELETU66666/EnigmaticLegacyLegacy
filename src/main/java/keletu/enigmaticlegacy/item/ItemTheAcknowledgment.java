@@ -21,6 +21,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -41,12 +42,10 @@ public class ItemTheAcknowledgment extends ItemBase {
         return bookID.equals(PatchouliAPI.instance.getOpenBookGui());
     }
 
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
-    {
+    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
         Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
 
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
-        {
+        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 3.5, 0));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.1D, 0));
         }
@@ -71,10 +70,11 @@ public class ItemTheAcknowledgment extends ItemBase {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
 
-        if (playerIn instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) playerIn;
-            PatchouliAPI.instance.openBookGUI((EntityPlayerMP) playerIn, bookID);
-        }
+        if (Loader.isModLoaded("patchouli")) {
+            if (playerIn instanceof EntityPlayerMP)
+                PatchouliAPI.instance.openBookGUI((EntityPlayerMP) playerIn, bookID);
+        } else
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
 
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }

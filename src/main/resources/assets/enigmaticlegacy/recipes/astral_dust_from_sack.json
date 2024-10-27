@@ -1,0 +1,12 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "enigmaticlegacy:astral_block"
+    }
+  ],
+  "result": {
+    "item": "enigmaticlegacy:astral_dust",
+    "count": 9
+  }
+}

@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy;
 import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.cap.PlayerPlaytimeCounter;
+import keletu.enigmaticlegacy.block.EnigmaticBaseBlock;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
@@ -18,16 +19,16 @@ import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.util.*;
 import static keletu.enigmaticlegacy.util.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
@@ -78,6 +79,9 @@ public class EnigmaticLegacy {
             return new ItemStack(theAcknowledgment);
         }
     };
+    public static Block astralBlock = new EnigmaticBaseBlock("astral_block", Material.SAND, "shovel", 0, SoundType.SAND);
+    public static Block etheriumBlock = new EnigmaticBaseBlock("etherium_block", Material.IRON, "pickaxe", 3, SoundType.METAL);
+    //public static Block endAnchorBlock = new BlockEndAnchor("end_anchor", Material.ROCK, "pickaxe", 3, SoundType.STONE);
 
     public static ItemEnigmaticAmulet enigmaticAmulet = new ItemEnigmaticAmulet();
     public static Item cursedRing = new ItemCursedRing();
@@ -177,9 +181,9 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
         //MinecraftForge.EVENT_BUS.register(new LootHandlerSpecial());
-        if(COMPAT_FORGOTTEN_RELICS)
+        if (COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
-        
+
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }
 
@@ -191,6 +195,13 @@ public class EnigmaticLegacy {
 
     @Mod.EventBusSubscriber
     public static class ObjectRegistryHandler {
+
+        @SubscribeEvent
+        public static void addBlocks(RegistryEvent.Register<Block> event) {
+            event.getRegistry().register(astralBlock);
+            event.getRegistry().register(etheriumBlock);
+            //event.getRegistry().register(endAnchorBlock);
+        }
 
         @SubscribeEvent
         public static void addItems(RegistryEvent.Register<Item> event) {
@@ -251,6 +262,10 @@ public class EnigmaticLegacy {
             event.getRegistry().register(eldritchPan);
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
+
+            event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
+            event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
+            //event.getRegistry().register(new ItemBlock(endAnchorBlock).setRegistryName("end_anchor"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 event.getRegistry().register(oblivionStone);
@@ -351,6 +366,14 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
+
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(endAnchorBlock), 0, new ModelResourceLocation(endAnchorBlock.getRegistryName(), "inventory"));
+
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(endAnchorBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(endAnchorBlock).getRegistryName(), "inventory"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

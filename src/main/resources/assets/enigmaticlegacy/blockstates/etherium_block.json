@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": [
+      { "model": "enigmaticlegacy:etherium_block" },
+      { "model": "enigmaticlegacy:etherium_block", "y": 90 },
+      { "model": "enigmaticlegacy:etherium_block", "y": 180 },
+      { "model": "enigmaticlegacy:etherium_block", "y": 270 }
+    ]
+  }
+}
