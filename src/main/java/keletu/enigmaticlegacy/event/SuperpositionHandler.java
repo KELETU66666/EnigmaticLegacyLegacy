@@ -177,6 +177,8 @@ public class SuperpositionHandler {
     }
 
     public static boolean getPersistentBoolean(EntityPlayer player, String tag, boolean value) {
+        if (!hasPersistentTag(player, tag))
+            return false;
         return Objects.equals(SuperpositionHandler.getPersistentTag(player, tag, new NBTTagByte((byte) (value ? 1 : 0))), new NBTTagByte((byte) (1)));
     }
 
@@ -369,7 +371,7 @@ public class SuperpositionHandler {
         equipmentStacks.addAll(player.inventory.armorInventory);
         for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++)
             equipmentStacks.add(BaublesApi.getBaubles(player).getStackInSlot(i));
-        
+
         return equipmentStacks;
     }
 
