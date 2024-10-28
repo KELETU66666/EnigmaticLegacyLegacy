@@ -64,7 +64,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.8.4";
+    public static final String VERSION = "0.8.5";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -81,7 +81,6 @@ public class EnigmaticLegacy {
     };
     public static Block astralBlock = new EnigmaticBaseBlock("astral_block", Material.SAND, "shovel", 0, SoundType.SAND);
     public static Block etheriumBlock = new EnigmaticBaseBlock("etherium_block", Material.IRON, "pickaxe", 3, SoundType.METAL);
-    //public static Block endAnchorBlock = new BlockEndAnchor("end_anchor", Material.ROCK, "pickaxe", 3, SoundType.STONE);
 
     public static ItemEnigmaticAmulet enigmaticAmulet = new ItemEnigmaticAmulet();
     public static Item cursedRing = new ItemCursedRing();
@@ -200,7 +199,6 @@ public class EnigmaticLegacy {
         public static void addBlocks(RegistryEvent.Register<Block> event) {
             event.getRegistry().register(astralBlock);
             event.getRegistry().register(etheriumBlock);
-            //event.getRegistry().register(endAnchorBlock);
         }
 
         @SubscribeEvent
@@ -265,7 +263,6 @@ public class EnigmaticLegacy {
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
-            //event.getRegistry().register(new ItemBlock(endAnchorBlock).setRegistryName("end_anchor"));
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 event.getRegistry().register(oblivionStone);
@@ -369,11 +366,10 @@ public class EnigmaticLegacy {
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(endAnchorBlock), 0, new ModelResourceLocation(endAnchorBlock.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(endAnchorBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(endAnchorBlock).getRegistryName(), "inventory"));
+
 
             if (COMPAT_FORGOTTEN_RELICS) {
                 oblivionStone.registerModels();

@@ -105,7 +105,7 @@ tooltip.enigmaticlegacy.theTwist1=§5在这条弃绝凡尘的道路上，
 tooltip.enigmaticlegacy.theTwist2=§5没有比这更好的知晓方式了...
 tooltip.enigmaticlegacy.theTwist3=§5对 Boss 和玩家：
 tooltip.enigmaticlegacy.theTwist4=§d修正§6第四诅咒§d：
-tooltip.enigmaticlegacy.theTwist5=§d- 总能造成全额的伤害
+tooltip.enigmaticlegacy.theTwist5=§d- 始终造成全额伤害
 tooltip.enigmaticlegacy.theTwist6=§5 对Boss和玩家的§d伤害
 tooltip.enigmaticlegacy.theTwist7=§d 击退§5
 
@@ -425,7 +425,7 @@ tooltip.enigmaticlegacy.worthyOnesOnly3=§5都在七咒的折磨下度过
 tooltip.enigmaticlegacy.worthyOnesOnly4=目前这段时间的占比为：
 
 tooltip.enigmaticlegacy.eldritchPan1=§d修正§6第四诅咒§d：
-tooltip.enigmaticlegacy.eldritchPan2=§d- 总能造成全额的伤害
+tooltip.enigmaticlegacy.eldritchPan2=§d- 始终造成全额伤害
 tooltip.enigmaticlegacy.eldritchPan3=§d 生命偷取
 tooltip.enigmaticlegacy.eldritchPan4=§d 饥饿偷取
 tooltip.enigmaticlegacy.eldritchPan4_alt=§d饥饿偷取（转化为生命）
@@ -462,3 +462,6 @@ message.enigmaticlegacy.eldritch_pan_buff=品尝了这份新的灵魂之后，�
 #Compat
 tooltip.enigmaticlegacy.compatXat1=§d修正 §6'隐藏' 诅咒§d:
 tooltip.enigmaticlegacy.compatXat2=§5- 末影人不再远距离传送到你周围
+
+tooltip.enigmaticlegacy.compatXat3=§d修正 §6第七诅咒§d:
+tooltip.enigmaticlegacy.compatXat4=§5- 你可以正常入眠

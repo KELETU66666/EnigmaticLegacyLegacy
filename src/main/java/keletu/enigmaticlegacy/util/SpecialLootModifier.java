@@ -51,7 +51,7 @@ public class SpecialLootModifier extends LootEntryTable {
     }
 
     private static LootPool getInjectPool(String entryName) {
-        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "enigmatic_inject_pool_special");
+        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(1), "enigmatic_inject_pool_special");
     }
 
     private static SpecialLootModifier getInjectEntry(String name, int weight) {

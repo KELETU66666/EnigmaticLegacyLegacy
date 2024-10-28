@@ -463,3 +463,6 @@ message.enigmaticlegacy.eldritch_pan_buff=With the taste of this new soul, The V
 #Compat
 tooltip.enigmaticlegacy.compatXat1=§dAlteration of the §6'Secret' Curse§d:
 tooltip.enigmaticlegacy.compatXat2=§5- Endermen no longer teleport to you.
+
+tooltip.enigmaticlegacy.compatXat3=§dAlteration of the §6Seventh Curse§d:
+tooltip.enigmaticlegacy.compatXat4=§5- You can sleep as normal.

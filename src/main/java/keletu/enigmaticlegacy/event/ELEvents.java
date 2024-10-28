@@ -16,6 +16,7 @@ import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
+import keletu.enigmaticlegacy.util.ModCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -801,7 +802,7 @@ public class ELEvents {
     public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player)) {
+            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
                 player.sleepTimer = 90;
             }
             if (player.isBurning() && hasCursed(player)) {
@@ -1118,26 +1119,6 @@ public class ELEvents {
             EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(player);
         }
     }
-
-    //TODO: End Anchor
-    /*@SubscribeEvent
-    public static void onPlayerRespawnOnAnchor(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent event) {
-        EntityPlayer player = event.player;
-        BlockPos pos = player.getPosition().down();
-        IBlockState state = player.world.getBlockState(pos);
-        if (SuperpositionHandler.getPersistentBoolean(player, "useAnchor", true)) {
-            if (state.getBlock() == endAnchorBlock && state.getValue(CHARGE) > 0) {
-                player.setSpawnDimension(player.world.provider.getDimension());
-                player.setSpawnPoint(pos.up(), true);
-                if (player.world.rand.nextInt(100) > 35)
-                    player.world.setBlockState(player.getPosition().down(), state.withProperty(CHARGE, state.getValue(CHARGE) - 1));
-                player.world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ENDERDRAGON_GROWL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            } else {
-                SuperpositionHandler.getPersistentBoolean(player, "useAnchor", false);
-                player.setSpawnPoint(player.world.getSpawnPoint(), true);
-            }
-        }
-    }*/
 
     @SubscribeEvent
     public static void entityJoinWorld(EntityJoinWorldEvent event) {
