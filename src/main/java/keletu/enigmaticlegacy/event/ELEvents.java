@@ -78,7 +78,6 @@ public class ELEvents {
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityPlayer, AxisAlignedBB> DESOLATION_BOXES = new WeakHashMap<>();
-    public static boolean dropEldritchAmulet = false;
     private static EntityPlayer abyssalHeartOwner;
 
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
