@@ -134,17 +134,19 @@ public class ELEvents {
                     break;
                 }
             }
-
+            double y = dimPoint.getPosY() + 1.5;
+            if(y < 0)
+                y = 3;
             if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player)) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), soulCrystal);
+                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedSoulCrystal);
                 EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
             } else if (found && !event.getDrops().isEmpty() && ELConfigs.vesselEnabled) {
                 ItemStack soulCrystal = SuperpositionHandler.shouldPlayerDropSoulCrystal(player) ? EnigmaticLegacy.soulCrystal.createCrystalFrom(player) : null;
                 ItemStack storageCrystal = EnigmaticLegacy.storageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
-                EntityItemSoulCrystal droppedStorageCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), storageCrystal);
+                EntityItemSoulCrystal droppedStorageCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), storageCrystal);
                 droppedStorageCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedStorageCrystal);
                 EnigmaticLegacy.logger.info("Summoned Extradimensional Storage Crystal for " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
@@ -156,7 +158,7 @@ public class ELEvents {
 
             } else if (SuperpositionHandler.shouldPlayerDropSoulCrystal(player)) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), dimPoint.getPosY() + 1.5, dimPoint.getPosZ(), soulCrystal);
+                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedSoulCrystal);
                 EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
