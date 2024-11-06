@@ -1,16 +1,21 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
+import baubles.api.render.IRenderBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -22,7 +27,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class ItemEnigmaticAmulet extends ItemBaseBauble {
+public class ItemEnigmaticAmulet extends ItemBaseBauble implements IRenderBauble {
+
+    @SideOnly(Side.CLIENT)
+    private static ModelBiped model;
+
     public ItemEnigmaticAmulet() {
         super("enigmatic_amulet", EnumRarity.RARE);
         this.setHasSubtypes(true);
@@ -64,6 +73,10 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
         else return super.getTranslationKey();
     }
 
+    @Override
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+        return super.canEquip(itemstack, player) && itemstack.getMetadata() != 0;
+    }
 
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase living) {
@@ -127,5 +140,55 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
             if (getMetadata(stack) == 0) {
                 setDamage(stack, worldIn.rand.nextInt(7) + 1);
             }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getRenderTexture(ItemStack stack) {
+        int color = stack.getMetadata();
+        String x;
+        switch (color) {
+            case 1:
+                x = "red";
+                break;
+            case 2:
+                x = "aqua";
+                break;
+            case 3:
+                x = "violet";
+                break;
+            case 4:
+                x = "magenta";
+                break;
+            case 5:
+                x = "green";
+                break;
+            case 6:
+                x = "black";
+                break;
+            case 7:
+                x = "blue";
+                break;
+            default:
+                x = "red";
+        }
+        return new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_" + x + ".png");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, RenderType renderType, float v) {
+        if (renderType == RenderType.BODY) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(getRenderTexture(itemStack));
+            Helper.rotateIfSneaking(entityPlayer);
+            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+            GlStateManager.translate(0, 0, armor ? -0.075 : -0.02);
+
+            float s = 1.05F / 16F;
+            GlStateManager.scale(s, s, s);
+            if (model == null)
+                model = new ModelBiped();
+
+            model.bipedBody.render(1F);
+        }
     }
 }

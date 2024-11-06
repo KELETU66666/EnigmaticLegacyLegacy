@@ -11,10 +11,7 @@ import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
-import keletu.enigmaticlegacy.item.ItemEldritchPan;
-import keletu.enigmaticlegacy.item.ItemInfernalShield;
-import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.ModCompat;
 import net.minecraft.block.Block;
@@ -47,6 +44,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -268,6 +266,13 @@ public class ELEvents {
 
     public static float getMissingHealthPool(EntityPlayer player) {
         return (player.getMaxHealth() - Math.min(player.getHealth(), player.getMaxHealth())) / player.getMaxHealth();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+        ItemEnigmaticEye.textureAtlasEye = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "items/enigmatic_eye"));
+        ItemEldritchAmulet.textureAtlasEldritch = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "models/layer/amulet_eldritch"));
     }
 
     @SubscribeEvent(priority = HIGH)

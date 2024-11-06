@@ -183,6 +183,9 @@ public class EnigmaticLegacy {
         if (COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
 
+        if (event.getSide().isClient()) {
+            MinecraftForge.EVENT_BUS.register(new LayerScroll());
+        }
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }
 

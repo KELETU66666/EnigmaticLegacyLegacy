@@ -2,11 +2,19 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
+import baubles.api.render.IRenderBauble;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
+import keletu.enigmaticlegacy.util.IconHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -25,6 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,7 +46,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemEldritchAmulet extends ItemBaseBauble {
+public class ItemEldritchAmulet extends ItemBaseBauble implements IRenderBauble {
+
+    @SideOnly(Side.CLIENT)
+    private static ModelBiped model;
 
     public ItemEldritchAmulet() {
         super("eldritch_amulet", EnumRarity.EPIC);
@@ -170,4 +183,46 @@ public class ItemEldritchAmulet extends ItemBaseBauble {
         return hadTag;
     }
 
+    @SideOnly(Side.CLIENT)
+    public static TextureAtlasSprite textureAtlasEldritch;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
+        GlStateManager.pushMatrix();
+        if(renderType == RenderType.BODY) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            Helper.rotateIfSneaking(entityPlayer);
+            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+            GlStateManager.scale(0.5, 0.5, 0.5);
+            GlStateManager.rotate(180, 0, 0, 1);
+            GlStateManager.translate(-0.5, -0.90, armor ? -0.4 : -0.25);
+
+            TextureAtlasSprite gemIcon = textureAtlasEldritch;
+            float f = gemIcon.getMinU();
+            float f1 = gemIcon.getMaxU();
+            float f2 = gemIcon.getMinV();
+            float f3 = gemIcon.getMaxV();
+            IconHelper.renderIconIn3D(Tessellator.getInstance(), f1, f2, f, f3, gemIcon.getIconWidth(), gemIcon.getIconHeight(), 1F / 32F);
+        }
+        GlStateManager.popMatrix();
+        onPlayerBaubleRenderChain(itemStack, entityPlayer, renderType, v);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void onPlayerBaubleRenderChain(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
+        if (renderType == IRenderBauble.RenderType.BODY) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_eldritch_chain.png"));
+            IRenderBauble.Helper.rotateIfSneaking(entityPlayer);
+            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+            GlStateManager.translate(0, 0, armor ? -0.075 : 0);
+
+            float s = 1.05F / 16F;
+            GlStateManager.scale(s, s, s);
+            if (model == null)
+                model = new ModelBiped();
+
+            model.bipedBody.render(1F);
+        }
+    }
 }
