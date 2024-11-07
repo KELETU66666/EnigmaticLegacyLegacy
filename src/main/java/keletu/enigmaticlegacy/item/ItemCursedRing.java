@@ -8,7 +8,7 @@ import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
-import keletu.enigmaticlegacy.util.ModCompat;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

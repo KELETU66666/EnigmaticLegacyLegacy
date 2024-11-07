@@ -4,7 +4,8 @@ import baubles.api.BaubleType;
 import baubles.api.render.IRenderBauble;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import keletu.enigmaticlegacy.util.IconHelper;
+import keletu.enigmaticlegacy.util.Quote;
+import keletu.enigmaticlegacy.util.helper.IconHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,6 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
@@ -32,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble{
+public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble {
 
     public ItemEnigmaticEye() {
         super("enigmatic_eye", EnumRarity.EPIC);
@@ -98,6 +100,7 @@ public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble{
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
     }
+
     @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
         EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);
@@ -120,6 +123,8 @@ public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble{
 
         if (stack.getItemDamage() == 0) {
             stack.setItemDamage(1);
+            if (player instanceof EntityPlayerMP)
+                Quote.getRandom(Quote.NARRATOR_INTROS).playWithoutLimit((EntityPlayerMP) player, 60);
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         } else
             return new ActionResult<>(EnumActionResult.FAIL, stack);
@@ -131,8 +136,7 @@ public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble{
     @Override
     @SideOnly(Side.CLIENT)
     public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
-        if(renderType == IRenderBauble.RenderType.BODY)
-        {
+        if (renderType == IRenderBauble.RenderType.BODY) {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
             IRenderBauble.Helper.rotateIfSneaking(entityPlayer);

@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item.etherium;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
+import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

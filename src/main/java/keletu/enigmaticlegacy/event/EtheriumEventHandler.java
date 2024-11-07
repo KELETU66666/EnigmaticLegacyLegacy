@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.event;
 
-import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.item.etherium.EtheriumArmor;
+import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;

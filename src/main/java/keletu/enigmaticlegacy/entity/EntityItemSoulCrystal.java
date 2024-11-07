@@ -22,10 +22,10 @@ package keletu.enigmaticlegacy.entity;
 
 import com.google.common.base.Optional;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.item.ItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemStorageCrystal;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

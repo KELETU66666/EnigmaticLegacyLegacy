@@ -9,7 +9,7 @@ import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.event.ELEvents;
-import keletu.enigmaticlegacy.util.IconHelper;
+import keletu.enigmaticlegacy.util.helper.IconHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;

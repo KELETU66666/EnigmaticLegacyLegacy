@@ -7,7 +7,7 @@ import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
-import keletu.enigmaticlegacy.util.ILootingBonus;
+import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

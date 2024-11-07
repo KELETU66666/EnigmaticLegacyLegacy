@@ -6,9 +6,9 @@ import baubles.api.render.IRenderBauble;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.core.ItemNBTHelper;
-import keletu.enigmaticlegacy.util.IFortuneBonus;
-import keletu.enigmaticlegacy.util.IconHelper;
+import keletu.enigmaticlegacy.util.helper.IconHelper;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
+import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -98,7 +98,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus, IR
     }
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
-        attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64d2e"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
+        attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64dde"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
         attributes.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b53"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
     }
 

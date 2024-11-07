@@ -4,6 +4,7 @@ import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.cap.PlayerPlaytimeCounter;
 import keletu.enigmaticlegacy.block.EnigmaticBaseBlock;
+import keletu.enigmaticlegacy.client.LayerScroll;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
@@ -16,9 +17,16 @@ import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
-import keletu.enigmaticlegacy.util.*;
-import static keletu.enigmaticlegacy.util.ModCompat.COMPAT_FORGOTTEN_RELICS;
+import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
+import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
+import keletu.enigmaticlegacy.util.Quote;
+import keletu.enigmaticlegacy.util.QuoteHandler;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
+import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
+import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
+import keletu.enigmaticlegacy.util.loot.LootHandler;
+import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -48,6 +56,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -165,6 +174,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
+        packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
 
@@ -179,12 +189,17 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
+        for(Quote quote : Quote.getAllQuotes())
+        {
+            ForgeRegistries.SOUND_EVENTS.register(quote.getSound());
+        }
         //MinecraftForge.EVENT_BUS.register(new LootHandlerSpecial());
         if (COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new LayerScroll());
+            MinecraftForge.EVENT_BUS.register(QuoteHandler.INSTANCE);
         }
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }

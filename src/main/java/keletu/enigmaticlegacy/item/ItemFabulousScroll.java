@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.ELConfigs;
-import keletu.enigmaticlegacy.core.ExperienceHelper;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
+import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

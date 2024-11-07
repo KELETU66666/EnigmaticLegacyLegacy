@@ -108,7 +108,6 @@ dependencies {
     implementation rfg.deobf("curse.maven:patchouli-306770:3162874")
 
     implementation rfg.deobf("curse.maven:trinkets-and-baubles-279900:5717039")
-    implementation files("libs/tombmanygraves2api-1.12.2-1.0.0.jar")
 
     if (project.use_mixins.toBoolean()) {
         // Change your mixin refmap name here:

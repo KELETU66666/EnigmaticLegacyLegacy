@@ -11,9 +11,13 @@ import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
+import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
+import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
+import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
-import keletu.enigmaticlegacy.util.ModCompat;
+import keletu.enigmaticlegacy.util.Quote;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -44,6 +48,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.WorldProviderEnd;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -77,7 +83,7 @@ public class ELEvents {
     private static final String SPAWN_WITH_CURSE = EnigmaticLegacy.MODID + ".cursedring";
     public static final Map<EntityPlayer, AxisAlignedBB> DESOLATION_BOXES = new WeakHashMap<>();
     private static EntityPlayer abyssalHeartOwner;
-
+    public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
 
     @SubscribeEvent
@@ -132,7 +138,7 @@ public class ELEvents {
                 }
             }
             double y = dimPoint.getPosY() + 1.5;
-            if(y < 0)
+            if (y < 0)
                 y = 3;
             if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player)) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
@@ -445,11 +451,57 @@ public class ELEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerTravel(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.player instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.player;
+            //LAST_SOUL_COMPASS_UPDATE.remove(player);
+
+            if (event.player.world.provider instanceof WorldProviderHell) {
+                Quote.SULFUR_AIR.playOnceIfUnlocked(player, 240);
+            } else if (event.player.world.provider instanceof WorldProviderEnd) {
+                Quote.TORTURED_ROCKS.playOnceIfUnlocked(player, 240);
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void onConfirmedDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+
+            if (event.isCanceled()) {
+                return;
+            }
+
+            SuperpositionHandler.setPersistentBoolean(player, "DeathFromEntity", event.getSource().getTrueSource() instanceof EntityLivingBase);
+        }
+
         if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
             EntityPlayerMP attacker = (EntityPlayerMP) event.getSource().getTrueSource();
             ItemStack weapon = attacker.getHeldItemMainhand();
+
+            if (event.getEntity() instanceof EntityWither) {
+                int killedWither = SuperpositionHandler.getPersistentInteger(attacker, "TimesKilledWither", 0);
+
+                if (killedWither <= 0) {
+                    Quote.BREATHES_RELIEVED.play(attacker, 140);
+                    killedWither++;
+                } else if (killedWither == 1) {
+                    Quote.APPALING_PRESENCE.play(attacker, 140);
+                    killedWither++;
+                } else if (killedWither == 2) {
+                    Quote.TERRIFYING_FORM.play(attacker, 140);
+                    killedWither++;
+                } else if (killedWither > 2 && killedWither < 5) {
+                    killedWither++;
+                } else if (killedWither == 4) {
+                    Quote.WHETHER_IT_IS.play(attacker, 140);
+                    killedWither++;
+                }
+
+                SuperpositionHandler.setPersistentInteger(attacker, "TimesKilledWither", killedWither);
+            }
 
             if (weapon.getItem().equals(eldritchPan)) {
                 ResourceLocation killedType = EntityList.getKey(event.getEntity());
@@ -459,6 +511,7 @@ public class ELEvents {
                 }
             }
         }
+
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -680,6 +733,71 @@ public class ELEvents {
                 event.getToolTip().add(2, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly2"));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onEndPortal(EndPortalActivatedEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            Quote.END_DOORSTEP.playOnceIfUnlocked(player, 40);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntitySummon(SummonedEntityEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            if (event.getSummonedEntity() instanceof EntityWither) {
+                Quote.COUNTLESS_DEAD.playOnceIfUnlocked(player, 20);
+            } else if (event.getSummonedEntity() instanceof EntityDragon) {
+                Quote.HORRIBLE_EXISTENCE.playOnceIfUnlocked(player, 100);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEnteredBlock(EnterBlockEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP && event.getBlockState().getBlock() == Blocks.END_GATEWAY) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            Quote.I_WANDERED.playOnceIfUnlocked(player, 160);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent event) {
+        EntityPlayer player = event.player;
+
+        /*
+         * Handler for re-enabling disabled Curio slots that are supposed to be
+         * permanently unlocked, when the player respawns.
+         */
+
+        if (!player.world.isRemote) {
+            //LAST_SOUL_COMPASS_UPDATE.remove(player);
+
+            if (!event.isEndConquered()) {
+                if (SuperpositionHandler.getPersistentBoolean(player, "DestroyedCursedRing", false)) {
+                    SuperpositionHandler.removePersistentTag(player, "DestroyedCursedRing");
+                    Quote.getRandom(Quote.RING_DESTRUCTION).playIfUnlocked((EntityPlayerMP) player, 10);
+                } else if (THEY_SEE_ME_ROLLIN.nextDouble() > 0.2)
+                    if (SuperpositionHandler.getPersistentBoolean(player, "DeathFromEntity", false)) {
+                        Quote.getRandom(Quote.DEATH_QUOTES_ENTITY).playIfUnlocked((EntityPlayerMP) player, 10);
+                    } else {
+                        Quote.getRandom(Quote.DEATH_QUOTES).playIfUnlocked((EntityPlayerMP) player, 10);
+                    }
+                //if (!player.world.getGameRules().getBoolean("keepInventory")) {
+                //    if (SuperpositionHandler.hasPersistentTag(player, EnigmaticEventHandler.NBT_KEY_ENABLESCROLL)) {
+                //        SuperpositionHandler.unlockSpecialSlot("scroll", event.getEntity());
+                //    }
+                //    if (SuperpositionHandler.hasPersistentTag(player, EnigmaticEventHandler.NBT_KEY_ENABLESPELLSTONE)) {
+                //        SuperpositionHandler.unlockSpecialSlot("spellstone", event.getEntity());
+                //    }
+                //}
+            }
+
+            // SuperpositionHandler.setCurrentWorldCursed(SuperpositionHandler.isTheCursedOne(player));
+        }
+
     }
 
     @SubscribeEvent
@@ -948,11 +1066,17 @@ public class ELEvents {
             }
         }
 
-        if (event.getEntityLiving() instanceof EntityMob) {
-            EntityMob monster = (EntityMob) event.getEntityLiving();
+        if (event.getEntityLiving() instanceof EntityMob || event.getEntityLiving() instanceof EntityDragon) {
+            EntityLiving monster = (EntityLiving) event.getEntityLiving();
 
             if (event.getSource().getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+
+                if (monster instanceof EntityDragon && player instanceof EntityPlayerMP) {
+                    EntityPlayerMP splayer = (EntityPlayerMP) player;
+                    Quote.POOR_CREATURE.playOnceIfUnlocked(splayer, 60);
+                }
+
                 /*
                  * Handler for damage bonuses of Charm of Monster Slayer.
                  */
@@ -1072,6 +1196,11 @@ public class ELEvents {
                 abyssalHeartOwner = null;
 
             }
+
+            List<EntityPlayerMP> players = dragon.world.getEntitiesWithinAABB(EntityPlayerMP.class,
+                    SuperpositionHandler.getBoundingBoxAroundEntity(dragon, 256));
+
+            players.forEach(player -> Quote.WITH_DRAGONS.playOnceIfUnlocked(player, 140));
         }
     }
 

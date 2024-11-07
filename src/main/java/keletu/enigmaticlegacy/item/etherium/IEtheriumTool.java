@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.item.etherium;
 
-import keletu.enigmaticlegacy.core.ItemNBTHelper;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;

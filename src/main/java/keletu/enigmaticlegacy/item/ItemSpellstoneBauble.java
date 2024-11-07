@@ -6,7 +6,7 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.util.ISpellstone;
+import keletu.enigmaticlegacy.util.interfaces.ISpellstone;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;

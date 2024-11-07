@@ -1,0 +1,286 @@
+{
+  "misc.hhon": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/hhon"
+      }
+    ]
+  },
+  "misc.hhoff": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/hhoff"
+      }
+    ]
+  },
+  "misc.deflect": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/deflect"
+      }
+    ]
+  },
+  "misc.learn": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/learn"
+      }
+    ]
+  },
+  "misc.sword_hit_reject": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/sword_hit_reject"
+      }
+    ]
+  },
+  "misc.shield_trigger": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/shield_hit_0"
+      },
+      {
+        "name": "enigmaticlegacy:misc/shield_hit_1"
+      }
+    ]
+  },
+  "misc.pan_clang": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/pan_clang_1"
+      },
+      {
+        "name": "enigmaticlegacy:misc/pan_clang_2"
+      },
+      {
+        "name": "enigmaticlegacy:misc/pan_clang_3"
+      }
+    ]
+  },
+  "misc.pan_clang_fr": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/pan_clang_fr"
+      }
+    ]
+  },
+  "misc.uneat": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/uneat1"
+      },
+      {
+        "name": "enigmaticlegacy:misc/uneat2"
+      },
+      {
+        "name": "enigmaticlegacy:misc/uneat3"
+      }
+    ]
+  },
+  "misc.write": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:misc/write1"
+      },
+      {
+        "name": "enigmaticlegacy:misc/write2"
+      }
+    ]
+  },
+  "quote.no_peril": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/no_peril"
+      }
+    ]
+  },
+  "quote.i_wandered": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/i_wandered"
+      }
+    ]
+  },
+  "quote.another_demigod": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/another_demigod"
+      }
+    ]
+  },
+  "quote.another_eon": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/another_eon"
+      }
+    ]
+  },
+  "quote.death_may": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/death_may"
+      }
+    ]
+  },
+  "quote.demise_is": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/demise_is"
+      }
+    ]
+  },
+  "quote.end_doorstep": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/end_doorstep"
+      }
+    ]
+  },
+  "quote.eternity_to_keep": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/eternity_to_keep"
+      }
+    ]
+  },
+  "quote.oblivion_rejects": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/oblivion_rejects"
+      }
+    ]
+  },
+  "quote.only_because": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/only_because"
+      }
+    ]
+  },
+  "quote.perhaps_you": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/perhaps_you"
+      }
+    ]
+  },
+  "quote.setback": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/setback"
+      }
+    ]
+  },
+  "quote.sulfur_air": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/sulfur_air"
+      }
+    ]
+  },
+  "quote.tortured_rocks": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/tortured_rocks"
+      }
+    ]
+  },
+  "quote.violence_calls": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/violence_calls"
+      }
+    ]
+  },
+  "quote.we_fall": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/we_fall"
+      }
+    ]
+  },
+  "quote.you_will_endure": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/you_will_endure"
+      }
+    ]
+  },
+  "quote.immortal": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/immortal"
+      }
+    ]
+  },
+  "quote.appaling_presence": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/appaling_presence"
+      }
+    ]
+  },
+  "quote.toll_paid": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/toll_paid"
+      }
+    ]
+  },
+  "quote.its_destruction": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/its_destruction"
+      }
+    ]
+  },
+  "quote.breathes_relieved": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/breathes_relieved"
+      }
+    ]
+  },
+  "quote.whether_it_is": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/whether_it_is"
+      }
+    ]
+  },
+  "quote.poor_creature": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/poor_creature"
+      }
+    ]
+  },
+  "quote.horrible_existence": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/horrible_existence"
+      }
+    ]
+  },
+  "quote.countless_dead": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/countless_dead"
+      }
+    ]
+  },
+  "quote.with_dragons": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/with_dragons"
+      }
+    ]
+  },
+  "quote.terrifying_form": {
+    "sounds": [
+      {
+        "name": "enigmaticlegacy:quote/terrifying_form"
+      }
+    ]
+  }
+}

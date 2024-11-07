@@ -9,10 +9,10 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
-import keletu.enigmaticlegacy.core.Vector3;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -52,6 +52,12 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+
+    public static SoundEvent registerSound(String name) {
+        ResourceLocation location = new ResourceLocation(EnigmaticLegacy.MODID, name);
+        return new SoundEvent(location).setRegistryName(name);
+    }
 
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);

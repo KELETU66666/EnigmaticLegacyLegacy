@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.item;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.angelBlessingDeflectChance;
 import static keletu.enigmaticlegacy.ELConfigs.angelBlessingSpellstoneCooldown;
-import keletu.enigmaticlegacy.core.Vector3;
+import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.core.ExperienceHelper;
-import keletu.enigmaticlegacy.core.ItemNBTHelper;
+import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;

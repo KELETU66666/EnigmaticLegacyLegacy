@@ -1,9 +1,9 @@
 package keletu.enigmaticlegacy.item.etherium;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.core.ItemNBTHelper;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.event.EtheriumEventHandler;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
