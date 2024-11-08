@@ -1,17 +1,10 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import baubles.api.render.IRenderBauble;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.util.Quote;
-import keletu.enigmaticlegacy.util.helper.IconHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -20,7 +13,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -34,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble {
+public class ItemEnigmaticEye extends ItemBaseBauble {
 
     public ItemEnigmaticEye() {
         super("enigmatic_eye", EnumRarity.EPIC);
@@ -128,32 +120,5 @@ public class ItemEnigmaticEye extends ItemBaseBauble implements IRenderBauble {
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         } else
             return new ActionResult<>(EnumActionResult.FAIL, stack);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static TextureAtlasSprite textureAtlasEye;
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
-        if (renderType == IRenderBauble.RenderType.BODY) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
-            IRenderBauble.Helper.rotateIfSneaking(entityPlayer);
-            IRenderBauble.Helper.translateToChest();
-            IRenderBauble.Helper.defaultTransforms();
-
-            GlStateManager.rotate(180, 0, 1, 0);
-            GlStateManager.translate(-0.4, -6 / 16D, armor ? -1 / 16D : 1 / 16D);
-            GlStateManager.scale(0.25, 0.25, 0.25);
-
-            TextureAtlasSprite gemIcon = textureAtlasEye;
-            float f = gemIcon.getMinU();
-            float f1 = gemIcon.getMaxU();
-            float f2 = gemIcon.getMinV();
-            float f3 = gemIcon.getMaxV();
-            IconHelper.renderIconIn3D(Tessellator.getInstance(), f1, f2, f, f3, gemIcon.getIconWidth(), gemIcon.getIconHeight(), 0.1F);
-        }
-
     }
 }

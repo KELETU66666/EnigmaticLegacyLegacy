@@ -109,7 +109,6 @@ public class ItemHeavenScroll extends ItemScrollBauble {
             }
 
         } catch (NullPointerException ex) {
-            ex.printStackTrace();
             this.flyMap.put(player, 0);
         }
     }

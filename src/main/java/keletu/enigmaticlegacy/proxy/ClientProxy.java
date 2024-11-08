@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.proxy;
 
 import keletu.enigmaticlegacy.client.LayerAmulet;
+import keletu.enigmaticlegacy.client.LayerCharm;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -60,6 +61,7 @@ public class ClientProxy extends CommonProxy{
     private static void addLayersToSkin(RenderPlayer renderPlayer) {
         //renderPlayer.addLayer(new LayerDrinkingHat(renderPlayer));
         renderPlayer.addLayer(new LayerAmulet(renderPlayer));
+        renderPlayer.addLayer(new LayerCharm(renderPlayer));
         //renderPlayer.addLayer(new LayerBelt(renderPlayer));
         //renderPlayer.addLayer(new LayerCloak(renderPlayer));
         //renderPlayer.addLayer(new LayerNightVisionGoggles(renderPlayer));

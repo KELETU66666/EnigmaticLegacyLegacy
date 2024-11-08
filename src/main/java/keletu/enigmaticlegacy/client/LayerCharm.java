@@ -3,7 +3,6 @@ package keletu.enigmaticlegacy.client;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -11,17 +10,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class LayerAmulet extends LayerBauble {
-    private static final ResourceLocation FLAME_TEXTURE = new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_ascension.png");
-    private static final ResourceLocation THORN_TEXTURE = new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_eldritch.png");
+public class LayerCharm extends LayerBauble {
+    private static final ResourceLocation MONSTER_CHARM = new ResourceLocation(EnigmaticLegacy.MODID, "textures/items/monster_charm.png");
+    private static final ResourceLocation MINING_CHARM = new ResourceLocation(EnigmaticLegacy.MODID, "textures/items/mining_charm.png");
+    private static final ResourceLocation BERSERK_EMBLEM = new ResourceLocation(EnigmaticLegacy.MODID, "textures/items/berserk_emblem.png");
+    private static final ResourceLocation ENIGMATIC_EYE = new ResourceLocation(EnigmaticLegacy.MODID, "textures/items/enigmatic_eye.png");
 
-    public LayerAmulet(RenderPlayer renderPlayer) {
+    public LayerCharm(RenderPlayer renderPlayer) {
         super(renderPlayer);
     }
 
@@ -52,52 +51,20 @@ public class LayerAmulet extends LayerBauble {
     }
 
     private ModelBase setTexturesGetModel(EntityPlayer player) {
-        ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.AMULET.getValidSlots()[0]);
+        ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.CHARM.getValidSlots()[0]);
         if (BaublesApi.isBaubleEquipped(player, stack.getItem()) == -1) return null;
         ResourceLocation textures = getTextures(stack);
         if (textures != null) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(textures);
-            return new ModelAmulet(stack);
+            return new ModelCharm(textures, stack);
         }
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getRenderTexture(ItemStack stack) {
-        int color = stack.getMetadata();
-        String x;
-        switch (color) {
-            case 1:
-                x = "red";
-                break;
-            case 2:
-                x = "aqua";
-                break;
-            case 3:
-                x = "violet";
-                break;
-            case 4:
-                x = "magenta";
-                break;
-            case 5:
-                x = "green";
-                break;
-            case 6:
-                x = "black";
-                break;
-            case 7:
-                x = "blue";
-                break;
-            default:
-                x = "red";
-        }
-        return new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_" + x + ".png");
-    }
-
     private @Nullable ResourceLocation getTextures(ItemStack stack) {
-        if (stack.getItem() == EnigmaticLegacy.enigmaticAmulet) return getRenderTexture(stack);
-        else if (stack.getItem() == EnigmaticLegacy.ascensionAmulet) return FLAME_TEXTURE;
-        else if (stack.getItem() == EnigmaticLegacy.eldritchAmulet) return THORN_TEXTURE;
+        if (stack.getItem() == EnigmaticLegacy.monsterCharm) return MONSTER_CHARM;
+        else if (stack.getItem() == EnigmaticLegacy.miningCharm) return MINING_CHARM;
+        else if (stack.getItem() == EnigmaticLegacy.berserkEmblem) return BERSERK_EMBLEM;
+        else if (stack.getItem() == EnigmaticLegacy.enigmaticEye) return ENIGMATIC_EYE;
         else return null;
     }
 }

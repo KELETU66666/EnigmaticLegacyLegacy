@@ -2,17 +2,12 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.render.IRenderBauble;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.util.helper.IconHelper;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,11 +16,13 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus, IRenderBauble {
+public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
 
     public final int nightVisionDuration = 210;
 
@@ -140,23 +137,5 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus, IR
     @Override
     public int bonusLevelFortune() {
         return 1;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
-        if(renderType == IRenderBauble.RenderType.BODY)
-        {
-            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
-            IRenderBauble.Helper.rotateIfSneaking(entityPlayer);
-            IRenderBauble.Helper.translateToChest();
-            IRenderBauble.Helper.defaultTransforms();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(EnigmaticLegacy.MODID, "textures/items/mining_charm.png"));
-            GlStateManager.rotate(180, 0, 1, 0);
-            GlStateManager.translate(-0.4, -6 / 16D, armor ? -1 / 16D : 1 / 16D);
-            GlStateManager.scale(0.25, 0.25, 0.25);
-            IconHelper.renderIconIn3D(Tessellator.getInstance(), 0.0f, 0.0f, 1.0f, 1.0f, 256, 256, 0.1f);
-        }
-
     }
 }

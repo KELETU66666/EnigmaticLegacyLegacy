@@ -9,6 +9,7 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.client.ModelCharm;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
@@ -277,7 +278,7 @@ public class ELEvents {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        ItemEnigmaticEye.textureAtlasEye = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "items/enigmatic_eye"));
+        ModelCharm.textureAtlasEye = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "items/enigmatic_eye"));
     }
 
     @SubscribeEvent(priority = HIGH)
