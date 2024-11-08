@@ -11,11 +11,13 @@ import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
+import keletu.enigmaticlegacy.event.ELEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
 import keletu.enigmaticlegacy.key.EnderChestRingHandler;
 import keletu.enigmaticlegacy.packet.*;
+import keletu.enigmaticlegacy.proxy.ClientProxy;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
 import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
@@ -52,6 +54,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -114,7 +117,7 @@ public class EnigmaticLegacy {
     public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
-    public static Item heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
+    public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
     //Material
@@ -200,6 +203,7 @@ public class EnigmaticLegacy {
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new LayerScroll());
             MinecraftForge.EVENT_BUS.register(QuoteHandler.INSTANCE);
+            ClientProxy.addRenderLayers();
         }
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
     }
@@ -209,6 +213,27 @@ public class EnigmaticLegacy {
         if (ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
     }
+
+    @Mod.EventHandler
+    private void onServerStart(FMLServerAboutToStartEvent event) {
+        performCleanup();
+    }
+
+    public void performCleanup() {
+        // TODO Figure something out with those multimaps
+        // I'd really like there to be a weak multimap or something
+
+        //proxy.clearTransientData();
+        //ELEvents.angeredGuardians.clear();
+        //ELEvents.postmortalPossession.clear();
+        ELEvents.knockbackThatBastard.clear();
+        //ELEvents.deferredToast.clear();
+        soulCrystal.attributeDispatcher.clear();
+        //enigmaticItem.flightMap.clear();
+        heavenScroll.flyMap.clear();
+        //RegisteredMeleeAttack.clearRegistry();
+    }
+
 
     @Mod.EventBusSubscriber
     public static class ObjectRegistryHandler {
@@ -398,6 +423,7 @@ public class EnigmaticLegacy {
 
             RenderingRegistry.registerEntityRenderingHandler(EntityItemSoulCrystal.class, manager -> new RenderEntitySoulCrystal(manager, Minecraft.getMinecraft().getRenderItem()));
         }
+
     }
 
 }

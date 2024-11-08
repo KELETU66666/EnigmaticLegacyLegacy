@@ -1,13 +1,17 @@
 package keletu.enigmaticlegacy.proxy;
 
+import keletu.enigmaticlegacy.client.LayerAmulet;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Map;
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
@@ -44,5 +48,21 @@ public class ClientProxy extends CommonProxy{
                 worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (float)pos.getX() + random.nextFloat(), (double)pos.getY() + (double)random.nextFloat() * 1.0f, (float)pos.getZ() + random.nextFloat(), d0, d1, d2);
             }
         }
+    }
+
+    public static void addRenderLayers() {
+        Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+
+        addLayersToSkin(skinMap.get("default"));
+        addLayersToSkin(skinMap.get("slim"));
+    }
+
+    private static void addLayersToSkin(RenderPlayer renderPlayer) {
+        //renderPlayer.addLayer(new LayerDrinkingHat(renderPlayer));
+        renderPlayer.addLayer(new LayerAmulet(renderPlayer));
+        //renderPlayer.addLayer(new LayerBelt(renderPlayer));
+        //renderPlayer.addLayer(new LayerCloak(renderPlayer));
+        //renderPlayer.addLayer(new LayerNightVisionGoggles(renderPlayer));
+        //renderPlayer.addLayer(new LayerSnorkel(renderPlayer));
     }
 }

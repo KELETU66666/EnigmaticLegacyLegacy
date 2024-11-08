@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaublesApi;
-import keletu.enigmaticlegacy.ELConfigs;
+import static keletu.enigmaticlegacy.ELConfigs.flyingScrollXpCostModifier;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
@@ -52,6 +52,10 @@ public class ItemHeavenScroll extends ItemScrollBauble {
         return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && super.canEquip(itemstack, player);
     }
 
+    protected boolean shouldCheckXpDrain(EntityPlayer player) {
+        return !player.isCreative() && player.capabilities.isFlying;
+    }
+
     @Override
     public void onWornTick(ItemStack stack, EntityLivingBase entityLivingBase) {
         if (entityLivingBase.world.isRemote)
@@ -60,25 +64,36 @@ public class ItemHeavenScroll extends ItemScrollBauble {
         if (entityLivingBase instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityLivingBase;
 
-            if (Math.random() <= (this.baseXpConsumptionProbability * ELConfigs.flyingScrollXpCostModifier) && player.capabilities.isFlying) {
-                ExperienceHelper.drainPlayerXP(player, 1);
+            //since we don't need to check if in range of beacon here, we can run this xp check every frame.
+            if (this.shouldCheckXpDrain(player) && Math.random() <= this.baseXpConsumptionProbability) {
+                //hook into xp cost modifier from config.
+                if (ExperienceHelper.getPlayerXP(player) >= flyingScrollXpCostModifier)
+                    ExperienceHelper.drainPlayerXP(player, (int) flyingScrollXpCostModifier);
             }
 
-            this.handleFlight(player);
+            // we pass false here, because we only want heaven scroll to check beacon
+            // range once per 20 ticks which is handled in the below function.
+            this.handleFlight(player, false);
         }
 
     }
 
-    protected void handleFlight(EntityPlayer player) {
+    protected boolean canFly(EntityPlayer player, boolean inRangeCheckedAndSucceeded) {
+        return ExperienceHelper.getPlayerXP(player) >= flyingScrollXpCostModifier && (inRangeCheckedAndSucceeded || SuperpositionHandler.isInBeaconRange(player));
+    }
+
+    protected void handleFlight(EntityPlayer player, boolean inRangeCheckedAndSucceeded) {
+        //don't check in range every tick as it is expensive. Particularly for multiple people.
+        //instead, check once per second, based on the player's tick count
+        //If we're here from fabulous scroll, we automatically know we can skip this
+        if (player.ticksExisted % 20 != 0)
+            return;
+
         try {
-            if (ExperienceHelper.getPlayerXP(player) > 0 && SuperpositionHandler.isInBeaconRange(player)) {
-
-                if (!player.capabilities.allowFlying) {
-                    player.capabilities.allowFlying = true;
-                }
-
+            if (this.canFly(player, inRangeCheckedAndSucceeded)) {
+                player.capabilities.allowFlying = true;
                 player.sendPlayerAbilities();
-                this.flyMap.put(player, 100);
+                this.flyMap.put(player, 5);
 
             } else if (this.flyMap.get(player) > 1) {
                 this.flyMap.put(player, this.flyMap.get(player) - 1);
@@ -94,6 +109,7 @@ public class ItemHeavenScroll extends ItemScrollBauble {
             }
 
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
             this.flyMap.put(player, 0);
         }
     }

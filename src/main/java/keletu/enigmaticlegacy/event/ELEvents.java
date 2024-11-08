@@ -278,7 +278,6 @@ public class ELEvents {
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
         ItemEnigmaticEye.textureAtlasEye = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "items/enigmatic_eye"));
-        ItemEldritchAmulet.textureAtlasEldritch = event.getMap().registerSprite(new ResourceLocation(EnigmaticLegacy.MODID, "models/layer/amulet_eldritch"));
     }
 
     @SubscribeEvent(priority = HIGH)

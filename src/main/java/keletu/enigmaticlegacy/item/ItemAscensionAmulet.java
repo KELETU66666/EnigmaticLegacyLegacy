@@ -1,15 +1,11 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import baubles.api.render.IRenderBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -17,21 +13,14 @@ import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class ItemAscensionAmulet extends ItemBaseBauble implements IRenderBauble {
-    @SideOnly(Side.CLIENT)
-    private static ModelBiped model;
-
+public class ItemAscensionAmulet extends ItemBaseBauble {
     public ItemAscensionAmulet() {
         super("ascension_amulet", EnumRarity.EPIC);
     }
@@ -99,23 +88,5 @@ public class ItemAscensionAmulet extends ItemBaseBauble implements IRenderBauble
     @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
         return BaubleType.AMULET;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onPlayerBaubleRender(ItemStack itemStack, EntityPlayer entityPlayer, IRenderBauble.RenderType renderType, float v) {
-        if (renderType == IRenderBauble.RenderType.BODY) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(EnigmaticLegacy.MODID, "textures/models/layer/amulet_ascension.png"));
-            IRenderBauble.Helper.rotateIfSneaking(entityPlayer);
-            boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
-            GlStateManager.translate(0, 0, armor ? -0.075 : -0.02);
-
-            float s = 1.05F / 16F;
-            GlStateManager.scale(s, s, s);
-            if (model == null)
-                model = new ModelBiped();
-
-            model.bipedBody.render(1F);
-        }
     }
 }
