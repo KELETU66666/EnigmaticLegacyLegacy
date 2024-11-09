@@ -7,6 +7,7 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -130,6 +131,12 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
                 }
 
                 for (EntityLivingBase victim : entities) {
+
+
+                    if (EntityList.getKey(victim).getNamespace().equals("srparasites")) {
+                        continue;
+                    }
+
                     if (this.getCombinedLight(victim.world, victim.getPosition(), 0) < 3) {
 
                         if (victim instanceof EntityPlayer) {
