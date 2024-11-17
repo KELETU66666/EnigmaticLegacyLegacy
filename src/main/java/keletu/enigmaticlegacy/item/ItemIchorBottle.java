@@ -98,7 +98,6 @@ public class ItemIchorBottle extends Item {
 
             double multiplier = 1;
             stack.shrink(1);
-            playerMP.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
 
             player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, (int) (1200 * multiplier), 2, false, true));
             player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, (int) (800 * multiplier), 4, false, true));
