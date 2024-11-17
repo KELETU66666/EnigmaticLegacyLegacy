@@ -319,7 +319,7 @@ public class ELConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:sul_compass"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:astral_fruit"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

@@ -11,30 +11,30 @@ public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
     public EnigmaticLegacyCore() {
 
-	}
+    }
 
-	@Override
-	public String[] getASMTransformerClass() {
-		return null;
-	}
+    @Override
+    public String[] getASMTransformerClass() {
+        return new String[]{"keletu.enigmaticlegacy.asm.BaublesTransformer"};
+    }
 
-	@Override
-	public String getModContainerClass() {
-		return null;
-	}
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
 
-	@Override
-	public String getSetupClass() {
-		return null;
-	}
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
 
-	@Override
-	public void injectData(Map<String, Object> data) {
-	}
+    @Override
+    public void injectData(Map<String, Object> data) {
+    }
 
-	@Override
-	public String getAccessTransformerClass() {
-		return "keletu.enigmaticlegacy.asm.ELCoreTransformer";
-	}
+    @Override
+    public String getAccessTransformerClass() {
+        return "keletu.enigmaticlegacy.asm.ELCoreTransformer";
+    }
 
 }

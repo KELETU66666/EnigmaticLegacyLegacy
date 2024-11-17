@@ -158,6 +158,8 @@ public class EnigmaticLegacy {
     public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
     public static Item voidPearl = new ItemVoidPearl();
     public static Item desolationRing = new ItemDesolationRing();
+    public static Item astralFruit = new ItemAstralFruit();
+    public static Item ichorBottle = new ItemIchorBottle();
 
 
     public static SimpleNetworkWrapper packetInstance;
@@ -177,6 +179,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
+        packetInstance.registerMessage(PacketSetPersistentTag.Handler.class, PacketSetPersistentTag.class, 6, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -303,6 +306,8 @@ public class EnigmaticLegacy {
             event.getRegistry().register(eldritchPan);
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
+            event.getRegistry().register(astralFruit);
+            event.getRegistry().register(ichorBottle);
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -406,6 +411,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

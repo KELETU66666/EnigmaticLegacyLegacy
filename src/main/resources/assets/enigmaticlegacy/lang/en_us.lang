@@ -380,8 +380,14 @@ tooltip.enigmaticlegacy.soulCrystal1=§6Right-Click§5 to absorb the crystal and
 tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystals.
 
 #1.18+
+item.ichor_bottle.name=Bottle of Ichor
+item.astral_fruit.name=Celestial Fruit
+
 potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
+
+tooltip.enigmaticlegacy.ichorBottle1=§5To contempt the gods, one must know them...
+tooltip.enigmaticlegacy.ichorBottle2=§5Consume to obtain §6+1§d Amulet Slot §5permanently.
 
 tooltip.enigmaticlegacy.soulCompass1=§5Points to the location of nearest §6Soul Crystal§5.
 

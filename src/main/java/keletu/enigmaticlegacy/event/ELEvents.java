@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import baubles.client.gui.GuiPlayerExpanded;
 import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
@@ -15,12 +16,18 @@ import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
-import keletu.enigmaticlegacy.item.*;
+import keletu.enigmaticlegacy.item.ItemEldritchPan;
+import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.packet.PacketSetPersistentTag;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -51,6 +58,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -86,6 +94,38 @@ public class ELEvents {
     private static EntityPlayer abyssalHeartOwner;
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+
+    private static final ResourceLocation texture = new ResourceLocation(MODID, "textures/gui/bar.png");
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onGui(GuiScreenEvent.BackgroundDrawnEvent evt) {
+        if (evt.getGui() instanceof GuiPlayerExpanded) {
+            evt.getGui().mc.getTextureManager().bindTexture(texture);
+            ScaledResolution sr = new ScaledResolution(evt.getGui().mc);
+            int startX = (sr.getScaledWidth() - 176) / 2;
+            int startY = (sr.getScaledHeight() - 166) / 2;
+            evt.getGui().drawTexturedModalRect(startX, startY - 6 - 18, 0, 0, 6, 6);
+            evt.getGui().drawTexturedModalRect(startX + 18 * 6 + 6, startY - 6 - 18, 58, 0, 6, 6);
+            for (int i = 0; i < 6; i++) {
+                evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 6 - 18, 4, 0, 18, 6);
+                evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 18, 6, 6, 18, 18);
+            }
+            evt.getGui().drawTexturedModalRect(startX, startY - 18, 0, 6, 6, 18);
+            evt.getGui().drawTexturedModalRect(startX + 18 * 6 + 6, startY - 18, 58, 6, 6, 30);
+
+            if (SuperpositionHandler.getPersistentBoolean(evt.getGui().mc.player, "ConsumedIchorBottle", true))
+                evt.getGui().drawTexturedModalRect(startX + 5, startY - 18 - 1, 0, 46, 18, 18);
+            if (SuperpositionHandler.getPersistentBoolean(evt.getGui().mc.player, "ConsumedAstralFruit", true))
+                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 1, startY - 18 - 1, 18, 46, 18, 18);
+            if (BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.enigmaticEye) != -1)
+                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 2, startY - 18 - 1, 36, 46, 18, 18);
+            evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 3, startY - 18 - 1, 54, 46, 18, 18);
+            evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 4, startY - 18 - 1, 72, 46, 18, 18);
+            if (false)
+                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 5, startY - 18 - 1, 90, 46, 18, 18);
+        }
+    }
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone event) {
@@ -931,6 +971,15 @@ public class ELEvents {
             }
             if (player.isBurning() && hasCursed(player)) {
                 player.setFire(player.fire + 2);
+            }
+            if(player instanceof EntityPlayerMP){
+                EntityPlayerMP playerMP = (EntityPlayerMP) player;
+                if(SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")){
+                    packetInstance.sendTo(new PacketSetPersistentTag("ConsumedIchorBottle", true), playerMP);
+                }
+                if(SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")){
+                    packetInstance.sendTo(new PacketSetPersistentTag("ConsumedAstralFruit", true), playerMP);
+                }
             }
         }
     }

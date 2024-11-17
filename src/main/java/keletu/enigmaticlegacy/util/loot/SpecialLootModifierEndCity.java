@@ -18,9 +18,9 @@ import java.util.Collection;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = EnigmaticLegacy.MODID)
-public class SpecialLootModifier extends LootEntryTable {
+public class SpecialLootModifierEndCity extends LootEntryTable {
 
-    protected SpecialLootModifier(ResourceLocation tableIn, int weightIn, int qualityIn, LootCondition[] conditionsIn, String entryName) {
+    protected SpecialLootModifierEndCity(ResourceLocation tableIn, int weightIn, int qualityIn, LootCondition[] conditionsIn, String entryName) {
         super(tableIn, weightIn, qualityIn, conditionsIn, entryName);
     }
 
@@ -32,13 +32,9 @@ public class SpecialLootModifier extends LootEntryTable {
 
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            if (!SuperpositionHandler.hasPersistentTag(player, "LootedArchitectEye")) {
-                SuperpositionHandler.setPersistentBoolean(player, "LootedArchitectEye", true);
-                stacks.add(new ItemStack(EnigmaticLegacy.enigmaticEye, 1));
-            }
-            if (!SuperpositionHandler.hasPersistentTag(player, "LootedIchorBottle")) {
-                SuperpositionHandler.setPersistentBoolean(player, "LootedIchorBottle", true);
-                stacks.add(new ItemStack(EnigmaticLegacy.ichorBottle, 1));
+            if (!SuperpositionHandler.hasPersistentTag(player, "LootedAstralFruit") && SuperpositionHandler.hasCursed(player)) {
+                SuperpositionHandler.setPersistentBoolean(player, "LootedAstralFruit", true);
+                stacks.add(new ItemStack(EnigmaticLegacy.astralFruit, 1));
             }
         }
     }
@@ -50,15 +46,16 @@ public class SpecialLootModifier extends LootEntryTable {
 
         if (name.startsWith(prefix)) {
             String file = name.substring(name.indexOf(prefix) + prefix.length());
-            evt.getTable().addPool(getInjectPool(file));
+            if (file.equals("end_city_treasure"))
+                evt.getTable().addPool(getInjectPool(file));
         }
     }
 
     private static LootPool getInjectPool(String entryName) {
-        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(1), "enigmatic_inject_pool_special");
+        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(1), "enigmatic_inject_pool_special_1");
     }
 
-    private static SpecialLootModifier getInjectEntry(String name, int weight) {
-        return new SpecialLootModifier(new ResourceLocation(EnigmaticLegacy.MODID, "special/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool_special");
+    private static SpecialLootModifierEndCity getInjectEntry(String name, int weight) {
+        return new SpecialLootModifierEndCity(new ResourceLocation(EnigmaticLegacy.MODID, "special/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool_special_1");
     }
 }
