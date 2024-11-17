@@ -179,7 +179,6 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
-        packetInstance.registerMessage(PacketSetPersistentTag.Handler.class, PacketSetPersistentTag.class, 6, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());

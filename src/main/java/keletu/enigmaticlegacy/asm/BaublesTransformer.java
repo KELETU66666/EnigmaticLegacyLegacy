@@ -5,7 +5,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.container.SlotBauble;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.bmtr.ASMException;
-import keletu.enigmaticlegacy.event.SuperpositionHandler;
+import keletu.enigmaticlegacy.event.ELEvents;
 import keletu.enigmaticlegacy.item.ItemScrollBauble;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,9 +100,9 @@ public class BaublesTransformer implements IClassTransformer {
             return false;
         switch (baubleSlot) {
             case 7:
-                return SuperpositionHandler.getPersistentBoolean(player, "ConsumedIchorBottle", true);
+                return ELEvents.hasIchorBottle;
             case 8:
-                return SuperpositionHandler.getPersistentBoolean(player, "ConsumedAstralFruit", true);
+                return ELEvents.hasAstralFruit;
             case 9:
                 return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) != -1;
             case 10:

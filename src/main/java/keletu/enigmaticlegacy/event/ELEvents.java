@@ -20,7 +20,6 @@ import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
-import keletu.enigmaticlegacy.packet.PacketSetPersistentTag;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
@@ -94,6 +93,8 @@ public class ELEvents {
     private static EntityPlayer abyssalHeartOwner;
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+    public static boolean hasIchorBottle = false;
+    public static boolean hasAstralFruit = false;
 
     private static final ResourceLocation texture = new ResourceLocation(MODID, "textures/gui/bar.png");
 
@@ -114,9 +115,9 @@ public class ELEvents {
             evt.getGui().drawTexturedModalRect(startX, startY - 18, 0, 6, 6, 18);
             evt.getGui().drawTexturedModalRect(startX + 18 * 6 + 6, startY - 18, 58, 6, 6, 30);
 
-            if (SuperpositionHandler.getPersistentBoolean(evt.getGui().mc.player, "ConsumedIchorBottle", true))
+            if (hasIchorBottle)
                 evt.getGui().drawTexturedModalRect(startX + 5, startY - 18 - 1, 0, 46, 18, 18);
-            if (SuperpositionHandler.getPersistentBoolean(evt.getGui().mc.player, "ConsumedAstralFruit", true))
+            if (hasAstralFruit)
                 evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 1, startY - 18 - 1, 18, 46, 18, 18);
             if (BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.enigmaticEye) != -1)
                 evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 2, startY - 18 - 1, 36, 46, 18, 18);
@@ -975,10 +976,10 @@ public class ELEvents {
             if(player instanceof EntityPlayerMP){
                 EntityPlayerMP playerMP = (EntityPlayerMP) player;
                 if(SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")){
-                    packetInstance.sendTo(new PacketSetPersistentTag("ConsumedIchorBottle", true), playerMP);
+                    hasIchorBottle = true;
                 }
                 if(SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")){
-                    packetInstance.sendTo(new PacketSetPersistentTag("ConsumedAstralFruit", true), playerMP);
+                    hasAstralFruit = true;
                 }
             }
         }
