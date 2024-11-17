@@ -1,17 +1,12 @@
 package keletu.enigmaticlegacy.asm;
 
 import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
-import baubles.common.container.SlotBauble;
 import keletu.enigmaticlegacy.ELConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.bmtr.ASMException;
-import keletu.enigmaticlegacy.event.ELEvents;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
-import keletu.enigmaticlegacy.item.ItemScrollBauble;
-import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.packet.PacketEnchantedWithPearl;
 import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -27,13 +22,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -81,9 +74,6 @@ public class ELCoreTransformer implements IClassTransformer {
 
         if ("baubles.common.CommonProxy".equals(newClassName)) {
             return transformCommonProxy(origCode);
-        }
-        if ("baubles.common.container.SlotBauble".equals(newClassName)) {
-            return patchSlotBauble(origCode);
         }
         return origCode;
     }
@@ -318,65 +308,6 @@ public class ELCoreTransformer implements IClassTransformer {
             }
         }
         return base;
-    }
-
-    private byte[] patchSlotBauble(byte[] origCode) {
-        final String methodToPatch2 = "isItemValid";
-        final String methodToPatch_srg2 = "func_75214_a";
-
-        ClassReader cr = new ClassReader(origCode);
-        ClassNode classNode = new ClassNode();
-        cr.accept(classNode, 0);
-
-        for (MethodNode methodNode : classNode.methods) {
-            if ((methodNode.name.equals(methodToPatch2) || methodNode.name.equals(methodToPatch_srg2)) && methodNode.desc.equals("(Lnet/minecraft/item/ItemStack;)Z")) {
-                Iterator<AbstractInsnNode> insnNodes = methodNode.instructions.iterator();
-                while (insnNodes.hasNext()) {
-                    AbstractInsnNode insn = insnNodes.next();
-                    if (insn.getOpcode() == Opcodes.IRETURN) {
-                        InsnList endList = new InsnList();
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 1)); // stack
-                        endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "slotBauble_isItemValid", "(Lbaubles/common/container/SlotBauble;Lnet/minecraft/item/ItemStack;)Z", false));
-                        methodNode.instructions.insertBefore(insn, endList);
-                    }
-                }
-            }
-        }
-
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        classNode.accept(cw);
-
-        return cw.toByteArray();
-    }
-
-    public static boolean slotBauble_isItemValid(SlotBauble slot, ItemStack stack) throws IllegalAccessException {
-        Field field = ReflectionHelper.findField(SlotBauble.class, "baubleSlot");
-        Field field1 = ReflectionHelper.findField(SlotBauble.class, "player");
-        field.setAccessible(true);
-        field1.setAccessible(true);
-        int baubleSlot = (int) field.get(slot);
-        EntityPlayer player = (EntityPlayer) field1.get(slot);
-        boolean isScroll = stack.getItem() instanceof ItemScrollBauble;
-        boolean isSpellstone = stack.getItem() instanceof ItemSpellstoneBauble;
-        if ((isScroll || isSpellstone) && baubleSlot < 10)
-            return false;
-        switch (baubleSlot) {
-            case 7:
-                return player.getTags().contains("hasIchorBottle");
-            case 8:
-                return player.getTags().contains("hasAstralFruit");
-            case 9:
-                return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) != -1;
-            case 10:
-                return !isScroll;
-            case 11:
-                return !isSpellstone;
-            case 12:
-                return /*!(stack.getItem() instanceof ItemSpellstoneBauble)*/ false;
-        }
-
-        return ((IBaublesItemHandler) slot.getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
     }
 
     private byte[] transformEventHandlerEntity(byte[] basicClass) {

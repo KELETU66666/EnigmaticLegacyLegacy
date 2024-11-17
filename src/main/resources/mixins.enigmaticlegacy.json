@@ -1,0 +1,14 @@
+{
+  "minVersion": "0.8",
+  "package": "keletu.enigmaticlegacy.mixins",
+  "refmap": "mixins.enigmaticlegacy.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "common.MixinEnterBlockTrigger",
+    "common.MixinSlotBauble",
+    "common.MixinSummonedEntityTrigger"
+  ],
+  "client": [
+  ],
+  "server": []
+}
