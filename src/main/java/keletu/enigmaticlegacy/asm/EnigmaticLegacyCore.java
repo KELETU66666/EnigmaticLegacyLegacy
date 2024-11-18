@@ -1,6 +1,5 @@
 package keletu.enigmaticlegacy.asm;
 
-import fermiumbooter.FermiumRegistryAPI;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Map;
 public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
     public EnigmaticLegacyCore() {
-		FermiumRegistryAPI.enqueueMixin(true, "mixins.enigmaticlegacy.json");
 	}
 
 	@Override

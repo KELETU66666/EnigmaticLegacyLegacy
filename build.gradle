@@ -100,7 +100,7 @@ dependencies {
         implementation 'com.cleanroommc:assetmover:2.5'
     }
     if (project.use_mixins.toBoolean()) {
-        implementation rfg.deobf("curse.maven:fermiumbooter-968474:5672830")
+        implementation 'zone.rong:mixinbooter:7.1'
     }
 
     // Example of deobfuscating a dependency
