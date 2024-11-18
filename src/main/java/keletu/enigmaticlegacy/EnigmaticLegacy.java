@@ -70,7 +70,7 @@ import net.minecraftforge.registries.IForgeRegistry;
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
         version = EnigmaticLegacy.VERSION,
-        dependencies = "required-after:baubles;required-after:mixinbooter;after:patchouli"
+        dependencies = "required-after:baubles;after:fermiumbooter;after:mixinbooter;after:patchouli"
 )
 public class EnigmaticLegacy {
 

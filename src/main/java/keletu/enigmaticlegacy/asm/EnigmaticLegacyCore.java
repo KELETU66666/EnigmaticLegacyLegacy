@@ -10,30 +10,36 @@ import java.util.Map;
 public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
     public EnigmaticLegacyCore() {
-	}
+        try {
+            Class.forName("zone.rong.mixinbooter.MixinBooterPlugin");
+            System.out.println("mixinbooter detected, ignoring fermiumbooter.");
+        } catch (ClassNotFoundException e) {
+           fermiumbooter.FermiumRegistryAPI.enqueueMixin(true, "mixins.enigmaticlegacy.json");
+        }
+    }
 
-	@Override
-	public String[] getASMTransformerClass() {
-		return null;
-	}
+    @Override
+    public String[] getASMTransformerClass() {
+        return null;
+    }
 
-	@Override
-	public String getModContainerClass() {
-		return null;
-	}
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
 
-	@Override
-	public String getSetupClass() {
-		return null;
-	}
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
 
-	@Override
-	public void injectData(Map<String, Object> data) {
-	}
+    @Override
+    public void injectData(Map<String, Object> data) {
+    }
 
-	@Override
-	public String getAccessTransformerClass() {
-		return "keletu.enigmaticlegacy.asm.ELCoreTransformer";
-	}
+    @Override
+    public String getAccessTransformerClass() {
+        return "keletu.enigmaticlegacy.asm.ELCoreTransformer";
+    }
 
 }
