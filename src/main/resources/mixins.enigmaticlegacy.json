@@ -3,6 +3,7 @@
   "package": "keletu.enigmaticlegacy.mixins",
   "refmap": "mixins.enigmaticlegacy.refmap.json",
   "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
   "mixins": [
     "common.MixinEnterBlockTrigger",
     "common.MixinSlotBauble",
