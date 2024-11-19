@@ -2,6 +2,8 @@ package keletu.enigmaticlegacy.packet;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -32,7 +34,9 @@ public class PacketCustom implements IMessage {
     public static class Handler implements IMessageHandler<PacketCustom, IMessage> {
 
         public IMessage onMessage(PacketCustom message, MessageContext ctx) {
-            Minecraft.getMinecraft().player.addTag(message.tag);
+            EntityPlayerSP sp = Minecraft.getMinecraft().player;
+            if (sp != null)
+                sp.addTag(message.tag);
             return null;
         }
     }

@@ -49,7 +49,7 @@ public class ItemHeavenScroll extends ItemScrollBauble {
     }
 
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && super.canEquip(itemstack, player);
+        return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.fabulousScroll) == -1 && super.canEquip(itemstack, player);
     }
 
     protected boolean shouldCheckXpDrain(EntityPlayer player) {
