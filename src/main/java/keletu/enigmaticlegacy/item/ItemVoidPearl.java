@@ -133,7 +133,7 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
                 for (EntityLivingBase victim : entities) {
 
 
-                    if (EntityList.getKey(victim).getNamespace().equals("srparasites")) {
+                    if (EntityList.getKey(victim) != null && EntityList.getKey(victim).getNamespace().equals("srparasites")) {
                         continue;
                     }
 
