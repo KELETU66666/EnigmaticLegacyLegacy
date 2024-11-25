@@ -7,7 +7,6 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +16,6 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -126,16 +124,9 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
             if (player.ticksExisted % 10 == 0) {
                 List<EntityLivingBase> entities = living.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.posX - shadowRange, player.posY - shadowRange, player.posZ - shadowRange, player.posX + shadowRange, player.posY + shadowRange, player.posZ + shadowRange));
 
-                if (entities.contains(player)) {
-                    entities.remove(player);
-                }
+                entities.remove(player);
 
                 for (EntityLivingBase victim : entities) {
-
-
-                    if (EntityList.getKey(victim).getNamespace().equals("srparasites")) {
-                        continue;
-                    }
 
                     if (this.getCombinedLight(victim.world, victim.getPosition(), 0) < 3) {
 
@@ -148,7 +139,7 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
                         }
 
                         if (!(victim instanceof EntityPlayer) || player.canAttackPlayer((EntityPlayer) victim)) {
-                            EntityDamageSourceIndirect darkness = new EntityDamageSourceIndirect("darkness", player, null);
+                            DamageSource darkness = new DamageSource("darkness");
                             darkness.setDamageIsAbsolute().setDamageBypassesArmor().setMagicDamage();
 
                             boolean attack = victim.attackEntityFrom(darkness, (float) baseDarknessDamage);
