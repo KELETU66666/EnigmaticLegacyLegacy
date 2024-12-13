@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " M ",
+    "IXI",
+    "NBN"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "M": {
+      "item": "minecraft:rabbit_stew"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:extradimensional_eye"
+  }
+}

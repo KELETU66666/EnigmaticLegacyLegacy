@@ -109,6 +109,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:patchouli-306770:3162874")
 
     implementation rfg.deobf("curse.maven:trinkets-and-baubles-279900:5717039")
+    compileOnly rfg.deobf("curse.maven:simpledifficulty-360779:3613814")
 
     if (project.use_mixins.toBoolean()) {
         // Change your mixin refmap name here:

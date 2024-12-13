@@ -21,9 +21,12 @@ import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemMonsterCharm;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.packet.PacketCustom;
+import keletu.enigmaticlegacy.packet.PacketPortalParticles;
+import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -93,8 +96,6 @@ public class ELEvents {
     private static EntityPlayer abyssalHeartOwner;
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
-    public static boolean hasIchorBottle = false;
-    public static boolean hasAstralFruit = false;
 
     private static final ResourceLocation texture = new ResourceLocation(MODID, "textures/gui/bar.png");
 
@@ -353,6 +354,22 @@ public class ELEvents {
         if (!event.isCanceled() && event.getSource().getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             genericEnforce(event, player, player.getHeldItemMainhand());
+
+
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == extraDimensionalEye)
+                if (ItemNBTHelper.verifyExistance(player.getHeldItemMainhand(), "BoundDimension"))
+                    if (ItemNBTHelper.getInt(player.getHeldItemMainhand(), "BoundDimension", 0) == event.getEntity().world.provider.getDimension()) {
+                        event.setCanceled(true);
+                        ItemStack stack = player.getHeldItemMainhand();
+
+                        EnigmaticLegacy.packetInstance.sendToAllAround(new PacketPortalParticles(event.getEntity().posX, event.getEntity().posY + (event.getEntity().getEyeHeight() / 2), event.getEntity().posZ, 96, 1.5D, false), new NetworkRegistry.TargetPoint(event.getEntity().world.provider.getDimension(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, 128));
+
+                        event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2)));
+                        event.getEntity().setPosition(ItemNBTHelper.getDouble(stack, "BoundX", 0D), ItemNBTHelper.getDouble(stack, "BoundY", 0D), ItemNBTHelper.getDouble(stack, "BoundZ", 0D));
+                        event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2)));
+
+                        EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(event.getEntity().posX, event.getEntity().posY + (event.getEntity().getEyeHeight() / 2), event.getEntity().posZ, 48, false), new NetworkRegistry.TargetPoint(event.getEntity().world.provider.getDimension(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, 128));
+                    }
 
             float knockbackPower = 1F;
 

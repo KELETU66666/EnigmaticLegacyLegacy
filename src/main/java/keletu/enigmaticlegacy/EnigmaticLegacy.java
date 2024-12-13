@@ -159,6 +159,7 @@ public class EnigmaticLegacy {
     public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
     public static Item voidPearl = new ItemVoidPearl();
     public static Item desolationRing = new ItemDesolationRing();
+    public static Item extraDimensionalEye = new ItemExtradimensionalEye();
     public static Item astralFruit = new ItemAstralFruit();
     public static Item ichorBottle = new ItemIchorBottle();
 
@@ -271,6 +272,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
+            event.getRegistry().register(extraDimensionalEye);
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
@@ -416,6 +418,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(witheriteCatalyst, 0, new ModelResourceLocation(witheriteCatalyst.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
