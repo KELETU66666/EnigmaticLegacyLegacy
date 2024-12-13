@@ -4,6 +4,8 @@ import baubles.api.BaublesApi;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.util.compat.CompatSimpledDifficulty;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -157,76 +159,62 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
                     }
                 }
             }
+
+            if (ModCompat.COMPAT_SIMPLED_DIFFICULTY)
+                CompatSimpledDifficulty.ClearTempurature(player);
         }
+
 
     }
 
-    public int getCombinedLight(World world, BlockPos pos, int lightValue)
-    {
+    public int getCombinedLight(World world, BlockPos pos, int lightValue) {
         int i = this.getLightFromNeighborsFor(world, EnumSkyBlock.SKY, pos);
         int j = this.getLightFromNeighborsFor(world, EnumSkyBlock.BLOCK, pos);
 
-        if (j < lightValue)
-        {
+        if (j < lightValue) {
             j = lightValue;
         }
 
         return i << 20 | j << 4;
     }
 
-    public int getLightFromNeighborsFor(World world, EnumSkyBlock type, BlockPos pos)
-    {
-        if (!world.provider.hasSkyLight() && type == EnumSkyBlock.SKY)
-        {
+    public int getLightFromNeighborsFor(World world, EnumSkyBlock type, BlockPos pos) {
+        if (!world.provider.hasSkyLight() && type == EnumSkyBlock.SKY) {
             return 0;
-        }
-        else
-        {
-            if (pos.getY() < 0)
-            {
+        } else {
+            if (pos.getY() < 0) {
                 pos = new BlockPos(pos.getX(), 0, pos.getZ());
             }
 
-            if (!world.isValid(pos))
-            {
+            if (!world.isValid(pos)) {
                 return type.defaultLightValue;
-            }
-            else if (!world.isBlockLoaded(pos))
-            {
+            } else if (!world.isBlockLoaded(pos)) {
                 return type.defaultLightValue;
-            }
-            else if (world.getBlockState(pos).useNeighborBrightness())
-            {
+            } else if (world.getBlockState(pos).useNeighborBrightness()) {
                 int i1 = world.getLightFor(type, pos.up());
                 int i = world.getLightFor(type, pos.east());
                 int j = world.getLightFor(type, pos.west());
                 int k = world.getLightFor(type, pos.south());
                 int l = world.getLightFor(type, pos.north());
 
-                if (i > i1)
-                {
+                if (i > i1) {
                     i1 = i;
                 }
 
-                if (j > i1)
-                {
+                if (j > i1) {
                     i1 = j;
                 }
 
-                if (k > i1)
-                {
+                if (k > i1) {
                     i1 = k;
                 }
 
-                if (l > i1)
-                {
+                if (l > i1) {
                     i1 = l;
                 }
 
                 return i1;
-            }
-            else
-            {
+            } else {
                 Chunk chunk = world.getChunk(pos);
                 return chunk.getLightFor(type, pos);
             }

@@ -71,6 +71,7 @@ item.enchantment_transposer.name=Tome of Hungering Knowledge
 item.eldritch_pan.name=The Voracious Pan
 item.void_stone.name=Keystone of The Oblivion
 item.soul_compass.name=Wayfinder of the Damned
+item.extradimensional_eye.name=Extradimensional Eye
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -100,6 +101,22 @@ tooltip.enigmaticlegacy.angelBlessing6=§5- Your own projectiles are greatly acc
 tooltip.enigmaticlegacy.angelBlessing7=§5- Active ability can be triggered by pressing jump
 tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air. §1§l [WIP]
 tooltip.enigmaticlegacy.angelBlessing9=§5- You are vulnerable to §6Withering§5 and §6Void Damage§5.
+
+tooltip.enigmaticlegacy.extradimensionalEyeLocation=§dBound Location:
+tooltip.enigmaticlegacy.extradimensionalEyeX=§d- X: §6
+tooltip.enigmaticlegacy.extradimensionalEyeY=§d- Y: §6
+tooltip.enigmaticlegacy.extradimensionalEyeZ=§d- Z: §6
+tooltip.enigmaticlegacy.extradimensionalEyeDimension=§6Dimension: §5
+tooltip.enigmaticlegacy.overworld=§2Overworld
+tooltip.enigmaticlegacy.nether=§4The Nether
+tooltip.enigmaticlegacy.end=§5The End
+tooltip.enigmaticlegacy.extradimensionalEye1=§5Bind to desired location by pressing
+tooltip.enigmaticlegacy.extradimensionalEye2=§6Shift§5+§6Right-Click§5 while standing there.
+tooltip.enigmaticlegacy.extradimensionalEye3=§5You can then §6Left-Click§5 with it on a
+tooltip.enigmaticlegacy.extradimensionalEye4=§5living creature to teleport it to that
+tooltip.enigmaticlegacy.extradimensionalEye5=§5location, as long as it resides in the
+tooltip.enigmaticlegacy.extradimensionalEye6=§5same dimension.
+tooltip.enigmaticlegacy.extradimensionalEye7=§6Vanishes after being used.
 
 tooltip.enigmaticlegacy.theTwist1=§5On a path to take it all away,
 tooltip.enigmaticlegacy.theTwist2=§5there can be no better way of knowing...
