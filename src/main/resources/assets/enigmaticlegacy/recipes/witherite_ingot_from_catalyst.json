@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "enigmaticlegacy:witherite_catalyst"
+    },
+    {
+      "item": "enigmaticlegacy:witherite_catalyst"
+    },
+    {
+      "item": "enigmaticlegacy:witherite_catalyst"
+    },
+    {
+      "item": "enigmaticlegacy:witherite_catalyst"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    }
+  ],
+  "result": {
+    "item": "enigmaticlegacy:witherite_ingot"
+  }
+}

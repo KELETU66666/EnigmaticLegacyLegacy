@@ -36,10 +36,6 @@ public class SpecialLootModifier extends LootEntryTable {
                 SuperpositionHandler.setPersistentBoolean(player, "LootedArchitectEye", true);
                 stacks.add(new ItemStack(EnigmaticLegacy.enigmaticEye, 1));
             }
-            if (!SuperpositionHandler.hasPersistentTag(player, "LootedIchorBottle")) {
-                SuperpositionHandler.setPersistentBoolean(player, "LootedIchorBottle", true);
-                stacks.add(new ItemStack(EnigmaticLegacy.ichorBottle, 1));
-            }
         }
     }
 
