@@ -70,13 +70,13 @@ import net.minecraftforge.registries.IForgeRegistry;
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
         version = EnigmaticLegacy.VERSION,
-        dependencies = "required-after:baubles;after:patchouli"
+        dependencies = "required-after:baubles;after:fermiumbooter;after:mixinbooter;after:patchouli"
 )
 public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.9.4";
+    public static final String VERSION = "0.10.3";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -133,6 +133,7 @@ public class EnigmaticLegacy {
     public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item evilIngot = new ItemBaseFireProof("evil_ingot", EnumRarity.EPIC);
     public static Item cosmicHeart = new ItemBaseFireProof("cosmic_heart", EnumRarity.EPIC);
+    public static Item witheriteCatalyst = new ItemBaseFireProof("witherite_catalyst", EnumRarity.COMMON);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -270,6 +271,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
+            event.getRegistry().register(witheriteCatalyst);
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(infernalShield);
@@ -406,6 +408,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(witheriteCatalyst, 0, new ModelResourceLocation(witheriteCatalyst.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

@@ -7,6 +7,7 @@ import keletu.enigmaticlegacy.ELConfigs;
 import static keletu.enigmaticlegacy.ELConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.witheriteCatalyst;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.client.ModelCharm;
@@ -22,7 +23,6 @@ import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
@@ -178,7 +178,7 @@ public class ELEvents {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
             if (enableWitherite && killed.getClass() == EntityWither.class && player.getActivePotionEffect(MobEffects.WEAKNESS) != null) {
-                addDrop(event, getRandomSizeStack(EnigmaticLegacy.ingotWitherite, 1, 3));
+                addDrop(event, getRandomSizeStack(EnigmaticLegacy.ingotWitherite, 3, 8));
             }
 
             if (hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
@@ -206,17 +206,14 @@ public class ELEvents {
                 } else if (killed.getClass() == EntitySpider.class || killed.getClass() == EntityCaveSpider.class) {
                     addDrop(event, getRandomSizeStack(Items.STRING, 2, 12));
                 } else if (killed.getClass() == EntityGuardian.class) {
-                    addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "nautilus_shell")), 1), 15);
                     addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 2, 5));
                 } else if (killed.getClass() == EntityElderGuardian.class) {
                     addDrop(event, getRandomSizeStack(Items.PRISMARINE_CRYSTALS, 4, 16));
                     addDrop(event, getRandomSizeStack(Items.PRISMARINE_SHARD, 7, 28));
                     addOneOf(event,
                             //new ItemStack(guardianHeart, 1),
-                            new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "heart_of_the_sea")), 1),
                             new ItemStack(Items.GOLDEN_APPLE, 1, 1),
-                            new ItemStack(Items.ENDER_EYE, 1),
-                            EnchantmentHelper.addRandomEnchantment(new Random(), new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("oe", "trident")), 1), 25 + new Random().nextInt(15), true));
+                            new ItemStack(Items.ENDER_EYE, 1));
                 } else if (killed.getClass() == EntityEnderman.class) {
                     addDropWithChance(event, getRandomSizeStack(Items.ENDER_EYE, 1, 2), 40);
                 } else if (killed.getClass() == EntityBlaze.class) {
@@ -246,7 +243,8 @@ public class ELEvents {
                 } else if (killed.getClass() == EntityWitherSkeleton.class) {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                    addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("futuremc", "netherite_scrap")), 1), 7);
+                    if (enableWitherite)
+                        addDropWithChance(event, new ItemStack(witheriteCatalyst, 1), 7);
                 } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
@@ -872,7 +870,7 @@ public class ELEvents {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
-                } else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
+                } else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4)) {
                     if (player.motionY < 0)
                         player.motionY *= 0.9;
                 }
@@ -886,7 +884,7 @@ public class ELEvents {
             return;
 
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-        if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
+        if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4)) {
             event.getEntityLiving().motionY *= 1.25F;
         }
     }
