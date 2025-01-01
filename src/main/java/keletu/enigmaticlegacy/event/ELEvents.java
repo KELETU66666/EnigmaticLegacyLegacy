@@ -332,6 +332,9 @@ public class ELEvents {
                         event.getEntity().world.playSound(null, event.getEntity().getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, (float) (0.8F + (Math.random() * 0.2)));
 
                         EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(event.getEntity().posX, event.getEntity().posY + (event.getEntity().getEyeHeight() / 2), event.getEntity().posZ, 48, false), new NetworkRegistry.TargetPoint(event.getEntity().world.provider.getDimension(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, 128));
+
+                        if(!player.capabilities.isCreativeMode)
+                            stack.shrink(1);
                     }
 
             float knockbackPower = 1F;
@@ -868,7 +871,7 @@ public class ELEvents {
             }
         }
 
-        if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemEldritchPan) {
+        if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan) {
             int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
             int hungerAmplifier = currentTicks / 300;
 

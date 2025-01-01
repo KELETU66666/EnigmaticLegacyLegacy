@@ -103,9 +103,7 @@ public class ItemVoidPearl extends ItemSpellstoneBauble {
 
 			 */
 
-            if (player.getAir() < 300) {
-                player.setAir(300);
-            }
+            player.setAir(300);
 
             if (player.isBurning()) {
                 player.extinguish();
