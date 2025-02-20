@@ -9,6 +9,7 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
@@ -47,6 +48,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -74,6 +76,9 @@ public class SuperpositionHandler {
      */
 
     public static boolean isInBeaconRange(EntityPlayer player) {
+        if(player.world.isRemote)
+            return false;
+
         List<TileEntityBeacon> list = new ArrayList<TileEntityBeacon>();
         boolean inRange = false;
 
@@ -235,10 +240,10 @@ public class SuperpositionHandler {
         return new Vec3d(newX, newY, newZ);
     }
 
-    public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source) {
+    public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source, CallbackInfoReturnable<Boolean> info) {
         if (blocker instanceof EntityPlayer && useItem != null) {
             EntityPlayer player = (EntityPlayer) blocker;
-            boolean blocking = player.isActiveItemStackBlocking();
+            boolean blocking = ((IProperShieldUser) blocker).isActuallyReallyBlocking();
 
             if (blocking && useItem.getItem() instanceof ItemInfernalShield) {
 

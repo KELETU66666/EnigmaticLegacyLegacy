@@ -10,7 +10,7 @@ import java.util.Map;
 public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
     public EnigmaticLegacyCore() {
-
+		fermiumbooter.FermiumRegistryAPI.enqueueMixin(false, "mixins.enigmaticlegacy.json");
 	}
 
 	@Override

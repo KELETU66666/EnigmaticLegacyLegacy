@@ -46,10 +46,6 @@ public class ELCoreTransformer implements IClassTransformer {
             byte[] newCode = patchEnchantmentMethods(origCode);
             return newCode;
         }
-        if (newClassName.equals("net.minecraft.entity.EntityLivingBase")) {
-            byte[] newCode = patchEntityLivingBase(origCode);
-            return newCode;
-        }
         return origCode;
     }
 /*
@@ -208,61 +204,6 @@ public class ELCoreTransformer implements IClassTransformer {
                 && (playerIn.experienceLevel >= i && playerIn.experienceLevel >= container.enchantLevels[id] || playerIn.capabilities.isCreativeMode))) {
             EnigmaticLegacy.packetInstance.sendToServer(new PacketEnchantedWithPearl(id));
             return true;
-        } else {
-            return false;
-        }
-    }
-
-    private byte[] patchEntityLivingBase(byte[] origCode) {
-        final String methodToPatch2 = "canBlockDamageSource";
-        final String methodToPatch_srg2 = "func_184583_d";
-        final String methodToPatch3 = "isActiveItemStackBlocking";
-        final String methodToPatch_srg3 = "func_184585_cz";
-
-        ClassReader cr = new ClassReader(origCode);
-        ClassNode classNode = new ClassNode();
-        cr.accept(classNode, 0);
-
-        for (MethodNode methodNode : classNode.methods) {
-            if ((methodNode.name.equals(methodToPatch2) || methodNode.name.equals(methodToPatch_srg2)) && methodNode.desc.equals("(Lnet/minecraft/util/DamageSource;)Z")) {
-                Iterator<AbstractInsnNode> insnNodes = methodNode.instructions.iterator();
-                while (insnNodes.hasNext()) {
-                    AbstractInsnNode insn = insnNodes.next();
-                    if (insn.getOpcode() == Opcodes.IRETURN) {
-                        InsnList endList = new InsnList();
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        endList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                        endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "elb_canBlockDamageSource", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/util/DamageSource;)Z", false));
-                        methodNode.instructions.insertBefore(insn, endList);
-                    }
-                }
-            } /*else if ((methodNode.name.equals(methodToPatch3) || methodNode.name.equals(methodToPatch_srg3)) && methodNode.desc.equals("()Z")) {
-                InsnList startList = new InsnList();
-                startList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                startList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "keletu/enigmaticlegacy/asm/ELCoreTransformer", "elb_isActiveItemBlocking", "(Lnet/minecraft/entity/EntityLivingBase;)Z", false));
-                methodNode.instructions.insert(startList);
-            }*/
-        }
-
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        classNode.accept(cw);
-
-        return cw.toByteArray();
-    }
-
-    public static boolean elb_canBlockDamageSource(EntityLivingBase elb, DamageSource damageSourceIn) {
-        return SuperpositionHandler.onDamageSourceBlocking(elb, elb.getActiveItemStack(), damageSourceIn);
-    }
-
-    public static boolean elb_isActiveItemBlocking(EntityLivingBase elb) {
-        if (elb.isHandActive() && !elb.getActiveItemStack().isEmpty()) {
-            Item item = elb.getActiveItemStack().getItem();
-
-            if (item.getItemUseAction(elb.getActiveItemStack()) != EnumAction.BLOCK) {
-                return false;
-            } else {
-                return item.getMaxItemUseDuration(elb.getActiveItemStack()) - elb.getItemInUseCount() >= 0;
-            }
         } else {
             return false;
         }

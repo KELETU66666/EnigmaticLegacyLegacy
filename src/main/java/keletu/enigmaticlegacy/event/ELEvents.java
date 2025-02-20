@@ -9,6 +9,7 @@ import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.client.ModelCharm;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
@@ -1073,7 +1074,7 @@ public class ELEvents {
              * Handler for increasing damage on users of Bulwark of Blazing Pride.
              */
             if (event.getSource().getTrueSource() != null) {
-                if (player.getActiveItemStack().getItem() instanceof ItemInfernalShield && player.isActiveItemStackBlocking()) {
+                if (player.getActiveItemStack().getItem() instanceof ItemInfernalShield && ((IProperShieldUser) player).isActuallyReallyBlocking()) {
                     Vec3d sourcePos = event.getSource().getDamageLocation();
                     if (sourcePos != null) {
                         if (lookPlayersBack(player.rotationYaw, event.getSource().getTrueSource().rotationYaw, 50.0D)) {
