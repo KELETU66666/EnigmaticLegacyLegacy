@@ -1,21 +1,24 @@
 package keletu.enigmaticlegacy.asm;
 
+import fermiumbooter.FermiumRegistryAPI;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.Name(value = "EnigmaticLegacyCore")
-@IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
+@IFMLLoadingPlugin.SortingIndex(1001)
+@IFMLLoadingPlugin.Name("EnigmaticLegacyCore")
 public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
     public EnigmaticLegacyCore() {
-		fermiumbooter.FermiumRegistryAPI.enqueueMixin(false, "mixins.enigmaticlegacy.json");
+		FermiumRegistryAPI.enqueueMixin(false, "mixins.enigmaticlegacy.json");
 	}
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return null;
+		return new String[0];
 	}
 
 	@Override

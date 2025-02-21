@@ -1,16 +1,18 @@
 {
-  "minVersion": "0.8",
-  "package": "keletu.enigmaticlegacy.mixins.early",
+  "required": true,
+  "package": "keletu.enigmaticlegacy.mixins",
   "refmap": "mixins.enigmaticlegacy.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
   "mixins": [
-    "MixinEnterBlockTrigger",
-    "MixinEntityLivingBase",
-    "MixinEntityPlayer",
-    "MixinSummonedEntityTrigger"
+    "early.MixinCooldownTracker",
+    "early.MixinEnterBlockTrigger",
+    "early.MixinEntityLivingBase",
+    "early.MixinEntityPlayer",
+    "early.MixinSummonedEntityTrigger"
   ],
-  "client": [
-  ],
-  "server": []
+  "injectors": {
+    "maxShiftBy": 10
+  }
 }
