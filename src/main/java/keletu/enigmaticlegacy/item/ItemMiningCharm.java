@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -96,7 +95,6 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
         attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64dde"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
-        attributes.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b53"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
     }
 
     public void removeNightVisionEffect(EntityPlayer player, int duration) {

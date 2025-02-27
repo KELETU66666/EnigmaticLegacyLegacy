@@ -211,11 +211,10 @@ public class ELCoreTransformer implements IClassTransformer {
             if (ELConfigs.lootingBonus > 0 && hasCursed((EntityPlayer) living))
                 base += ELConfigs.lootingBonus;
 
-            for (int i = 0; i < BaublesApi.getBaubles((EntityPlayer) living).getSizeInventory(); i++) {
+            for (int i = 0; i < BaublesApi.getBaublesHandler((EntityPlayer) living).getSlots(); i++) {
                 ItemStack bStack = BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(i);
                 if (!bStack.isEmpty() && bStack.getItem() instanceof ILootingBonus) {
                     base += ((ILootingBonus) bStack.getItem()).bonusLevelLooting();
-                    break;
                 }
             }
         }

@@ -55,6 +55,13 @@ import java.util.*;
 
 public class SuperpositionHandler {
 
+    public static int getBaubleSlots(EntityPlayer player){
+        return BaublesApi.getBaublesHandler(player).getSlots();
+    }
+
+    public static ItemStack getSlotBauble(EntityPlayer player, int slotId) {
+        return BaublesApi.getBaubles(player).getStackInSlot(slotId);
+    }
 
     public static SoundEvent registerSound(String name) {
         ResourceLocation location = new ResourceLocation(EnigmaticLegacy.MODID, name);

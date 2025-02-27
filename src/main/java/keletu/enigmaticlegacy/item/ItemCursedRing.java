@@ -58,7 +58,6 @@ public class ItemCursedRing extends ItemBase implements IBauble {
 
         attributesDefault.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
         attributesDefault.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
-		attributesDefault.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b52"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
 
 		return attributesDefault;
     }
