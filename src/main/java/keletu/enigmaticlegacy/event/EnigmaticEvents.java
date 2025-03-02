@@ -1014,7 +1014,7 @@ public class EnigmaticEvents {
     public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
+            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && EnigmaticConfigs.enableInsomnia && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
                 player.sleepTimer = 90;
             }
             if (player.isBurning() && hasCursed(player)) {

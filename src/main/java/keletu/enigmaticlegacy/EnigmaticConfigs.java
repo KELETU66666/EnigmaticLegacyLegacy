@@ -17,6 +17,7 @@ public class EnigmaticConfigs {
     public static int fortuneBonus;
     public static int lootingBonus;
     public static int enchantingBonus;
+    public static boolean enableInsomnia;
 
     public static float knockbackDebuff;
     public static double neutralAngerRange;
@@ -136,6 +137,8 @@ public class EnigmaticConfigs {
         lootingBonus = config.getInt("LootingBonus", "The Seven Curses", 1, 0, 100, "How many bonus Looting levels ring provides");
 
         enchantingBonus = config.getInt("EnchantingBonus", "The Seven Curses", 10, 0, 100, "How much additional Enchanting Power ring provides in Enchanting Table.");
+
+        enableInsomnia = config.getBoolean("Enable cursed Insomnia", "The Seven Curses", true, "Should cursed player insomnia at night?");
 
         useWhitelist = config.getBoolean("UseWhitelist", "The Seven Curses", true, "If true, use whitelist for cursed ring");
 
