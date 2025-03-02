@@ -2,7 +2,7 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaublesApi;
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.util.compat.CompatSimpledDifficulty;
 import keletu.enigmaticlegacy.util.compat.ModCompat;

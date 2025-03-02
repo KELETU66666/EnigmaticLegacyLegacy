@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.asm;
 
 import baubles.api.BaublesApi;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasPearl;
@@ -208,8 +208,8 @@ public class ELCoreTransformer implements IClassTransformer {
     public static int enchantment_getLootingLevel(EntityLivingBase living) {
         int base = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOOTING, living.getHeldItemMainhand());
         if (living instanceof EntityPlayer) {
-            if (ELConfigs.lootingBonus > 0 && hasCursed((EntityPlayer) living))
-                base += ELConfigs.lootingBonus;
+            if (EnigmaticConfigs.lootingBonus > 0 && hasCursed((EntityPlayer) living))
+                base += EnigmaticConfigs.lootingBonus;
 
             for (int i = 0; i < BaublesApi.getBaublesHandler((EntityPlayer) living).getSlots(); i++) {
                 ItemStack bStack = BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(i);

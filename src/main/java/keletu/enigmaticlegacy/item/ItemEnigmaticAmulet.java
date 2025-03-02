@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.item;
 import baubles.api.BaubleType;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -100,7 +100,7 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
         int color = stack.getMetadata();
 
         if (color == 1) {
-            atts.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(UUID.fromString("f5bb82c7-0332-4adf-a414-2e4f03471983"), EnigmaticLegacy.MODID + ":attack_bonus", ELConfigs.enigmaticAmuletDamageBonus, 0));
+            atts.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(UUID.fromString("f5bb82c7-0332-4adf-a414-2e4f03471983"), EnigmaticLegacy.MODID + ":attack_bonus", EnigmaticConfigs.enigmaticAmuletDamageBonus, 0));
         } else if (color == 2) {
             atts.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("cde98b8a-0cfc-45dc-929f-9cce9b6fbdfa"), EnigmaticLegacy.MODID + ":sprint_bonus", player.isSprinting() ? 0.15F : 0F, 2));
         } else if (color == 7) {
@@ -113,7 +113,7 @@ public class ItemEnigmaticAmulet extends ItemBaseBauble {
     public Multimap<String, AttributeModifier> getAllModifiers() {
         Multimap<String, AttributeModifier> atts = HashMultimap.create();
 
-        atts.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(UUID.fromString("f5bb82c7-0332-4adf-a414-2e4f03471983"), EnigmaticLegacy.MODID + ":attack_bonus", ELConfigs.enigmaticAmuletDamageBonus, 0));
+        atts.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(UUID.fromString("f5bb82c7-0332-4adf-a414-2e4f03471983"), EnigmaticLegacy.MODID + ":attack_bonus", EnigmaticConfigs.enigmaticAmuletDamageBonus, 0));
         atts.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("cde98b8a-0cfc-45dc-929f-9cce9b6fbdfa"), EnigmaticLegacy.MODID + ":sprint_bonus", 0.15F, 2));
         atts.put(EntityLivingBase.SWIM_SPEED.getName(), new AttributeModifier(UUID.fromString("a4d4b794-a691-4757-b1cb-f5f2d5a25571"), EnigmaticLegacy.MODID + ":swim_bonus", 0.25F, 2));
 

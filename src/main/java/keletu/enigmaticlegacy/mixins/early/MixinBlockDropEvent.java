@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.mixins.early;
 
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
 import net.minecraft.block.Block;
@@ -31,8 +31,8 @@ public abstract class MixinBlockDropEvent {
     private void mixinHarvestLevel(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity p_180657_5_, ItemStack stack, CallbackInfo ci){
         int base = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
         if (player instanceof EntityPlayer) {
-            if (ELConfigs.fortuneBonus > 0 && hasCursed((player)))
-                base += ELConfigs.fortuneBonus;
+            if (EnigmaticConfigs.fortuneBonus > 0 && hasCursed((player)))
+                base += EnigmaticConfigs.fortuneBonus;
 
             for (int i = 0; i < getBaubleSlots(player); i++) {
                 ItemStack bStack = getSlotBauble(player, i);

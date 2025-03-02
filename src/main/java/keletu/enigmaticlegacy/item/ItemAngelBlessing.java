@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.angelBlessingDeflectChance;
-import static keletu.enigmaticlegacy.ELConfigs.angelBlessingSpellstoneCooldown;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingDeflectChance;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingSpellstoneCooldown;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -11,10 +11,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.entity.projectile.EntityWitherSkull;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,6 +65,23 @@ public class ItemAngelBlessing extends ItemSpellstoneBauble {
 		//} catch (NullPointerException ex) {
 		//	// Just don't do it lol
 		//}
+	}
+
+	@Override
+	public void onWornTick(ItemStack stack, EntityLivingBase living) {
+		if (living.world.isRemote)
+			return;
+
+		List<EntityArrow> projectileEntities = living.world.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(living.posX - this.range, living.posY - this.range, living.posZ - this.range, living.posX + this.range, living.posY + this.range, living.posZ + this.range));
+		List<EntityThrowable> potionEntities = living.world.getEntitiesWithinAABB(EntityThrowable.class, new AxisAlignedBB(living.posX - this.range, living.posY - this.range, living.posZ - this.range, living.posX + this.range, living.posY + this.range, living.posZ + this.range));
+
+		for (EntityArrow entity : projectileEntities) {
+			this.redirect(living, entity);
+		}
+		
+		for (EntityThrowable entity : potionEntities) {
+			this.redirect(living, entity);
+		}
 	}
 
 	public void redirect(EntityLivingBase bearer, Entity redirected) {

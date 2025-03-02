@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "LXL",
+    "ERE",
+    "CSC"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:stone",
+      "data": 0
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    },
+    "C": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "E": {
+      "item": "enigmaticlegacy:evil_essence"
+    },
+    "X": {
+      "item": "enigmaticlegacy:twisted_core"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:cursed_stone"
+  }
+}

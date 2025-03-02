@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.item;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
@@ -53,7 +53,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
         list.add("");
 
         if (GuiScreen.isShiftKeyDown()) {
-            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.miningCharm1") + Math.round(ELConfigs.breakSpeedBonus * 100) + "%" + I18n.format("tooltip.enigmaticlegacy.miningCharm1_1"));
+            list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.miningCharm1") + Math.round(EnigmaticConfigs.breakSpeedBonus * 100) + "%" + I18n.format("tooltip.enigmaticlegacy.miningCharm1_1"));
             list.add(TextFormatting.GOLD + I18n.format("tooltip.enigmaticlegacy.miningCharm2") + 1 + I18n.format("tooltip.enigmaticlegacy.miningCharm2_1"));
             list.add("");
             list.add(I18n.format("tooltip.enigmaticlegacy.miningCharm3"));
@@ -94,7 +94,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
     }
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
-        attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64dde"), "Reach bonus", ELConfigs.reachDistanceBonus, 0).setSaved(false));
+        attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64dde"), "Reach bonus", EnigmaticConfigs.reachDistanceBonus, 0).setSaved(false));
     }
 
     public void removeNightVisionEffect(EntityPlayer player, int duration) {

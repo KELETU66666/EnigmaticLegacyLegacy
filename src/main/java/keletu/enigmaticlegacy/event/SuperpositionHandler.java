@@ -1,10 +1,9 @@
 package keletu.enigmaticlegacy.event;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
@@ -13,6 +12,7 @@ import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.Enchantment;
@@ -55,7 +55,7 @@ import java.util.*;
 
 public class SuperpositionHandler {
 
-    public static int getBaubleSlots(EntityPlayer player){
+    public static int getBaubleSlots(EntityPlayer player) {
         return BaublesApi.getBaublesHandler(player).getSlots();
     }
 
@@ -69,10 +69,17 @@ public class SuperpositionHandler {
     }
 
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
-        IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+        if(entity != null) {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+            ItemStack stack;
 
-        for (int i : BaubleType.TRINKET.getValidSlots())
-            return handler.getStackInSlot(i);
+            for (int i = 0; i < handler.getSlots(); i++) {
+                stack = handler.getStackInSlot(i);
+                if (stack.getItem() instanceof ItemSpellstoneBauble)
+                    return stack;
+            }
+        }
+
         return ItemStack.EMPTY;
     }
 
@@ -83,7 +90,7 @@ public class SuperpositionHandler {
      */
 
     public static boolean isInBeaconRange(EntityPlayer player) {
-        if(player.world.isRemote)
+        if (player.world.isRemote)
             return false;
 
         List<TileEntityBeacon> list = new ArrayList<TileEntityBeacon>();
@@ -286,7 +293,7 @@ public class SuperpositionHandler {
                                         living.setEntityInvulnerable(false);
                                         living.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.getDamageType(), player), 4F);
                                         living.setFire(4);
-                                        ELEvents.knockbackThatBastard.remove(living);
+                                        EnigmaticEvents.knockbackThatBastard.remove(living);
                                     }
                                 }
                             }
@@ -397,7 +404,7 @@ public class SuperpositionHandler {
         if (Loader.isModLoaded("gokistats")) {
             return false;
         }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss && hasCursed(player);
+        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && hasCursed(player);
     }
 
     public static void loseSoul(EntityPlayer player) {
@@ -497,11 +504,11 @@ public class SuperpositionHandler {
     }
 
     public static boolean isCursed(ItemStack stack) {
-        return ELConfigs.cursedItemList.contains(stack.getItem().getRegistryName());
+        return EnigmaticConfigs.cursedItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean isEldritch(ItemStack stack) {
-        return ELConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
+        return EnigmaticConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean hasCursed(EntityPlayer player) {

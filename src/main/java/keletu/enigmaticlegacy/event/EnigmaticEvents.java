@@ -3,8 +3,8 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import keletu.enigmaticlegacy.ELConfigs;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
@@ -27,6 +27,8 @@ import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDynamicLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
@@ -55,6 +57,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -64,6 +67,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -83,7 +87,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = MODID)
-public class ELEvents {
+public class EnigmaticEvents {
 
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
@@ -92,6 +96,7 @@ public class ELEvents {
     private static EntityPlayer abyssalHeartOwner;
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+    public static boolean dropCursedStone = false;
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone event) {
@@ -147,13 +152,14 @@ public class ELEvents {
             double y = dimPoint.getPosY() + 1.5;
             if (y < 0)
                 y = 3;
-            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player)) {
+
+            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player) && !dropCursedStone) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedSoulCrystal);
                 EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
-            } else if (found && !event.getDrops().isEmpty() && ELConfigs.vesselEnabled) {
+            } else if (found && !event.getDrops().isEmpty() && EnigmaticConfigs.vesselEnabled) {
                 ItemStack soulCrystal = SuperpositionHandler.shouldPlayerDropSoulCrystal(player) ? EnigmaticLegacy.soulCrystal.createCrystalFrom(player) : null;
                 ItemStack storageCrystal = EnigmaticLegacy.storageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
                 EntityItemSoulCrystal droppedStorageCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), storageCrystal);
@@ -165,7 +171,6 @@ public class ELEvents {
                 if (soulCrystal != null) {
                     droppedCrystal = true;
                 }
-
             } else if (SuperpositionHandler.shouldPlayerDropSoulCrystal(player)) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
@@ -190,7 +195,7 @@ public class ELEvents {
             if (hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
 
 
-                if (!ELConfigs.enableSpecialDrops)
+                if (!EnigmaticConfigs.enableSpecialDrops)
                     return;
 
                 if (killed instanceof EntityDragon) {
@@ -249,8 +254,6 @@ public class ELEvents {
                 } else if (killed.getClass() == EntityWitherSkeleton.class) {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                    if (enableWitherite)
-                        addDropWithChance(event, new ItemStack(witheriteCatalyst, 1), 7);
                 } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
@@ -273,6 +276,68 @@ public class ELEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onCursedDrops(PlayerDropsEvent event) {
+        if (event.getEntityPlayer() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            boolean hasCursedStone = false;
+
+            for (EntityItem entityItem : event.getDrops()) {
+                ItemStack itemStack = entityItem.getItem();
+                if (itemStack.getItem() == cursedStone) {
+                    hasCursedStone = true;
+                    itemStack.shrink(1);
+                }
+            }
+
+            if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
+                BlockPos deathPos = player.getPosition();
+
+                if (isThereLava(player.world, deathPos)) {
+                    BlockPos surfacePos = deathPos;
+
+                    while (true) {
+                        BlockPos nextAbove = surfacePos.add(0, 1, 0);
+                        if (isThereLava(player.world, nextAbove)) {
+                            surfacePos = nextAbove;
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    boolean confirmLavaPool = true;
+
+                    for (int i = -3; i <= 2; ++i) {
+
+                        boolean checkArea = false;
+                        for (BlockPos blockPos : BlockPos.getAllInBox(surfacePos.add(-3, i, -3), surfacePos.add(3, i, 3))) {
+                            if (i <= 0)
+                                checkArea = isThereLava(player.world, blockPos);
+                            else
+                                checkArea = player.world.isAirBlock(blockPos) || isThereLava(player.world, blockPos);
+                        }
+
+                        confirmLavaPool = confirmLavaPool && checkArea;
+                    }
+
+                    if (confirmLavaPool) {
+                        dropCursedStone = true;
+                        player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isThereLava(World world, BlockPos pos) {
+        IBlockState fluidState = world.getBlockState(pos);
+        if (fluidState.getMaterial() == Material.LAVA && !(fluidState.getBlock() instanceof BlockDynamicLiquid))
+            return true;
+        else
+            return false;
     }
 
     public static float getMissingHealthPool(EntityPlayer player) {
@@ -334,7 +399,7 @@ public class ELEvents {
 
                         EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(event.getEntity().posX, event.getEntity().posY + (event.getEntity().getEyeHeight() / 2), event.getEntity().posZ, 48, false), new NetworkRegistry.TargetPoint(event.getEntity().world.provider.getDimension(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, 128));
 
-                        if(!player.capabilities.isCreativeMode)
+                        if (!player.capabilities.isCreativeMode)
                             stack.shrink(1);
                     }
 
@@ -642,7 +707,7 @@ public class ELEvents {
 
         float miningBoost = 1.0F;
         if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.miningCharm) != -1) {
-            miningBoost += ELConfigs.breakSpeedBonus;
+            miningBoost += EnigmaticConfigs.breakSpeedBonus;
         }
 
         if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1) {
@@ -749,7 +814,7 @@ public class ELEvents {
         if (event.getEntityPlayer() == null)
             return;
 
-        for (ResourceLocation rl : ELConfigs.cursedItemList) {
+        for (ResourceLocation rl : EnigmaticConfigs.cursedItemList) {
             if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
                 TextFormatting color = !hasCursed(event.getEntityPlayer()) ? TextFormatting.DARK_RED : TextFormatting.GRAY;
                 event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
@@ -891,7 +956,7 @@ public class ELEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (!player.capabilities.isFlying && !player.onGround) {
-                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER) {
+                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getMaterial() == Material.WATER) {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
@@ -928,7 +993,7 @@ public class ELEvents {
             }
 
         if (shouldBoost) {
-            event.setLevel(event.getLevel() + ELConfigs.enchantingBonus);
+            event.setLevel(event.getLevel() + EnigmaticConfigs.enchantingBonus);
         }
     }
 
@@ -941,7 +1006,7 @@ public class ELEvents {
         }
 
         if (event.getEntityLiving() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getEntityLiving())) {
-            event.setStrength(event.getStrength() * ELConfigs.knockbackDebuff);
+            event.setStrength(event.getStrength() * EnigmaticConfigs.knockbackDebuff);
         }
     }
 
@@ -993,7 +1058,7 @@ public class ELEvents {
                 if (mainhandStack.getItem() == EnigmaticLegacy.theTwist) {
                     if (hasCursed(player)) {
                         if (!event.getEntityLiving().isNonBoss() || event.getEntityLiving() instanceof EntityPlayer) {
-                            event.setAmount(event.getAmount() * ELConfigs.bossDamageBonus);
+                            event.setAmount(event.getAmount() * EnigmaticConfigs.bossDamageBonus);
                         }
                     } else {
                         event.setCanceled(true);
@@ -1024,7 +1089,7 @@ public class ELEvents {
             float damageBoost = 0F;
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
-                damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) ELConfigs.attackDamage);
+                damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) EnigmaticConfigs.attackDamage);
             }
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
@@ -1067,7 +1132,7 @@ public class ELEvents {
                 event.setAmount(event.getAmount() * painMultiplier);
             }
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
-                event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) ELConfigs.damageResistance)));
+                event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) EnigmaticConfigs.damageResistance)));
             }
 
             /*
@@ -1106,20 +1171,20 @@ public class ELEvents {
 
                 if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.monsterCharm) != -1) {
                     if (monster.isEntityUndead()) {
-                        event.setAmount(event.getAmount() * (1 + ELConfigs.undeadDamageBonus));
+                        event.setAmount(event.getAmount() * (1 + EnigmaticConfigs.undeadDamageBonus));
                     } else if (monster.getAttackTarget() == player || monster instanceof EntityCreeper) {
 
                         if (monster instanceof EntityEnderman || monster instanceof EntityPigZombie || monster instanceof EntityBlaze || monster instanceof EntityGuardian || monster instanceof EntityElderGuardian/* || !monster.canChangeDimensions()*/) {
                             // NO-OP
                         } else {
-                            event.setAmount(event.getAmount() * (1 + ELConfigs.hostileDamageBonus));
+                            event.setAmount(event.getAmount() * (1 + EnigmaticConfigs.hostileDamageBonus));
                         }
 
                     }
                 }
                 if (hasCursed(player)) {
                     if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum && player.getHeldItemMainhand().getItem() != eldritchPan)) {
-                        event.setAmount(event.getAmount() * (1 - ELConfigs.monsterDamageDebuff));
+                        event.setAmount(event.getAmount() * (1 - EnigmaticConfigs.monsterDamageDebuff));
                     }
                 }
             }
@@ -1167,7 +1232,7 @@ public class ELEvents {
         }
 
         if (player != null && hasCursed(player)) {
-            bonusExp += event.getOriginalExperience() * ELConfigs.experienceBonus;
+            bonusExp += event.getOriginalExperience() * EnigmaticConfigs.experienceBonus;
         }
 
         event.setDroppedExperience(event.getDroppedExperience() + bonusExp);

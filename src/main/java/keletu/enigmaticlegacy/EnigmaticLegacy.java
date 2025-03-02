@@ -11,7 +11,7 @@ import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
-import keletu.enigmaticlegacy.event.ELEvents;
+import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
@@ -96,7 +96,7 @@ public class EnigmaticLegacy {
 
     public static ItemEnigmaticAmulet enigmaticAmulet = new ItemEnigmaticAmulet();
     public static Item cursedRing = new ItemCursedRing();
-    //public static Item cursedStone = new ItemCursedStone();
+    public static Item cursedStone = new ItemCursedStone();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
     public static Item ironRing = new ItemIronRing();
     public static Item enderRing = new ItemEnderRing();
@@ -133,7 +133,6 @@ public class EnigmaticLegacy {
     public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item evilIngot = new ItemBaseFireProof("evil_ingot", EnumRarity.EPIC);
     public static Item cosmicHeart = new ItemBaseFireProof("cosmic_heart", EnumRarity.EPIC);
-    public static Item witheriteCatalyst = new ItemBaseFireProof("witherite_catalyst", EnumRarity.COMMON);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -168,7 +167,7 @@ public class EnigmaticLegacy {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ELConfigs.onConfig(event);
+        EnigmaticConfigs.onConfig(event);
 
         CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter(null));
 
@@ -227,7 +226,7 @@ public class EnigmaticLegacy {
         //proxy.clearTransientData();
         //ELEvents.angeredGuardians.clear();
         //ELEvents.postmortalPossession.clear();
-        ELEvents.knockbackThatBastard.clear();
+        EnigmaticEvents.knockbackThatBastard.clear();
         //ELEvents.deferredToast.clear();
         soulCrystal.attributeDispatcher.clear();
         //enigmaticItem.flightMap.clear();
@@ -255,7 +254,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(magnetRing);
             event.getRegistry().register(superMagnetRing);
             event.getRegistry().register(cursedRing);
-            //event.getRegistry().register(cursedStone);
+            event.getRegistry().register(cursedStone);
             event.getRegistry().register(soulCrystal);
             event.getRegistry().register(storageCrystal);
             event.getRegistry().register(miningCharm);
@@ -272,7 +271,6 @@ public class EnigmaticLegacy {
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
-            event.getRegistry().register(witheriteCatalyst);
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(infernalShield);
@@ -352,7 +350,7 @@ public class EnigmaticLegacy {
         @SideOnly(Side.CLIENT)
         public static void modelRegistryEvent(ModelRegistryEvent event) {
             ModelLoader.setCustomModelResourceLocation(cursedRing, 0, new ModelResourceLocation(cursedRing.getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(cursedStone, 0, new ModelResourceLocation(cursedStone.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(cursedStone, 0, new ModelResourceLocation(cursedStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(soulCrystal, 0, new ModelResourceLocation(soulCrystal.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ironRing, 0, new ModelResourceLocation(ironRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(gemRing, 0, new ModelResourceLocation(gemRing.getRegistryName(), "inventory"));
@@ -409,7 +407,6 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(witheriteCatalyst, 0, new ModelResourceLocation(witheriteCatalyst.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));

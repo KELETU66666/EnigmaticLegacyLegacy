@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
 import net.minecraft.client.gui.GuiScreen;
@@ -58,8 +58,8 @@ public class ItemFabulousScroll extends ItemHeavenScroll {
             //because we're only checking once per 20 ticks, increase the probability by 20
             if (this.shouldCheckXpDrain(player) && !inRange && Math.random() <= ((this.baseXpConsumptionProbability * fabConsumptionProbMod) * 20)) {
                 //cost modifier hooked up to drain xp cost
-                if (ExperienceHelper.getPlayerXP(player) >= ELConfigs.flyingScrollXpCostModifier)
-                    ExperienceHelper.drainPlayerXP(player, (int) (ELConfigs.flyingScrollXpCostModifier));
+                if (ExperienceHelper.getPlayerXP(player) >= EnigmaticConfigs.flyingScrollXpCostModifier)
+                    ExperienceHelper.drainPlayerXP(player, (int) (EnigmaticConfigs.flyingScrollXpCostModifier));
             }
 
             this.handleFlight(player, inRange);

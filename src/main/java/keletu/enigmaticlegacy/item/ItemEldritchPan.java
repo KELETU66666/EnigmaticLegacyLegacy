@@ -2,7 +2,7 @@ package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;

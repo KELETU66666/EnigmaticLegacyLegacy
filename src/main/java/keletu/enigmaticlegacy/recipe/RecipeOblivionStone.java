@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.recipe;
 
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.inventory.InventoryCrafting;
@@ -52,7 +52,7 @@ public class RecipeOblivionStone extends IForgeRegistryEntry.Impl<IRecipe> imple
 			int[] meta = nbt.getIntArray("SupersolidMetaID");
 			int counter = 0;
 
-			if (arr.length >= ELConfigs.oblivionStoneHardCap)
+			if (arr.length >= EnigmaticConfigs.oblivionStoneHardCap)
 				return ItemStack.EMPTY;
 
 			for (int s : arr) {
@@ -131,7 +131,7 @@ public class RecipeOblivionStone extends IForgeRegistryEntry.Impl<IRecipe> imple
 			int[] meta = nbt.getIntArray("SupersolidMetaID");
 			int counter = 0;
 
-			if (arr.length >= ELConfigs.oblivionStoneHardCap)
+			if (arr.length >= EnigmaticConfigs.oblivionStoneHardCap)
 				return false;
 
 			for (int s : arr) {

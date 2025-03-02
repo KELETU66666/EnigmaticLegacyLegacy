@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
+import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDesolationRing extends ItemBaseBauble {
+public class ItemDesolationRing extends ItemBaseBauble implements IKeptBauble {
 
 	public ItemDesolationRing() {
 		super("desolation_ring", EnumRarity.EPIC);

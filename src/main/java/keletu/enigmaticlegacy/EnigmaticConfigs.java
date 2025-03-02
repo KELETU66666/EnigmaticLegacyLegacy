@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ELConfigs {
+public class EnigmaticConfigs {
 
     public static float painMultiplier;
     public static float monsterDamageDebuff;
