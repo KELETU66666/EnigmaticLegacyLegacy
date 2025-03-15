@@ -84,8 +84,8 @@ public class KeepBaublesEvent {
 
     public static int getSlotShouldKept(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-        for (int x : BaubleType.TRINKET.getValidSlots()) {
-            ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
+        for (int x : handler.getSlots()) {
+            ItemStack stack = handler.getStackInSlot(x);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
                 return x;
             }
@@ -95,8 +95,8 @@ public class KeepBaublesEvent {
 
     public static ItemStack getBaubleStack(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-        for (int x : BaubleType.TRINKET.getValidSlots()) {
-            ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
+        for (int x : handler.getSlots()) {
+            ItemStack stack = handler.getStackInSlot(x);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
                 return stack;
             }
