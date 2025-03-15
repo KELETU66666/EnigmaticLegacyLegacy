@@ -29,6 +29,7 @@ import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELI
 import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
 import keletu.enigmaticlegacy.util.loot.LootHandler;
 import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
+import keletu.enigmaticlegacy.util.loot.LootHandlerForgottenRelics;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -117,6 +118,7 @@ public class EnigmaticLegacy {
     public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
+    public static Item blazingCore = new ItemMagmaHeart();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -178,6 +180,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
+        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -199,6 +202,9 @@ public class EnigmaticLegacy {
         //MinecraftForge.EVENT_BUS.register(new LootHandlerSpecial());
         if (COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
+        else
+            MinecraftForge.EVENT_BUS.register(new LootHandlerForgottenRelics());
+
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new LayerScroll());
@@ -264,6 +270,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(golemHeart);
             event.getRegistry().register(oceanStone);
             event.getRegistry().register(angelBlessing);
+            event.getRegistry().register(blazingCore);
             event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
@@ -408,6 +415,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

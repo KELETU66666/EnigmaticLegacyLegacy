@@ -34,6 +34,7 @@ item.desolation_ring.name=The Burden of Desolation
 item.golem_heart.name=Heart of the Golem
 item.ocean_stone.name=Will of the Ocean
 item.angel_blessing.name=Angel's Blessing
+item.magma_heart.name=Blazing Core
 item.void_pearl.name=Pearl of the Void
 
 #material
@@ -101,6 +102,20 @@ tooltip.enigmaticlegacy.angelBlessing6=§5- Your own projectiles are greatly acc
 tooltip.enigmaticlegacy.angelBlessing7=§5- Active ability can be triggered by pressing jump
 tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air. §1§l [WIP]
 tooltip.enigmaticlegacy.angelBlessing9=§5- You are vulnerable to §6Withering§5 and §6Void Damage§5.
+
+tooltip.enigmaticlegacy.blazingCore1=§dActive ability:
+tooltip.enigmaticlegacy.blazingCore2=§4- Absent.
+tooltip.enigmaticlegacy.blazingCoreCooldown=§dСooldown: §6
+tooltip.enigmaticlegacy.blazingCoreCooldown_1=§6 seconds
+tooltip.enigmaticlegacy.blazingCore3=§dPassive abilities:
+tooltip.enigmaticlegacy.blazingCore4=§5- Immunity to fire.
+tooltip.enigmaticlegacy.blazingCore5=§5- Temporary immunity to lava.
+tooltip.enigmaticlegacy.blazingCore6=§5- Burns those who attack you in melee.
+tooltip.enigmaticlegacy.blazingCore7=§5- Heavily improved visibility in lava.
+tooltip.enigmaticlegacy.blazingCore8=§5- Any status effects applied to you tick
+tooltip.enigmaticlegacy.blazingCore9=§5  down twice as fast, except §6Fire Resistance§5.
+tooltip.enigmaticlegacy.blazingCore10=§5- §6Fire Resistance§5 lasts twice as long.
+tooltip.enigmaticlegacy.blazingCore11=§5- You are vulnerable to underwater creatures.
 
 tooltip.enigmaticlegacy.extradimensionalEyeLocation=§dBound Location:
 tooltip.enigmaticlegacy.extradimensionalEyeX=§d- X: §6

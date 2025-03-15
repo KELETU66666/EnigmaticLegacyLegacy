@@ -107,6 +107,11 @@
           "type": "item",
           "name": "enigmaticlegacy:magma_heart",
           "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:void_stone",
+          "weight": 8
         }
       ]
     }

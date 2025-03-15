@@ -16,20 +16,22 @@ import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
-import keletu.enigmaticlegacy.item.ItemEldritchPan;
-import keletu.enigmaticlegacy.item.ItemInfernalShield;
-import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
+import keletu.enigmaticlegacy.util.helper.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
@@ -60,6 +62,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -83,8 +87,10 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class EnigmaticEvents {
@@ -97,6 +103,8 @@ public class EnigmaticEvents {
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
     public static boolean dropCursedStone = false;
+
+    public static final ResourceLocation FIREBAR_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/firebar.png");
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone event) {
@@ -364,6 +372,10 @@ public class EnigmaticEvents {
 
                 if (advancedCurio.immunityList.contains(event.getSource().damageType)) {
                     event.setCanceled(true);
+                }
+
+                if (event.getSource() == DamageSource.LAVA) {
+                    handleLavaProtection(event);
                 }
 
                 /*
@@ -998,6 +1010,84 @@ public class EnigmaticEvents {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onOverlayRender(RenderGameOverlayEvent.Post event) {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (!mc.player.isSpectator()) {
+
+            ItemStack lavaProtector = ItemStack.EMPTY;
+            ItemStack lavaCharm = SuperpositionHandler.getAdvancedBaubles(mc.player);
+
+            if (!lavaCharm.isEmpty() && lavaCharm.getItem() instanceof ItemMagmaHeart) {
+                lavaProtector = lavaCharm;
+            }
+
+            if (!lavaProtector.isEmpty()) {
+                NBTTagCompound compound = lavaProtector.getTagCompound();
+                if (compound != null) {
+                    int charge = compound.getInteger("blazingCoreCharge");
+
+                    if (event.getType() == RenderGameOverlayEvent.ElementType.ALL && (mc.player.isInLava() || charge < 200)) {
+                        renderLavaChargeBar(event.getResolution(), charge, 200);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *From Mod Botania
+     * Botania is Open Source and distributed under the
+     * Botania License: http://botaniamod.net/license.php
+     */
+    private static void renderLavaChargeBar(ScaledResolution res, int totalMana, int totalMaxMana) {
+        Minecraft mc = Minecraft.getMinecraft();
+        int width = 182;
+        int x = res.getScaledWidth() / 2 - width / 2;
+        int y = res.getScaledHeight() - 29;
+
+        if (totalMaxMana == 0)
+            width = 0;
+        else width *= (double) totalMana / (double) totalMaxMana;
+
+        if (width == 0) {
+            if (totalMana > 0)
+                width = 1;
+            else return;
+        }
+
+        mc.renderEngine.bindTexture(FIREBAR_LOCATION);
+
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderHelper.drawTexturedModalRect(x, y, 0, 0, 251, width, 5);
+        GlStateManager.disableBlend();
+    }
+
+    //From RandomThings mod, Thank you author :)
+    private static void handleLavaProtection(LivingAttackEvent event) {
+        ItemStack lavaProtector = ItemStack.EMPTY;
+        ItemStack lavaCharm = SuperpositionHandler.getAdvancedBaubles(event.getEntityLiving());
+
+        if (!lavaCharm.isEmpty() && lavaCharm.getItem() instanceof ItemMagmaHeart) {
+            lavaProtector = lavaCharm;
+        }
+
+        if (!lavaProtector.isEmpty()) {
+            NBTTagCompound compound = lavaProtector.getTagCompound();
+            if (compound != null) {
+                int charge = compound.getInteger("blazingCoreCharge");
+                if (charge > 0) {
+                    compound.setInteger("blazingCoreCharge", charge - 1);
+                    compound.setInteger("blazingCoreCooldown", 40);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingKnockback(LivingKnockBackEvent event) {
         if (knockbackThatBastard.containsKey(event.getEntityLiving())) {
             float knockbackPower = knockbackThatBastard.get(event.getEntityLiving());
@@ -1020,6 +1110,22 @@ public class EnigmaticEvents {
             if (player.isBurning() && hasCursed(player)) {
                 player.setFire(player.fire + 2);
             }
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1)
+                if (!player.getActivePotionEffects().isEmpty()) {
+                    Collection<PotionEffect> effects = new ArrayList<>();
+                    effects.addAll(player.getActivePotionEffects());
+
+                    for (PotionEffect effect : effects) {
+                        if (effect.getPotion().equals(MobEffects.FIRE_RESISTANCE)) {
+                            if (player.ticksExisted % 2 == 0 && effect.duration > 0) {
+                                effect.duration += 1;
+                            }
+                        } else {
+                            effect.onUpdate(player);
+                        }
+                    }
+
+                }
         }
     }
 
@@ -1037,6 +1143,17 @@ public class EnigmaticEvents {
     //        }
     //    }
     //}
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onFogRender(EntityViewRenderEvent.FogDensity event) {
+        IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player, (float) event.getRenderPartialTicks());
+        if (iblockstate.getMaterial() == Material.LAVA && BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.blazingCore) != -1) {
+            event.setCanceled(true);
+            event.setDensity((float) magmaHeartLavafogDensity);
+        }
+
+    }
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
@@ -1088,6 +1205,17 @@ public class EnigmaticEvents {
 
             float damageBoost = 0F;
 
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
+                if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
+                    EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
+                    if (!attacker.isImmuneToFire()) {
+                        attacker.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.damageType, player), (float) magmaHeartDamageFeedback);
+                        attacker.setFire(magmaHeartIgnitionFeedback);
+                    }
+                }
+
+            }
+
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
                 damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) EnigmaticConfigs.attackDamage);
             }
@@ -1109,9 +1237,9 @@ public class EnigmaticEvents {
 
                 if (event.getSource().damageType.startsWith("explosion") && advancedCurio == EnigmaticLegacy.golemHeart && SuperpositionHandler.hasAnyArmor(player)) {
                     event.setCanceled(true);
-                } /*else if (advancedCurio == magmaHeart && trueSource != null && (trueSource.getMobType() == CreatureAttribute.WATER || trueSource instanceof DrownedEntity)) {
-                event.setAmount(event.getAmount() * 2F);
-            } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
+                } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                    event.setAmount(event.getAmount() * 2F);
+                } /*else if (advancedCurio == eyeOfNebula && player.isInWater()) {
                 event.setAmount(event.getAmount() * 2F);
             } */ else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
                     event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);

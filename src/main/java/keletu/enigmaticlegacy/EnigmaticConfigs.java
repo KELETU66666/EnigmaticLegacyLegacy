@@ -113,6 +113,13 @@ public class EnigmaticConfigs {
     public static double angelBlessingAccelerationModifier;
     public static double angelBlessingAccelerationModifierElytra;
     public static float angelBlessingDeflectChance;
+
+    public static int magmaHeartSpellstoneCooldown;
+    public static double magmaHeartDamageFeedback;
+    public static int magmaHeartIgnitionFeedback;
+    public static double magmaHeartLavafogDensity;
+    public static boolean magmaHeartTraitorBar;
+
     public static double flyingScrollXpCostModifier;
 
     public static void onConfig(FMLPreInitializationEvent builder) {
@@ -291,6 +298,16 @@ public class EnigmaticConfigs {
         angelBlessingAccelerationModifierElytra = config.getFloat("AccelerationModifierElytra", "Angel Blessing", 0.6F, 0, 256, "Separate acceleration modifier for active ability of Angel's Blessing when player is flying with Elytra.");
 
         angelBlessingDeflectChance = config.getFloat("DeflectChance", "Angel Blessing", 0.5F, 0, 1, "Chance to deflect projectile when having Angel's Blessing equipped. Measured in parents.");
+
+        magmaHeartSpellstoneCooldown = config.getInt("Cooldown", "BlazingCore", 0, 0, 32768, "Active ability cooldown for Blazing Core. Measured in ticks. 20 ticks equal to 1 second.");
+
+        magmaHeartDamageFeedback = config.getFloat("DamageFeedback", "BlazingCore", 4.0F, 0, 512, "How much fire-based damage instantly receives any creature that attacks bearer of the Blazing Core.");
+
+        magmaHeartIgnitionFeedback = config.getInt("IgnitionFeedback", "BlazingCore", 4, 0, 512, "How how many seconds any creature that attacks bearer of the Blazing Core will be set on fire.");
+
+        magmaHeartLavafogDensity = config.getFloat("LavaDensity", "BlazingCore", 0.3F, 0, 1024, "Controls how obscured your vision is in lava when Blazing Core is equipped. Lower value equals more visibility.");
+
+        magmaHeartTraitorBar = config.getBoolean("TraitorBarEnabled", "BlazingCore", false, "Flips the parabolic function bearing responsibility for heat bar rendering when temporary fire resistance from Blazing Core is active. Instead of default behavior, it will start decreasing slowly, but will expotentially speed up the closer to the end it is. This is a purely visual effect - raw fire immunity time provided stays unchanged.");
 
         flyingScrollXpCostModifier = config.getFloat("flyingScrollXpCostModifier", "Heaven Scroll", 1.0F, 0, 32768, "Multiplier for experience consumption by Gift of the Heaven.");
 
