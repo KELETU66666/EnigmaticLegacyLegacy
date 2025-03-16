@@ -77,7 +77,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.1.2";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -182,6 +182,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
         packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
         packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 7, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 8, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
