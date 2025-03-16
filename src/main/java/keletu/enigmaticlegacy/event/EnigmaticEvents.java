@@ -1041,6 +1041,8 @@ public class EnigmaticEvents {
      * Botania is Open Source and distributed under the
      * Botania License: http://botaniamod.net/license.php
      */
+
+    @SideOnly(Side.CLIENT)
     private static void renderLavaChargeBar(ScaledResolution res, int totalMana, int totalMaxMana) {
         Minecraft mc = Minecraft.getMinecraft();
         int width = 182;
