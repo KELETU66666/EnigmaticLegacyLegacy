@@ -3,6 +3,8 @@ package keletu.enigmaticlegacy.item;
 import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingDeflectChance;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingSpellstoneCooldown;
+import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.packet.PacketForceArrowRotations;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -19,6 +21,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -88,43 +92,59 @@ public class ItemAngelBlessing extends ItemSpellstoneBauble {
 		if (redirected instanceof EntityWitherSkull)
 			return;
 
-		/*
-		 * if (redirected instanceof TridentEntity) if
-		 * (((TridentEntity)redirected).getShooter() == bearer) return;
-		 */
-
 		Vector3 entityPos = Vector3.fromEntityCenter(redirected);
 		Vector3 bearerPos = Vector3.fromEntityCenter(bearer);
 
 		Vector3 redirection = entityPos.subtract(bearerPos);
 		redirection = redirection.normalize();
 
-		if (redirected instanceof EntityArrow && ((EntityArrow) redirected).shootingEntity == bearer) {
+		if ((redirected instanceof EntityArrow && ((EntityArrow) redirected).shootingEntity == bearer) || (redirected instanceof EntityThrowable && ((EntityThrowable) redirected).getThrower() == bearer)) {
+			if (redirected.getTags().contains("AB_ACCELERATED")) {
+				if (redirected.getEntityWorld() instanceof WorldServer) {
+					//ServerChunkCache cache = level.getChunkSource();
+					//cache.broadcastAndSend(redirected, new ClientboundSetEntityMotionPacket(redirected));
+					//cache.broadcastAndSend(redirected, new ClientboundTeleportEntityPacket(redirected));
+					//EnigmaticLegacy.packetInstance.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(bearer.getX(), bearer.getY(), bearer.getZ(), 64.0D, bearer.level.dimension())), new PacketForceArrowRotations(redirected.getId(), redirected.getYRot(), redirected.getXRot(), redirected.getDeltaMovement().x, redirected.getDeltaMovement().y, redirected.getDeltaMovement().z, redirected.getX(), redirected.getY(), redirected.getZ()));
+				}
 
-			//if (redirected instanceof TridentEntity) {
-			//	TridentEntity trident = (TridentEntity) redirected;
+				return;
+			}
 
+			if (redirected.getTags().stream().anyMatch(tag -> tag.startsWith("AB_DEFLECTED")))
+				return;
+
+			//if (redirected instanceof ThrownTrident) {
+			//	ThrownTrident trident = (ThrownTrident) redirected;
+//
 			//	if (trident.clientSideReturnTridentTickCount > 0)
 			//		return;
 			//}
 
-			redirected.motionX *= 1.75D;
-			redirected.motionY *= 1.75D;
-			redirected.motionZ *= 1.75D;
+			if (redirected.addTag("AB_ACCELERATED")) {
+				redirected.motionX *= 1.75D;
+				redirected.motionY *= 1.75D;
+				redirected.motionZ *= 1.75D;
+
+				if (redirected.getEntityWorld() instanceof WorldServer) {
+					EnigmaticLegacy.packetInstance.sendToAllAround(new PacketForceArrowRotations(redirected.getEntityId(), redirected.rotationYaw, redirected.rotationPitch, redirected.motionX, redirected.motionY, redirected.motionZ, redirected.posX, redirected.posY, redirected.posZ), new NetworkRegistry.TargetPoint(bearer.world.provider.getDimension(), bearer.posX, bearer.posY, bearer.posZ, 64.0D));
+				}
+
+				//EnigmaticLegacy.packetInstance.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(bearer.getX(), bearer.getY(), bearer.getZ(), 64.0D, bearer.level.dimension())), new PacketForceArrowRotations(redirected.getId(), redirected.getYRot(), redirected.getXRot(), redirected.getDeltaMovement().x, redirected.getDeltaMovement().y, redirected.getDeltaMovement().z, redirected.getX(), redirected.getY(), redirected.getZ()));
+			}
 		} else {
-			redirected.motionX = redirection.x;
-			redirected.motionY = redirection.y;
-			redirected.motionZ = redirection.z;
+			// redirected.setDeltaMovement(redirection.x, redirection.y, redirection.z);
 		}
 
-		if (redirected instanceof EntityArrow) {
-			EntityArrow redirectedProjectile = (EntityArrow) redirected;
-			redirectedProjectile.posX = (redirection.x / 4.0);
-			redirectedProjectile.posY = (redirection.y / 4.0);
-			redirectedProjectile.posZ = (redirection.z / 4.0);
+		/*
+		if (redirected instanceof AbstractHurtingProjectile) {
+			AbstractHurtingProjectile redirectedProjectile = (AbstractHurtingProjectile) redirected;
+			redirectedProjectile.xPower = (redirection.x / 4.0);
+			redirectedProjectile.yPower = (redirection.y / 4.0);
+			redirectedProjectile.zPower = (redirection.z / 4.0);
 		}
+		 */
 	}
-
+	
 	@Override
 	void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
 		

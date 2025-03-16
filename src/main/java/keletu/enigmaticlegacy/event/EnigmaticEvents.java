@@ -1205,17 +1205,6 @@ public class EnigmaticEvents {
 
             float damageBoost = 0F;
 
-            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
-                if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
-                    EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
-                    if (!attacker.isImmuneToFire()) {
-                        attacker.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.damageType, player), (float) magmaHeartDamageFeedback);
-                        attacker.setFire(magmaHeartIgnitionFeedback);
-                    }
-                }
-
-            }
-
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
                 damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) EnigmaticConfigs.attackDamage);
             }
@@ -1259,6 +1248,19 @@ public class EnigmaticEvents {
             if (hasCursed(player)) {
                 event.setAmount(event.getAmount() * painMultiplier);
             }
+
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
+                if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
+                    EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
+                    if (!attacker.isImmuneToFire()) {
+                        attacker.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.damageType, player), (float) magmaHeartDamageFeedback);
+                        attacker.setFire(magmaHeartIgnitionFeedback);
+                    }
+                }
+
+            }
+
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
                 event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) EnigmaticConfigs.damageResistance)));
             }
