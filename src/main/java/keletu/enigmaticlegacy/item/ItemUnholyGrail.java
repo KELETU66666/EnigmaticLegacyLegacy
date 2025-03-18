@@ -27,6 +27,7 @@ public class ItemUnholyGrail extends ItemBaseFireProof {
 
 	public ItemUnholyGrail() {
 		super("unholy_grail", EnumRarity.EPIC);
+		this.maxStackSize = 1;
 	}
 
 	@Override
