@@ -3,7 +3,7 @@
     "modid": "enigmaticlegacy",
     "name": "Enigmatic Legacy²",
     "description": "A backport of Enigmatic Legacy",
-    "version": "0.10.5",
+    "version": "1.2.0",
     "mcversion": "1.12.2",
     "url": "",
     "updateUrl": "",
@@ -16,7 +16,7 @@
     "screenshots": [],
     "requiredMods": [
       "baubles",
-      "grimoire"
+      "fermiumbooter"
     ]
   }
 ]

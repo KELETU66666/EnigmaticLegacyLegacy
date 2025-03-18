@@ -205,8 +205,18 @@
         },
         {
           "type": "item",
-          "name": "enigmaticlegacy:ichor_bottle",
-          "weight": 10
+          "name": "enigmaticlegacy:magnet_ring",
+          "weight": 8
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:iron_ring",
+          "weight": 20
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:unholy_grail",
+          "weight": 1
         }
       ]
     }

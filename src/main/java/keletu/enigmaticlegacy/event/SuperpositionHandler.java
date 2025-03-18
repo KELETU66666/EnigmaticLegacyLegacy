@@ -1,17 +1,18 @@
 package keletu.enigmaticlegacy.event;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
+import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.Enchantment;
@@ -47,12 +48,20 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
 
+    public static int getBaubleSlots(EntityPlayer player) {
+        return BaublesApi.getBaublesHandler(player).getSlots();
+    }
+
+    public static ItemStack getSlotBauble(EntityPlayer player, int slotId) {
+        return BaublesApi.getBaubles(player).getStackInSlot(slotId);
+    }
 
     public static SoundEvent registerSound(String name) {
         ResourceLocation location = new ResourceLocation(EnigmaticLegacy.MODID, name);
@@ -60,10 +69,17 @@ public class SuperpositionHandler {
     }
 
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
-        IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+        if(entity != null) {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+            ItemStack stack;
 
-        for (int i : BaubleType.TRINKET.getValidSlots())
-            return handler.getStackInSlot(i);
+            for (int i = 0; i < handler.getSlots(); i++) {
+                stack = handler.getStackInSlot(i);
+                if (stack.getItem() instanceof ItemSpellstoneBauble)
+                    return stack;
+            }
+        }
+
         return ItemStack.EMPTY;
     }
 
@@ -74,6 +90,9 @@ public class SuperpositionHandler {
      */
 
     public static boolean isInBeaconRange(EntityPlayer player) {
+        if (player.world.isRemote)
+            return false;
+
         List<TileEntityBeacon> list = new ArrayList<TileEntityBeacon>();
         boolean inRange = false;
 
@@ -235,10 +254,10 @@ public class SuperpositionHandler {
         return new Vec3d(newX, newY, newZ);
     }
 
-    public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source) {
+    public static boolean onDamageSourceBlocking(EntityLivingBase blocker, ItemStack useItem, DamageSource source, CallbackInfoReturnable<Boolean> info) {
         if (blocker instanceof EntityPlayer && useItem != null) {
             EntityPlayer player = (EntityPlayer) blocker;
-            boolean blocking = player.isActiveItemStackBlocking();
+            boolean blocking = ((IProperShieldUser) blocker).isActuallyReallyBlocking();
 
             if (blocking && useItem.getItem() instanceof ItemInfernalShield) {
 
@@ -274,7 +293,7 @@ public class SuperpositionHandler {
                                         living.setEntityInvulnerable(false);
                                         living.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.getDamageType(), player), 4F);
                                         living.setFire(4);
-                                        ELEvents.knockbackThatBastard.remove(living);
+                                        EnigmaticEvents.knockbackThatBastard.remove(living);
                                     }
                                 }
                             }
@@ -385,7 +404,7 @@ public class SuperpositionHandler {
         if (Loader.isModLoaded("gokistats")) {
             return false;
         }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < ELConfigs.heartLoss && hasCursed(player);
+        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && hasCursed(player);
     }
 
     public static void loseSoul(EntityPlayer player) {
@@ -485,11 +504,11 @@ public class SuperpositionHandler {
     }
 
     public static boolean isCursed(ItemStack stack) {
-        return ELConfigs.cursedItemList.contains(stack.getItem().getRegistryName());
+        return EnigmaticConfigs.cursedItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean isEldritch(ItemStack stack) {
-        return ELConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
+        return EnigmaticConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean hasCursed(EntityPlayer player) {

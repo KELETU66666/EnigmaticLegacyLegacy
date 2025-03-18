@@ -1,17 +1,16 @@
 package keletu.enigmaticlegacy;
 
-import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
-import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
-import keletu.enigmaticlegacy.api.cap.PlayerPlaytimeCounter;
+import keletu.enigmaticlegacy.api.cap.*;
 import keletu.enigmaticlegacy.block.EnigmaticBaseBlock;
 import keletu.enigmaticlegacy.client.LayerScroll;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
+import keletu.enigmaticlegacy.effect.GrowingBloodlustEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
-import keletu.enigmaticlegacy.event.ELEvents;
+import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
@@ -29,6 +28,7 @@ import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELI
 import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
 import keletu.enigmaticlegacy.util.loot.LootHandler;
 import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
+import keletu.enigmaticlegacy.util.loot.LootHandlerForgottenRelics;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -70,13 +70,13 @@ import net.minecraftforge.registries.IForgeRegistry;
         modid = EnigmaticLegacy.MODID,
         name = EnigmaticLegacy.MOD_NAME,
         version = EnigmaticLegacy.VERSION,
-        dependencies = "required-after:baubles;after:fermiumbooter;after:mixinbooter;after:patchouli"
+        dependencies = "required-after:baubles;required-after:fermiumbooter;after:patchouli;after:bettercombatmod"
 )
 public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "0.10.5";
+    public static final String VERSION = "1.2.0-special";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -96,7 +96,7 @@ public class EnigmaticLegacy {
 
     public static ItemEnigmaticAmulet enigmaticAmulet = new ItemEnigmaticAmulet();
     public static Item cursedRing = new ItemCursedRing();
-    //public static Item cursedStone = new ItemCursedStone();
+    public static Item cursedStone = new ItemCursedStone();
     public static ItemSoulCrystal soulCrystal = new ItemSoulCrystal();
     public static Item ironRing = new ItemIronRing();
     public static Item enderRing = new ItemEnderRing();
@@ -117,6 +117,7 @@ public class EnigmaticLegacy {
     public static Item enigmaticEye = new ItemEnigmaticEye();
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
+    public static Item blazingCore = new ItemMagmaHeart();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -133,7 +134,6 @@ public class EnigmaticLegacy {
     public static Item abyssalHeart = new ItemBaseFireProof("abyssal_heart", EnumRarity.EPIC).setMaxStackSize(1);
     public static Item evilIngot = new ItemBaseFireProof("evil_ingot", EnumRarity.EPIC);
     public static Item cosmicHeart = new ItemBaseFireProof("cosmic_heart", EnumRarity.EPIC);
-    public static Item witheriteCatalyst = new ItemBaseFireProof("witherite_catalyst", EnumRarity.COMMON);
 
     //Armor
     public static Item etheriumHelm = new EtheriumArmor(EntityEquipmentSlot.HEAD, 1, "etherium_helm");
@@ -160,6 +160,9 @@ public class EnigmaticLegacy {
     public static Item voidPearl = new ItemVoidPearl();
     public static Item desolationRing = new ItemDesolationRing();
     public static Item extraDimensionalEye = new ItemExtradimensionalEye();
+    public static Item forbiddenFruit = new ItemForbiddenFruit();
+    public static Item unholyGrail = new ItemUnholyGrail();
+    public static Item redemptionPotion = new ItemRedemptionPotion();
     public static Item astralFruit = new ItemAstralFruit();
     public static Item ichorBottle = new ItemIchorBottle();
 
@@ -167,12 +170,14 @@ public class EnigmaticLegacy {
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
     public static Potion growingHungerEffect = new GrowingHungerEffect();
+    public static Potion growingBloodlust = new GrowingBloodlustEffect();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ELConfigs.onConfig(event);
+        EnigmaticConfigs.onConfig(event);
 
         CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter(null));
+        CapabilityManager.INSTANCE.register(IForbiddenConsumed.class, new EnigmaticCapabilities.CapabilityForbiddenConsumed(), () -> new ForbiddenConsumed(null));
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
@@ -181,7 +186,10 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
-        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 6, Side.CLIENT);
+        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
+        packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 7, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 8, Side.CLIENT);
+        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -197,13 +205,15 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         MinecraftForge.EVENT_BUS.register(new LootHandler());
-        for(Quote quote : Quote.getAllQuotes())
-        {
+        for (Quote quote : Quote.getAllQuotes()) {
             ForgeRegistries.SOUND_EVENTS.register(quote.getSound());
         }
         //MinecraftForge.EVENT_BUS.register(new LootHandlerSpecial());
         if (COMPAT_FORGOTTEN_RELICS)
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
+        else
+            MinecraftForge.EVENT_BUS.register(new LootHandlerForgottenRelics());
+
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new LayerScroll());
@@ -231,7 +241,7 @@ public class EnigmaticLegacy {
         //proxy.clearTransientData();
         //ELEvents.angeredGuardians.clear();
         //ELEvents.postmortalPossession.clear();
-        ELEvents.knockbackThatBastard.clear();
+        EnigmaticEvents.knockbackThatBastard.clear();
         //ELEvents.deferredToast.clear();
         soulCrystal.attributeDispatcher.clear();
         //enigmaticItem.flightMap.clear();
@@ -259,7 +269,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(magnetRing);
             event.getRegistry().register(superMagnetRing);
             event.getRegistry().register(cursedRing);
-            //event.getRegistry().register(cursedStone);
+            event.getRegistry().register(cursedStone);
             event.getRegistry().register(soulCrystal);
             event.getRegistry().register(storageCrystal);
             event.getRegistry().register(miningCharm);
@@ -269,14 +279,16 @@ public class EnigmaticLegacy {
             event.getRegistry().register(golemHeart);
             event.getRegistry().register(oceanStone);
             event.getRegistry().register(angelBlessing);
+            event.getRegistry().register(blazingCore);
             event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
             event.getRegistry().register(extraDimensionalEye);
+            event.getRegistry().register(forbiddenFruit);
+            event.getRegistry().register(unholyGrail);
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
-            event.getRegistry().register(witheriteCatalyst);
             event.getRegistry().register(ingotWitherite);
             event.getRegistry().register(enchanterPearl);
             event.getRegistry().register(infernalShield);
@@ -310,6 +322,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(eldritchPan);
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
+            event.getRegistry().register(redemptionPotion);
             event.getRegistry().register(astralFruit);
             event.getRegistry().register(ichorBottle);
 
@@ -325,6 +338,7 @@ public class EnigmaticLegacy {
         public static void registerEffects(final RegistryEvent.Register<Potion> event) {
             event.getRegistry().register(blazingStrengthEffect);
             event.getRegistry().register(growingHungerEffect);
+            event.getRegistry().register(growingBloodlust);
         }
 
         @SubscribeEvent
@@ -358,7 +372,7 @@ public class EnigmaticLegacy {
         @SideOnly(Side.CLIENT)
         public static void modelRegistryEvent(ModelRegistryEvent event) {
             ModelLoader.setCustomModelResourceLocation(cursedRing, 0, new ModelResourceLocation(cursedRing.getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(cursedStone, 0, new ModelResourceLocation(cursedStone.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(cursedStone, 0, new ModelResourceLocation(cursedStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(soulCrystal, 0, new ModelResourceLocation(soulCrystal.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ironRing, 0, new ModelResourceLocation(ironRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(gemRing, 0, new ModelResourceLocation(gemRing.getRegistryName(), "inventory"));
@@ -417,8 +431,11 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(witheriteCatalyst, 0, new ModelResourceLocation(witheriteCatalyst.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(unholyGrail, 0, new ModelResourceLocation(unholyGrail.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(redemptionPotion, 0, new ModelResourceLocation(redemptionPotion.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

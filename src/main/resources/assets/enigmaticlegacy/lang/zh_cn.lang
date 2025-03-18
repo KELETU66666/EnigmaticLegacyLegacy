@@ -43,7 +43,7 @@ item.etherium_ore.name=以太矿石
 item.etherium_ingot.name=以太锭
 item.earth_heart.name=大地之心
 item.twisted_core.name=扭曲之心
-item.witherite_catalyst.name=凋灵下界合金催化剂
+item.witherite_catalyst.name=凋灵下界合金碎片
 item.witherite_ingot.name=凋灵下界合金锭
 item.evil_essence.name=邪恶精髓
 item.thicc_scroll.name=空白卷轴
@@ -380,16 +380,8 @@ tooltip.enigmaticlegacy.soulCrystal1=§6右击§5吸收水晶，
 tooltip.enigmaticlegacy.soulCrystal2=§5并恢复一颗破碎的§6灵魂水晶
 
 #1.18+
-item.ichor_bottle.name=灵液瓶
-item.astral_fruit.name=天体果实
-
 potion.blazing_strength=耀炎之力
 potion.growing_hunger=饥饿渐涨
-
-tooltip.enigmaticlegacy.ichorBottle1=§5藐视神明的前提是了解神明……
-tooltip.enigmaticlegacy.ichorBottle2=§5饮用以永久 §6+1§d 饰品栏位 §5
-
-tooltip.enigmaticlegacy.astralFruit1=§5使用它可 §6+1§d 戒指栏位 §5
 
 tooltip.enigmaticlegacy.soulCompass1=§5它会指向最近的§6灵魂水晶
 
@@ -440,9 +432,9 @@ tooltip.enigmaticlegacy.eldritchPan4=§d 饥饿偷取
 tooltip.enigmaticlegacy.eldritchPan4_alt=§d饥饿偷取（转化为生命）
 tooltip.enigmaticlegacy.eldritchPan5=§5能烹饪被杀死的生物的肉
 tooltip.enigmaticlegacy.eldritchPan6=§5可以用作盾牌，并在格挡时吞噬投射物
-tooltip.enigmaticlegacy.eldritchPan7=§5持有它会赋予你§6饥饿渐长§5效果，
+tooltip.enigmaticlegacy.eldritchPan7=§5持有它会赋予你§6饥饿渐涨§5效果，
 tooltip.enigmaticlegacy.eldritchPan8=§5使你更饥饿，但更强大
-tooltip.enigmaticlegacy.eldritchPan7_alt=§5持有它会赋予你§6血腥渴望渐长§5效果，
+tooltip.enigmaticlegacy.eldritchPan7_alt=§5持有它会赋予你§6血怒渐涨§5效果，
 tooltip.enigmaticlegacy.eldritchPan8_alt=§5使你失去生命，但获得力量和生命偷取
 tooltip.enigmaticlegacy.eldritchPan8p_alt=§5此效果不会杀死你
 tooltip.enigmaticlegacy.eldritchPan9=§5每用它杀死一种新的生物，都会使其永久获得

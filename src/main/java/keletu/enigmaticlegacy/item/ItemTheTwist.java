@@ -1,9 +1,9 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.ELConfigs;
-import static keletu.enigmaticlegacy.ELConfigs.bossDamageBonus;
-import static keletu.enigmaticlegacy.ELConfigs.knockbackBonus;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.bossDamageBonus;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.knockbackBonus;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
 import net.minecraft.client.Minecraft;
@@ -53,8 +53,8 @@ public class ItemTheTwist extends ItemBaseFireProof {
         Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
 
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", ELConfigs.twistAttackDamage, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ELConfigs.twistAttackSpeed, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", EnigmaticConfigs.twistAttackDamage, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", EnigmaticConfigs.twistAttackSpeed, 0));
         }
 
         return multimap;

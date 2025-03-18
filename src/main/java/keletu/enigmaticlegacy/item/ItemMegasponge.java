@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import net.minecraft.block.Block;
@@ -67,9 +67,9 @@ public class ItemMegasponge extends ItemBaseBauble {
     }
 
     private boolean soakUp(World world, BlockPos pos) {
-        for (int x = -ELConfigs.radius; x <= ELConfigs.radius; x++) {
-            for (int y = -ELConfigs.radius; y <= ELConfigs.radius; y++) {
-                for (int z = -ELConfigs.radius; z <= ELConfigs.radius; z++) {
+        for (int x = -EnigmaticConfigs.radius; x <= EnigmaticConfigs.radius; x++) {
+            for (int y = -EnigmaticConfigs.radius; y <= EnigmaticConfigs.radius; y++) {
+                for (int z = -EnigmaticConfigs.radius; z <= EnigmaticConfigs.radius; z++) {
                     final BlockPos targetPos = pos.add(x, y, z);
 
                     Material material = world.getBlockState(targetPos).getMaterial();

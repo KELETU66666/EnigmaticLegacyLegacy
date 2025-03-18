@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.oceanStoneSwimmingSpeedBoost;
-import static keletu.enigmaticlegacy.ELConfigs.oceanStoneUnderwaterCreaturesResistance;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneSwimmingSpeedBoost;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneUnderwaterCreaturesResistance;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ELConfigs {
+public class EnigmaticConfigs {
 
     public static float painMultiplier;
     public static float monsterDamageDebuff;
@@ -17,6 +17,7 @@ public class ELConfigs {
     public static int fortuneBonus;
     public static int lootingBonus;
     public static int enchantingBonus;
+    public static boolean enableInsomnia;
 
     public static float knockbackDebuff;
     public static double neutralAngerRange;
@@ -95,7 +96,12 @@ public class ELConfigs {
     public static float voidPearlUndeadProbability;
     public static int witheringTime;
     public static int witheringLevel;
-
+    public static float regenerationSubtraction;
+    public static double bloodLustDamageBoost;
+    public static double bloodLustLifestealBoost;
+    public static double bloodLustHealthLossLimit;
+    public static int bloodLustHealthLossTicks;
+    public static int bloodLustTicksPerLevel;
 
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
@@ -112,6 +118,13 @@ public class ELConfigs {
     public static double angelBlessingAccelerationModifier;
     public static double angelBlessingAccelerationModifierElytra;
     public static float angelBlessingDeflectChance;
+
+    public static int magmaHeartSpellstoneCooldown;
+    public static double magmaHeartDamageFeedback;
+    public static int magmaHeartIgnitionFeedback;
+    public static double magmaHeartLavafogDensity;
+    public static boolean magmaHeartTraitorBar;
+
     public static double flyingScrollXpCostModifier;
 
     public static void onConfig(FMLPreInitializationEvent builder) {
@@ -136,6 +149,8 @@ public class ELConfigs {
         lootingBonus = config.getInt("LootingBonus", "The Seven Curses", 1, 0, 100, "How many bonus Looting levels ring provides");
 
         enchantingBonus = config.getInt("EnchantingBonus", "The Seven Curses", 10, 0, 100, "How much additional Enchanting Power ring provides in Enchanting Table.");
+
+        enableInsomnia = config.getBoolean("Enable cursed Insomnia", "The Seven Curses", true, "Should cursed player insomnia at night?");
 
         useWhitelist = config.getBoolean("UseWhitelist", "The Seven Curses", true, "If true, use whitelist for cursed ring");
 
@@ -289,6 +304,16 @@ public class ELConfigs {
 
         angelBlessingDeflectChance = config.getFloat("DeflectChance", "Angel Blessing", 0.5F, 0, 1, "Chance to deflect projectile when having Angel's Blessing equipped. Measured in parents.");
 
+        magmaHeartSpellstoneCooldown = config.getInt("Cooldown", "BlazingCore", 0, 0, 32768, "Active ability cooldown for Blazing Core. Measured in ticks. 20 ticks equal to 1 second.");
+
+        magmaHeartDamageFeedback = config.getFloat("DamageFeedback", "BlazingCore", 4.0F, 0, 512, "How much fire-based damage instantly receives any creature that attacks bearer of the Blazing Core.");
+
+        magmaHeartIgnitionFeedback = config.getInt("IgnitionFeedback", "BlazingCore", 4, 0, 512, "How how many seconds any creature that attacks bearer of the Blazing Core will be set on fire.");
+
+        magmaHeartLavafogDensity = config.getFloat("LavaDensity", "BlazingCore", 0.3F, 0, 1024, "Controls how obscured your vision is in lava when Blazing Core is equipped. Lower value equals more visibility.");
+
+        magmaHeartTraitorBar = config.getBoolean("TraitorBarEnabled", "BlazingCore", false, "Flips the parabolic function bearing responsibility for heat bar rendering when temporary fire resistance from Blazing Core is active. Instead of default behavior, it will start decreasing slowly, but will expotentially speed up the closer to the end it is. This is a purely visual effect - raw fire immunity time provided stays unchanged.");
+
         flyingScrollXpCostModifier = config.getFloat("flyingScrollXpCostModifier", "Heaven Scroll", 1.0F, 0, 32768, "Multiplier for experience consumption by Gift of the Heaven.");
 
         spellstoneCooldown = config.getInt("Cooldown", "Void Pearl", 0, 0, 1, "Active ability cooldown for Pearl of the Void. Measured in ticks. 20 ticks equal to 1 second.");
@@ -305,6 +330,18 @@ public class ELConfigs {
 
         witheringLevel = config.getInt("WitheringLevel", "Void Pearl", 2, 0, 3, "Level of Withering that bearer of the pearl will apply to entitities they attack.");
 
+        regenerationSubtraction = config.getFloat("RegenerationSubtraction", "Forbidden Fruit", 0.8F, 0, 1, "How much should be subtracted from regeneration of player who have consumed The Forbidden Fruit. ");
+
+        bloodLustDamageBoost = config.getFloat("DamageBoost", "Growing BloodLust", 0.05F, 0, 100, "Damage boost granted by the Growing Bloodlust, per level of effect.");
+
+        bloodLustLifestealBoost = config.getFloat("LifestealBoost", "Growing BloodLust", 0.025F, 0, 100, "Lifesteal granted by the Growing Bloodlust, per level of effect.");
+
+        bloodLustHealthLossTicks = config.getInt("HealthLossTicks", "Growing BloodLust", 160, 0, 20000, "How often the player loses 1 HP at level one of Growing Bloodlust, in ticks.");
+
+        bloodLustHealthLossLimit = config.getFloat("HealthLossLimit", "Growing BloodLust", 0.3F, 0, 1, "How much health Growing Bloodlust leaves the player with, as a fraction of max health.");
+
+        bloodLustTicksPerLevel = config.getInt("TicksPerLevel", "Growing BloodLust", 300, 0, 20000, "How lock the The Voracious Pan needs to be held, in ticks, to increase the strength "
+                + "of the Growing Bloodlust effect by one level.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
@@ -319,7 +356,7 @@ public class ELConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:astral_fruit"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:sul_compass"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

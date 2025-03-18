@@ -1,4 +1,4 @@
-package keletu.enigmaticlegacy.mixins.common;
+package keletu.enigmaticlegacy.mixins.late;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;

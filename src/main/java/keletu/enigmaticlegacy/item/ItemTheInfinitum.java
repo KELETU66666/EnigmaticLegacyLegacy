@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.ELConfigs;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.client.Minecraft;
@@ -56,7 +56,7 @@ public class ItemTheInfinitum extends ItemBaseFireProof {
 
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", infinitumAttackDamage, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ELConfigs.infinitumAttackSpeed, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", EnigmaticConfigs.infinitumAttackSpeed, 0));
         }
 
         return multimap;

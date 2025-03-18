@@ -1,4 +1,4 @@
-package keletu.enigmaticlegacy.mixins.common;
+package keletu.enigmaticlegacy.mixins.early;
 
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import net.minecraft.advancements.critereon.EnterBlockTrigger;

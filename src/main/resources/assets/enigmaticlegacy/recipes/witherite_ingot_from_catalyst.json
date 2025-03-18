@@ -2,16 +2,17 @@
   "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "enigmaticlegacy:witherite_catalyst"
+      "item": "minecraft:skull",
+      "data": 1
     },
     {
-      "item": "enigmaticlegacy:witherite_catalyst"
+      "item": "minecraft:obsidian"
     },
     {
-      "item": "enigmaticlegacy:witherite_catalyst"
+      "item": "minecraft:obsidian"
     },
     {
-      "item": "enigmaticlegacy:witherite_catalyst"
+      "item": "minecraft:obsidian"
     },
     {
       "type": "forge:ore_dict",

@@ -4,22 +4,21 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.client.gui.GuiPlayerExpanded;
-import keletu.enigmaticlegacy.ELConfigs;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
+import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
+import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.client.ModelCharm;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
-import keletu.enigmaticlegacy.item.ItemEldritchPan;
-import keletu.enigmaticlegacy.item.ItemInfernalShield;
-import keletu.enigmaticlegacy.item.ItemMonsterCharm;
-import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketCustom;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
@@ -27,10 +26,16 @@ import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
+import keletu.enigmaticlegacy.util.helper.RenderHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDynamicLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
@@ -58,9 +63,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.client.GuiIngameForge;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -68,6 +77,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -83,11 +93,13 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = MODID)
-public class ELEvents {
+public class EnigmaticEvents {
 
     private static final String SPAWN_WITH_BOOK = EnigmaticLegacy.MODID + ".acknowledgment";
     private static final String SPAWN_WITH_AMULET = EnigmaticLegacy.MODID + ".enigmatic_amulet";
@@ -96,7 +108,10 @@ public class ELEvents {
     private static EntityPlayer abyssalHeartOwner;
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
+    public static boolean dropCursedStone = false;
 
+    public static final ResourceLocation FIREBAR_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/firebar.png");
+    public static final ResourceLocation ICONS_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/generic_icons.png");
     private static final ResourceLocation texture = new ResourceLocation(MODID, "textures/gui/bar.png");
 
     @SideOnly(Side.CLIENT)
@@ -183,13 +198,14 @@ public class ELEvents {
             double y = dimPoint.getPosY() + 1.5;
             if (y < 0)
                 y = 3;
-            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player)) {
+
+            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player) && !dropCursedStone) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());
                 dimPoint.world.spawnEntity(droppedSoulCrystal);
                 EnigmaticLegacy.logger.info("Teared Soul Crystal from " + player.getGameProfile().getName() + " at X: " + dimPoint.getPosX() + ", Y: " + dimPoint.getPosY() + ", Z: " + dimPoint.getPosZ());
-            } else if (found && !event.getDrops().isEmpty() && ELConfigs.vesselEnabled) {
+            } else if (found && !event.getDrops().isEmpty() && EnigmaticConfigs.vesselEnabled) {
                 ItemStack soulCrystal = SuperpositionHandler.shouldPlayerDropSoulCrystal(player) ? EnigmaticLegacy.soulCrystal.createCrystalFrom(player) : null;
                 ItemStack storageCrystal = EnigmaticLegacy.storageCrystal.storeDropsOnCrystal(event.getDrops(), player, soulCrystal);
                 EntityItemSoulCrystal droppedStorageCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), storageCrystal);
@@ -201,7 +217,6 @@ public class ELEvents {
                 if (soulCrystal != null) {
                     droppedCrystal = true;
                 }
-
             } else if (SuperpositionHandler.shouldPlayerDropSoulCrystal(player)) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
@@ -226,7 +241,7 @@ public class ELEvents {
             if (hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
 
 
-                if (!ELConfigs.enableSpecialDrops)
+                if (!EnigmaticConfigs.enableSpecialDrops)
                     return;
 
                 if (killed instanceof EntityDragon) {
@@ -285,8 +300,6 @@ public class ELEvents {
                 } else if (killed.getClass() == EntityWitherSkeleton.class) {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                    if (enableWitherite)
-                        addDropWithChance(event, new ItemStack(witheriteCatalyst, 1), 7);
                 } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
@@ -309,6 +322,68 @@ public class ELEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onCursedDrops(PlayerDropsEvent event) {
+        if (event.getEntityPlayer() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            boolean hasCursedStone = false;
+
+            for (EntityItem entityItem : event.getDrops()) {
+                ItemStack itemStack = entityItem.getItem();
+                if (itemStack.getItem() == cursedStone) {
+                    hasCursedStone = true;
+                    itemStack.shrink(1);
+                }
+            }
+
+            if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
+                BlockPos deathPos = player.getPosition();
+
+                if (isThereLava(player.world, deathPos)) {
+                    BlockPos surfacePos = deathPos;
+
+                    while (true) {
+                        BlockPos nextAbove = surfacePos.add(0, 1, 0);
+                        if (isThereLava(player.world, nextAbove)) {
+                            surfacePos = nextAbove;
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    boolean confirmLavaPool = true;
+
+                    for (int i = -3; i <= 2; ++i) {
+
+                        boolean checkArea = false;
+                        for (BlockPos blockPos : BlockPos.getAllInBox(surfacePos.add(-3, i, -3), surfacePos.add(3, i, 3))) {
+                            if (i <= 0)
+                                checkArea = isThereLava(player.world, blockPos);
+                            else
+                                checkArea = player.world.isAirBlock(blockPos) || isThereLava(player.world, blockPos);
+                        }
+
+                        confirmLavaPool = confirmLavaPool && checkArea;
+                    }
+
+                    if (confirmLavaPool) {
+                        dropCursedStone = true;
+                        player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isThereLava(World world, BlockPos pos) {
+        IBlockState fluidState = world.getBlockState(pos);
+        if (fluidState.getMaterial() == Material.LAVA && !(fluidState.getBlock() instanceof BlockDynamicLiquid))
+            return true;
+        else
+            return false;
     }
 
     public static float getMissingHealthPool(EntityPlayer player) {
@@ -335,6 +410,10 @@ public class ELEvents {
 
                 if (advancedCurio.immunityList.contains(event.getSource().damageType)) {
                     event.setCanceled(true);
+                }
+
+                if (event.getSource() == DamageSource.LAVA) {
+                    handleLavaProtection(event);
                 }
 
                 /*
@@ -370,8 +449,7 @@ public class ELEvents {
 
                         EnigmaticLegacy.packetInstance.sendToAllAround(new PacketRecallParticles(event.getEntity().posX, event.getEntity().posY + (event.getEntity().getEyeHeight() / 2), event.getEntity().posZ, 48, false), new NetworkRegistry.TargetPoint(event.getEntity().world.provider.getDimension(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, 128));
 
-
-                        if(!player.capabilities.isCreativeMode)
+                        if (!player.capabilities.isCreativeMode)
                             stack.shrink(1);
                     }
 
@@ -475,6 +553,11 @@ public class ELEvents {
 
             if (SuperpositionHandler.isWearEnigmaticAmulet(player, 6)) {
                 lifesteal += event.getAmount() * 0.1F;
+            }
+
+            if (player.isPotionActive(growingBloodlust)) {
+                int amplifier = 1 + player.getActivePotionEffect(growingBloodlust).getAmplifier();
+                lifesteal += event.getAmount() * (infinitumLifestealBonus * amplifier);
             }
 
             if (lifesteal > 0) {
@@ -679,7 +762,7 @@ public class ELEvents {
 
         float miningBoost = 1.0F;
         if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.miningCharm) != -1) {
-            miningBoost += ELConfigs.breakSpeedBonus;
+            miningBoost += EnigmaticConfigs.breakSpeedBonus;
         }
 
         if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.cursedScroll) != -1) {
@@ -702,25 +785,14 @@ public class ELEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-			/*
-			 * Regeneration slowdown handler for Pearl of the Void.
-			 * Removed as of Release 2.5.0.
-
-			if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.voidPearl)) {
-				if (event.getAmount() <= 1.0F) {
-					event.setAmount((float) (event.getAmount() / (1.5F * ConfigHandler.VOID_PEARL_REGENERATION_MODIFIER.getValue())));
-				}
-			}
-			 */
-
             if (event.getAmount() <= 1.0F)
-                //if (forbiddenFruit.haveConsumedFruit(player)) {
-                //    event.setAmount(event.getAmount()*ForbiddenFruit.regenerationSubtraction.getValue().asModifierInverted());
-                //}
-
-                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
-                    event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
+                if (IForbiddenConsumed.get(player).isConsumed()) {
+                    event.setAmount(event.getAmount() * EnigmaticConfigs.regenerationSubtraction);
                 }
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+                event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
+            }
         }
 
     }
@@ -786,7 +858,7 @@ public class ELEvents {
         if (event.getEntityPlayer() == null)
             return;
 
-        for (ResourceLocation rl : ELConfigs.cursedItemList) {
+        for (ResourceLocation rl : EnigmaticConfigs.cursedItemList) {
             if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
                 TextFormatting color = !hasCursed(event.getEntityPlayer()) ? TextFormatting.DARK_RED : TextFormatting.GRAY;
                 event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
@@ -911,28 +983,24 @@ public class ELEvents {
 
         if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan) {
             int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
-            int hungerAmplifier = currentTicks / 300;
+            if (IForbiddenConsumed.get(player).isConsumed()) {
+                int bloodlustAmplifier = currentTicks / bloodLustTicksPerLevel;
 
-            hungerAmplifier = Math.min(hungerAmplifier, 9);
-            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+                bloodlustAmplifier = Math.min(bloodlustAmplifier, 9);
+
+                player.addPotionEffect(new PotionEffect(growingBloodlust, 200, bloodlustAmplifier, true, true));
+            } else {
+                int hungerAmplifier = currentTicks / 300;
+
+                hungerAmplifier = Math.min(hungerAmplifier, 9);
+                player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+            }
 
             ItemEldritchPan.HOLDING_DURATIONS.put(player, currentTicks + 1);
         } else {
             ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
             player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
-        }
-
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(7).isEmpty() && !player.getTags().contains("hasIchorBottle")) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(7), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(7, ItemStack.EMPTY);
-        }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(8).isEmpty() && !player.getTags().contains("hasAstralFruit")) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(8), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(8, ItemStack.EMPTY);
-        }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(9).isEmpty() && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) == -1) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(9), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(9, ItemStack.EMPTY);
+            player.removePotionEffect(growingBloodlust);
         }
     }
 
@@ -941,7 +1009,7 @@ public class ELEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (!player.capabilities.isFlying && !player.onGround) {
-                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.WATER || player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getBlock() == Blocks.FLOWING_WATER) {
+                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getMaterial() == Material.WATER) {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
@@ -978,7 +1046,143 @@ public class ELEvents {
             }
 
         if (shouldBoost) {
-            event.setLevel(event.getLevel() + ELConfigs.enchantingBonus);
+            event.setLevel(event.getLevel() + EnigmaticConfigs.enchantingBonus);
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onOverlayRender(RenderGameOverlayEvent event) {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (!mc.player.isSpectator()) {
+
+            ItemStack lavaProtector = ItemStack.EMPTY;
+            ItemStack lavaCharm = SuperpositionHandler.getAdvancedBaubles(mc.player);
+
+            if (!lavaCharm.isEmpty() && lavaCharm.getItem() instanceof ItemMagmaHeart) {
+                lavaProtector = lavaCharm;
+            }
+
+            if (!lavaProtector.isEmpty()) {
+                NBTTagCompound compound = lavaProtector.getTagCompound();
+                if (compound != null) {
+                    int charge = compound.getInteger("blazingCoreCharge");
+
+                    if (event instanceof RenderGameOverlayEvent.Post && event.getType() == RenderGameOverlayEvent.ElementType.ALL && (mc.player.isInLava() || charge < 200)) {
+                        renderLavaChargeBar(event.getResolution(), charge, 200);
+                    }
+                }
+            }
+
+            if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && event instanceof RenderGameOverlayEvent.Pre) {
+
+                if (IForbiddenConsumed.get(mc.player).isConsumed()) {
+
+                    event.setCanceled(true);
+                    mc.getTextureManager().bindTexture(ICONS_LOCATION);
+
+                    int width = event.getResolution().getScaledWidth();
+                    int height = event.getResolution().getScaledHeight();
+
+                    EntityPlayer player = (EntityPlayer) mc.getRenderViewEntity();
+                    GlStateManager.enableBlend();
+                    int left = width / 2 + 91;
+                    int top = height - GuiIngameForge.right_height;
+
+                    GuiIngameForge.right_height += 10;
+                    boolean unused = false;// Unused flag in vanilla, seems to be part of a 'fade out' mechanic
+
+                    FoodStats stats = mc.player.getFoodStats();
+                    int level = stats.getFoodLevel();
+
+                    for (int i = 0; i < 10; ++i) {
+                        int idx = i * 2 + 1;
+                        int x = left - i * 8 - 9;
+                        int y = top;
+                        int icon = 16;
+                        byte background = 0;
+/*
+                        if (mc.player.isPotionActive(MobEffects.HUNGER))
+                        {
+                            icon += 36;
+                            background = 13;
+                        }
+                        if (unused) background = 1; //Probably should be a += 1 but vanilla never uses this
+*/
+                        if (player.getFoodStats().getSaturationLevel() <= 0.0F && mc.ingameGUI.updateCounter % (level * 3 + 1) == 0) {
+                            y = top + (THEY_SEE_ME_ROLLIN.nextInt(3) - 1);
+                        }
+
+                        mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, 9, 9);
+
+                        /*
+                        if (idx < level)
+                            mc.ingameGUI.drawTexturedModalRect(x, y, icon + 36, 27, 9, 9);
+                        else if (idx == level)
+                            mc.ingameGUI.drawTexturedModalRect(x, y, icon + 45, 27, 9, 9);
+
+                         */
+                    }
+                    GlStateManager.disableBlend();
+
+                    mc.getTextureManager().bindTexture(Gui.ICONS);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * From Mod Botania
+     * Botania is Open Source and distributed under the
+     * Botania License: http://botaniamod.net/license.php
+     */
+
+    @SideOnly(Side.CLIENT)
+    private static void renderLavaChargeBar(ScaledResolution res, int totalMana, int totalMaxMana) {
+        Minecraft mc = Minecraft.getMinecraft();
+        int width = 182;
+        int x = res.getScaledWidth() / 2 - width / 2;
+        int y = res.getScaledHeight() - 29;
+
+        if (totalMaxMana == 0)
+            width = 0;
+        else width *= (double) totalMana / (double) totalMaxMana;
+
+        if (width == 0) {
+            if (totalMana > 0)
+                width = 1;
+            else return;
+        }
+
+        mc.renderEngine.bindTexture(FIREBAR_LOCATION);
+
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderHelper.drawTexturedModalRect(x, y, 0, 0, 251, width, 5);
+        GlStateManager.disableBlend();
+    }
+
+    //From RandomThings mod, Thank you author :)
+    private static void handleLavaProtection(LivingAttackEvent event) {
+        ItemStack lavaProtector = ItemStack.EMPTY;
+        ItemStack lavaCharm = SuperpositionHandler.getAdvancedBaubles(event.getEntityLiving());
+
+        if (!lavaCharm.isEmpty() && lavaCharm.getItem() instanceof ItemMagmaHeart) {
+            lavaProtector = lavaCharm;
+        }
+
+        if (!lavaProtector.isEmpty()) {
+            NBTTagCompound compound = lavaProtector.getTagCompound();
+            if (compound != null) {
+                int charge = compound.getInteger("blazingCoreCharge");
+                if (charge > 0) {
+                    compound.setInteger("blazingCoreCharge", charge - 1);
+                    compound.setInteger("blazingCoreCooldown", 40);
+                    event.setCanceled(true);
+                }
+            }
         }
     }
 
@@ -991,7 +1195,7 @@ public class ELEvents {
         }
 
         if (event.getEntityLiving() instanceof EntityPlayer && hasCursed((EntityPlayer) event.getEntityLiving())) {
-            event.setStrength(event.getStrength() * ELConfigs.knockbackDebuff);
+            event.setStrength(event.getStrength() * EnigmaticConfigs.knockbackDebuff);
         }
     }
 
@@ -999,12 +1203,38 @@ public class ELEvents {
     public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
+            if (IForbiddenConsumed.get(player).isConsumed()) {
+                FoodStats foodStats = player.getFoodStats();
+                foodStats.setFoodLevel(20);
+                foodStats.foodSaturationLevel = 0F;
+
+                if (player.isPotionActive(MobEffects.HUNGER)) {
+                    player.removePotionEffect(MobEffects.HUNGER);
+                }
+            }
+            if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && EnigmaticConfigs.enableInsomnia && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
                 player.sleepTimer = 90;
             }
             if (player.isBurning() && hasCursed(player)) {
                 player.setFire(player.fire + 2);
             }
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1)
+                if (!player.getActivePotionEffects().isEmpty()) {
+                    Collection<PotionEffect> effects = new ArrayList<>();
+                    effects.addAll(player.getActivePotionEffects());
+
+                    for (PotionEffect effect : effects) {
+                        if (effect.getPotion().equals(MobEffects.FIRE_RESISTANCE)) {
+                            if (player.ticksExisted % 2 == 0 && effect.duration > 0) {
+                                effect.duration += 1;
+                            }
+                        } else {
+                            effect.onUpdate(player);
+                        }
+                    }
+
+                }
+
             if (player instanceof EntityPlayerMP) {
                 EntityPlayerMP playerMP = (EntityPlayerMP) player;
                 if (SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")) {
@@ -1035,6 +1265,17 @@ public class ELEvents {
     //}
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onFogRender(EntityViewRenderEvent.FogDensity event) {
+        IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player, (float) event.getRenderPartialTicks());
+        if (iblockstate.getMaterial() == Material.LAVA && BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.blazingCore) != -1) {
+            event.setCanceled(true);
+            event.setDensity((float) magmaHeartLavafogDensity);
+        }
+
+    }
+
+    @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
         if (event.getAmount() >= Float.MAX_VALUE)
             return;
@@ -1054,7 +1295,7 @@ public class ELEvents {
                 if (mainhandStack.getItem() == EnigmaticLegacy.theTwist) {
                     if (hasCursed(player)) {
                         if (!event.getEntityLiving().isNonBoss() || event.getEntityLiving() instanceof EntityPlayer) {
-                            event.setAmount(event.getAmount() * ELConfigs.bossDamageBonus);
+                            event.setAmount(event.getAmount() * EnigmaticConfigs.bossDamageBonus);
                         }
                     } else {
                         event.setCanceled(true);
@@ -1085,7 +1326,7 @@ public class ELEvents {
             float damageBoost = 0F;
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
-                damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) ELConfigs.attackDamage);
+                damageBoost += event.getAmount() * (getMissingHealthPool(player) * (float) EnigmaticConfigs.attackDamage);
             }
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
@@ -1105,9 +1346,9 @@ public class ELEvents {
 
                 if (event.getSource().damageType.startsWith("explosion") && advancedCurio == EnigmaticLegacy.golemHeart && SuperpositionHandler.hasAnyArmor(player)) {
                     event.setCanceled(true);
-                } /*else if (advancedCurio == magmaHeart && trueSource != null && (trueSource.getMobType() == CreatureAttribute.WATER || trueSource instanceof DrownedEntity)) {
-                event.setAmount(event.getAmount() * 2F);
-            } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
+                } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                    event.setAmount(event.getAmount() * 2F);
+                } /*else if (advancedCurio == eyeOfNebula && player.isInWater()) {
                 event.setAmount(event.getAmount() * 2F);
             } */ else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
                     event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);
@@ -1127,15 +1368,28 @@ public class ELEvents {
             if (hasCursed(player)) {
                 event.setAmount(event.getAmount() * painMultiplier);
             }
+
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
+                if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
+                    EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
+                    if (!attacker.isImmuneToFire()) {
+                        attacker.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.damageType, player), (float) magmaHeartDamageFeedback);
+                        attacker.setFire(magmaHeartIgnitionFeedback);
+                    }
+                }
+
+            }
+
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.berserkEmblem) != -1) {
-                event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) ELConfigs.damageResistance)));
+                event.setAmount(event.getAmount() * (1.0F - (getMissingHealthPool(player) * (float) EnigmaticConfigs.damageResistance)));
             }
 
             /*
              * Handler for increasing damage on users of Bulwark of Blazing Pride.
              */
             if (event.getSource().getTrueSource() != null) {
-                if (player.getActiveItemStack().getItem() instanceof ItemInfernalShield && player.isActiveItemStackBlocking()) {
+                if (player.getActiveItemStack().getItem() instanceof ItemInfernalShield && ((IProperShieldUser) player).isActuallyReallyBlocking()) {
                     Vec3d sourcePos = event.getSource().getDamageLocation();
                     if (sourcePos != null) {
                         if (lookPlayersBack(player.rotationYaw, event.getSource().getTrueSource().rotationYaw, 50.0D)) {
@@ -1167,20 +1421,20 @@ public class ELEvents {
 
                 if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.monsterCharm) != -1) {
                     if (monster.isEntityUndead()) {
-                        event.setAmount(event.getAmount() * (1 + ELConfigs.undeadDamageBonus));
+                        event.setAmount(event.getAmount() * (1 + EnigmaticConfigs.undeadDamageBonus));
                     } else if (monster.getAttackTarget() == player || monster instanceof EntityCreeper) {
 
                         if (monster instanceof EntityEnderman || monster instanceof EntityPigZombie || monster instanceof EntityBlaze || monster instanceof EntityGuardian || monster instanceof EntityElderGuardian/* || !monster.canChangeDimensions()*/) {
                             // NO-OP
                         } else {
-                            event.setAmount(event.getAmount() * (1 + ELConfigs.hostileDamageBonus));
+                            event.setAmount(event.getAmount() * (1 + EnigmaticConfigs.hostileDamageBonus));
                         }
 
                     }
                 }
                 if (hasCursed(player)) {
                     if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum && player.getHeldItemMainhand().getItem() != eldritchPan)) {
-                        event.setAmount(event.getAmount() * (1 - ELConfigs.monsterDamageDebuff));
+                        event.setAmount(event.getAmount() * (1 - EnigmaticConfigs.monsterDamageDebuff));
                     }
                 }
             }
@@ -1228,7 +1482,7 @@ public class ELEvents {
         }
 
         if (player != null && hasCursed(player)) {
-            bonusExp += event.getOriginalExperience() * ELConfigs.experienceBonus;
+            bonusExp += event.getOriginalExperience() * EnigmaticConfigs.experienceBonus;
         }
 
         event.setDroppedExperience(event.getDroppedExperience() + bonusExp);

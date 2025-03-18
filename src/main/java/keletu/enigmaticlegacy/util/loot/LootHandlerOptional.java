@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public final class LootHandlerOptional {
 
-    private static final String TABLE = "inject/nether_bridge";
+    private static final String TABLE = "inject/nether_bridge_optional";
 
     public LootHandlerOptional() {
             LootTableList.register(new ResourceLocation(EnigmaticLegacy.MODID, TABLE));
@@ -29,11 +29,11 @@ public final class LootHandlerOptional {
     }
 
     private LootPool getInjectPool(String entryName) {
-        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "enigmatic_inject_pool_bridge");
+        return new LootPool(new LootEntry[]{getInjectEntry(entryName, 1)}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "enigmatic_inject_pool_bridge_compat");
     }
 
     private LootEntryTable getInjectEntry(String name, int weight) {
-        return new LootEntryTable(new ResourceLocation(EnigmaticLegacy.MODID, "inject/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool_bridge");
+        return new LootEntryTable(new ResourceLocation(EnigmaticLegacy.MODID, "inject/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool_bridge_compat");
     }
 
 }

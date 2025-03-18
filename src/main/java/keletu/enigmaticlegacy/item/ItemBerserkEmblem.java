@@ -4,9 +4,9 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import keletu.enigmaticlegacy.event.ELEvents;
+import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -56,7 +56,7 @@ public class ItemBerserkEmblem extends ItemBaseBauble {
 
         if (Minecraft.getMinecraft().player != null)
             if (BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, this) != -1) {
-                float missingPool = ELEvents.getMissingHealthPool(Minecraft.getMinecraft().player);
+                float missingPool = EnigmaticEvents.getMissingHealthPool(Minecraft.getMinecraft().player);
                 int percentage = (int) (missingPool * 100F);
 
                 list.add("");
@@ -91,7 +91,7 @@ public class ItemBerserkEmblem extends ItemBaseBauble {
     private Multimap<String, AttributeModifier> createAttributeMap(EntityPlayer player) {
         Multimap<String, AttributeModifier> attributesDefault = HashMultimap.create();
 
-        float missingHealthPool = ELEvents.getMissingHealthPool(player);
+        float missingHealthPool = EnigmaticEvents.getMissingHealthPool(player);
 
         attributesDefault.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(UUID.fromString("ec62548c-5b26-401e-83fd-693e4aafa532"), "enigmaticlegacy:attack_speed_modifier", missingHealthPool * attackSpeed, 2));
         attributesDefault.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("f4ece564-d2c0-40d2-a96a-dc68b493137c"), "enigmaticlegacy:speed_modifier", missingHealthPool * movementSpeed, 2));

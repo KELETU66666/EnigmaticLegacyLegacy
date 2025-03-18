@@ -34,6 +34,7 @@ item.desolation_ring.name=The Burden of Desolation
 item.golem_heart.name=Heart of the Golem
 item.ocean_stone.name=Will of the Ocean
 item.angel_blessing.name=Angel's Blessing
+item.magma_heart.name=Blazing Core
 item.void_pearl.name=Pearl of the Void
 
 #material
@@ -70,8 +71,11 @@ item.infernal_shield.name=Bulwark of Blazing Pride
 item.enchantment_transposer.name=Tome of Hungering Knowledge
 item.eldritch_pan.name=The Voracious Pan
 item.void_stone.name=Keystone of The Oblivion
+item.forbidden_fruit.name=The Forbidden Fruit
 item.soul_compass.name=Wayfinder of the Damned
 item.extradimensional_eye.name=Extradimensional Eye
+item.unholy_grail.name=Unholy Grail
+item.redemption_potion.name=Potion of Redemption
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -101,6 +105,20 @@ tooltip.enigmaticlegacy.angelBlessing6=§5- Your own projectiles are greatly acc
 tooltip.enigmaticlegacy.angelBlessing7=§5- Active ability can be triggered by pressing jump
 tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air. §1§l [WIP]
 tooltip.enigmaticlegacy.angelBlessing9=§5- You are vulnerable to §6Withering§5 and §6Void Damage§5.
+
+tooltip.enigmaticlegacy.blazingCore1=§dActive ability:
+tooltip.enigmaticlegacy.blazingCore2=§4- Absent.
+tooltip.enigmaticlegacy.blazingCoreCooldown=§dСooldown: §6
+tooltip.enigmaticlegacy.blazingCoreCooldown_1=§6 seconds
+tooltip.enigmaticlegacy.blazingCore3=§dPassive abilities:
+tooltip.enigmaticlegacy.blazingCore4=§5- Immunity to fire.
+tooltip.enigmaticlegacy.blazingCore5=§5- Temporary immunity to lava.
+tooltip.enigmaticlegacy.blazingCore6=§5- Burns those who attack you in melee.
+tooltip.enigmaticlegacy.blazingCore7=§5- Heavily improved visibility in lava.
+tooltip.enigmaticlegacy.blazingCore8=§5- Any status effects applied to you tick
+tooltip.enigmaticlegacy.blazingCore9=§5  down twice as fast, except §6Fire Resistance§5.
+tooltip.enigmaticlegacy.blazingCore10=§5- §6Fire Resistance§5 lasts twice as long.
+tooltip.enigmaticlegacy.blazingCore11=§5- You are vulnerable to underwater creatures.
 
 tooltip.enigmaticlegacy.extradimensionalEyeLocation=§dBound Location:
 tooltip.enigmaticlegacy.extradimensionalEyeX=§d- X: §6
@@ -142,7 +160,7 @@ tooltip.enigmaticlegacy.cursedRing9=§5- Every death tears your soul apart.
 tooltip.enigmaticlegacy.cursedRing10=§5- You suffer from incurable insomnia.
 tooltip.enigmaticlegacy.cursedRing11=§dSeven blessings will reward those who withstand:
 tooltip.enigmaticlegacy.cursedRing12=§5- §6+
-tooltip.enigmaticlegacy.cursedRing12_1=§d Luck
+tooltip.enigmaticlegacy.cursedRing12_1=§d Fortune Level
 tooltip.enigmaticlegacy.cursedRing13=§5- §6+
 tooltip.enigmaticlegacy.cursedRing13_1=§d Looting Level
 tooltip.enigmaticlegacy.cursedRing14=§5- §6+
@@ -152,6 +170,11 @@ tooltip.enigmaticlegacy.cursedRing15_1=§d Enchanting Power§5 in §6Enchanting 
 tooltip.enigmaticlegacy.cursedRing16=§5- Unique drops from some creatures.
 tooltip.enigmaticlegacy.cursedRing17=§5- Portability of §6Ender Chest.
 tooltip.enigmaticlegacy.cursedRing18=§5- You can create and use unique items.
+
+tooltip.enigmaticlegacy.forbiddenFruitLore=§5Knowledge is the greatest gift.
+tooltip.enigmaticlegacy.forbiddenFruit1=§5After consuming the fruit you shall never
+tooltip.enigmaticlegacy.forbiddenFruit2=§5experience hunger again, but any form of
+tooltip.enigmaticlegacy.forbiddenFruit3=§5regeneration will have §6%1$s§5 weaker effect.
 
 tooltip.enigmaticlegacy.OblivionStoneCtrlTooltip=§5Hold §6Ctrl§5 to see consumable items.
 tooltip.enigmaticlegacy.OblivionStone1=§5Combine with any item in crafting grid
@@ -197,7 +220,7 @@ tooltip.enigmaticlegacy.superMagnetRing3_alt=§5Only takes effect when holding �
 tooltip.enigmaticlegacy.miningCharm1=§6+
 tooltip.enigmaticlegacy.miningCharm1_1=§d Mining Speed
 tooltip.enigmaticlegacy.miningCharm2=§6+
-tooltip.enigmaticlegacy.miningCharm2_1=§d Luck
+tooltip.enigmaticlegacy.miningCharm2_1=§d Fortune Level
 tooltip.enigmaticlegacy.miningCharm3=§5When you are underground and in dark,
 tooltip.enigmaticlegacy.miningCharm4=§5applies §6Night Vision§5 effect to you. This
 tooltip.enigmaticlegacy.miningCharm5=§5feature can be disabled by pressing
@@ -284,6 +307,11 @@ tooltip.enigmaticlegacy.cursedStone3=§5in your inventory, §6Ring of the Seven 
 tooltip.enigmaticlegacy.cursedStone4=§5will be permanently destroyed, along with
 tooltip.enigmaticlegacy.cursedStone5=§5one of your §6Soul Crystals.
 tooltip.enigmaticlegacy.cursedStone6=§4This cannot be undone.
+
+tooltip.enigmaticlegacy.unholyGrail1=§5You'd better not be drinking from it...
+
+tooltip.enigmaticlegacy.redemptionPotion1=§5Allows you to atone for the sin committed
+tooltip.enigmaticlegacy.redemptionPotion2=§5by tasting §6The Forbidden Fruit§5.
 
 tooltip.enigmaticlegacy.infinimeal1=§5Functions as infinite §6Bone Meal.
 tooltip.enigmaticlegacy.infinimeal2=§5Effective on §6Cactuses§5, §6Vines§5,
@@ -402,6 +430,8 @@ item.astral_fruit.name=Celestial Fruit
 
 potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
+potion.growing_bloodlust=Growing Bloodlust
+
 
 tooltip.enigmaticlegacy.ichorBottle1=§5To contempt the gods, one must know them...
 tooltip.enigmaticlegacy.ichorBottle2=§5Consume to obtain §6+1§d Amulet Slot §5permanently.
@@ -454,7 +484,7 @@ tooltip.enigmaticlegacy.eldritchPan1=§5Alteration of the §6Fourth Curse§d:
 tooltip.enigmaticlegacy.eldritchPan2=§6- Always deals its full damage.
 tooltip.enigmaticlegacy.eldritchPan3=§dLifesteal
 tooltip.enigmaticlegacy.eldritchPan4=§dHungersteal
-tooltip.enigmaticlegacy.eldritchPan4_alt=§dHungersteal (converts to health)
+tooltip.enigmaticlegacy.eldritchPan4_alt=§6%s §dHungersteal (converts to health)
 tooltip.enigmaticlegacy.eldritchPan5=§5Cooks the meat of slain creatures.
 tooltip.enigmaticlegacy.eldritchPan6=§5Can be used as a shield, and consume projectiles while blocking.
 tooltip.enigmaticlegacy.eldritchPan7=§5Continuosly holding the pan grants a §6Growing Hunger§5 effect,

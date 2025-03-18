@@ -1,8 +1,8 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import static keletu.enigmaticlegacy.ELConfigs.invertShift;
-import static keletu.enigmaticlegacy.ELConfigs.superRange;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.invertShift;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.superRange;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.setEntityMotionFromVector;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;

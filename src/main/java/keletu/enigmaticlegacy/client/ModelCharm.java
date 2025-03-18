@@ -33,7 +33,6 @@ public class ModelCharm extends ModelBase {
         if (entity instanceof EntityPlayer) {
             EntityPlayer entityPlayer = (EntityPlayer) entity;
             boolean armor = !entityPlayer.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
-            IRenderBauble.Helper.rotateIfSneaking(entityPlayer);
             IRenderBauble.Helper.translateToChest();
             IRenderBauble.Helper.defaultTransforms();
             if (stack.getItem() instanceof ItemEnigmaticEye) {

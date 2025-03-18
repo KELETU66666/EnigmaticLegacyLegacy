@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

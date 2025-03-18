@@ -197,6 +197,21 @@
           "type": "item",
           "name": "enigmaticlegacy:golem_heart",
           "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:magnet_ring",
+          "weight": 8
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:iron_ring",
+          "weight": 20
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:unholy_grail",
+          "weight": 1
         }
       ]
     }

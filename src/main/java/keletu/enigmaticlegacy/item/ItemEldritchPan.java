@@ -2,9 +2,10 @@ package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
+import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.BlockDispenser;
@@ -157,7 +158,7 @@ public class ItemEldritchPan extends ItemShield {
             String damageGain = "+" + this.toString(panUniqueDamageGain);
             String armorGain = "+" + this.toString(panUniqueArmorGain);
 
-            //boolean noHunger = SuperpositionHandler.cannotHunger((EnigmaticLegacy.PROXY.getClientPlayer()));
+            boolean noHunger = Minecraft.getMinecraft().player != null && IForbiddenConsumed.get(Minecraft.getMinecraft().player).isConsumed();
 
             if (Minecraft.getMinecraft().player != null && SuperpositionHandler.hasCursed(Minecraft.getMinecraft().player)) {
                 tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan1"));
@@ -167,25 +168,25 @@ public class ItemEldritchPan extends ItemShield {
 
             tooltip.add(TextFormatting.GOLD + life + I18n.format("tooltip.enigmaticlegacy.eldritchPan3"));
 
-            //  if (!noHunger) {
-            tooltip.add(TextFormatting.GOLD + hunger + I18n.format("tooltip.enigmaticlegacy.eldritchPan4"));
-            //  } else {
-            //     tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan4_alt") + TextFormatting.GOLD + hunger);
-            // }
+            if (!noHunger) {
+                tooltip.add(TextFormatting.GOLD + hunger + I18n.format("tooltip.enigmaticlegacy.eldritchPan4"));
+            } else {
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan4_alt", hunger));
+            }
 
             tooltip.add("");
             tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan5"));
             tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan6"));
             tooltip.add("");
 
-            //if (!noHunger) {
-            tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan7"));
-            tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8"));
-            //} else {
-            //    tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan7_alt"));
-            //    tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8_alt"));
-            //    tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8p_alt"));
-            //}
+            if (!noHunger) {
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan7"));
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8"));
+            } else {
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan7_alt"));
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8_alt"));
+                tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan8p_alt"));
+            }
             tooltip.add("");
             tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan9") + TextFormatting.GOLD + damageGain);
             tooltip.add(I18n.format("tooltip.enigmaticlegacy.eldritchPan10") + TextFormatting.GOLD + armorGain + I18n.format("tooltip.enigmaticlegacy.eldritchPan10_1"));
@@ -372,6 +373,7 @@ public class ItemEldritchPan extends ItemShield {
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
     }
+
     @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
         EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);

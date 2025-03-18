@@ -2,7 +2,7 @@ package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -235,7 +235,7 @@ public class ItemOblivionStone extends ItemBase {
 				int[] meta = nbt.getIntArray("SupersolidMetaID");
 				int counter = 0;
 
-				if (arr.length <= ELConfigs.oblivionStoneSoftCap) {
+				if (arr.length <= EnigmaticConfigs.oblivionStoneSoftCap) {
 				for (int s : arr) {
 					Item something = Item.getItemById(s);
 					if (something != null) {
@@ -251,7 +251,7 @@ public class ItemOblivionStone extends ItemBase {
 					counter++;
 				}
 				} else {
-					for (int s = 0; s < ELConfigs.oblivionStoneSoftCap; s++) {
+					for (int s = 0; s < EnigmaticConfigs.oblivionStoneSoftCap; s++) {
 						int randomID = (int) (Math.random()*30.0D);
 						Item something = Item.getItemById(arr[randomID]);
 

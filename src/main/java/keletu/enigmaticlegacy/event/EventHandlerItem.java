@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.event;
 
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.container.gui.GuiEnderChestInventoryButton;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
@@ -31,7 +31,7 @@ public class EventHandlerItem {
             GuiContainer gui = (GuiContainer) event.getGui();
 
             if (hasCursed(Minecraft.getMinecraft().player) || hasEnderRing(Minecraft.getMinecraft().player))
-                event.getButtonList().add(new GuiEnderChestInventoryButton(56, gui, 127 + ELConfigs.xiconOffsetEnderChest, 61 + ELConfigs.yiconOffsetEnderChest, 20, 18));
+                event.getButtonList().add(new GuiEnderChestInventoryButton(56, gui, 127 + EnigmaticConfigs.xiconOffsetEnderChest, 61 + EnigmaticConfigs.yiconOffsetEnderChest, 20, 18));
         }
     }
 
@@ -41,7 +41,7 @@ public class EventHandlerItem {
         TextFormatting format = TextFormatting.DARK_RED;
         EntityPlayer player = Minecraft.getMinecraft().player;
 
-        for (ResourceLocation rl : ELConfigs.eldritchItemList) {
+        for (ResourceLocation rl : EnigmaticConfigs.eldritchItemList) {
             if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
                 if (player != null) {
                     format = isTheWorthyOne(Minecraft.getMinecraft().player) ? TextFormatting.GOLD : TextFormatting.DARK_RED;

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "keletu.enigmaticlegacy.mixins",
+  "refmap": "mixins.enigmaticlegacy.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "mixins": [
+    "late.MixinSlotBauble"
+  ],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}

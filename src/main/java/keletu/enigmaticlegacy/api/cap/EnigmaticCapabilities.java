@@ -9,24 +9,43 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class EnigmaticCapabilities {
 
-	@CapabilityInject(IPlaytimeCounter.class)
-	public static final Capability<IPlaytimeCounter> PLAYTIME_COUNTER = null;
+    @CapabilityInject(IPlaytimeCounter.class)
+    public static Capability<IPlaytimeCounter> PLAYTIME_COUNTER;
 
-	public static class CapabilityPlayerPlayTime implements IStorage<IPlaytimeCounter> {
+    @CapabilityInject(IForbiddenConsumed.class)
+    public static Capability<IForbiddenConsumed> FORBIDDEN_FRUIT_CONSUME;
 
-		@Override
-		public NBTBase writeNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side) {
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setLong("timeWithCurses", instance.getTimeWithCurses());
-			tag.setLong("timeWithoutCurses", instance.getTimeWithoutCurses());
-			return tag;
-		}
+    public static class CapabilityPlayerPlayTime implements IStorage<IPlaytimeCounter> {
 
-		@Override
-		public void readNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side, NBTBase nbt) {
-			NBTTagCompound tag = (NBTTagCompound) nbt;
-			instance.setTimeWithCurses(tag.getLong("timeWithCurses"));
-			instance.setTimeWithoutCurses(tag.getLong("timeWithoutCurses"));
-		}
-	}
+        @Override
+        public NBTBase writeNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setLong("timeWithCurses", instance.getTimeWithCurses());
+            tag.setLong("timeWithoutCurses", instance.getTimeWithoutCurses());
+            return tag;
+        }
+
+        @Override
+        public void readNBT(Capability<IPlaytimeCounter> capability, IPlaytimeCounter instance, EnumFacing side, NBTBase nbt) {
+            NBTTagCompound tag = (NBTTagCompound) nbt;
+            instance.setTimeWithCurses(tag.getLong("timeWithCurses"));
+            instance.setTimeWithoutCurses(tag.getLong("timeWithoutCurses"));
+        }
+    }
+
+    public static class CapabilityForbiddenConsumed implements IStorage<IForbiddenConsumed> {
+
+        @Override
+        public NBTBase writeNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setBoolean("isForbiddenConsumed", instance.isConsumed());
+            return tag;
+        }
+
+        @Override
+        public void readNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side, NBTBase nbt) {
+            NBTTagCompound tag = (NBTTagCompound) nbt;
+            instance.setConsumed(tag.getBoolean("isForbiddenConsumed"));
+        }
+    }
 }

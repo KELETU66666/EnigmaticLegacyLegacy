@@ -1,6 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
-import keletu.enigmaticlegacy.ELConfigs;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -201,7 +201,7 @@ public class ItemExperienceScroll extends ItemScrollBauble {
 
         }
 
-        List<EntityXPOrb> orbs = world.getEntitiesWithinAABB(EntityXPOrb.class, SuperpositionHandler.getBoundingBoxAroundEntity(player, ELConfigs.xpCollectionRange));
+        List<EntityXPOrb> orbs = world.getEntitiesWithinAABB(EntityXPOrb.class, SuperpositionHandler.getBoundingBoxAroundEntity(player, EnigmaticConfigs.xpCollectionRange));
         for (EntityXPOrb processed : orbs) {
             if (processed.isDead) {
                 continue;

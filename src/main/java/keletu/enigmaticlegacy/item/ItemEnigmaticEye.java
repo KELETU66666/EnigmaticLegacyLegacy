@@ -1,7 +1,6 @@
 package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.util.Quote;
@@ -77,10 +76,6 @@ public class ItemEnigmaticEye extends ItemBaseBauble {
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase living) {
         super.onUnequipped(stack, living);
-        if(!BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(9).isEmpty()){
-            ((EntityPlayer) living).dropItem(BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(9), false);
-            BaublesApi.getBaubles((EntityPlayer) living).setInventorySlotContents(9, ItemStack.EMPTY);
-        }
     }
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {

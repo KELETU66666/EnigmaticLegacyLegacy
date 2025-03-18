@@ -58,7 +58,7 @@ public class PacketSyncPlayTime implements IMessage {
         private void handleClientSide(PacketSyncPlayTime message) {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.world == null) {
-                return;
+                return; // 如果世界为空，则直接返回
             }
 
             EntityPlayer player = mc.world.getPlayerEntityByUUID(message.playerUUID);

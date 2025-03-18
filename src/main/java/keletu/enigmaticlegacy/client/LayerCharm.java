@@ -33,7 +33,8 @@ public class LayerCharm extends LayerBauble {
         ModelBase amulet = setTexturesGetModel(player);
         if (amulet == null) return;
 
-        if (player.isSneaking()) GlStateManager.translate(0, 0.2F, 0);
+        if (player.isSneaking())
+            GlStateManager.translate(0, 0.2F, 0);
         modelPlayer.bipedBody.postRender(scale);
         amulet.render(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     }

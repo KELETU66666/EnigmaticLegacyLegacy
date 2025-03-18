@@ -103,33 +103,33 @@ public class RenderEntitySoulCrystal extends Render<EntityItemSoulCrystal> {
         }
 
         //for(int k = 0; k < j; ++k) {
-        IBakedModel transformedModel;
-        if (flag1) {
-            GlStateManager.pushMatrix();
-            //if (k > 0) {
-            f7 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-            f9 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-            float f6 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-            GlStateManager.translate(this.shouldSpreadItems() ? f7 : 0.0F, this.shouldSpreadItems() ? f9 : 0.0F, f6);
-            //}
+            IBakedModel transformedModel;
+            if (flag1) {
+                GlStateManager.pushMatrix();
+                //if (k > 0) {
+                    f7 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+                    f9 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+                    float f6 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+                    GlStateManager.translate(this.shouldSpreadItems() ? f7 : 0.0F, this.shouldSpreadItems() ? f9 : 0.0F, f6);
+                //}
 
-            transformedModel = ForgeHooksClient.handleCameraTransforms(ibakedmodel, TransformType.GROUND, false);
-            this.itemRenderer.renderItem(itemstack, transformedModel);
-            GlStateManager.popMatrix();
-        } else {
-            GlStateManager.pushMatrix();
-            //if (k > 0) {
-            f7 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-            f9 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-            GlStateManager.translate(f7, f9, 0.0F);
-            //}
+                transformedModel = ForgeHooksClient.handleCameraTransforms(ibakedmodel, TransformType.GROUND, false);
+                this.itemRenderer.renderItem(itemstack, transformedModel);
+                GlStateManager.popMatrix();
+            } else {
+                GlStateManager.pushMatrix();
+                //if (k > 0) {
+                    f7 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
+                    f9 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
+                    GlStateManager.translate(f7, f9, 0.0F);
+                //}
 
-            transformedModel = ForgeHooksClient.handleCameraTransforms(ibakedmodel, TransformType.GROUND, false);
-            this.itemRenderer.renderItem(itemstack, transformedModel);
-            GlStateManager.popMatrix();
-            GlStateManager.translate(0.0F, 0.0F, 0.09375F);
-        }
-        // }
+                transformedModel = ForgeHooksClient.handleCameraTransforms(ibakedmodel, TransformType.GROUND, false);
+                this.itemRenderer.renderItem(itemstack, transformedModel);
+                GlStateManager.popMatrix();
+                GlStateManager.translate(0.0F, 0.0F, 0.09375F);
+            }
+       // }
 
         if (this.renderOutlines) {
             GlStateManager.disableOutlineMode();

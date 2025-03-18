@@ -5,10 +5,11 @@ import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.ELConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemCursedRing extends ItemBase implements IBauble {
+public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble {
 
     public ItemCursedRing() {
         super("cursed_ring", EnumHelper.addRarity("Curses", TextFormatting.DARK_RED, "Curses"));
@@ -58,7 +59,6 @@ public class ItemCursedRing extends ItemBase implements IBauble {
 
         attributesDefault.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
         attributesDefault.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
-		attributesDefault.put(SharedMonsterAttributes.LUCK.getName(), new AttributeModifier(UUID.fromString("6c913e9a-0d6f-4b3b-81b9-4c82f7778b52"), EnigmaticLegacy.MODID+":luck_bonus", 1.0, 0));
 
 		return attributesDefault;
     }
