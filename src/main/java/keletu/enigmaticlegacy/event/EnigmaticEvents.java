@@ -8,6 +8,7 @@ import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
+import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.client.ModelCharm;
@@ -29,6 +30,7 @@ import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -62,6 +64,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -105,6 +108,7 @@ public class EnigmaticEvents {
     public static boolean dropCursedStone = false;
 
     public static final ResourceLocation FIREBAR_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/firebar.png");
+    public static final ResourceLocation ICONS_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/generic_icons.png");
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone event) {
@@ -517,6 +521,11 @@ public class EnigmaticEvents {
                 lifesteal += event.getAmount() * 0.1F;
             }
 
+            if (player.isPotionActive(growingBloodlust)) {
+                int amplifier = 1 + player.getActivePotionEffect(growingBloodlust).getAmplifier();
+                lifesteal += event.getAmount() * (infinitumLifestealBonus * amplifier);
+            }
+
             if (lifesteal > 0) {
                 player.heal(lifesteal);
             }
@@ -742,25 +751,14 @@ public class EnigmaticEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-			/*
-			 * Regeneration slowdown handler for Pearl of the Void.
-			 * Removed as of Release 2.5.0.
-
-			if (SuperpositionHandler.hasCurio(player, EnigmaticLegacy.voidPearl)) {
-				if (event.getAmount() <= 1.0F) {
-					event.setAmount((float) (event.getAmount() / (1.5F * ConfigHandler.VOID_PEARL_REGENERATION_MODIFIER.getValue())));
-				}
-			}
-			 */
-
             if (event.getAmount() <= 1.0F)
-                //if (forbiddenFruit.haveConsumedFruit(player)) {
-                //    event.setAmount(event.getAmount()*ForbiddenFruit.regenerationSubtraction.getValue().asModifierInverted());
-                //}
-
-                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
-                    event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
+                if (IForbiddenConsumed.get(player).isConsumed()) {
+                    event.setAmount(event.getAmount() * EnigmaticConfigs.regenerationSubtraction);
                 }
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
+                event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
+            }
         }
 
     }
@@ -951,15 +949,24 @@ public class EnigmaticEvents {
 
         if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan) {
             int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
-            int hungerAmplifier = currentTicks / 300;
+            if (IForbiddenConsumed.get(player).isConsumed()) {
+                int bloodlustAmplifier = currentTicks / bloodLustTicksPerLevel;
 
-            hungerAmplifier = Math.min(hungerAmplifier, 9);
-            player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+                bloodlustAmplifier = Math.min(bloodlustAmplifier, 9);
+
+                player.addPotionEffect(new PotionEffect(growingBloodlust, 200, bloodlustAmplifier, true, true));
+            } else {
+                int hungerAmplifier = currentTicks / 300;
+
+                hungerAmplifier = Math.min(hungerAmplifier, 9);
+                player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+            }
 
             ItemEldritchPan.HOLDING_DURATIONS.put(player, currentTicks + 1);
         } else {
             ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
             player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
+            player.removePotionEffect(growingBloodlust);
         }
     }
 
@@ -1011,7 +1018,7 @@ public class EnigmaticEvents {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void onOverlayRender(RenderGameOverlayEvent.Post event) {
+    public static void onOverlayRender(RenderGameOverlayEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
 
         if (!mc.player.isSpectator()) {
@@ -1028,16 +1035,74 @@ public class EnigmaticEvents {
                 if (compound != null) {
                     int charge = compound.getInteger("blazingCoreCharge");
 
-                    if (event.getType() == RenderGameOverlayEvent.ElementType.ALL && (mc.player.isInLava() || charge < 200)) {
+                    if (event instanceof RenderGameOverlayEvent.Post && event.getType() == RenderGameOverlayEvent.ElementType.ALL && (mc.player.isInLava() || charge < 200)) {
                         renderLavaChargeBar(event.getResolution(), charge, 200);
                     }
                 }
+            }
+
+            if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && event instanceof RenderGameOverlayEvent.Pre) {
+
+                if (IForbiddenConsumed.get(mc.player).isConsumed()) {
+
+                    event.setCanceled(true);
+                    mc.getTextureManager().bindTexture(ICONS_LOCATION);
+
+                    int width = event.getResolution().getScaledWidth();
+                    int height = event.getResolution().getScaledHeight();
+
+                    EntityPlayer player = (EntityPlayer) mc.getRenderViewEntity();
+                    GlStateManager.enableBlend();
+                    int left = width / 2 + 91;
+                    int top = height - GuiIngameForge.right_height;
+
+                    GuiIngameForge.right_height += 10;
+                    boolean unused = false;// Unused flag in vanilla, seems to be part of a 'fade out' mechanic
+
+                    FoodStats stats = mc.player.getFoodStats();
+                    int level = stats.getFoodLevel();
+
+                    for (int i = 0; i < 10; ++i)
+                    {
+                        int idx = i * 2 + 1;
+                        int x = left - i * 8 - 9;
+                        int y = top;
+                        int icon = 16;
+                        byte background = 0;
+/*
+                        if (mc.player.isPotionActive(MobEffects.HUNGER))
+                        {
+                            icon += 36;
+                            background = 13;
+                        }
+                        if (unused) background = 1; //Probably should be a += 1 but vanilla never uses this
+*/
+                        if (player.getFoodStats().getSaturationLevel() <= 0.0F && mc.ingameGUI.updateCounter % (level * 3 + 1) == 0)
+                        {
+                            y = top + (THEY_SEE_ME_ROLLIN.nextInt(3) - 1);
+                        }
+
+                        mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, 9, 9);
+
+                        /*
+                        if (idx < level)
+                            mc.ingameGUI.drawTexturedModalRect(x, y, icon + 36, 27, 9, 9);
+                        else if (idx == level)
+                            mc.ingameGUI.drawTexturedModalRect(x, y, icon + 45, 27, 9, 9);
+
+                         */
+                    }
+                    GlStateManager.disableBlend();
+
+                    mc.getTextureManager().bindTexture(Gui.ICONS);
+                }
+
             }
         }
     }
 
     /**
-     *From Mod Botania
+     * From Mod Botania
      * Botania is Open Source and distributed under the
      * Botania License: http://botaniamod.net/license.php
      */
@@ -1106,6 +1171,15 @@ public class EnigmaticEvents {
     public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+            if (IForbiddenConsumed.get(player).isConsumed()) {
+                FoodStats foodStats = player.getFoodStats();
+                foodStats.setFoodLevel(20);
+                foodStats.foodSaturationLevel = 0F;
+
+                if (player.isPotionActive(MobEffects.HUNGER)) {
+                    player.removePotionEffect(MobEffects.HUNGER);
+                }
+            }
             if (player.isPlayerSleeping() && player.sleepTimer > 90 && hasCursed(player) && EnigmaticConfigs.enableInsomnia && (!ModCompat.COMPAT_TRINKETS || BaublesApi.isBaubleEquipped(player, ForgeRegistries.ITEMS.getValue(new ResourceLocation("xat", "teddy_bear"))) == -1)) {
                 player.sleepTimer = 90;
             }

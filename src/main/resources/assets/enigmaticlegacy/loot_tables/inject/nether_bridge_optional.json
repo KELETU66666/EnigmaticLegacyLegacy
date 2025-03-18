@@ -112,6 +112,11 @@
           "type": "item",
           "name": "enigmaticlegacy:void_stone",
           "weight": 8
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:forbidden_fruit",
+          "weight": 4
         }
       ]
     }

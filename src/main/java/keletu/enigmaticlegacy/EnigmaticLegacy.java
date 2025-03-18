@@ -1,11 +1,10 @@
 package keletu.enigmaticlegacy;
 
-import keletu.enigmaticlegacy.api.cap.EnigmaticCapabilities;
-import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
-import keletu.enigmaticlegacy.api.cap.PlayerPlaytimeCounter;
+import keletu.enigmaticlegacy.api.cap.*;
 import keletu.enigmaticlegacy.block.EnigmaticBaseBlock;
 import keletu.enigmaticlegacy.client.LayerScroll;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
+import keletu.enigmaticlegacy.effect.GrowingBloodlustEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
 import keletu.enigmaticlegacy.entity.EntityItemImportant;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
@@ -161,17 +160,22 @@ public class EnigmaticLegacy {
     public static Item voidPearl = new ItemVoidPearl();
     public static Item desolationRing = new ItemDesolationRing();
     public static Item extraDimensionalEye = new ItemExtradimensionalEye();
+    public static Item forbiddenFruit = new ItemForbiddenFruit();
+    public static Item unholyGrail = new ItemUnholyGrail();
+    public static Item redemptionPotion = new ItemRedemptionPotion();
 
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
     public static Potion growingHungerEffect = new GrowingHungerEffect();
+    public static Potion growingBloodlust = new GrowingBloodlustEffect();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         EnigmaticConfigs.onConfig(event);
 
         CapabilityManager.INSTANCE.register(IPlaytimeCounter.class, new EnigmaticCapabilities.CapabilityPlayerPlayTime(), () -> new PlayerPlaytimeCounter(null));
+        CapabilityManager.INSTANCE.register(IForbiddenConsumed.class, new EnigmaticCapabilities.CapabilityForbiddenConsumed(), () -> new ForbiddenConsumed(null));
 
         packetInstance = NetworkRegistry.INSTANCE.newSimpleChannel("EnigmaticChannel");
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
@@ -277,6 +281,8 @@ public class EnigmaticLegacy {
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
             event.getRegistry().register(extraDimensionalEye);
+            event.getRegistry().register(forbiddenFruit);
+            event.getRegistry().register(unholyGrail);
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
@@ -313,6 +319,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(eldritchPan);
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
+            event.getRegistry().register(redemptionPotion);
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -326,6 +333,7 @@ public class EnigmaticLegacy {
         public static void registerEffects(final RegistryEvent.Register<Potion> event) {
             event.getRegistry().register(blazingStrengthEffect);
             event.getRegistry().register(growingHungerEffect);
+            event.getRegistry().register(growingBloodlust);
         }
 
         @SubscribeEvent
@@ -418,6 +426,9 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(unholyGrail, 0, new ModelResourceLocation(unholyGrail.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(redemptionPotion, 0, new ModelResourceLocation(redemptionPotion.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

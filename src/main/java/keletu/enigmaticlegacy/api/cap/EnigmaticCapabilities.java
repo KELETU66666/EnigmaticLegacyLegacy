@@ -10,7 +10,10 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 public class EnigmaticCapabilities {
 
     @CapabilityInject(IPlaytimeCounter.class)
-    public static final Capability<IPlaytimeCounter> PLAYTIME_COUNTER = null;
+    public static Capability<IPlaytimeCounter> PLAYTIME_COUNTER;
+
+    @CapabilityInject(IForbiddenConsumed.class)
+    public static Capability<IForbiddenConsumed> FORBIDDEN_FRUIT_CONSUME;
 
     public static class CapabilityPlayerPlayTime implements IStorage<IPlaytimeCounter> {
 
@@ -27,6 +30,22 @@ public class EnigmaticCapabilities {
             NBTTagCompound tag = (NBTTagCompound) nbt;
             instance.setTimeWithCurses(tag.getLong("timeWithCurses"));
             instance.setTimeWithoutCurses(tag.getLong("timeWithoutCurses"));
+        }
+    }
+
+    public static class CapabilityForbiddenConsumed implements IStorage<IForbiddenConsumed> {
+
+        @Override
+        public NBTBase writeNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setBoolean("isForbiddenConsumed", instance.isConsumed());
+            return tag;
+        }
+
+        @Override
+        public void readNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side, NBTBase nbt) {
+            NBTTagCompound tag = (NBTTagCompound) nbt;
+            instance.setConsumed(tag.getBoolean("isForbiddenConsumed"));
         }
     }
 }

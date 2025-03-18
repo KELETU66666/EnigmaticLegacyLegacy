@@ -96,7 +96,12 @@ public class EnigmaticConfigs {
     public static float voidPearlUndeadProbability;
     public static int witheringTime;
     public static int witheringLevel;
-
+    public static float regenerationSubtraction;
+    public static double bloodLustDamageBoost;
+    public static double bloodLustLifestealBoost;
+    public static double bloodLustHealthLossLimit;
+    public static int bloodLustHealthLossTicks;
+    public static int bloodLustTicksPerLevel;
 
     public static final List<ResourceLocation> neutralAngerBlacklist = new ArrayList<>();
     public static final List<ResourceLocation> neutralAngerWhitelist = new ArrayList<>();
@@ -325,6 +330,18 @@ public class EnigmaticConfigs {
 
         witheringLevel = config.getInt("WitheringLevel", "Void Pearl", 2, 0, 3, "Level of Withering that bearer of the pearl will apply to entitities they attack.");
 
+        regenerationSubtraction = config.getFloat("RegenerationSubtraction", "Forbidden Fruit", 0.8F, 0, 1, "How much should be subtracted from regeneration of player who have consumed The Forbidden Fruit. ");
+
+        bloodLustDamageBoost = config.getFloat("DamageBoost", "Growing BloodLust", 0.05F, 0, 100, "Damage boost granted by the Growing Bloodlust, per level of effect.");
+
+        bloodLustLifestealBoost = config.getFloat("LifestealBoost", "Growing BloodLust", 0.025F, 0, 100, "Lifesteal granted by the Growing Bloodlust, per level of effect.");
+
+        bloodLustHealthLossTicks = config.getInt("HealthLossTicks", "Growing BloodLust", 160, 0, 20000, "How often the player loses 1 HP at level one of Growing Bloodlust, in ticks.");
+
+        bloodLustHealthLossLimit = config.getFloat("HealthLossLimit", "Growing BloodLust", 0.3F, 0, 1, "How much health Growing Bloodlust leaves the player with, as a fraction of max health.");
+
+        bloodLustTicksPerLevel = config.getInt("TicksPerLevel", "Growing BloodLust", 300, 0, 20000, "How lock the The Voracious Pan needs to be held, in ticks, to increase the strength "
+                + "of the Growing Bloodlust effect by one level.");
 
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"

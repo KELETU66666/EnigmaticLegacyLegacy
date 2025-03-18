@@ -71,8 +71,11 @@ item.infernal_shield.name=Bulwark of Blazing Pride
 item.enchantment_transposer.name=Tome of Hungering Knowledge
 item.eldritch_pan.name=The Voracious Pan
 item.void_stone.name=Keystone of The Oblivion
+item.forbidden_fruit.name=The Forbidden Fruit
 item.soul_compass.name=Wayfinder of the Damned
 item.extradimensional_eye.name=Extradimensional Eye
+item.unholy_grail.name=Unholy Grail
+item.redemption_potion.name=Potion of Redemption
 
 tooltip.enigmaticlegacy.holdShift=§5The §6Shift §5shall be held.
 
@@ -167,6 +170,11 @@ tooltip.enigmaticlegacy.cursedRing15_1=§d Enchanting Power§5 in §6Enchanting 
 tooltip.enigmaticlegacy.cursedRing16=§5- Unique drops from some creatures.
 tooltip.enigmaticlegacy.cursedRing17=§5- Portability of §6Ender Chest.
 tooltip.enigmaticlegacy.cursedRing18=§5- You can create and use unique items.
+
+tooltip.enigmaticlegacy.forbiddenFruitLore=§5Knowledge is the greatest gift.
+tooltip.enigmaticlegacy.forbiddenFruit1=§5After consuming the fruit you shall never
+tooltip.enigmaticlegacy.forbiddenFruit2=§5experience hunger again, but any form of
+tooltip.enigmaticlegacy.forbiddenFruit3=§5regeneration will have §6%1$s§5 weaker effect.
 
 tooltip.enigmaticlegacy.OblivionStoneCtrlTooltip=§5Hold §6Ctrl§5 to see consumable items.
 tooltip.enigmaticlegacy.OblivionStone1=§5Combine with any item in crafting grid
@@ -300,6 +308,11 @@ tooltip.enigmaticlegacy.cursedStone4=§5will be permanently destroyed, along wit
 tooltip.enigmaticlegacy.cursedStone5=§5one of your §6Soul Crystals.
 tooltip.enigmaticlegacy.cursedStone6=§4This cannot be undone.
 
+tooltip.enigmaticlegacy.unholyGrail1=§5You'd better not be drinking from it...
+
+tooltip.enigmaticlegacy.redemptionPotion1=§5Allows you to atone for the sin committed
+tooltip.enigmaticlegacy.redemptionPotion2=§5by tasting §6The Forbidden Fruit§5.
+
 tooltip.enigmaticlegacy.infinimeal1=§5Functions as infinite §6Bone Meal.
 tooltip.enigmaticlegacy.infinimeal2=§5Effective on §6Cactuses§5, §6Vines§5,
 tooltip.enigmaticlegacy.infinimeal3=§6Nether Wart§5 and §6Sugar Cane.
@@ -414,6 +427,7 @@ tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystal
 #1.18+
 potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
+potion.growing_bloodlust=Growing Bloodlust
 
 tooltip.enigmaticlegacy.soulCompass1=§5Points to the location of nearest §6Soul Crystal§5.
 
@@ -461,7 +475,7 @@ tooltip.enigmaticlegacy.eldritchPan1=§5Alteration of the §6Fourth Curse§d:
 tooltip.enigmaticlegacy.eldritchPan2=§6- Always deals its full damage.
 tooltip.enigmaticlegacy.eldritchPan3=§dLifesteal
 tooltip.enigmaticlegacy.eldritchPan4=§dHungersteal
-tooltip.enigmaticlegacy.eldritchPan4_alt=§dHungersteal (converts to health)
+tooltip.enigmaticlegacy.eldritchPan4_alt=§6%s §dHungersteal (converts to health)
 tooltip.enigmaticlegacy.eldritchPan5=§5Cooks the meat of slain creatures.
 tooltip.enigmaticlegacy.eldritchPan6=§5Can be used as a shield, and consume projectiles while blocking.
 tooltip.enigmaticlegacy.eldritchPan7=§5Continuosly holding the pan grants a §6Growing Hunger§5 effect,
