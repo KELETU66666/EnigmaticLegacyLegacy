@@ -5,6 +5,7 @@ import static keletu.enigmaticlegacy.EnigmaticConfigs.flyingScrollXpCostModifier
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
+import keletu.enigmaticlegacy.util.interfaces.IScroll;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -49,7 +50,7 @@ public class ItemHeavenScroll extends ItemScrollBauble {
     }
 
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.fabulousScroll) == -1 && super.canEquip(itemstack, player);
+        return (itemstack.getItem() instanceof IScroll) && BaublesApi.isBaubleEquipped((EntityPlayer) player, itemstack.getItem()) == -1;
     }
 
     protected boolean shouldCheckXpDrain(EntityPlayer player) {

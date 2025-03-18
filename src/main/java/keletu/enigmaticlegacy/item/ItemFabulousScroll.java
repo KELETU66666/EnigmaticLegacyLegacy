@@ -5,6 +5,7 @@ import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
+import keletu.enigmaticlegacy.util.interfaces.IScroll;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -69,9 +70,8 @@ public class ItemFabulousScroll extends ItemHeavenScroll {
 
     }
 
-    @Override
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return BaublesApi.isBaubleEquipped((EntityPlayer) player, EnigmaticLegacy.heavenScroll) == -1 && BaublesApi.isBaubleEquipped((EntityPlayer) player, this) == -1;
+        return (itemstack.getItem() instanceof IScroll) && BaublesApi.isBaubleEquipped((EntityPlayer) player, itemstack.getItem()) == -1;
     }
 
     @Override
