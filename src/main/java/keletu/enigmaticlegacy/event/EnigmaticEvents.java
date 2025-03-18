@@ -1002,6 +1002,19 @@ public class EnigmaticEvents {
             player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
             player.removePotionEffect(growingBloodlust);
         }
+
+        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(7).isEmpty() && !player.getTags().contains("hasIchorBottle")) {
+            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(7), false);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(7, ItemStack.EMPTY);
+        }
+        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(8).isEmpty() && !player.getTags().contains("hasAstralFruit")) {
+            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(8), false);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(8, ItemStack.EMPTY);
+        }
+        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(9).isEmpty() && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) == -1) {
+            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(9), false);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(9, ItemStack.EMPTY);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
