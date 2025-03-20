@@ -14,6 +14,11 @@ public interface IForbiddenConsumed extends INBTSerializable<NBTTagCompound> {
 
 	public void setConsumed(boolean bool);
 
+	public int getSpellstoneCooldown();
+
+	public void setSpellstoneCooldown(int cooldown);
+	public void decreaseCooldown();
+
 	@Override
 	public NBTTagCompound serializeNBT();
 

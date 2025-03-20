@@ -14,7 +14,7 @@ import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
-import keletu.enigmaticlegacy.key.EnderChestRingHandler;
+import keletu.enigmaticlegacy.key.EnigmaticKeyHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.ClientProxy;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
@@ -76,7 +76,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.3.0";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -182,17 +182,17 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
         packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
         packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 7, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 8, Side.CLIENT);
+        packetInstance.registerMessage(PacketSpellstoneKey.Handler.class, PacketSpellstoneKey.class, 9, Side.SERVER);
+        packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 10, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
 
         if (event.getSide().isClient()) {
-            EnderChestRingHandler.registerKeybinds();
+            EnigmaticKeyHandler.registerKeybinds();
         }
     }
 

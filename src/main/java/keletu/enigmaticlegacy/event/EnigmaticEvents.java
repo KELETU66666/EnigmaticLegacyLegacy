@@ -20,7 +20,6 @@ import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
-import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -913,14 +912,14 @@ public class EnigmaticEvents {
             counter.incrementTimeWithoutCurses();
         }
 
+        if(IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0){
+            IForbiddenConsumed.get(player).decreaseCooldown();
+        }
+
         if (BaublesApi.isBaubleEquipped(player, desolationRing) != -1 && SuperpositionHandler.isTheWorthyOne(player)) {
             DESOLATION_BOXES.put(player, SuperpositionHandler.getBoundingBoxAroundEntity(player, 128));
         } else {
             DESOLATION_BOXES.remove(player);
-        }
-
-        if (player.ticksExisted % 100 == 0) {
-            syncPlayTime(player);
         }
 
         IBaublesItemHandler baublesHandler = BaublesApi.getBaublesHandler(player);
@@ -1558,14 +1557,5 @@ public class EnigmaticEvents {
             EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(player);
         }
 
-    }
-
-    private static void syncPlayTime(EntityPlayer player) {
-        if (!player.world.isRemote) {
-            IPlaytimeCounter counter = IPlaytimeCounter.get(player);
-            counter.matchStats();
-            EnigmaticLegacy.packetInstance.sendToAllAround(new PacketSyncPlayTime(player.getUniqueID(), counter.getTimeWithCurses(), counter.getTimeWithoutCurses()),
-                    new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 64));
-        }
     }
 }
