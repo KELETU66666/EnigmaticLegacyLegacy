@@ -190,21 +190,6 @@
         },
         {
           "type": "item",
-          "name": "enigmaticlegacy:ocean_stone",
-          "weight": 10
-        },
-        {
-          "type": "item",
-          "name": "enigmaticlegacy:golem_heart",
-          "weight": 10
-        },
-        {
-          "type": "item",
-          "name": "enigmaticlegacy:angel_blessing",
-          "weight": 10
-        },
-        {
-          "type": "item",
           "name": "enigmaticlegacy:magnet_ring",
           "weight": 8
         },
@@ -217,6 +202,11 @@
           "type": "item",
           "name": "enigmaticlegacy:unholy_grail",
           "weight": 1
+        },
+        {
+          "type": "loot_table",
+          "name": "enigmaticlegacy:inject/spellstone_temple",
+          "weight": 12
         }
       ]
     }

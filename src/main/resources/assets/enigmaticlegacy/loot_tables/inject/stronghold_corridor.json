@@ -202,6 +202,11 @@
           "type": "item",
           "name": "enigmaticlegacy:unholy_grail",
           "weight": 1
+        },
+        {
+          "type": "loot_table",
+          "name": "enigmaticlegacy:inject/spellstone_stronghold",
+          "weight": 10
         }
       ]
     }

@@ -35,6 +35,7 @@ item.golem_heart.name=Heart of the Golem
 item.ocean_stone.name=Will of the Ocean
 item.angel_blessing.name=Angel's Blessing
 item.magma_heart.name=Blazing Core
+item.eye_of_nebula.name=Eye of the Nebula
 item.void_pearl.name=Pearl of the Void
 
 #material
@@ -387,6 +388,14 @@ tooltip.enigmaticlegacy.oceanStone8=§5- Provides effects of §6Aqua Affinity§5
 tooltip.enigmaticlegacy.oceanStone9=§5- Negates gravity when underwater.
 tooltip.enigmaticlegacy.oceanStone10=§5- Greatly increased swimming speed.
 tooltip.enigmaticlegacy.oceanStone11=§5- You are vulnerable to §6Fire Damage.
+
+tooltip.enigmaticlegacy.eyeOfNebula1=§dActive ability:
+tooltip.enigmaticlegacy.eyeOfNebula2=§6- Teleports you behind creature you are looking at.
+tooltip.enigmaticlegacy.eyeOfNebulaCooldown=§dСooldown: §6%1$s§6 seconds
+tooltip.enigmaticlegacy.eyeOfNebula3=§dPassive abilities:
+tooltip.enigmaticlegacy.eyeOfNebula4=§5- §6%1$s§d Magic Damage Resistance.
+tooltip.enigmaticlegacy.eyeOfNebula5=§5- §6%1$s§d Chance§5 to teleport away from any attack.
+tooltip.enigmaticlegacy.eyeOfNebula6=§5- When in water, you are vulnerable to ANY damage.
 
 tooltip.enigmaticlegacy.voidPearl1=§dActive ability:
 tooltip.enigmaticlegacy.voidPearl2=§4- Absent.

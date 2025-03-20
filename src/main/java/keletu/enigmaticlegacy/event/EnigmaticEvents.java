@@ -393,6 +393,20 @@ public class EnigmaticEvents {
 					}
 					 */
             }
+
+            if (BaublesApi.isBaubleEquipped(player, eyeOfNebula) != -1 && !event.isCanceled()) {
+                if (THEY_SEE_ME_ROLLIN.nextInt(100) < Math.round(eyeOfNebulaDodgeProbability * 100) && player.hurtResistantTime <= 10 && event.getSource().getTrueSource() instanceof EntityLivingBase) {
+
+                    for (int counter = 0; counter <= 32; counter++) {
+                        if (SuperpositionHandler.validTeleportRandomly(player, player.world, (int) eyeOfNebulaDodgeRange)) {
+                            break;
+                        }
+                    }
+
+                    player.hurtResistantTime = 20;
+                    event.setCanceled(true);
+                }
+            }
         }
 
         if (!event.isCanceled() && event.getSource().getTrueSource() instanceof EntityPlayer) {
@@ -912,7 +926,7 @@ public class EnigmaticEvents {
             counter.incrementTimeWithoutCurses();
         }
 
-        if(IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0){
+        if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0) {
             IForbiddenConsumed.get(player).decreaseCooldown();
         }
 
@@ -1061,8 +1075,7 @@ public class EnigmaticEvents {
                     FoodStats stats = mc.player.getFoodStats();
                     int level = stats.getFoodLevel();
 
-                    for (int i = 0; i < 10; ++i)
-                    {
+                    for (int i = 0; i < 10; ++i) {
                         int idx = i * 2 + 1;
                         int x = left - i * 8 - 9;
                         int y = top;
@@ -1076,8 +1089,7 @@ public class EnigmaticEvents {
                         }
                         if (unused) background = 1; //Probably should be a += 1 but vanilla never uses this
 */
-                        if (player.getFoodStats().getSaturationLevel() <= 0.0F && mc.ingameGUI.updateCounter % (level * 3 + 1) == 0)
-                        {
+                        if (player.getFoodStats().getSaturationLevel() <= 0.0F && mc.ingameGUI.updateCounter % (level * 3 + 1) == 0) {
                             y = top + (THEY_SEE_ME_ROLLIN.nextInt(3) - 1);
                         }
 
@@ -1303,9 +1315,9 @@ public class EnigmaticEvents {
                     event.setCanceled(true);
                 } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     event.setAmount(event.getAmount() * 2F);
-                } /*else if (advancedCurio == eyeOfNebula && player.isInWater()) {
-                event.setAmount(event.getAmount() * 2F);
-            } */ else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
+                } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
+                    event.setAmount(event.getAmount() * 2F);
+                } else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
                     event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);
                 }
 

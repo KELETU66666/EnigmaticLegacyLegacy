@@ -118,6 +118,7 @@ public class EnigmaticLegacy {
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
     public static Item blazingCore = new ItemMagmaHeart();
+    public static Item eyeOfNebula = new ItemEyeOfNebula();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -182,11 +183,12 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
-        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
-        packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 7, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 8, Side.CLIENT);
-        packetInstance.registerMessage(PacketSpellstoneKey.Handler.class, PacketSpellstoneKey.class, 9, Side.SERVER);
-        packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 10, Side.CLIENT);
+        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 4, Side.CLIENT);
+        packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 5, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 6, Side.CLIENT);
+        packetInstance.registerMessage(PacketSpellstoneKey.Handler.class, PacketSpellstoneKey.class, 7, Side.SERVER);
+        packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
+        packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -277,6 +279,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(oceanStone);
             event.getRegistry().register(angelBlessing);
             event.getRegistry().register(blazingCore);
+            event.getRegistry().register(eyeOfNebula);
             event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
@@ -429,6 +432,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(unholyGrail, 0, new ModelResourceLocation(unholyGrail.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(redemptionPotion, 0, new ModelResourceLocation(redemptionPotion.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(eyeOfNebula, 0, new ModelResourceLocation(eyeOfNebula.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
