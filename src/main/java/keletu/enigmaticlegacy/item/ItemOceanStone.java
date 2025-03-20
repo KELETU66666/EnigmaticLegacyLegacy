@@ -1,24 +1,31 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneSwimmingSpeedBoost;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneUnderwaterCreaturesResistance;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
+import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,56 +84,57 @@ public class ItemOceanStone extends ItemSpellstoneBauble {
 
     }
 
-//    @Override
-//    public void triggerActiveAbility(World world, EntityPlayerMP player, ItemStack stack) {
-//        if (SuperpositionHandler.hasSpellstoneCooldown(player))
-//            return;
-//
-//        if (player.world.provider.getDimension() == 0)
-//            if (!world.getWorldInfo().isThundering()) {
-//                boolean paybackReceived = false;
-//
-//                /*
-//                 * ItemStack scroll = SuperpositionHandler.getCurioStack(player,
-//                 * EnigmaticLegacy.xpScroll);
-//                 *
-//                 * if (scroll != null && ItemNBTHelper.getInt(scroll, "XPStored", 0) >=
-//                 * xpCostBase*2) { ItemNBTHelper.setInt(scroll, "XPStored",
-//                 * ItemNBTHelper.getInt(scroll, "XPStored", 0) - (int)
-//                 * ((xpCostBase+(Math.random()*xpCostBase))*ConfigHandler.
-//                 * OCEAN_STONE_XP_COST_MODIFIER.getValue())); paybackReceived = true; } else
-//                 */
-//
-//                if (ExperienceHelper.getPlayerXP(player) >= this.xpCostBase * 2) {
-//                    ExperienceHelper.drainPlayerXP(player, (int) ((this.xpCostBase + (Math.random() * this.xpCostBase)) * oceanStoneXpCostModifier));
-//                    paybackReceived = true;
-//                }
-//
-//                if (paybackReceived) {
-//
-//                    if (world instanceof WorldServer) {
-//                        WorldServer WorldServer = (WorldServer) world;
-//
-//                        int thunderstormTime = (int) (10000 + (Math.random() * 20000));
-//
-//                        WorldServer.getWorldInfo().setThundering(true);
-//                        WorldServer.getWorldInfo().setThunderTime(thunderstormTime);
-//						/*
-//							info.setWanderingTraderSpawnDelay(delay);
-//							info.setRaining(true);
-//							info.setThundering(true);
-//							info.setRainTime(thunderstormTime);
-//							info.setThunderTime(thunderstormTime);
-//						 */
-//                    }
-//
-//                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.NEUTRAL, 2.0F, (float) (0.7F + (Math.random() * 0.3D)));
-//
-//                    SuperpositionHandler.setSpellstoneCooldown(player, oceanStoneSpellstoneCooldown);
-//                }
-//
-//            }
-//    }
+    @Override
+    public void triggerActiveAbility(World world, EntityPlayerMP player, ItemStack stack) {
+        if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0)
+            return;
+
+        if (player.world.provider.getDimension() == 0)
+           /* if (!world.getWorldInfo().isThundering())*/ {
+                boolean paybackReceived = false;
+
+                /*
+                 * ItemStack scroll = SuperpositionHandler.getCurioStack(player,
+                 * EnigmaticLegacy.xpScroll);
+                 *
+                 * if (scroll != null && ItemNBTHelper.getInt(scroll, "XPStored", 0) >=
+                 * xpCostBase*2) { ItemNBTHelper.setInt(scroll, "XPStored",
+                 * ItemNBTHelper.getInt(scroll, "XPStored", 0) - (int)
+                 * ((xpCostBase+(Math.random()*xpCostBase))*ConfigHandler.
+                 * OCEAN_STONE_XP_COST_MODIFIER.getValue())); paybackReceived = true; } else
+                 */
+
+                if (ExperienceHelper.getPlayerXP(player) >= this.xpCostBase * 2) {
+                    ExperienceHelper.drainPlayerXP(player, (int) ((this.xpCostBase + (Math.random() * this.xpCostBase)) * EnigmaticConfigs.oceanStoneXpCostModifier));
+                    paybackReceived = true;
+                }
+
+                if (paybackReceived) {
+
+                    if (world instanceof WorldServer) {
+                        WorldServer WorldServer = (WorldServer) world;
+
+                        int thunderstormTime = (int) (10000 + (Math.random() * 20000));
+
+                        WorldServer.getWorldInfo().setRaining(true);
+                        WorldServer.getWorldInfo().setThundering(true);
+                        WorldServer.getWorldInfo().setThunderTime(thunderstormTime);
+						/*
+							info.setWanderingTraderSpawnDelay(delay);
+							info.setRaining(true);
+							info.setThundering(true);
+							info.setRainTime(thunderstormTime);
+							info.setThunderTime(thunderstormTime);
+						 */
+                    }
+
+                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.NEUTRAL, 2.0F, (float) (0.7F + (Math.random() * 0.3D)));
+
+                    IForbiddenConsumed.get(player).setSpellstoneCooldown(EnigmaticConfigs.oceanStoneSpellstoneCooldown);
+                }
+
+            }
+    }
 
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase living) {

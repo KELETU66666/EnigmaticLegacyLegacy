@@ -1,10 +1,11 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
-import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingDeflectChance;
-import static keletu.enigmaticlegacy.EnigmaticConfigs.angelBlessingSpellstoneCooldown;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.packet.PacketForceArrowRotations;
+import keletu.enigmaticlegacy.packet.PacketPlayerMotion;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -12,12 +13,15 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.entity.projectile.EntityWitherSkull;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -59,6 +63,8 @@ public class ItemAngelBlessing extends ItemSpellstoneBauble {
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing5") + TextFormatting.GOLD + angelBlessingDeflectChance * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.angelBlessing5_1"));
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing6"));
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing7"));
+			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing8"));
+			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing9"));
 		} else {
 			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));
 		}
@@ -69,6 +75,33 @@ public class ItemAngelBlessing extends ItemSpellstoneBauble {
 		//} catch (NullPointerException ex) {
 		//	// Just don't do it lol
 		//}
+	}
+
+	@Override
+	public void triggerActiveAbility(World world, EntityPlayerMP player, ItemStack stack) {
+		if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0)
+			return;
+
+		Vector3 accelerationVec = new Vector3(player.getLookVec());
+		Vector3 motionVec = new Vector3(player.motionX, player.motionY, player.motionZ);
+
+		if (player.isElytraFlying()) {
+			accelerationVec = accelerationVec.multiply(angelBlessingAccelerationModifierElytra);
+			accelerationVec = accelerationVec.multiply(1 / (Math.max(0.15D, motionVec.mag()) * 2.25D));
+		} else {
+			accelerationVec = accelerationVec.multiply(angelBlessingAccelerationModifier);
+		}
+
+		Vector3 finalMotion = new Vector3(motionVec.x + accelerationVec.x, motionVec.y + accelerationVec.y, motionVec.z + accelerationVec.z);
+
+		EnigmaticLegacy.packetInstance.sendTo(new PacketPlayerMotion(finalMotion.x, finalMotion.y, finalMotion.z), player);
+		player.motionX = finalMotion.x;
+		player.motionY = finalMotion.y;
+		player.motionZ = finalMotion.z;
+
+		world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDEREYE_LAUNCH, SoundCategory.PLAYERS, 1.0F, (float) (0.6F + (Math.random() * 0.1D)));
+
+		IForbiddenConsumed.get(player).setSpellstoneCooldown(angelBlessingSpellstoneCooldown);
 	}
 
 	@Override

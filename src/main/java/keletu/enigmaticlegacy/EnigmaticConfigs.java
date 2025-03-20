@@ -125,6 +125,12 @@ public class EnigmaticConfigs {
     public static double magmaHeartLavafogDensity;
     public static boolean magmaHeartTraitorBar;
 
+    public static int eyeOfNebulaSpellstoneCooldown;
+    public static float eyeOfNebulaDodgeProbability;
+    public static double eyeOfNebulaDodgeRange;
+    public static double eyeOfNebulaPhaseRange;
+    public static float eyeOfNebulaMagicResistance;
+
     public static double flyingScrollXpCostModifier;
 
     public static void onConfig(FMLPreInitializationEvent builder) {
@@ -332,6 +338,16 @@ public class EnigmaticConfigs {
 
         regenerationSubtraction = config.getFloat("RegenerationSubtraction", "Forbidden Fruit", 0.8F, 0, 1, "How much should be subtracted from regeneration of player who have consumed The Forbidden Fruit. ");
 
+        eyeOfNebulaSpellstoneCooldown = config.getInt("Cooldown", "EyeOfNebula", 60, 0, 32676, "Active ability cooldown for Eye of the Nebula. Measured in ticks. 20 ticks equal to 1 second.");
+
+        eyeOfNebulaDodgeProbability = config.getFloat("DodgeChance", "EyeOfNebula", 0.15F, 0, 1, "Probability for Eye of the Nebula to teleport it's bearer from any attack without receiving any damage. Defined as percentage.");
+
+        eyeOfNebulaDodgeRange = config.getFloat("DodgeRange", "EyeOfNebula", 16, 1, 128, "Range in which Eye of the Nebula searches for a position to teleport it's bearer to when dodging the attack.");
+
+        eyeOfNebulaPhaseRange = config.getFloat("PhaseRange", "EyeOfNebula", 32, 1, 128, "Range in which Eye of the Nebula can reach an entity when using it's active ability.");
+
+        eyeOfNebulaMagicResistance = config.getFloat("MagicResistance", "EyeOfNebula", 0.65F, 0, 1, "Magic Damage resistance provided by Eye of the Nebula. Defined as percentage.");
+
         bloodLustDamageBoost = config.getFloat("DamageBoost", "Growing BloodLust", 0.05F, 0, 100, "Damage boost granted by the Growing Bloodlust, per level of effect.");
 
         bloodLustLifestealBoost = config.getFloat("LifestealBoost", "Growing BloodLust", 0.025F, 0, 100, "Lifesteal granted by the Growing Bloodlust, per level of effect.");
@@ -356,7 +372,7 @@ public class EnigmaticConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot",  "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));

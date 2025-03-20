@@ -108,9 +108,9 @@
           ]
         },
         {
-          "type": "item",
-          "name": "enigmaticlegacy:void_pearl",
-          "weight": 10
+          "type": "loot_table",
+          "name": "enigmaticlegacy:inject/spellstone_endcity",
+          "weight": 12
         }
       ]
     }

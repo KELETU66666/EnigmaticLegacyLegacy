@@ -39,6 +39,7 @@ public class EnigmaticCapabilities {
         public NBTBase writeNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setBoolean("isForbiddenConsumed", instance.isConsumed());
+            tag.setInteger("spellstoneCooldown", instance.getSpellstoneCooldown());
             return tag;
         }
 
@@ -46,6 +47,7 @@ public class EnigmaticCapabilities {
         public void readNBT(Capability<IForbiddenConsumed> capability, IForbiddenConsumed instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tag = (NBTTagCompound) nbt;
             instance.setConsumed(tag.getBoolean("isForbiddenConsumed"));
+            instance.setSpellstoneCooldown(tag.getInteger("spellstoneCooldown"));
         }
     }
 }

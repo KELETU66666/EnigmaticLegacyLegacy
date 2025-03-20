@@ -14,7 +14,7 @@ import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.item.etherium.*;
-import keletu.enigmaticlegacy.key.EnderChestRingHandler;
+import keletu.enigmaticlegacy.key.EnigmaticKeyHandler;
 import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.proxy.ClientProxy;
 import keletu.enigmaticlegacy.proxy.CommonProxy;
@@ -76,7 +76,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.2.0-special";
+    public static final String VERSION = "1.3.0-special";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -118,6 +118,7 @@ public class EnigmaticLegacy {
     public static ItemStorageCrystal storageCrystal = new ItemStorageCrystal();
     public static Item angelBlessing = new ItemAngelBlessing();
     public static Item blazingCore = new ItemMagmaHeart();
+    public static Item eyeOfNebula = new ItemEyeOfNebula();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -184,18 +185,19 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
         packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 4, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncPlayTime.Handler.class, PacketSyncPlayTime.class, 5, Side.SERVER);
-        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 6, Side.CLIENT);
-        packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 7, Side.CLIENT);
-        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 8, Side.CLIENT);
-        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 9, Side.CLIENT);
+        packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 4, Side.CLIENT);
+        packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 5, Side.CLIENT);
+        packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 6, Side.CLIENT);
+        packetInstance.registerMessage(PacketSpellstoneKey.Handler.class, PacketSpellstoneKey.class, 7, Side.SERVER);
+        packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
+        packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
+        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 10, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
 
         if (event.getSide().isClient()) {
-            EnderChestRingHandler.registerKeybinds();
+            EnigmaticKeyHandler.registerKeybinds();
         }
     }
 
@@ -280,6 +282,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(oceanStone);
             event.getRegistry().register(angelBlessing);
             event.getRegistry().register(blazingCore);
+            event.getRegistry().register(eyeOfNebula);
             event.getRegistry().register(voidPearl);
             event.getRegistry().register(earthHeart);
             event.getRegistry().register(infinimeal);
@@ -436,6 +439,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(unholyGrail, 0, new ModelResourceLocation(unholyGrail.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(redemptionPotion, 0, new ModelResourceLocation(redemptionPotion.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(eyeOfNebula, 0, new ModelResourceLocation(eyeOfNebula.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

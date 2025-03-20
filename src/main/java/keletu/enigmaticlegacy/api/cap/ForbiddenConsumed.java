@@ -13,9 +13,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class ForbiddenConsumed implements IForbiddenConsumed {
 	public static final ResourceLocation FORBIDDEN_CONSUMED = new ResourceLocation(EnigmaticLegacy.MODID, "is_forbidden_consumed");
+	public static final ResourceLocation SPELLSTONE_COOLDOWN = new ResourceLocation(EnigmaticLegacy.MODID, "spellstone_cooldown");
 
 	private final EntityPlayer player;
 	private boolean bool = false;
+	private int cooldown = 0;
 
 	public ForbiddenConsumed(EntityPlayer player) {
 		this.player = player;
@@ -35,6 +37,20 @@ public class ForbiddenConsumed implements IForbiddenConsumed {
 		this.bool = bool;
 	}
 
+	@Override
+	public int getSpellstoneCooldown() {
+		return this.cooldown;
+	}
+
+	@Override
+	public void setSpellstoneCooldown(int cooldown) {
+		if (cooldown != this.cooldown) {
+			this.updateStat(SPELLSTONE_COOLDOWN, cooldown);
+		}
+
+		this.cooldown = cooldown;
+	}
+
 	private void updateStat(ResourceLocation stat, boolean value) {
 		if (this.player instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) this.player;
@@ -42,16 +58,30 @@ public class ForbiddenConsumed implements IForbiddenConsumed {
 		}
 	}
 
+	private void updateStat(ResourceLocation stat, int value) {
+		if (this.player instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) this.player;
+			player.addStat(new StatBase(stat.getNamespace(), new TextComponentString(stat.getPath())), value);
+		}
+	}
+
+	@Override
+	public void decreaseCooldown() {
+		this.updateStat(SPELLSTONE_COOLDOWN, cooldown--);
+	}
+
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setBoolean("isForbiddenConsumed", this.bool);
+		tag.setInteger("spellstoneCooldown", this.cooldown);
 		return tag;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound tag) {
 		this.bool = tag.getBoolean("isForbiddenConsumed");
+		this.cooldown = tag.getInteger("spellstoneCooldown");
 	}
 
 	public static class Provider implements ICapabilitySerializable<NBTTagCompound> {

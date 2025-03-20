@@ -8,6 +8,7 @@ import keletu.enigmaticlegacy.EnigmaticConfigs;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.eyeOfNebula;
 import keletu.enigmaticlegacy.api.DimensionalPosition;
 import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
@@ -22,7 +23,6 @@ import keletu.enigmaticlegacy.item.*;
 import keletu.enigmaticlegacy.packet.PacketCustom;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
-import keletu.enigmaticlegacy.packet.PacketSyncPlayTime;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -427,6 +427,21 @@ public class EnigmaticEvents {
 						event.setCanceled(true);
 					}
 					 */
+
+
+                if (BaublesApi.isBaubleEquipped(player, eyeOfNebula) != -1 && !event.isCanceled()) {
+                    if (THEY_SEE_ME_ROLLIN.nextInt(100) < Math.round(eyeOfNebulaDodgeProbability * 100) && player.hurtResistantTime <= 10 && event.getSource().getTrueSource() instanceof EntityLivingBase) {
+
+                        for (int counter = 0; counter <= 32; counter++) {
+                            if (SuperpositionHandler.validTeleportRandomly(player, player.world, (int) eyeOfNebulaDodgeRange)) {
+                                break;
+                            }
+                        }
+
+                        player.hurtResistantTime = 20;
+                        event.setCanceled(true);
+                    }
+                }
             }
         }
 
@@ -947,14 +962,14 @@ public class EnigmaticEvents {
             counter.incrementTimeWithoutCurses();
         }
 
+        if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0) {
+            IForbiddenConsumed.get(player).decreaseCooldown();
+        }
+
         if (BaublesApi.isBaubleEquipped(player, desolationRing) != -1 && SuperpositionHandler.isTheWorthyOne(player)) {
             DESOLATION_BOXES.put(player, SuperpositionHandler.getBoundingBoxAroundEntity(player, 128));
         } else {
             DESOLATION_BOXES.remove(player);
-        }
-
-        if (player.ticksExisted % 100 == 0) {
-            syncPlayTime(player);
         }
 
         IBaublesItemHandler baublesHandler = BaublesApi.getBaublesHandler(player);
@@ -1361,9 +1376,9 @@ public class EnigmaticEvents {
                     event.setCanceled(true);
                 } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     event.setAmount(event.getAmount() * 2F);
-                } /*else if (advancedCurio == eyeOfNebula && player.isInWater()) {
-                event.setAmount(event.getAmount() * 2F);
-            } */ else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
+                } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
+                    event.setAmount(event.getAmount() * 2F);
+                } else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
                     event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);
                 }
 
@@ -1615,14 +1630,5 @@ public class EnigmaticEvents {
             EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(player);
         }
 
-    }
-
-    private static void syncPlayTime(EntityPlayer player) {
-        if (!player.world.isRemote) {
-            IPlaytimeCounter counter = IPlaytimeCounter.get(player);
-            counter.matchStats();
-            EnigmaticLegacy.packetInstance.sendToAllAround(new PacketSyncPlayTime(player.getUniqueID(), counter.getTimeWithCurses(), counter.getTimeWithoutCurses()),
-                    new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 64));
-        }
     }
 }

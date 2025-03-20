@@ -1,0 +1,21 @@
+{
+  "__comment": "This table is injected as its own pool into minecraft:chests/end_city_treasure",
+  "pools": [
+    {
+      "name": "spellstones",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:golem_heart",
+          "weight": 65
+        },
+        {
+          "type": "item",
+          "name": "enigmaticlegacy:eye_of_nebula",
+          "weight": 35
+        }
+      ]
+    }
+  ]
+}

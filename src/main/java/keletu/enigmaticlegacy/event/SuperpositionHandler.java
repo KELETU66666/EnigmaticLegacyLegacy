@@ -13,8 +13,11 @@ import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -39,6 +42,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -47,6 +51,9 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -69,7 +76,7 @@ public class SuperpositionHandler {
     }
 
     public static ItemStack getAdvancedBaubles(final EntityLivingBase entity) {
-        if(entity != null) {
+        if (entity != null) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
             ItemStack stack;
 
@@ -81,6 +88,134 @@ public class SuperpositionHandler {
         }
 
         return ItemStack.EMPTY;
+    }
+
+    @Nullable
+    public static EntityLivingBase getObservedEntity(final EntityPlayer player, final World world, final float range, final int maxDist) {
+        EntityLivingBase newTarget = null;
+        Vector3 target = Vector3.fromEntityCenter(player);
+        List<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
+        for (int distance = 1; entities.size() == 0 && distance < maxDist; ++distance) {
+            target = target.add(new Vector3(player.getLookVec()).multiply(distance)).add(0.0, 0.5, 0.0);
+            entities = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range));
+            if (entities.contains(player)) {
+                entities.remove(player);
+            }
+        }
+        if (entities.size() > 0) {
+            newTarget = entities.get(0);
+        }
+        return newTarget;
+    }
+
+    /**
+     * Attempts to find valid location within given radius and teleport entity
+     * there.
+     *
+     * @return True if teleportation were successfull, false otherwise.
+     */
+    public static boolean validTeleportRandomly(Entity entity, World world, int radius) {
+        int d = radius * 2;
+
+        double x = entity.posX + ((Math.random() - 0.5D) * d);
+        double y = entity.posY + ((Math.random() - 0.5D) * d);
+        double z = entity.posZ + ((Math.random() - 0.5D) * d);
+        return SuperpositionHandler.validTeleport(entity, x, y, z, world, radius);
+    }
+
+    /**
+     * Attempts to teleport entity at given coordinates, or nearest valid location
+     * on Y axis.
+     *
+     * @return True if successfull, false otherwise.
+     */
+
+    public static boolean validTeleport(Entity entity, double x_init, double y_init, double z_init, World world, int checkAxis) {
+
+        int x = (int) x_init;
+        int y = (int) y_init;
+        int z = (int) z_init;
+
+        IBlockState block = world.getBlockState(new BlockPos(x, y - 1, z));
+
+        if (world.isAirBlock(new BlockPos(x, y - 1, z)) & block.isFullCube()) {
+
+            for (int counter = 0; counter <= checkAxis; counter++) {
+
+                if (!world.isAirBlock(new BlockPos(x, y + counter - 1, z)) & world.getBlockState(new BlockPos(x, y + counter - 1, z)).isFullCube() & world.isAirBlock(new BlockPos(x, y + counter, z)) & world.isAirBlock(new BlockPos(x, y + counter + 1, z))) {
+
+                    world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.HOSTILE, 1.0F, (float) (0.8F + (Math.random() * 0.2D)));
+
+                    EnigmaticLegacy.packetInstance.sendToAllAround(new PacketPortalParticles(entity.posX, entity.posY, entity.posZ, 72, 1.0D, false), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 128));
+
+                    if (entity instanceof EntityPlayerMP) {
+                        EntityPlayerMP player = (EntityPlayerMP) entity;
+                        player.attemptTeleport(x + 0.5, y + counter, z + 0.5);
+                    } else {
+                        ((EntityLivingBase) entity).attemptTeleport(x + 0.5, y + counter, z + 0.5);
+                    }
+
+                    world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.HOSTILE, 1.0F, (float) (0.8F + (Math.random() * 0.2D)));
+
+                    EnigmaticLegacy.packetInstance.sendToAllAround(new PacketPortalParticles(entity.posX, entity.posY, entity.posZ, 48, 1.0D, false), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 128));
+
+                    return true;
+                }
+
+            }
+
+        } else {
+
+            for (int counter = 0; counter <= checkAxis; counter++) {
+
+                if (!world.isAirBlock(new BlockPos(x, y - counter - 1, z)) & world.getBlockState(new BlockPos(x, y - counter - 1, z)).isFullCube() & world.isAirBlock(new BlockPos(x, y - counter, z)) & world.isAirBlock(new BlockPos(x, y - counter + 1, z))) {
+
+                    world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.HOSTILE, 1.0F, (float) (0.8F + (Math.random() * 0.2D)));
+                    EnigmaticLegacy.packetInstance.sendToAllAround(new PacketPortalParticles(entity.posX, entity.posY, entity.posZ, 48, 1.0D, false), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 128));
+
+                    if (entity instanceof EntityPlayerMP) {
+                        EntityPlayerMP player = (EntityPlayerMP) entity;
+                        player.attemptTeleport(x + 0.5, y - counter, z + 0.5);
+                    } else {
+                        ((EntityLivingBase) entity).attemptTeleport(x + 0.5, y - counter, z + 0.5);
+                    }
+
+                    world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.HOSTILE, 1.0F, (float) (0.8F + (Math.random() * 0.2D)));
+                    EnigmaticLegacy.packetInstance.sendToAllAround(new PacketPortalParticles(entity.posX, entity.posY, entity.posZ, 48, 1.0D, false), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 128));
+
+                    return true;
+                }
+
+            }
+
+        }
+
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void lookAt(double px, double py, double pz, EntityPlayerSP me) {
+        double dirx = me.posX - px;
+        double diry = me.posY - py;
+        double dirz = me.posZ - pz;
+
+        double len = Math.sqrt(dirx * dirx + diry * diry + dirz * dirz);
+
+        dirx /= len;
+        diry /= len;
+        dirz /= len;
+
+        double pitch = Math.asin(diry);
+        double yaw = Math.atan2(dirz, dirx);
+
+        // to degree
+        pitch = pitch * 180.0 / Math.PI;
+        yaw = yaw * 180.0 / Math.PI;
+
+        yaw += 90f;
+        me.rotationYaw = (float) pitch;
+        me.rotationPitch = (float) yaw;
+        // me.rotationYawHead = (float)yaw;
     }
 
     /**
