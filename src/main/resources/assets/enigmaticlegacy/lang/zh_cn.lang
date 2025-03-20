@@ -90,7 +90,7 @@ tooltip.enigmaticlegacy.fabulousScroll4=§5飞行不消耗经验值
 tooltip.enigmaticlegacy.fabulousScroll5=§5补偿飞行时的挖掘速度损失
 
 tooltip.enigmaticlegacy.angelBlessing1=§d主动技能：
-tooltip.enigmaticlegacy.angelBlessing2=§6- 向你视野的方向运动时，你的速度会在增加§1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessing2=§6- 向你视野的方向运动时，你的速度会在增加
 tooltip.enigmaticlegacy.angelBlessingCooldown=§d冷却：§6
 tooltip.enigmaticlegacy.angelBlessingCooldown_1=§6 秒
 tooltip.enigmaticlegacy.angelBlessing3=§d被动效果：
@@ -99,7 +99,7 @@ tooltip.enigmaticlegacy.angelBlessing5=§5- §6
 tooltip.enigmaticlegacy.angelBlessing5_1=§d 概率§5 偏转弹射物
 tooltip.enigmaticlegacy.angelBlessing6=§5- 你的弹射物将获得速度加成
 tooltip.enigmaticlegacy.angelBlessing7=§5- 你可以在空中使用跳跃键
-tooltip.enigmaticlegacy.angelBlessing8=§5  激活你的主动技能§1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessing8=§5  激活你的主动技能
 tooltip.enigmaticlegacy.angelBlessing9=§5- 你受到 §6凋零 §5 和 §6虚空 §5的伤害增加
 
 tooltip.enigmaticlegacy.theTwist1=§5在这条弃绝凡尘的道路上，
@@ -330,7 +330,7 @@ tooltip.enigmaticlegacy.golemHeart10=§5- 免疫挤压和荆棘伤害
 tooltip.enigmaticlegacy.golemHeart11=§5- 受到的 §6魔法伤害§5 增加
 
 tooltip.enigmaticlegacy.oceanStone1=§d主动技能：
-tooltip.enigmaticlegacy.oceanStone2=§6- 消耗大量经验召唤雷暴§1§l[WIP]
+tooltip.enigmaticlegacy.oceanStone2=§6- 消耗大量经验召唤雷暴
 tooltip.enigmaticlegacy.oceanStone3=§6
 tooltip.enigmaticlegacy.oceanStoneCooldown=§d冷却：§660§6 秒
 tooltip.enigmaticlegacy.oceanStone4=§d被动效果：

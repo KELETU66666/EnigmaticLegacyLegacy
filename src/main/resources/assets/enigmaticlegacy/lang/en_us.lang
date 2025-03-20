@@ -95,7 +95,7 @@ tooltip.enigmaticlegacy.fabulousScroll4=§5within the range of an active §6Beac
 tooltip.enigmaticlegacy.fabulousScroll5=§5Compensates mining speed penalty when flying.
 
 tooltip.enigmaticlegacy.angelBlessing1=§dActive ability:
-tooltip.enigmaticlegacy.angelBlessing2=§6- Accelerates you in the direction of your sight. §1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessing2=§6- Accelerates you in the direction of your sight.
 tooltip.enigmaticlegacy.angelBlessingCooldown=§dСooldown: §6
 tooltip.enigmaticlegacy.angelBlessingCooldown_1=§6 seconds
 tooltip.enigmaticlegacy.angelBlessing3=§dPassive abilities:
@@ -104,7 +104,7 @@ tooltip.enigmaticlegacy.angelBlessing5=§5- §6
 tooltip.enigmaticlegacy.angelBlessing5_1=§d Chance§5 to deflect incoming projectile.
 tooltip.enigmaticlegacy.angelBlessing6=§5- Your own projectiles are greatly accelerated.
 tooltip.enigmaticlegacy.angelBlessing7=§5- Active ability can be triggered by pressing jump
-tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air. §1§l [WIP]
+tooltip.enigmaticlegacy.angelBlessing8=§5  key while in mid-air.
 tooltip.enigmaticlegacy.angelBlessing9=§5- You are vulnerable to §6Withering§5 and §6Void Damage§5.
 
 tooltip.enigmaticlegacy.blazingCore1=§dActive ability:
@@ -384,7 +384,7 @@ tooltip.enigmaticlegacy.golemHeart10=§5- Immunity to pressure and pricking dama
 tooltip.enigmaticlegacy.golemHeart11=§5- You are vulnerable to §6Magic Damage.
 
 tooltip.enigmaticlegacy.oceanStone1=§dActive ability:
-tooltip.enigmaticlegacy.oceanStone2=§6- Starts thunderstorm, at great cost of experience. §1§l [WIP]
+tooltip.enigmaticlegacy.oceanStone2=§6- Starts thunderstorm, at great cost of experience.
 tooltip.enigmaticlegacy.oceanStone3=§6
 tooltip.enigmaticlegacy.oceanStoneCooldown=§dСooldown: §660§6 seconds
 tooltip.enigmaticlegacy.oceanStone4=§dPassive abilities:
