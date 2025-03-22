@@ -174,7 +174,7 @@ public class ItemAstralBreaker extends ItemTool implements IEtheriumTool {
 
         if (block == Blocks.OBSIDIAN)
         {
-            return this.toolMaterial.getHarvestLevel() == 3;
+            return this.toolMaterial.getHarvestLevel() >= 3;
         }
         else if (block != Blocks.DIAMOND_BLOCK && block != Blocks.DIAMOND_ORE)
         {
