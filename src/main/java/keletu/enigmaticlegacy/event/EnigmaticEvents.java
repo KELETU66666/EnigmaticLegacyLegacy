@@ -18,6 +18,7 @@ import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
 import keletu.enigmaticlegacy.item.*;
+import keletu.enigmaticlegacy.packet.PacketCosmicRevive;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.Quote;
@@ -92,7 +93,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class EnigmaticEvents {
@@ -105,7 +105,9 @@ public class EnigmaticEvents {
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
     public static boolean dropCursedStone = false;
+    public static int scheduledCubeRevive = -1;
 
+    public static final Map<EntityPlayer, Float> LAST_HEALTH = new WeakHashMap<>();
     public static final ResourceLocation FIREBAR_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/firebar.png");
     public static final ResourceLocation ICONS_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/generic_icons.png");
 
@@ -501,6 +503,11 @@ public class EnigmaticEvents {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityDamaged(LivingDamageEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            LAST_HEALTH.put(player, player.getHealth());
+        }
+
         if (event.getSource().getTrueSource() instanceof EntityPlayer && !event.getSource().getTrueSource().world.isRemote) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 
@@ -601,6 +608,9 @@ public class EnigmaticEvents {
 
         if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
             EntityPlayerMP attacker = (EntityPlayerMP) event.getSource().getTrueSource();
+            if (BaublesApi.isBaubleEquipped(attacker, EnigmaticLegacy.the_cube) != -1) {
+                EnigmaticLegacy.the_cube.applyRandomEffect(attacker, true);
+            }
             ItemStack weapon = attacker.getHeldItemMainhand();
 
             if (event.getEntity() instanceof EntityWither) {
@@ -701,6 +711,11 @@ public class EnigmaticEvents {
                         chance += angelBlessingDeflectChance;
                     }
 
+                    if(BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                        trigger = true;
+                        chance += 0.35;
+                    }
+
                     if (SuperpositionHandler.isWearEnigmaticAmulet(player, 3)) {
                         trigger = true;
                         chance += 0.15;
@@ -750,6 +765,10 @@ public class EnigmaticEvents {
 
         if (SuperpositionHandler.isWearEnigmaticAmulet(event.getEntityPlayer(), 5)) {
             miningBoost += 0.25F;
+        }
+
+        if (BaublesApi.isBaubleEquipped(event.getEntityPlayer(), EnigmaticLegacy.the_cube) != -1) {
+            miningBoost += 0.6F;
         }
 
         correctedSpeed = correctedSpeed * miningBoost;
@@ -913,73 +932,82 @@ public class EnigmaticEvents {
 
     @SubscribeEvent
     public static void tickHandler(TickEvent.PlayerTickEvent event) {
-        if (event.player.world.isRemote)
-            return;
-
         EntityPlayer player = event.player;
 
-        IPlaytimeCounter counter = IPlaytimeCounter.get(player);
+        if (event.player.world.isRemote) {
 
-        if (SuperpositionHandler.hasCursed(player)) {
-            counter.incrementTimeWithCurses();
-        } else {
-            counter.incrementTimeWithoutCurses();
-        }
+            IPlaytimeCounter counter = IPlaytimeCounter.get(player);
 
-        if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0) {
-            IForbiddenConsumed.get(player).decreaseCooldown();
-        }
-
-        if (BaublesApi.isBaubleEquipped(player, desolationRing) != -1 && SuperpositionHandler.isTheWorthyOne(player)) {
-            DESOLATION_BOXES.put(player, SuperpositionHandler.getBoundingBoxAroundEntity(player, 128));
-        } else {
-            DESOLATION_BOXES.remove(player);
-        }
-
-        IBaublesItemHandler baublesHandler = BaublesApi.getBaublesHandler(player);
-        for (int i = 0; i < baublesHandler.getSlots(); i++) {
-            ItemStack stack = baublesHandler.getStackInSlot(i);
-            if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-                if (!player.inventory.addItemStackToInventory(stack)) {
-                    player.dropItem(stack, false);
-                }
-                baublesHandler.setStackInSlot(i, ItemStack.EMPTY);
-                player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
-            }
-        }
-
-        IBaublesItemHandler extraBaublesHandler = BaublesApi.getBaublesHandler(player);
-        for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
-            ItemStack stack = extraBaublesHandler.getStackInSlot(i);
-            if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-                if (!player.inventory.addItemStackToInventory(stack)) {
-                    player.dropItem(stack, false);
-                }
-                extraBaublesHandler.setStackInSlot(i, ItemStack.EMPTY);
-                player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
-            }
-        }
-
-        if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan) {
-            int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
-            if (IForbiddenConsumed.get(player).isConsumed()) {
-                int bloodlustAmplifier = currentTicks / bloodLustTicksPerLevel;
-
-                bloodlustAmplifier = Math.min(bloodlustAmplifier, 9);
-
-                player.addPotionEffect(new PotionEffect(growingBloodlust, 200, bloodlustAmplifier, true, true));
+            if (SuperpositionHandler.hasCursed(player)) {
+                counter.incrementTimeWithCurses();
             } else {
-                int hungerAmplifier = currentTicks / 300;
-
-                hungerAmplifier = Math.min(hungerAmplifier, 9);
-                player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+                counter.incrementTimeWithoutCurses();
             }
 
-            ItemEldritchPan.HOLDING_DURATIONS.put(player, currentTicks + 1);
+            if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0) {
+                IForbiddenConsumed.get(player).decreaseCooldown();
+            }
+
+            if (BaublesApi.isBaubleEquipped(player, desolationRing) != -1 && SuperpositionHandler.isTheWorthyOne(player)) {
+                DESOLATION_BOXES.put(player, SuperpositionHandler.getBoundingBoxAroundEntity(player, 128));
+            } else {
+                DESOLATION_BOXES.remove(player);
+            }
+
+            IBaublesItemHandler baublesHandler = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < baublesHandler.getSlots(); i++) {
+                ItemStack stack = baublesHandler.getStackInSlot(i);
+                if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
+                    if (!player.inventory.addItemStackToInventory(stack)) {
+                        player.dropItem(stack, false);
+                    }
+                    baublesHandler.setStackInSlot(i, ItemStack.EMPTY);
+                    player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+                }
+            }
+
+            IBaublesItemHandler extraBaublesHandler = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
+                ItemStack stack = extraBaublesHandler.getStackInSlot(i);
+                if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
+                    if (!player.inventory.addItemStackToInventory(stack)) {
+                        player.dropItem(stack, false);
+                    }
+                    extraBaublesHandler.setStackInSlot(i, ItemStack.EMPTY);
+                    player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+                }
+            }
+
+            if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemEldritchPan) {
+                int currentTicks = ItemEldritchPan.HOLDING_DURATIONS.getOrDefault(player, 0);
+                if (IForbiddenConsumed.get(player).isConsumed()) {
+                    int bloodlustAmplifier = currentTicks / bloodLustTicksPerLevel;
+
+                    bloodlustAmplifier = Math.min(bloodlustAmplifier, 9);
+
+                    player.addPotionEffect(new PotionEffect(growingBloodlust, 200, bloodlustAmplifier, true, true));
+                } else {
+                    int hungerAmplifier = currentTicks / 300;
+
+                    hungerAmplifier = Math.min(hungerAmplifier, 9);
+                    player.addPotionEffect(new PotionEffect(EnigmaticLegacy.growingHungerEffect, 200, hungerAmplifier, true, true));
+                }
+
+                ItemEldritchPan.HOLDING_DURATIONS.put(player, currentTicks + 1);
+            } else {
+                ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
+                player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
+                player.removePotionEffect(growingBloodlust);
+            }
         } else {
-            ItemEldritchPan.HOLDING_DURATIONS.put(player, 0);
-            player.removePotionEffect(EnigmaticLegacy.growingHungerEffect);
-            player.removePotionEffect(growingBloodlust);
+            if (scheduledCubeRevive > 0/* && Minecraft.getMinecraft().loadingScreen == null*/) {
+                scheduledCubeRevive--;
+
+                if (scheduledCubeRevive == 0) {
+                    proxy.displayReviveAnimation(player.getEntityId(), 1);
+                    scheduledCubeRevive = -1;
+                }
+            }
         }
     }
 
@@ -1435,6 +1463,40 @@ public class EnigmaticEvents {
                 //}
             }
         }
+
+        if (event.getEntity() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityLivingBase) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            EntityLivingBase living = (EntityLivingBase) event.getSource().getTrueSource();
+            if (BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                if (event.getAmount() <= the_cube.getDamageLimit(player) && THEY_SEE_ME_ROLLIN.nextDouble() <= 0.35) {
+                    event.setCanceled(true);
+                    living.attackEntityFrom(event.getSource(), event.getAmount());
+                    player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_NOTE_GUITAR, SoundCategory.PLAYERS, 1F, 1F);
+                } else {
+                    the_cube.applyRandomEffect(living, false);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void endEntityHurt(LivingHurtEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP && event.getSource().getTrueSource() != null) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            if (event.getAmount() > the_cube.getDamageLimit(player) && BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                event.setCanceled(true);
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1F, 1F);
+
+                if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
+                    EntityLivingBase living = (EntityLivingBase) event.getSource().getTrueSource();
+                    Vec3d look = new Vec3d(living.getPosition()).subtract(new Vec3d(player.getPosition())).normalize();
+                    Vec3d dir = look.add(look.x * 9, look.y * 9, look.z * 9);
+
+                    if (!(dir.x == 0 && dir.z == 0))
+                        living.knockBack(player, 0.75F, dir.x, dir.z);
+                }
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -1455,6 +1517,28 @@ public class EnigmaticEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusExp);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onDeathLow(LivingDeathEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.the_cube) != -1) {
+                if (IForbiddenConsumed.get(player).getSpellstoneCooldown() == 0) {
+                    event.setCanceled(true);
+                    player.setHealth(player.getMaxHealth() * 0.3F);
+
+                    EnigmaticLegacy.the_cube.triggerActiveAbility(player.world, player, SuperpositionHandler.getTheCube(player));
+
+                    player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 1200, 2));
+                    player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 1200, 1));
+                    player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 1200, 0));
+                    player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 1200, 1));
+
+                    EnigmaticLegacy.packetInstance.sendToAllAround(new PacketCosmicRevive(player.getEntityId(), 1), new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 128));
+                }
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onLivingDeath(LivingDeathEvent event) {
         EntityLivingBase living = event.getEntityLiving();
@@ -1462,7 +1546,10 @@ public class EnigmaticEvents {
         if (!living.world.isRemote && living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
 
-            if (BaublesApi.isBaubleEquipped(player, voidPearl) != -1 && Math.random() <= voidPearlUndeadProbability) {
+            if (LAST_HEALTH.containsKey(player) && LAST_HEALTH.get(player) >= 1.5F && BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                event.setCanceled(true);
+                player.setHealth(1);
+            } else if (BaublesApi.isBaubleEquipped(player, voidPearl) != -1 && Math.random() <= voidPearlUndeadProbability) {
                 event.setCanceled(true);
                 player.setHealth(1);
             } else if (SuperpositionHandler.isTheWorthyOne((EntityPlayer) living)) {

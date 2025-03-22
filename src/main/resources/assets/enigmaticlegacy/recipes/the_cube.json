@@ -1,0 +1,37 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "GCB",
+    "AHE",
+    "OCV"
+  ],
+  "key": {
+	"G": {
+      "item": "enigmaticlegacy:golem_heart"
+    },
+    "A": {
+      "item": "enigmaticlegacy:angel_blessing"
+    },
+	"O": {
+      "item": "enigmaticlegacy:ocean_stone"
+    },
+	"C": {
+      "item": "enigmaticlegacy:cosmic_heart"
+    },
+	"H": {
+      "item": "minecraft:obsidian"
+    },
+    "B": {
+      "item": "enigmaticlegacy:magma_heart"
+    },
+    "E": {
+      "item": "enigmaticlegacy:eye_of_nebula"
+    },
+    "V": {
+      "item": "enigmaticlegacy:void_pearl"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:the_cube"
+  }
+}
