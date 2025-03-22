@@ -934,7 +934,7 @@ public class EnigmaticEvents {
     public static void tickHandler(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
 
-        if (event.player.world.isRemote) {
+        if (!event.player.world.isRemote) {
 
             IPlaytimeCounter counter = IPlaytimeCounter.get(player);
 
