@@ -13,7 +13,9 @@ import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import keletu.enigmaticlegacy.item.ItemEldritchPan;
 import keletu.enigmaticlegacy.item.ItemInfernalShield;
 import keletu.enigmaticlegacy.item.ItemSpellstoneBauble;
+import keletu.enigmaticlegacy.item.ItemTheCube;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
+import keletu.enigmaticlegacy.util.RealSmoothTeleporter;
 import keletu.enigmaticlegacy.util.Vector3;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +49,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -61,6 +64,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SuperpositionHandler {
+
+    static Random RANDOM = new Random();
 
     public static int getBaubleSlots(EntityPlayer player) {
         return BaublesApi.getBaublesHandler(player).getSlots();
@@ -88,6 +93,69 @@ public class SuperpositionHandler {
         }
 
         return ItemStack.EMPTY;
+    }
+
+    public static ItemStack getTheCube(final EntityLivingBase entity) {
+        if (entity != null) {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+            ItemStack stack;
+
+            for (int i = 0; i < handler.getSlots(); i++) {
+                stack = handler.getStackInSlot(i);
+                if (stack.getItem() instanceof ItemTheCube)
+                    return stack;
+            }
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    public static void sendToDimension(EntityPlayerMP player, int dimension, ITeleporter teleporter) {
+        if (player.world.provider.getDimension() != dimension) {
+            WorldServer world = SuperpositionHandler.getWorld(dimension);
+            if (world != null) {
+                player.changeDimension(dimension, teleporter);
+            }
+        }
+    }
+
+    public static void sendToDimension(EntityPlayerMP player, int dimension) {
+        sendToDimension(player, dimension, new RealSmoothTeleporter());
+    }
+
+    @SafeVarargs
+    public static <T> T getRandomElement(List<T> list, T... excluding) {
+        List<T> filtered = new ArrayList<>(list);
+        Arrays.stream(excluding).forEach(filtered::remove);
+
+        if (filtered.size() <= 0)
+            throw new IllegalArgumentException("List has no valid elements to choose");
+        else if (filtered.size() == 1)
+            return filtered.get(0);
+        else
+            return filtered.get(RANDOM.nextInt(filtered.size()));
+    }
+
+    public static WorldServer getWorld(int key) {
+        WorldServer ret = net.minecraftforge.common.DimensionManager.getWorld(key, true);
+        if (ret == null)
+        {
+            net.minecraftforge.common.DimensionManager.initDimension(key);
+            ret = net.minecraftforge.common.DimensionManager.getWorld(key);
+        }
+        return ret;
+    }
+
+    public static WorldServer getOverworld() {
+        return SuperpositionHandler.getWorld(0);
+    }
+
+    public static WorldServer getNether() {
+        return SuperpositionHandler.getWorld(-1);
+    }
+
+    public static WorldServer getEnd() {
+        return SuperpositionHandler.getWorld(1);
     }
 
     @Nullable

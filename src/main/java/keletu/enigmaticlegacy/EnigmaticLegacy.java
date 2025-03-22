@@ -119,6 +119,7 @@ public class EnigmaticLegacy {
     public static Item angelBlessing = new ItemAngelBlessing();
     public static Item blazingCore = new ItemMagmaHeart();
     public static Item eyeOfNebula = new ItemEyeOfNebula();
+    public static ItemTheCube the_cube = new ItemTheCube();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -191,7 +192,8 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketSpellstoneKey.Handler.class, PacketSpellstoneKey.class, 7, Side.SERVER);
         packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
-        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 10, Side.CLIENT);
+        packetInstance.registerMessage(PacketCosmicRevive.Handler.class, PacketCosmicRevive.class, 10, Side.CLIENT);
+        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 11, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -320,6 +322,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(enigmaticEye);
             event.getRegistry().register(cosmicHeart);
             event.getRegistry().register(ascensionAmulet);
+            event.getRegistry().register(the_cube);
             event.getRegistry().register(abyssalHeart);
             event.getRegistry().register(theInfinitum);
             event.getRegistry().register(eldritchPan);
@@ -440,6 +443,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(unholyGrail, 0, new ModelResourceLocation(unholyGrail.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(redemptionPotion, 0, new ModelResourceLocation(redemptionPotion.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(eyeOfNebula, 0, new ModelResourceLocation(eyeOfNebula.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(the_cube, 0, new ModelResourceLocation(the_cube.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));

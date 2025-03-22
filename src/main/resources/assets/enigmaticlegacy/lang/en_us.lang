@@ -441,6 +441,7 @@ potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
 potion.growing_bloodlust=Growing Bloodlust
 
+item.the_cube.name=Non-Euclidean Cube
 
 tooltip.enigmaticlegacy.ichorBottle1=§5To contempt the gods, one must know them...
 tooltip.enigmaticlegacy.ichorBottle2=§5Consume to obtain §6+1§d Amulet Slot §5permanently.
@@ -452,6 +453,29 @@ tooltip.enigmaticlegacy.soulCompass1=§5Points to the location of nearest §6Sou
 tooltip.enigmaticlegacy.enigmaticEye1=§5It is connected to location beyond your space and
 tooltip.enigmaticlegacy.enigmaticEye2=§5time. You can awaken the eye, if you wish to risk
 tooltip.enigmaticlegacy.enigmaticEye3=§5drawing attention of someone... or something.
+
+tooltip.enigmaticlegacy.theCube1=§dActive ability:
+tooltip.enigmaticlegacy.theCube2=§6- Teleports you to random location in one of three main dimensions.
+tooltip.enigmaticlegacy.theCube3=§dСooldown: §6%1$s§6 seconds
+tooltip.enigmaticlegacy.theCube4=§dPassive abilities:
+tooltip.enigmaticlegacy.theCube5=§5- §6+35%%§d Sprinting Speed
+tooltip.enigmaticlegacy.theCube6=§5- §6+100%%§d Swimming Speed
+tooltip.enigmaticlegacy.theCube7=§5- §6+60%%§d Mining Speed
+tooltip.enigmaticlegacy.theCube8=§5- §6+40%%§d Attack Speed
+tooltip.enigmaticlegacy.theCube9=§5- §6+1§d Fortune Level
+tooltip.enigmaticlegacy.theCube10=§5- §6+1§d Luck
+tooltip.enigmaticlegacy.theCube11=§5- Any attacks that deal above §6%1$s§6 damage§5 are completely negated.
+tooltip.enigmaticlegacy.theCube12=§5- §635%%§d Chance§5 to deflect an incoming attack or projectile.
+tooltip.enigmaticlegacy.theCube13=§5- When attacked in melee, applies random debuff to attacker.
+tooltip.enigmaticlegacy.theCube14=§5- Whenever you slay any creature, you receive random buff.
+tooltip.enigmaticlegacy.theCube15=§5- You need no air to breathe.
+tooltip.enigmaticlegacy.theCube16=§5- Immunity to negative status effects.
+tooltip.enigmaticlegacy.theCube17=§5- Immunity to pressure, fall, collision, pricking, teleportation, fire
+tooltip.enigmaticlegacy.theCube18=§5  and lava damage.
+tooltip.enigmaticlegacy.theCube19=§5- When you have more than §61 health§5, you survive any lethal damage
+tooltip.enigmaticlegacy.theCube20=§5  with §61 health§5 remaining. If you have §61 health§5 or less, attempts to
+tooltip.enigmaticlegacy.theCube21=§5  trigger active ability to prevent lethal damage. Restores your
+tooltip.enigmaticlegacy.theCube22=§5  health to §630%%§5 and applies powerful buffs if successful.
 
 tooltip.enigmaticlegacy.enigmaticEyeAwakened1=§5Now that you have drawn his attention, whoever uses
 tooltip.enigmaticlegacy.enigmaticEyeAwakened2=§5the eye to observe you and the world does not seem to
