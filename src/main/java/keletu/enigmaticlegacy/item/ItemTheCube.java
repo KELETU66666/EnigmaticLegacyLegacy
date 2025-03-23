@@ -181,7 +181,7 @@ public class ItemTheCube extends ItemSpellstoneBauble implements IFortuneBonus {
             }
 
             for (PotionEffect effect : new ArrayList<>(player.getActivePotionEffects())) {
-                if (!effect.getPotion().isBeneficial()) {
+                if (effect.getPotion().isBadEffect()) {
                     player.removePotionEffect(effect.getPotion());
                 }
             }
