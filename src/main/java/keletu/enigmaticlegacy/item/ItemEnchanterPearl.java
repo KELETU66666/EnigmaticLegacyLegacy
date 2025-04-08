@@ -1,5 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -9,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemEnchanterPearl extends ItemBaseFireProof {
+public class ItemEnchanterPearl extends ItemBaseFireProof implements IBauble {
 
 	public ItemEnchanterPearl() {
 		super("enchanter_pearl", EnumRarity.EPIC);
@@ -33,4 +35,8 @@ public class ItemEnchanterPearl extends ItemBaseFireProof {
 		}
 	}
 
+	@Override
+	public BaubleType getBaubleType(ItemStack itemStack) {
+		return BaubleType.TRINKET;
+	}
 }

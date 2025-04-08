@@ -76,7 +76,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.4.3";
+    public static final String VERSION = "1.4.4";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -183,7 +183,6 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketRecallParticles.Handler.class, PacketRecallParticles.class, 0, Side.CLIENT);
         packetInstance.registerMessage(PacketEnderRingKey.Handler.class, PacketEnderRingKey.class, 1, Side.SERVER);
         packetInstance.registerMessage(PacketPortalParticles.Handler.class, PacketPortalParticles.class, 2, Side.CLIENT);
-        packetInstance.registerMessage(PacketEnchantedWithPearl.Handler.class, PacketEnchantedWithPearl.class, 3, Side.SERVER);
         packetInstance.registerMessage(PacketItemNBTSync.Handler.class, PacketItemNBTSync.class, 4, Side.CLIENT);
         packetInstance.registerMessage(PacketForceArrowRotations.Handler.class, PacketForceArrowRotations.class, 5, Side.CLIENT);
         packetInstance.registerMessage(PacketSyncCapability.Handler.class, PacketSyncCapability.class, 6, Side.CLIENT);
