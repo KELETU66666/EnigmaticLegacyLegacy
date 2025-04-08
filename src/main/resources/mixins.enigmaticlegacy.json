@@ -11,7 +11,8 @@
     "early.MixinEnterBlockTrigger",
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
-    "early.MixinSummonedEntityTrigger"
+    "early.MixinSummonedEntityTrigger",
+    "early.MixinContainerEnchantment"
   ],
   "injectors": {
     "maxShiftBy": 10

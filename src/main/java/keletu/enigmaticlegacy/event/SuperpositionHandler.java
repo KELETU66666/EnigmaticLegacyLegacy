@@ -34,6 +34,7 @@ import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -854,5 +855,54 @@ public class SuperpositionHandler {
         }
 
         return pointedEntity;
+    }
+
+    /**
+     * Merges enchantments from mergeFrom onto input ItemStack, with exact same
+     * rules as vanilla Anvil when used in Survival Mode.
+     * @param input
+     * @param mergeFrom
+     * @param overmerge Shifts the rules of merging so that they make more sense with Apotheosis compat
+     * @return Copy of input ItemStack with new enchantments merged from mergeFrom
+     */
+
+    public static ItemStack mergeEnchantments(ItemStack input, ItemStack mergeFrom, boolean overmerge, boolean onlyTreasure) {
+        ItemStack returnedStack = input.copy();
+        Map<Enchantment, Integer> inputEnchants = EnchantmentHelper.getEnchantments(returnedStack);
+        Map<Enchantment, Integer> mergedEnchants = EnchantmentHelper.getEnchantments(mergeFrom);
+
+        for(Enchantment mergedEnchant : mergedEnchants.keySet()) {
+            if (mergedEnchant != null) {
+                int inputEnchantLevel = inputEnchants.getOrDefault(mergedEnchant, 0);
+                int mergedEnchantLevel = mergedEnchants.get(mergedEnchant);
+
+                if (!overmerge) {
+                    mergedEnchantLevel = inputEnchantLevel == mergedEnchantLevel ? (mergedEnchantLevel + 1 > mergedEnchant.getMaxLevel() ? mergedEnchant.getMaxLevel() : mergedEnchantLevel + 1) : Math.max(mergedEnchantLevel, inputEnchantLevel);
+                } else {
+                    mergedEnchantLevel = inputEnchantLevel > 0 ? Math.max(mergedEnchantLevel, inputEnchantLevel) + 1 : Math.max(mergedEnchantLevel, inputEnchantLevel);
+                    mergedEnchantLevel = Math.min(mergedEnchantLevel, 10);
+                }
+
+                boolean compatible = mergedEnchant.canApply(input);
+                if (input.getItem() instanceof ItemEnchantedBook) {
+                    compatible = true;
+                }
+
+                for(Enchantment originalEnchant : inputEnchants.keySet()) {
+                    if (originalEnchant != mergedEnchant && !mergedEnchant.isCompatibleWith(originalEnchant)) {
+                        compatible = false;
+                    }
+                }
+
+                if (compatible) {
+                    if (!onlyTreasure || mergedEnchant.isTreasureEnchantment() || mergedEnchant.isCurse()) {
+                        inputEnchants.put(mergedEnchant, mergedEnchantLevel);
+                    }
+                }
+            }
+        }
+
+        EnchantmentHelper.setEnchantments(inputEnchants, returnedStack);
+        return returnedStack;
     }
 }
