@@ -48,9 +48,6 @@ public class ItemInfinimeal extends ItemBase {
         IBlockState iblockstate = world.getBlockState(target);
         Block block = iblockstate.getBlock();
 
-        int hook = net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal(player, world, target, iblockstate, stack, hand);
-        if (hook != 0) return hook > 0;
-
         if (block instanceof IGrowable) {
             IGrowable igrowable = (IGrowable) block;
 
