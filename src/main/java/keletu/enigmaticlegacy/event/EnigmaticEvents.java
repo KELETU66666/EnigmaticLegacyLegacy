@@ -124,7 +124,7 @@ public class EnigmaticEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onLivingDrops(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
@@ -644,6 +644,15 @@ public class EnigmaticEvents {
             }
         }
 
+        EntityLivingBase living = event.getEntityLiving();
+
+        if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1) {
+            EntityPlayerMP player = (EntityPlayerMP) living;
+            eldritchAmulet.storeInventory(player);
+
+            SuperpositionHandler.setPersistentBoolean(player, "dropEldritchAmulet", true);
+
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -1593,19 +1602,6 @@ public class EnigmaticEvents {
                     SuperpositionHandler.getBoundingBoxAroundEntity(dragon, 256));
 
             players.forEach(player -> Quote.WITH_DRAGONS.playOnceIfUnlocked(player, 140));
-        }
-    }
-
-    @SubscribeEvent(priority = HIGH)
-    public static void keepRingCurses(LivingDeathEvent event) {
-        EntityLivingBase living = event.getEntityLiving();
-
-        if (!living.world.isRemote && living instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayer) living, eldritchAmulet) != -1) {
-            EntityPlayerMP player = (EntityPlayerMP) living;
-            eldritchAmulet.storeInventory(player);
-
-            SuperpositionHandler.setPersistentBoolean(player, "dropEldritchAmulet", true);
-
         }
     }
 
