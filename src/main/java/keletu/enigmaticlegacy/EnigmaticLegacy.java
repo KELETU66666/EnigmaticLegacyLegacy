@@ -27,8 +27,8 @@ import keletu.enigmaticlegacy.util.compat.ModCompat;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
 import keletu.enigmaticlegacy.util.loot.LootHandler;
-import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
 import keletu.enigmaticlegacy.util.loot.LootHandlerForgottenRelics;
+import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -168,6 +168,9 @@ public class EnigmaticLegacy {
     public static Item astralFruit = new ItemAstralFruit();
     public static Item ichorBottle = new ItemIchorBottle();
 
+    //Additions
+    public static Item blessedStone = new ItemBlessStone();
+    public static Item blessedRing = new ItemBlessRing();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -331,6 +334,9 @@ public class EnigmaticLegacy {
             event.getRegistry().register(astralFruit);
             event.getRegistry().register(ichorBottle);
 
+            event.getRegistry().register(blessedStone);
+            event.getRegistry().register(blessedRing);
+
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
 
@@ -446,6 +452,9 @@ public class EnigmaticLegacy {
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
+
+            ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));

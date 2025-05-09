@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getPersistentBoolean;
 import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,7 +72,16 @@ public class KeepBaublesEvent {
             }
             worthyMap.remove(player.getUniqueID());
         } else if (baublesMap.containsKey(player.getUniqueID()) && slotMap.containsKey(player.getUniqueID())) {
-            if (!(EnigmaticEvents.dropCursedStone)) {
+            if (EnigmaticEvents.dropBlessedStone) {
+                IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+                if (baublesMap.get(player.getUniqueID()).getItem() == EnigmaticLegacy.cursedRing)
+                    handler.setStackInSlot(slotMap.get(player.getUniqueID()), new ItemStack(EnigmaticLegacy.blessedRing));
+                else if (baublesMap.get(player.getUniqueID()).getItem() == EnigmaticLegacy.desolationRing)
+                    handler.setStackInSlot(slotMap.get(player.getUniqueID()), ItemStack.EMPTY);
+                else
+                    handler.setStackInSlot(slotMap.get(player.getUniqueID()), baublesMap.get(player.getUniqueID()));
+                EnigmaticEvents.dropBlessedStone = false;
+            } else if (!EnigmaticEvents.dropCursedStone) {
                 IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
                 handler.setStackInSlot(slotMap.get(player.getUniqueID()), baublesMap.get(player.getUniqueID()));
             } else {

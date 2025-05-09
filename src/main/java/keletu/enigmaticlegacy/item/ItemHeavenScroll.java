@@ -2,7 +2,6 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaublesApi;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.flyingScrollXpCostModifier;
-import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
 import keletu.enigmaticlegacy.util.interfaces.IScroll;

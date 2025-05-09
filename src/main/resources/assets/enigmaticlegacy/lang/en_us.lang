@@ -554,3 +554,40 @@ tooltip.enigmaticlegacy.compatXat2=§5- Endermen no longer teleport to you.
 
 tooltip.enigmaticlegacy.compatXat3=§dAlteration of the §6Seventh Curse§d:
 tooltip.enigmaticlegacy.compatXat4=§5- You can sleep as normal.
+
+#Additions
+item.blessed_stone.name=Holy Stone
+item.blessed_ring.name=Ring of Redemption
+
+tooltip.enigmaticaddons.blessStone1=§5Take this stone to seek death,
+tooltip.enigmaticaddons.blessStone2=§5hen the §6Ring of the Seven Curses §5will
+tooltip.enigmaticaddons.blessStone3=§5transform into the §6Ring of Redemption§5.
+tooltip.enigmaticaddons.blessStone_info_1=§4A ritual exclusive to the hardcore is...
+tooltip.enigmaticaddons.blessStone_info_2=§4§kXX_XX_XX_XX
+tooltip.enigmaticaddons.blessStone1_hardcore=§5The tenacious will allows the curses to compromise
+tooltip.enigmaticaddons.blessStone2_hardcore=§5Let's begin the transaction of souls
+tooltip.enigmaticaddons.blessStone_hardcore_info=§dThe Hardcore can also be overcome.
+
+book.enigmaticaddons.entry.bless_stone.name=The Choice of Rebirth
+book.enigmaticaddons.entry.bless_stone.heading=The True Redemption
+book.enigmaticaddons.entry.bless_stone.page.1=When you are hesitating whether to sacrifice yourself to break free from the Seven Curse Ring, there is a brand new choice in front of you.<br2/>The biggest problem is the Loss of Soul, and with the current materials and methods, it seems impossible. Although we can't break the connection, we could let the connection be presented in a new way.
+book.enigmaticaddons.entry.bless_stone.page.2=Slowly infiltrate a little pure power into the Ring of Seven Curses, and mobilize the blessings to change the curses. However, all these operations still need to be carried out when the contact is vulnerable, that is, you need to face death.
+book.enigmaticaddons.entry.bless_stone.page.3=After the final soul loss, the Ring of Seven Curses will completely disappear from your sight and turn into a touch of gold on your hand.<br2/>The previous curses has completely disappeared, also the original blessing has been partially preserved. Although most of the objects that once
+book.enigmaticaddons.entry.bless_stone.page.4=accompanied you are no longer usable, there are still some things that bear witness to your past filled with suffering, which is constantly approaching death. They still recognize your qualifications, are willing to break the shackles of the curse for you. <br2/>May you enjoy life to the fullest on days away from the curses. But you cannot truly understand this ring, please do not make the choice easily.
+
+tooltip.enigmaticaddons.blessRing1=§dFor those who have experienced torment,
+tooltip.enigmaticaddons.blessRing2=§dremaining blessings are still effective:
+tooltip.enigmaticaddons.blessRing3=§5- You receive §6%1$s§5 damage from §6ANY§5 source.
+tooltip.enigmaticaddons.blessRing4=§5- Increase the damage you cause by §6%1$s
+tooltip.enigmaticaddons.blessRing5=§5- Obtain sustained §dRegeneration.
+tooltip.enigmaticaddons.blessRing6=§5- §6+%1$s§d Looting Level
+tooltip.enigmaticaddons.blessRing7=§5- §6+%1$s§d Fortune Level
+tooltip.enigmaticaddons.blessRing8=§5- Unique drops from some creatures.
+tooltip.enigmaticaddons.blessRing9=§5- You can create and use unique relics.
+tooltip.enigmaticaddons.blessRingLore1=§5This ring shines with a unique
+tooltip.enigmaticaddons.blessRingLore2=§5luster, remembering those years
+tooltip.enigmaticaddons.blessRingLore3=§5of torment, and also, it is a
+tooltip.enigmaticaddons.blessRingLore4=§5proof of power......
+
+tooltip.enigmaticaddons.blessUse1=This item understands your past experiences,
+tooltip.enigmaticaddons.blessUse2=and it still recognizes your qualifications.

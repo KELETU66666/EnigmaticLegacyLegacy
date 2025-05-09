@@ -108,6 +108,7 @@ public class EnigmaticEvents {
     public static final Random THEY_SEE_ME_ROLLIN = new Random();
     public static final Map<EntityLivingBase, Float> knockbackThatBastard = new WeakHashMap<>();
     public static boolean dropCursedStone = false;
+    public static boolean dropBlessedStone = false;
     public static int scheduledCubeRevive = -1;
 
     public static final Map<EntityPlayer, Float> LAST_HEALTH = new WeakHashMap<>();
@@ -188,6 +189,10 @@ public class EnigmaticEvents {
 
             for (EntityItem entityItem : event.getDrops()) {
                 ItemStack itemStack = entityItem.getItem();
+                if(itemStack.getItem() == blessedStone) {
+                    dropBlessedStone = true;
+                    itemStack.shrink(1);
+                }
                 if (itemStack.getItem() == eldritchAmulet) {
                     hasEldritchAmulet = true;
                     break;
@@ -196,6 +201,7 @@ public class EnigmaticEvents {
                     break;
                 }
             }
+
             double y = dimPoint.getPosY() + 1.5;
             if (y < 0)
                 y = 3;
@@ -755,7 +761,7 @@ public class EnigmaticEvents {
                         chance += angelBlessingDeflectChance;
                     }
 
-                    if(BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                    if (BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
                         trigger = true;
                         chance += 0.35;
                     }
@@ -864,11 +870,13 @@ public class EnigmaticEvents {
                 if (slot.getSlotType().equals(EntityEquipmentSlot.Type.ARMOR)) {
                     ItemStack stack = player.inventory.armorInventory.get(slot.getIndex());
                     if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-                        if (!player.inventory.addItemStackToInventory(stack)) {
-                            player.dropItem(stack, false);
+                        if (!(hasBlessed(player) && isBlessed(stack))) {
+                            if (!player.inventory.addItemStackToInventory(stack)) {
+                                player.dropItem(stack, false);
+                            }
+                            player.inventory.armorInventory.set(slot.getIndex(), ItemStack.EMPTY);
+                            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                         }
-                        player.inventory.armorInventory.set(slot.getIndex(), ItemStack.EMPTY);
-                        player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                     }
                 }
             }
@@ -903,8 +911,13 @@ public class EnigmaticEvents {
         for (ResourceLocation rl : EnigmaticConfigs.cursedItemList) {
             if (event.getItemStack().getItem() == ForgeRegistries.ITEMS.getValue(rl)) {
                 TextFormatting color = !hasCursed(event.getEntityPlayer()) ? TextFormatting.DARK_RED : TextFormatting.GRAY;
-                event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
-                event.getToolTip().add(2, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly2"));
+                if (!(hasBlessed(event.getEntityPlayer()) && isBlessed(event.getItemStack()))) {
+                    event.getToolTip().add(1, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly1"));
+                    event.getToolTip().add(2, color + I18n.format("tooltip.enigmaticlegacy.cursedOnesOnly2"));
+                } else {
+                    event.getToolTip().add(1, TextFormatting.GOLD + I18n.format("tooltip.enigmaticaddons.blessUse1"));
+                    event.getToolTip().add(2, TextFormatting.GOLD + I18n.format("tooltip.enigmaticaddons.blessUse2"));
+                }
             }
         }
     }
@@ -1002,11 +1015,13 @@ public class EnigmaticEvents {
             for (int i = 0; i < baublesHandler.getSlots(); i++) {
                 ItemStack stack = baublesHandler.getStackInSlot(i);
                 if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-                    if (!player.inventory.addItemStackToInventory(stack)) {
-                        player.dropItem(stack, false);
+                    if (!(hasBlessed(player) && isBlessed(stack))) {
+                        if (!player.inventory.addItemStackToInventory(stack)) {
+                            player.dropItem(stack, false);
+                        }
+                        baublesHandler.setStackInSlot(i, ItemStack.EMPTY);
+                        player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                     }
-                    baublesHandler.setStackInSlot(i, ItemStack.EMPTY);
-                    player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                 }
             }
 
@@ -1014,11 +1029,13 @@ public class EnigmaticEvents {
             for (int i = 0; i < extraBaublesHandler.getSlots(); i++) {
                 ItemStack stack = extraBaublesHandler.getStackInSlot(i);
                 if ((isCursed(stack) && !hasCursed(player)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-                    if (!player.inventory.addItemStackToInventory(stack)) {
-                        player.dropItem(stack, false);
+                    if (!(hasBlessed(player) && isBlessed(stack))) {
+                        if (!player.inventory.addItemStackToInventory(stack)) {
+                            player.dropItem(stack, false);
+                        }
+                        extraBaublesHandler.setStackInSlot(i, ItemStack.EMPTY);
+                        player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                     }
-                    extraBaublesHandler.setStackInSlot(i, ItemStack.EMPTY);
-                    player.world.playSound(null, event.player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
                 }
             }
 
@@ -1431,8 +1448,9 @@ public class EnigmaticEvents {
 
             if (hasCursed(player)) {
                 event.setAmount(event.getAmount() * painMultiplier);
+            } else if (hasBlessed(player)) {
+                event.setAmount(event.getAmount() * (1 - blessedOneDamageResistance));
             }
-
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
                 if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
@@ -1500,6 +1518,8 @@ public class EnigmaticEvents {
                     if (event.getSource().getImmediateSource() != player || (player.getHeldItemMainhand().getItem() != EnigmaticLegacy.theTwist && player.getHeldItemMainhand().getItem() != theInfinitum && player.getHeldItemMainhand().getItem() != eldritchPan)) {
                         event.setAmount(event.getAmount() * (1 - EnigmaticConfigs.monsterDamageDebuff));
                     }
+                } else if (hasBlessed(player)) {
+                    event.setAmount(event.getAmount() * (1 + blessedOneDamageBoost));
                 }
             }
         }

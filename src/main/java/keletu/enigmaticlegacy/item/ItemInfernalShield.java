@@ -103,7 +103,7 @@ public class ItemInfernalShield extends ItemShield {
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
 
-        if (SuperpositionHandler.hasCursed(player)) {
+        if (SuperpositionHandler.hasCursed(player) || SuperpositionHandler.hasBlessed(player)) {
             player.setActiveHand(hand);
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         } else
@@ -119,7 +119,7 @@ public class ItemInfernalShield extends ItemShield {
     public void onUpdate(ItemStack stack, World worldIn, Entity holder, int itemSlot, boolean isSelected) {
         if (holder instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) holder;
-            if (player.isBurning() && SuperpositionHandler.hasCursed(player)) {
+            if (player.isBurning() && SuperpositionHandler.hasCursed(player) || SuperpositionHandler.hasBlessed(player)) {
                 if (player.getHeldItemMainhand() == stack || player.getHeldItemOffhand() == stack) {
                     player.extinguish();
                 }

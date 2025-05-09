@@ -3,7 +3,6 @@ package keletu.enigmaticlegacy.item;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.util.interfaces.ISpellstone;

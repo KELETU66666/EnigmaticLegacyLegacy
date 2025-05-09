@@ -2,7 +2,6 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.util.interfaces.IScroll;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

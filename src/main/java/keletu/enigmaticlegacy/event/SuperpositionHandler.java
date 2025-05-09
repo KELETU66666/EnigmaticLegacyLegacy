@@ -5,8 +5,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -697,14 +696,20 @@ public class SuperpositionHandler {
             return;
 
         if ((!hasCursed(player) && isCursed(stack)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-            event.setCanceled(true);
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+            if(!(hasBlessed(player) && isBlessed(stack))) {
+                event.setCanceled(true);
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+            }
 
         }
     }
 
     public static void enforce(PlayerInteractEvent event) {
         genericEnforce(event, event.getEntityPlayer(), event.getItemStack());
+    }
+
+    public static boolean isBlessed(ItemStack stack) {
+        return EnigmaticConfigs.blessedItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean isCursed(ItemStack stack) {
@@ -715,12 +720,16 @@ public class SuperpositionHandler {
         return EnigmaticConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
     }
 
+    public static boolean hasBlessed(EntityPlayer player) {
+        return BaublesApi.isBaubleEquipped(player, blessedRing) != -1;
+    }
+
     public static boolean hasCursed(EntityPlayer player) {
         return BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
     }
 
     public static boolean hasPearl(EntityPlayer player) {
-        return hasCursed(player) && player.inventory.hasItemStack(new ItemStack(enchanterPearl));
+        return (hasBlessed(player) || hasCursed(player)) && player.inventory.hasItemStack(new ItemStack(enchanterPearl));
     }
 
     public static boolean hasEnderRing(EntityPlayer player) {

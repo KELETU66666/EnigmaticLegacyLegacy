@@ -133,6 +133,13 @@ public class EnigmaticConfigs {
 
     public static double flyingScrollXpCostModifier;
 
+
+    //Additions
+    public static float blessedOneDamageResistance;
+    public static float blessedOneDamageBoost;
+    public static int blessedOneRegenerationSpeed;
+    public static final List<ResourceLocation> blessedItemList = new ArrayList<>();
+
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
@@ -372,7 +379,7 @@ public class EnigmaticConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot",  "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
@@ -389,6 +396,16 @@ public class EnigmaticConfigs {
 
         Arrays.stream(desolation).forEach(entry -> desolationRingExtraMonstersList.add(new ResourceLocation(entry)));
 
+
+        blessedOneDamageResistance = config.getFloat("BlessedOneDamageResistance", "Additions", 0.25F, 0, 1, "The damage resistance of the Ring of Redemption. Measured in percentage.");
+        blessedOneDamageBoost = config.getFloat("blessedOneDamageBoost", "Additions", 0.20F, 0, 5, "The damage boost of the Ring of Redemption. Measured in percentage.");
+        blessedOneRegenerationSpeed = config.getInt("blessedOneRegenerationSpeed", "Additions", 20, 5, 1000, "The time required for each regeneration of Ring of Redemption. Measured in ticks.");
+
+        blessedItemList.clear();
+        String[] blessed = config.getStringList("ItemBeBlessed", "Additions", new String[]{"enigmaticlegacy:astral_fruit", "enigmaticlegacy:twisted_mirror", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:guardian_heart", "enigmaticlegacy:twisted_core", "enigmaticlegacy:curse_transposer", "enigmaticaddons:night_scroll", "enigmaticaddons:sanguinary_handbook", "enigmaticaddons:earth_promise", "enigmaticaddons:thunder_scroll", "enigmaticaddons:pure_heart", "enigmaticaddons:bless_amplifier", "enigmaticaddons:the_bless", "enigmaticaddons:scorched_charm"}, "List of items needs ware ring to use"
+                + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
+
+        Arrays.stream(blessed).forEach(entry -> blessedItemList.add(new ResourceLocation(entry)));
 
         config.save();
     }
