@@ -250,11 +250,11 @@ public class ELCoreTransformer implements IClassTransformer {
     private void transformConstructor(ClassNode cn) {
         MethodNode mn = locateMethod(cn, "()V", "<init>");
         AbstractInsnNode bipush = locateTargetInsn(mn, n -> n.getOpcode() == Opcodes.BIPUSH && n.getNext().getOpcode() == Opcodes.INVOKESPECIAL);
-        mn.instructions.insert(bipush, new IntInsnNode(Opcodes.BIPUSH, 7 + 6));
+        mn.instructions.insert(bipush, new IntInsnNode(Opcodes.BIPUSH, 7 + 7));
         mn.instructions.remove(bipush);
 
         AbstractInsnNode arraySizeNode = locateTargetInsn(mn, n -> n.getOpcode() == Opcodes.BIPUSH && n.getNext().getOpcode() == Opcodes.NEWARRAY);
-        mn.instructions.insert(arraySizeNode, new IntInsnNode(Opcodes.BIPUSH, 7 + 6));
+        mn.instructions.insert(arraySizeNode, new IntInsnNode(Opcodes.BIPUSH, 7 + 7));
         mn.instructions.remove(arraySizeNode);
     }
 
@@ -262,7 +262,7 @@ public class ELCoreTransformer implements IClassTransformer {
         FieldNode fn = cn.fields.parallelStream()
                 .filter(f -> "BAUBLE_SLOTS".equals(f.name))
                 .findFirst().orElseThrow(() -> new ASMException("Can't find field BAUBLE_SLOTS"));
-        fn.value = 6;
+        fn.value = 7;
     }
 
     private byte[] transformBaubleType(byte[] basicClass) {
@@ -282,11 +282,11 @@ public class ELCoreTransformer implements IClassTransformer {
 
     private void addTrinkets(MethodNode mn) {
         AbstractInsnNode arraysizeNode = locateTargetInsn(mn, n -> n.getOpcode() == Opcodes.LDC && ((LdcInsnNode) n).cst.equals("TRINKET")).getNext().getNext();
-        mn.instructions.insert(arraysizeNode, new IntInsnNode(Opcodes.BIPUSH, 7 + 6));
+        mn.instructions.insert(arraysizeNode, new IntInsnNode(Opcodes.BIPUSH, 7 + 7));
         mn.instructions.remove(arraysizeNode);
         AbstractInsnNode init = locateTargetInsn(mn, n -> n.getOpcode() == Opcodes.INVOKESPECIAL && ((MethodInsnNode) n).name.equals("<init>") && ((MethodInsnNode) n).desc.equals("(Ljava/lang/String;I[I)V") && n.getNext().getOpcode() == Opcodes.PUTSTATIC && ((FieldInsnNode) n.getNext()).name.equals("TRINKET"));
         InsnList initArrayInsns = new InsnList();
-        for (int i = 7; i < 7 + 6; i++) {
+        for (int i = 7; i < 7 + 7; i++) {
             initArrayInsns.add(new InsnNode(Opcodes.DUP));
             initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i));
             initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i));
@@ -298,14 +298,14 @@ public class ELCoreTransformer implements IClassTransformer {
     private void addRings(MethodNode mn) {
         AbstractInsnNode arraysizeNode = locateTargetInsn(mn, n -> n.getOpcode() == Opcodes.LDC && ((LdcInsnNode) n).cst.equals("RING")).getNext().getNext();
 
-        mn.instructions.insert(arraysizeNode, new IntInsnNode(Opcodes.BIPUSH, 2 + 1));
+        mn.instructions.insert(arraysizeNode, new IntInsnNode(Opcodes.BIPUSH, 2 + 2));
         mn.instructions.remove(arraysizeNode);
         AbstractInsnNode init = locateTargetInsn(mn, n -> n instanceof MethodInsnNode && ((MethodInsnNode) n).name.equals("<init>") && ((MethodInsnNode) n).desc.equals("(Ljava/lang/String;I[I)V") && n.getNext().getOpcode() == Opcodes.PUTSTATIC && ((FieldInsnNode) n.getNext()).name.equals("RING"));
         InsnList initArrayInsns = new InsnList();
-        for (int i = 2; i < 2 + 1; i++) {
+        for (int i = 2; i < 2 + 2; i++) {
             initArrayInsns.add(new InsnNode(Opcodes.DUP));
             initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i));
-            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 6));
+            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 7));
             initArrayInsns.add(new InsnNode(Opcodes.IASTORE));
         }
         mn.instructions.insertBefore(init, initArrayInsns);
@@ -337,7 +337,7 @@ public class ELCoreTransformer implements IClassTransformer {
         for (int i = 1; i < 1 + 1; i++) {
             initArrayInsns.add(new InsnNode(Opcodes.DUP));
             initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i));
-            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 8));
+            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 9));
             initArrayInsns.add(new InsnNode(Opcodes.IASTORE));
         }
         mn.instructions.insertBefore(init, initArrayInsns);

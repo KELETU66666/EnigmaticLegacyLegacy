@@ -65,7 +65,8 @@ dependencies {
     compileOnly fg.deobf("curse.maven:rlcombat-711714:5940474")
 
     implementation fg.deobf("curse.maven:fermiumbooter-${fermiumbooter_version}")
-	
+    implementation fg.deobf("curse.maven:first-aid-276837:4414252")
+
     implementation fg.deobf("curse.maven:jei-${jei_version}")
 }
 

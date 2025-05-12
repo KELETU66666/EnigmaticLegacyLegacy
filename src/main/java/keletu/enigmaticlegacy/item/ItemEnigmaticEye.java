@@ -77,10 +77,6 @@ public class ItemEnigmaticEye extends ItemBaseBauble {
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase living) {
         super.onUnequipped(stack, living);
-        if(!BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(9).isEmpty()){
-            ((EntityPlayer) living).dropItem(BaublesApi.getBaubles((EntityPlayer) living).getStackInSlot(9), false);
-            BaublesApi.getBaubles((EntityPlayer) living).setInventorySlotContents(9, ItemStack.EMPTY);
-        }
     }
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {

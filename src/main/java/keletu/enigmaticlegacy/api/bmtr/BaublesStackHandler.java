@@ -14,7 +14,7 @@ public class BaublesStackHandler extends BaublesContainer {
 	
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
-		setSize(6 + 7);
+		setSize(7 + 7);
         NBTTagList tagList = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound itemTags = tagList.getCompoundTagAt(i);

@@ -13,8 +13,8 @@ public class Snippets {
 			throw new ASMException("Not an EntityPlayer: "+p);
 		}
 		EntityPlayer ep = (EntityPlayer) p;
-		for (int i = 0; i < 6; i++) {
-			int r = 6 + 18 * i;
+		for (int i = 0; i < 7; i++) {
+			int r = 7 + 18 * i;
 			SlotBauble sb = new SlotBauble(ep, BaublesApi.getBaublesHandler(ep), i + 7, r, -18);
 			sb.slotNumber = c.inventorySlots.size();
 			c.inventorySlots.add(sb);

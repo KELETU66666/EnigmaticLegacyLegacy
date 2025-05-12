@@ -558,6 +558,7 @@ tooltip.enigmaticlegacy.compatXat4=§5- You can sleep as normal.
 #Additions
 item.blessed_stone.name=Holy Stone
 item.blessed_ring.name=Ring of Redemption
+item.half_heart_mask.name=Ominous Mask
 
 tooltip.enigmaticaddons.blessStone1=§5Take this stone to seek death,
 tooltip.enigmaticaddons.blessStone2=§5hen the §6Ring of the Seven Curses §5will

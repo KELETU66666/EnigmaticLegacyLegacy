@@ -125,24 +125,31 @@ public class EnigmaticEvents {
             int startX = (sr.getScaledWidth() - 176) / 2;
             int startY = (sr.getScaledHeight() - 166) / 2;
             evt.getGui().drawTexturedModalRect(startX, startY - 6 - 18, 0, 0, 6, 6);
-            evt.getGui().drawTexturedModalRect(startX + 18 * 6 + 6, startY - 6 - 18, 58, 0, 6, 6);
-            for (int i = 0; i < 6; i++) {
+            evt.getGui().drawTexturedModalRect(startX + 18 * 7 + 6, startY - 6 - 18, 58, 0, 6, 6);
+            for (int i = 0; i < 7; i++) {
                 evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 6 - 18, 4, 0, 18, 6);
                 evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 18, 6, 6, 18, 18);
             }
             evt.getGui().drawTexturedModalRect(startX, startY - 18, 0, 6, 6, 18);
-            evt.getGui().drawTexturedModalRect(startX + 18 * 6 + 6, startY - 18, 58, 6, 6, 30);
+            evt.getGui().drawTexturedModalRect(startX + 18 * 7 + 6, startY - 18, 58, 6, 6, 30);
 
             if (Minecraft.getMinecraft().player.getTags().contains("hasIchorBottle"))
-                evt.getGui().drawTexturedModalRect(startX + 5, startY - 18 - 1, 0, 46, 18, 18);
+                evt.getGui().drawTexturedModalRect(startX + 6, startY - 18 - 1, 0, 46, 18, 18);
+
+            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 1, startY - 18 - 1, 18, 46, 18, 18);
+
             if (Minecraft.getMinecraft().player.getTags().contains("hasAstralFruit"))
-                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 1, startY - 18 - 1, 18, 46, 18, 18);
+                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 2, startY - 18 - 1, 36, 46, 18, 18);
+
             if (BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.enigmaticEye) != -1)
-                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 2, startY - 18 - 1, 36, 46, 18, 18);
-            evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 3, startY - 18 - 1, 54, 46, 18, 18);
-            evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 4, startY - 18 - 1, 72, 46, 18, 18);
+                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 3, startY - 18 - 1, 54, 46, 18, 18);
+
+            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 4, startY - 18 - 1, 72, 46, 18, 18);
+
+            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 5, startY - 18 - 1, 90, 46, 18, 18);
+
             if (false)
-                evt.getGui().drawTexturedModalRect(startX + 5 + 18 * 5, startY - 18 - 1, 90, 46, 18, 18);
+                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 6, startY - 18 - 1, 108, 46, 18, 18);
         }
     }
 
@@ -1075,13 +1082,13 @@ public class EnigmaticEvents {
             player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(7), false);
             BaublesApi.getBaublesHandler(player).setStackInSlot(7, ItemStack.EMPTY);
         }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(8).isEmpty() && !player.getTags().contains("hasAstralFruit")) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(8), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(8, ItemStack.EMPTY);
-        }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(9).isEmpty() && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) == -1) {
+        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(9).isEmpty() && !player.getTags().contains("hasAstralFruit")) {
             player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(9), false);
             BaublesApi.getBaublesHandler(player).setStackInSlot(9, ItemStack.EMPTY);
+        }
+        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(10).isEmpty() && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) == -1) {
+            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(10), false);
+            BaublesApi.getBaublesHandler(player).setStackInSlot(10, ItemStack.EMPTY);
         }
     }
 

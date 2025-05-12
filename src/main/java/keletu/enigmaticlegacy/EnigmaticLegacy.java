@@ -6,10 +6,7 @@ import keletu.enigmaticlegacy.client.LayerScroll;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingBloodlustEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
-import keletu.enigmaticlegacy.entity.EntityItemImportant;
-import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
-import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
+import keletu.enigmaticlegacy.entity.*;
 import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
@@ -22,8 +19,10 @@ import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
+import keletu.enigmaticlegacy.util.compat.CompatFirstAidEvent;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FIRSTAID;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
 import keletu.enigmaticlegacy.util.loot.LootHandler;
@@ -76,7 +75,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.5.0-rlc";
+    public static final String VERSION = "1.6.0-rlc";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -171,6 +170,7 @@ public class EnigmaticLegacy {
     //Additions
     public static Item blessedStone = new ItemBlessStone();
     public static Item blessedRing = new ItemBlessRing();
+    public static Item halfHeartMask = new ItemHalfHeartMask();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -210,6 +210,8 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "special_drop"), EntityBlessedStone.class, "special_drop", 3, MODID, 80, 3, true);
+
         MinecraftForge.EVENT_BUS.register(new LootHandler());
         for (Quote quote : Quote.getAllQuotes()) {
             ForgeRegistries.SOUND_EVENTS.register(quote.getSound());
@@ -233,6 +235,8 @@ public class EnigmaticLegacy {
     public void postInit(FMLPostInitializationEvent event) {
         if (ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
+        if (ModCompat.COMPAT_FIRSTAID)
+            MinecraftForge.EVENT_BUS.register(new CompatFirstAidEvent());
     }
 
     @Mod.EventHandler
@@ -336,6 +340,8 @@ public class EnigmaticLegacy {
 
             event.getRegistry().register(blessedStone);
             event.getRegistry().register(blessedRing);
+            if (COMPAT_FIRSTAID)
+                event.getRegistry().register(halfHeartMask);
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -455,7 +461,10 @@ public class EnigmaticLegacy {
 
             ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
-
+            
+            if (COMPAT_FIRSTAID)
+                ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
+            
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));
 

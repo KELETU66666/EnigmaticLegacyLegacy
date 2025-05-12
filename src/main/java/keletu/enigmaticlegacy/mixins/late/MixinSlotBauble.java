@@ -29,20 +29,20 @@ public class MixinSlotBauble extends SlotItemHandler {
     public boolean isItemValid(ItemStack stack) {
         boolean isScroll = stack.getItem() instanceof ItemScrollBauble;
         boolean isSpellstone = stack.getItem() instanceof ItemSpellstoneBauble;
-        if ((isScroll || isSpellstone) && baubleSlot < 10)
+        if ((isScroll || isSpellstone) && baubleSlot < 11)
             return false;
         switch (baubleSlot) {
             case 7:
                 return player.getTags().contains("hasIchorBottle");
-            case 8:
-                return player.getTags().contains("hasAstralFruit");
             case 9:
-                return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) != -1;
+                return player.getTags().contains("hasAstralFruit");
             case 10:
-                return !isScroll;
+                return BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) != -1;
             case 11:
-                return !isSpellstone;
+                return !isScroll;
             case 12:
+                return !isSpellstone;
+            case 13:
                 return /*!(stack.getItem() instanceof ItemSpellstoneBauble)*/ false;
         }
 
