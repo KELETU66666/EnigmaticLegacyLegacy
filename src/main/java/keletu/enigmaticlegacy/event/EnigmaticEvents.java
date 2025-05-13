@@ -290,55 +290,111 @@ public class EnigmaticEvents {
             }
         }
     }
+    @SubscribeEvent
+    public static void onCursedDeath(LivingDeathEvent event) {
+        if (event.getEntityLiving() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
+            if (player.world.getGameRules().getBoolean("keepInventory")) {
+                boolean hasCursedStone = false;
+                if (player.inventory.hasItemStack(new ItemStack(cursedStone))) {
+                    hasCursedStone = true;
+                    player.inventory.clearMatchingItems(cursedStone, 0, 1, null);
+                }
+
+                if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
+                    BlockPos deathPos = player.getPosition();
+
+                    if (isThereLava(player.world, deathPos)) {
+                        BlockPos surfacePos = deathPos;
+
+                        while (true) {
+                            BlockPos nextAbove = surfacePos.add(0, 1, 0);
+                            if (isThereLava(player.world, nextAbove)) {
+                                surfacePos = nextAbove;
+                                continue;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        boolean confirmLavaPool = true;
+
+                        for (int i = -3; i <= 2; ++i) {
+
+                            boolean checkArea = false;
+                            for (BlockPos blockPos : BlockPos.getAllInBox(surfacePos.add(-3, i, -3), surfacePos.add(3, i, 3))) {
+                                if (i <= 0)
+                                    checkArea = isThereLava(player.world, blockPos);
+                                else
+                                    checkArea = player.world.isAirBlock(blockPos) || isThereLava(player.world, blockPos);
+                            }
+
+                            confirmLavaPool = confirmLavaPool && checkArea;
+                        }
+
+                        if (confirmLavaPool) {
+                            for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++) {
+                                if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedRing) || i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.desolationRing))
+                                    BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
+                            }
+                            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void onCursedDrops(PlayerDropsEvent event) {
         if (event.getEntityPlayer() instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-            boolean hasCursedStone = false;
+            if (!player.world.getGameRules().getBoolean("keepInventory")) {
+                boolean hasCursedStone = false;
 
-            for (EntityItem entityItem : event.getDrops()) {
-                ItemStack itemStack = entityItem.getItem();
-                if (itemStack.getItem() == cursedStone) {
-                    hasCursedStone = true;
-                    itemStack.shrink(1);
+                for (EntityItem entityItem : event.getDrops()) {
+                    ItemStack itemStack = entityItem.getItem();
+                    if (itemStack.getItem() == cursedStone) {
+                        hasCursedStone = true;
+                        itemStack.shrink(1);
+                    }
                 }
-            }
 
-            if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
-                BlockPos deathPos = player.getPosition();
+                if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
+                    BlockPos deathPos = player.getPosition();
 
-                if (isThereLava(player.world, deathPos)) {
-                    BlockPos surfacePos = deathPos;
+                    if (isThereLava(player.world, deathPos)) {
+                        BlockPos surfacePos = deathPos;
 
-                    while (true) {
-                        BlockPos nextAbove = surfacePos.add(0, 1, 0);
-                        if (isThereLava(player.world, nextAbove)) {
-                            surfacePos = nextAbove;
-                            continue;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    boolean confirmLavaPool = true;
-
-                    for (int i = -3; i <= 2; ++i) {
-
-                        boolean checkArea = false;
-                        for (BlockPos blockPos : BlockPos.getAllInBox(surfacePos.add(-3, i, -3), surfacePos.add(3, i, 3))) {
-                            if (i <= 0)
-                                checkArea = isThereLava(player.world, blockPos);
-                            else
-                                checkArea = player.world.isAirBlock(blockPos) || isThereLava(player.world, blockPos);
+                        while (true) {
+                            BlockPos nextAbove = surfacePos.add(0, 1, 0);
+                            if (isThereLava(player.world, nextAbove)) {
+                                surfacePos = nextAbove;
+                                continue;
+                            } else {
+                                break;
+                            }
                         }
 
-                        confirmLavaPool = confirmLavaPool && checkArea;
-                    }
+                        boolean confirmLavaPool = true;
 
-                    if (confirmLavaPool) {
-                        dropCursedStone = true;
-                        player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        for (int i = -3; i <= 2; ++i) {
+
+                            boolean checkArea = false;
+                            for (BlockPos blockPos : BlockPos.getAllInBox(surfacePos.add(-3, i, -3), surfacePos.add(3, i, 3))) {
+                                if (i <= 0)
+                                    checkArea = isThereLava(player.world, blockPos);
+                                else
+                                    checkArea = player.world.isAirBlock(blockPos) || isThereLava(player.world, blockPos);
+                            }
+
+                            confirmLavaPool = confirmLavaPool && checkArea;
+                        }
+
+                        if (confirmLavaPool) {
+                            dropCursedStone = true;
+                            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        }
                     }
                 }
             }

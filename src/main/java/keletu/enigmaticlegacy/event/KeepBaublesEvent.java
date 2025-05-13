@@ -14,9 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -25,8 +23,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mod.EventBusSubscriber
 public class KeepBaublesEvent {
 
-    private static Map<UUID, ItemStack> baublesMap = new HashMap<>();
-    private static Map<UUID, Integer> slotMap = new HashMap<>();
+    private static Map<UUID, List<ItemStack>> baublesMap = new HashMap<>();
+    private static Map<UUID, List<Integer>> slotMap = new HashMap<>();
     private static Map<UUID, NonNullList<ItemStack>> worthyMap = new HashMap<>();
 
     @SubscribeEvent
@@ -43,8 +41,8 @@ public class KeepBaublesEvent {
         baublesMap.remove(player.getUniqueID());
         slotMap.remove(player.getUniqueID());
         worthyMap.remove(player.getUniqueID());
-        ItemStack stack = getBaubleStacks(player);
-        int slot = getSlotShouldKept(player);
+        List<ItemStack> stacks = getBaubleStacks(player);
+        List<Integer> slots = getSlotShouldKept(player);
         if (getPersistentBoolean(player, "dropEldritchAmulet", true)) {
             IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
             NonNullList<ItemStack> list = NonNullList.create();
@@ -53,11 +51,14 @@ public class KeepBaublesEvent {
                 baubles.setStackInSlot(i, ItemStack.EMPTY);
             }
             worthyMap.put(player.getUniqueID(), list);
-        } else if (stack.getItem() instanceof IKeptBauble) {
-            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-            handler.setStackInSlot(slot, ItemStack.EMPTY);
-            baublesMap.put(player.getUniqueID(), stack);
-            slotMap.put(player.getUniqueID(), slot);
+        } else {
+            for (int i = 0; i < slots.size(); i++)
+                if (stacks.get(i).getItem() instanceof IKeptBauble) {
+                    IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+                    handler.setStackInSlot(slots.get(i), ItemStack.EMPTY);
+                    baublesMap.put(player.getUniqueID(), stacks);
+                    slotMap.put(player.getUniqueID(), slots);
+                }
         }
     }
 
@@ -71,41 +72,48 @@ public class KeepBaublesEvent {
             }
             worthyMap.remove(player.getUniqueID());
         } else if (baublesMap.containsKey(player.getUniqueID()) && slotMap.containsKey(player.getUniqueID())) {
-            if (!(EnigmaticEvents.dropCursedStone)) {
-                IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-                handler.setStackInSlot(slotMap.get(player.getUniqueID()), baublesMap.get(player.getUniqueID()));
-            } else {
-                EnigmaticEvents.dropCursedStone = false;
+            for (int i = 0; i < slotMap.get(player.getUniqueID()).size(); i++) {
+                ItemStack stack = baublesMap.get(player.getUniqueID()).get(i);
+                int slot = slotMap.get(player.getUniqueID()).get(i);
+
+                if (!EnigmaticEvents.dropCursedStone) {
+                    IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+                    handler.setStackInSlot(slot, stack);
+                } else {
+                    EnigmaticEvents.dropCursedStone = false;
+                }
             }
             baublesMap.remove(player.getUniqueID());
             slotMap.remove(player.getUniqueID());
         }
     }
 
-    public static int getSlotShouldKept(EntityPlayer player) {
+    public static List<Integer> getSlotShouldKept(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-        for (int x : BaubleType.TRINKET.getValidSlots()) {
+        List<Integer> slots = new ArrayList<>();
+        for (int x = 0; x < handler.getSlots(); x++) {
             ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
-                return x;
+                slots.add(x);
             }
         }
-        return -1;
+        return slots;
     }
 
-    public static ItemStack getBaubleStack(EntityPlayer player) {
+    public static List<ItemStack> getBaubleStack(EntityPlayer player) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
-        for (int x : BaubleType.TRINKET.getValidSlots()) {
+        List<ItemStack> stacks = new ArrayList<>();
+        for (int x = 0; x < handler.getSlots(); x++) {
             ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
-                return stack;
+                stacks.add(stack);
             }
         }
-        return ItemStack.EMPTY;
+        return stacks;
     }
 
-    public static ItemStack getBaubleStacks(EntityPlayer player) {
-        AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
+    public static List<ItemStack> getBaubleStacks(EntityPlayer player) {
+        AtomicReference<List<ItemStack>> backpack = new AtomicReference<>(new ArrayList<>());
         backpack.set(KeepBaublesEvent.getBaubleStack(player));
         return backpack.get();
     }
@@ -123,16 +131,12 @@ public class KeepBaublesEvent {
     }
 
     public static void setBaubleStackAll(EntityPlayer player, ItemStack stack) {
-        //if (stack.getItem() instanceof ItemCursedRing) {
         IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
         for (int i = 0; i < baubles.getSlots(); ++i) {
-            //if (baubles.isItemValidForSlot(i, stack, player)) {
             ItemStack remainder = baubles.insertItem(i, stack.copy(), true);
             if (remainder.getCount() < stack.getCount()) {
                 baubles.insertItem(i, stack.copy(), false);
             }
-            //}
         }
-        //}
     }
 }

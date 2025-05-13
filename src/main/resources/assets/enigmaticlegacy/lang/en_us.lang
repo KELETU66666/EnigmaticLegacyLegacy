@@ -540,6 +540,9 @@ key.categories.enigmaticlegacy=Enigmatic Legacy²
 key.enderRing=Open Ender Chest
 message.enigmaticlegacy.eldritch_pan_buff=With the taste of this new soul, The Voracious Pan grows ever stronger.
 
+commands.setcursedtime.usage=Usage: /setcursedtime tick (optional)playerName
+commands.setnoringtime.usage=Usage: /setnoringtime tick (optional)playerName
+
 #Compat
 tooltip.enigmaticlegacy.compatXat1=§dAlteration of the §6'Secret' Curse§d:
 tooltip.enigmaticlegacy.compatXat2=§5- Endermen no longer teleport to you.

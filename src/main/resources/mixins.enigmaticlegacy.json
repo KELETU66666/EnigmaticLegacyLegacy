@@ -9,6 +9,7 @@
     "early.MixinBlockDropEvent",
     "early.MixinContainerEnchantment",
     "early.MixinCooldownTracker",
+    "early.MixinEnchantmentHelper",
     "early.MixinEnterBlockTrigger",
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
