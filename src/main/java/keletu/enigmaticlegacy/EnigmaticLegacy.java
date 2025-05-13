@@ -3,6 +3,8 @@ package keletu.enigmaticlegacy;
 import keletu.enigmaticlegacy.api.cap.*;
 import keletu.enigmaticlegacy.block.EnigmaticBaseBlock;
 import keletu.enigmaticlegacy.client.LayerScroll;
+import keletu.enigmaticlegacy.command.CommandSetCursedTime;
+import keletu.enigmaticlegacy.command.CommandSetNoRingTime;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingBloodlustEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
@@ -50,10 +52,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -75,7 +74,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.6.0-rlc";
+    public static final String VERSION = "1.6.1-rlc";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -237,6 +236,12 @@ public class EnigmaticLegacy {
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
         if (ModCompat.COMPAT_FIRSTAID)
             MinecraftForge.EVENT_BUS.register(new CompatFirstAidEvent());
+    }
+
+    @Mod.EventHandler
+    public void serverStart(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandSetCursedTime());
+        event.registerServerCommand(new CommandSetNoRingTime());
     }
 
     @Mod.EventHandler

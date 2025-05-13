@@ -12,6 +12,7 @@
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
     "early.MixinSummonedEntityTrigger",
+    "early.MixinEnchantmentHelper",
     "early.MixinContainerEnchantment"
   ],
   "injectors": {
