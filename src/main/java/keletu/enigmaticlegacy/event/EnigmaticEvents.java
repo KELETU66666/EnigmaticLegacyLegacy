@@ -124,7 +124,7 @@ public class EnigmaticEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDrops(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
@@ -290,6 +290,7 @@ public class EnigmaticEvents {
             }
         }
     }
+
     @SubscribeEvent
     public static void onCursedDeath(LivingDeathEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayerMP) {
@@ -776,7 +777,7 @@ public class EnigmaticEvents {
                         chance += angelBlessingDeflectChance;
                     }
 
-                    if(BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
+                    if (BaublesApi.isBaubleEquipped(player, the_cube) != -1) {
                         trigger = true;
                         chance += 0.35;
                     }
