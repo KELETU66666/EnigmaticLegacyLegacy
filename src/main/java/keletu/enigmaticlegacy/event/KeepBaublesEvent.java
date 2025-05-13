@@ -5,6 +5,7 @@ import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getPersistentBoolean;
+import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,7 @@ public class KeepBaublesEvent {
     private static Map<UUID, List<ItemStack>> baublesMap = new HashMap<>();
     private static Map<UUID, List<Integer>> slotMap = new HashMap<>();
     private static Map<UUID, NonNullList<ItemStack>> worthyMap = new HashMap<>();
+    public static List<UUID> cursedPlayers = new ArrayList<>();
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
@@ -51,12 +53,15 @@ public class KeepBaublesEvent {
                 list.add(i, baubles.getStackInSlot(i));
                 baubles.setStackInSlot(i, ItemStack.EMPTY);
             }
+            cursedPlayers.add(player.getUniqueID());
             worthyMap.put(player.getUniqueID(), list);
         } else {
             for (int i = 0; i < slots.size(); i++)
                 if (stacks.get(i).getItem() instanceof IKeptBauble) {
                     IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
                     handler.setStackInSlot(slots.get(i), ItemStack.EMPTY);
+                    if (stacks.get(i).getItem() instanceof ItemCursedRing)
+                        cursedPlayers.add(player.getUniqueID());
                     baublesMap.put(player.getUniqueID(), stacks);
                     slotMap.put(player.getUniqueID(), slots);
                 }
@@ -102,7 +107,7 @@ public class KeepBaublesEvent {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
         List<Integer> slots = new ArrayList<>();
         for (int x = 0; x < handler.getSlots(); x++) {
-            ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
+            ItemStack stack = handler.getStackInSlot(x);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
                 slots.add(x);
             }
@@ -114,7 +119,7 @@ public class KeepBaublesEvent {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
         List<ItemStack> stacks = new ArrayList<>();
         for (int x = 0; x < handler.getSlots(); x++) {
-            ItemStack stack = handler.getStackInSlot(BaubleType.TRINKET.getValidSlots()[x]);
+            ItemStack stack = handler.getStackInSlot(x);
             if (!stack.isEmpty() && stack.getItem() instanceof IKeptBauble) {
                 stacks.add(stack);
             }

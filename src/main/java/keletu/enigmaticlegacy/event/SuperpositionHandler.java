@@ -607,7 +607,14 @@ public class SuperpositionHandler {
         if (Loader.isModLoaded("gokistats")) {
             return false;
         }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && hasCursed(player);
+
+        boolean lol = false;
+        if(KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())){
+            lol = true;
+            KeepBaublesEvent.cursedPlayers.remove(player.getUniqueID());
+        }
+
+        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && lol;
     }
 
     public static void loseSoul(EntityPlayer player) {
