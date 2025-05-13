@@ -166,7 +166,7 @@ public class EnigmaticEvents {
             if (y < 0)
                 y = 3;
 
-            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.isTheWorthyOne(player) && !dropCursedStone) {
+            if (hasEldritchAmulet && !event.getDrops().isEmpty() && SuperpositionHandler.shouldPlayerDropSoulCrystal(player) && !dropCursedStone) {
                 ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
                 EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(dimPoint.world, dimPoint.getPosX(), y, dimPoint.getPosZ(), soulCrystal);
                 droppedSoulCrystal.setOwnerId(player.getUniqueID());

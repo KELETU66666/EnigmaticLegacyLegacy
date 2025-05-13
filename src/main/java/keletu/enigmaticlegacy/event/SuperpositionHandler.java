@@ -607,18 +607,14 @@ public class SuperpositionHandler {
         if (Loader.isModLoaded("gokistats")) {
             return false;
         }
-        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && hasCursed(player);
-    }
 
-    public static void loseSoul(EntityPlayer player) {
-        if (hasCursed(player)) {
-            if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
-                ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
-                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
-                droppedSoulCrystal.setOwnerId(player.getUniqueID());
-                player.world.spawnEntity(droppedSoulCrystal);
-            }
+        boolean lol = false;
+        if(KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())){
+            lol = true;
+            KeepBaublesEvent.cursedPlayers.remove(player.getUniqueID());
         }
+
+        return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && lol;
     }
 
     /**
