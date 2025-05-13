@@ -649,31 +649,6 @@ public class SuperpositionHandler {
         return new AxisAlignedBB(entity.posX - radius, entity.posY - radius, entity.posZ - radius, entity.posX + radius, entity.posY + radius, entity.posZ + radius);
     }
 
-    /**
-     * @return True if ItemStack can be added to player's inventory (fully or
-     * partially), false otherwise.
-     */
-
-    public static boolean canPickStack(EntityPlayer player, ItemStack stack) {
-
-        if (player.inventory.getSlotFor(ItemStack.EMPTY) >= 0)
-            return true;
-        else {
-            List<ItemStack> allInventories = new ArrayList<ItemStack>();
-
-            // allInventories.addAll(player.inventory.armorInventory);
-            allInventories.addAll(player.inventory.mainInventory);
-            allInventories.addAll(player.inventory.offHandInventory);
-
-            for (ItemStack invStack : allInventories) {
-                if (canMergeStacks(invStack, stack, player.inventory.getInventoryStackLimit()))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
     public static boolean canMergeStacks(ItemStack stack1, ItemStack stack2, int invStackLimit) {
         return !stack1.isEmpty() && stackEqualExact(stack1, stack2) && stack1.isStackable() && stack1.getCount() < stack1.getMaxStackSize() && stack1.getCount() < invStackLimit;
     }

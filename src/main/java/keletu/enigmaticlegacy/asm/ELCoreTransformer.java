@@ -305,7 +305,7 @@ public class ELCoreTransformer implements IClassTransformer {
         for (int i = 2; i < 2 + 2; i++) {
             initArrayInsns.add(new InsnNode(Opcodes.DUP));
             initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i));
-            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 7));
+            initArrayInsns.add(new IntInsnNode(Opcodes.BIPUSH, i + 6));
             initArrayInsns.add(new InsnNode(Opcodes.IASTORE));
         }
         mn.instructions.insertBefore(init, initArrayInsns);
