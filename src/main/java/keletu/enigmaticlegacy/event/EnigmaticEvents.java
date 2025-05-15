@@ -13,16 +13,14 @@ import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.client.ModelCharm;
+import keletu.enigmaticlegacy.entity.EntityHarmlessLightningBolt;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
 import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
 import keletu.enigmaticlegacy.item.*;
-import keletu.enigmaticlegacy.packet.PacketCosmicRevive;
-import keletu.enigmaticlegacy.packet.PacketCustom;
-import keletu.enigmaticlegacy.packet.PacketPortalParticles;
-import keletu.enigmaticlegacy.packet.PacketRecallParticles;
+import keletu.enigmaticlegacy.packet.*;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -1064,6 +1062,12 @@ public class EnigmaticEvents {
 
     }
 
+
+    @SubscribeEvent
+    public void onTick(LivingEvent.LivingUpdateEvent event) {
+
+    }
+
     @SubscribeEvent
     public static void tickHandler(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
@@ -1447,6 +1451,14 @@ public class EnigmaticEvents {
 
             Entity immediateSource = event.getSource().getImmediateSource();
 
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1) {
+                if (SuperpositionHandler.canPerformanceSweeping(player)) {
+                    int electric = event.getEntityLiving().getEntityData().getInteger("Electric");
+                    event.getEntityLiving().getEntityData().setInteger("Electric", electric + 60 + player.world.rand.nextInt(80) + (int) (event.getAmount() * 10));
+                }
+                event.setAmount(ItemThunderScroll.modify(event.getEntityLiving(), event.getAmount()));
+            }
+
             if (player.getHeldItemMainhand() != ItemStack.EMPTY) {
                 ItemStack mainhandStack = player.getHeldItemMainhand();
 
@@ -1515,6 +1527,10 @@ public class EnigmaticEvents {
                 if (advancedCurio.resistanceList.containsKey(event.getSource().damageType)) {
                     event.setAmount(event.getAmount() * advancedCurio.resistanceList.get(event.getSource().damageType).get());
                 }
+            }
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1 && event.getSource().equals(DamageSource.LIGHTNING_BOLT)) {
+                event.setAmount(event.getAmount() * 0.5F);
             }
 
             if (event.getSource() == DamageSource.FALL) {
@@ -1645,6 +1661,15 @@ public class EnigmaticEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
+        EntityPlayer player = event.getEntityPlayer();
+        boolean flag = player.onGround && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1;
+        if (flag && !player.isSprinting() && SuperpositionHandler.canPerformanceSweeping(player) && !player.getCooldownTracker().hasCooldown(EnigmaticLegacy.thunderScroll)) {
+            EnigmaticLegacy.packetInstance.sendToServer(new PacketEmptyLeftClick(true));
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void endEntityHurt(LivingHurtEvent event) {
         if (event.getEntity() instanceof EntityPlayerMP && event.getSource().getTrueSource() != null) {
@@ -1760,12 +1785,34 @@ public class EnigmaticEvents {
 
             players.forEach(player -> Quote.WITH_DRAGONS.playOnceIfUnlocked(player, 140));
         }
-    }
-
-    @SubscribeEvent(priority = HIGH)
-    public static void keepRingCurses(LivingDeathEvent event) {
 
 
+        EntityLivingBase entity = event.getEntityLiving();
+        NBTTagCompound data = entity.getEntityData();
+        // CosmicPotion
+        int cooldown = data.getInteger("CosmicPotion");
+
+        // Counter of Lightning
+        int electric = data.getInteger("Electric");
+        if (electric > 0) {
+            if (electric > 1200) {
+                List<Entity> entities = event.getEntity().world.getEntitiesWithinAABB(Entity.class, entity.getEntityBoundingBox().grow(2.2));
+                boolean flag = true;
+                for (Entity target : entities) {
+                    if (target instanceof EntityPlayer && BaublesApi.isBaubleEquipped((EntityPlayer) target, EnigmaticLegacy.thunderScroll) != -1) {
+                        flag = false;
+                        break;
+                    }
+
+                }
+                if (flag) {
+                    EntityHarmlessLightningBolt lightningbolt = new EntityHarmlessLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 5.0F * electric / 600.0F);
+                    lightningbolt.setSilent(entity.world.rand.nextBoolean());
+                    entity.world.spawnEntity(lightningbolt);
+                    data.setInteger("Electric", (electric - 1200) / 2 + 100);
+                }
+            } else data.setInteger("Electric", electric - 1);
+        } else data.removeTag("Electric");
     }
 
     @SubscribeEvent

@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "MHM",
+    "IXF",
+    "RBR"
+  ],
+  "key": {
+    "X": {
+      "item": "enigmaticlegacy:thicc_scroll"
+    },
+    "M": {
+      "item": "minecraft:ghast_tear"
+    },
+    "H": {
+      "item": "enigmaticlegacy:ocean_stone"
+    },
+    "B": {
+      "item": "enigmaticlegacy:twisted_core"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "I": {
+      "item": "minecraft:dye",
+      "data": 0
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:thunder_scroll"
+  }
+}

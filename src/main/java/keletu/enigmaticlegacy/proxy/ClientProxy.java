@@ -3,10 +3,12 @@ package keletu.enigmaticlegacy.proxy;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.client.LayerAmulet;
 import keletu.enigmaticlegacy.client.LayerCharm;
+import keletu.enigmaticlegacy.entity.EntityHarmlessLightningBolt;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderLightningBolt;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -50,6 +53,10 @@ public class ClientProxy extends CommonProxy {
                 worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (float) pos.getX() + random.nextFloat(), (double) pos.getY() + (double) random.nextFloat() * 1.0f, (float) pos.getZ() + random.nextFloat(), d0, d1, d2);
             }
         }
+    }
+
+    public void renderEntities(){
+        RenderingRegistry.registerEntityRenderingHandler(EntityHarmlessLightningBolt.class, new RenderLightningBolt(Minecraft.getMinecraft().getRenderManager()));
     }
 
     public static void addRenderLayers() {

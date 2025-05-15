@@ -13,7 +13,11 @@ public class CommonProxy {
         return null;
     }
 
-    public void displayReviveAnimation(int entityID, int reviveType){
+    public void displayReviveAnimation(int entityID, int reviveType) {
 
+    }
+
+
+    public void renderEntities() {
     }
 }

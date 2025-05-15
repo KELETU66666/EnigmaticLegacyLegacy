@@ -562,6 +562,7 @@ tooltip.enigmaticlegacy.compatXat4=§5- You can sleep as normal.
 item.blessed_stone.name=Holy Stone
 item.blessed_ring.name=Ring of Redemption
 item.half_heart_mask.name=Ominous Mask
+item.thunder_scroll.name=Scroll of Thunder Embrace
 
 tooltip.enigmaticaddons.blessStone1=§5Take this stone to seek death,
 tooltip.enigmaticaddons.blessStone2=§5hen the §6Ring of the Seven Curses §5will
@@ -592,6 +593,12 @@ tooltip.enigmaticaddons.blessRingLore1=§5This ring shines with a unique
 tooltip.enigmaticaddons.blessRingLore2=§5luster, remembering those years
 tooltip.enigmaticaddons.blessRingLore3=§5of torment, and also, it is a
 tooltip.enigmaticaddons.blessRingLore4=§5proof of power......
+
+tooltip.enigmaticaddons.thunderScroll1=§5Sweep attack deals §6100% §5damage.
+tooltip.enigmaticaddons.thunderScroll2=§5Deal more damage to§d armored §5targets.
+tooltip.enigmaticaddons.thunderScroll3=§5After being hit much times,the target
+tooltip.enigmaticaddons.thunderScroll4=§5will be struck by §6lightning bolt§5.
+tooltip.enigmaticaddons.thunderScroll5=§5Reduce lightning damage by half.
 
 tooltip.enigmaticaddons.blessUse1=This item understands your past experiences,
 tooltip.enigmaticaddons.blessUse2=and it still recognizes your qualifications.

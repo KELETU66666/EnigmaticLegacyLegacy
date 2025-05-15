@@ -13,6 +13,7 @@
     "early.MixinEntityPlayer",
     "early.MixinSummonedEntityTrigger",
     "early.MixinEnchantmentHelper",
+    "early.mixinStupidLogger",
     "early.MixinContainerEnchantment"
   ],
   "injectors": {

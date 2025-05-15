@@ -74,7 +74,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.6.2-rlc";
+    public static final String VERSION = "1.6.4-rlc";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -170,6 +170,7 @@ public class EnigmaticLegacy {
     public static Item blessedStone = new ItemBlessStone();
     public static Item blessedRing = new ItemBlessRing();
     public static Item halfHeartMask = new ItemHalfHeartMask();
+    public static Item thunderScroll = new ItemThunderScroll();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -195,6 +196,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketCosmicRevive.Handler.class, PacketCosmicRevive.class, 10, Side.CLIENT);
         packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 11, Side.CLIENT);
+        packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 12, Side.SERVER);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -210,6 +212,7 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "special_drop"), EntityBlessedStone.class, "special_drop", 3, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "harmless_lightning"), EntityHarmlessLightningBolt.class, "harmless_lightning", 4, MODID, 80, 3, true);
 
         MinecraftForge.EVENT_BUS.register(new LootHandler());
         for (Quote quote : Quote.getAllQuotes()) {
@@ -228,6 +231,8 @@ public class EnigmaticLegacy {
             ClientProxy.addRenderLayers();
         }
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
+
+        proxy.renderEntities();
     }
 
     @Mod.EventHandler
@@ -347,6 +352,7 @@ public class EnigmaticLegacy {
             event.getRegistry().register(blessedRing);
             if (COMPAT_FIRSTAID)
                 event.getRegistry().register(halfHeartMask);
+            event.getRegistry().register(thunderScroll);
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -469,7 +475,8 @@ public class EnigmaticLegacy {
             
             if (COMPAT_FIRSTAID)
                 ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
-            
+            ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
+
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));
 

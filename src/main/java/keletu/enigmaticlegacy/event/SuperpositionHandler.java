@@ -31,10 +31,12 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
@@ -138,8 +140,7 @@ public class SuperpositionHandler {
 
     public static WorldServer getWorld(int key) {
         WorldServer ret = net.minecraftforge.common.DimensionManager.getWorld(key, true);
-        if (ret == null)
-        {
+        if (ret == null) {
             net.minecraftforge.common.DimensionManager.initDimension(key);
             ret = net.minecraftforge.common.DimensionManager.getWorld(key);
         }
@@ -166,9 +167,7 @@ public class SuperpositionHandler {
         for (int distance = 1; entities.size() == 0 && distance < maxDist; ++distance) {
             target = target.add(new Vector3(player.getLookVec()).multiply(distance)).add(0.0, 0.5, 0.0);
             entities = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range));
-            if (entities.contains(player)) {
-                entities.remove(player);
-            }
+            entities.remove(player);
         }
         if (entities.size() > 0) {
             newTarget = entities.get(0);
@@ -591,6 +590,21 @@ public class SuperpositionHandler {
         return count;
     }
 
+    public static boolean canPerformanceSweeping(EntityPlayer player) {
+        double d0 = player.distanceWalkedModified - player.prevDistanceWalkedModified;
+        boolean flag2 = player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
+        float f2 = player.getCooledAttackStrength(0.5F);
+        boolean flag = f2 > 0.9F;
+
+        if (!player.isSprinting() && !flag2 && !flag && player.onGround && d0 < (double) player.getAIMoveSpeed()) {
+            ItemStack itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
+
+            return itemstack.getItem() instanceof ItemSword;
+        }
+
+        return false;
+    }
+
     public static List<ItemStack> getFullEquipment(EntityPlayer player) {
         List<ItemStack> equipmentStacks = Lists.newArrayList();
 
@@ -609,7 +623,7 @@ public class SuperpositionHandler {
         }
 
         boolean lol = false;
-        if(KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())){
+        if (KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())) {
             lol = true;
             KeepBaublesEvent.cursedPlayers.remove(player.getUniqueID());
         }
@@ -678,7 +692,7 @@ public class SuperpositionHandler {
             return;
 
         if ((!hasCursed(player) && isCursed(stack)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-            if(!(hasBlessed(player) && isBlessed(stack))) {
+            if (!(hasBlessed(player) && isBlessed(stack))) {
                 event.setCanceled(true);
                 player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
             }
@@ -851,6 +865,7 @@ public class SuperpositionHandler {
     /**
      * Merges enchantments from mergeFrom onto input ItemStack, with exact same
      * rules as vanilla Anvil when used in Survival Mode.
+     *
      * @param input
      * @param mergeFrom
      * @param overmerge Shifts the rules of merging so that they make more sense with Apotheosis compat
@@ -862,7 +877,7 @@ public class SuperpositionHandler {
         Map<Enchantment, Integer> inputEnchants = EnchantmentHelper.getEnchantments(returnedStack);
         Map<Enchantment, Integer> mergedEnchants = EnchantmentHelper.getEnchantments(mergeFrom);
 
-        for(Enchantment mergedEnchant : mergedEnchants.keySet()) {
+        for (Enchantment mergedEnchant : mergedEnchants.keySet()) {
             if (mergedEnchant != null) {
                 int inputEnchantLevel = inputEnchants.getOrDefault(mergedEnchant, 0);
                 int mergedEnchantLevel = mergedEnchants.get(mergedEnchant);
@@ -879,7 +894,7 @@ public class SuperpositionHandler {
                     compatible = true;
                 }
 
-                for(Enchantment originalEnchant : inputEnchants.keySet()) {
+                for (Enchantment originalEnchant : inputEnchants.keySet()) {
                     if (originalEnchant != mergedEnchant && !mergedEnchant.isCompatibleWith(originalEnchant)) {
                         compatible = false;
                     }

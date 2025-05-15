@@ -379,7 +379,7 @@ public class EnigmaticConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticaddons:thunder_scroll"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
