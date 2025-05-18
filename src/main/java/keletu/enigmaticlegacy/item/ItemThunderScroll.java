@@ -1,9 +1,5 @@
 package keletu.enigmaticlegacy.item;
 
-import keletu.enigmaticlegacy.EnigmaticConfigs;
-import static keletu.enigmaticlegacy.event.SuperpositionHandler.getCurseAmount;
-import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -11,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,7 +18,6 @@ public class ItemThunderScroll extends ItemScrollBauble {
 
     public ItemThunderScroll() {
         super("thunder_scroll", EnumRarity.EPIC);
-        this.maxStackSize = 1;
     }
 
     @Override

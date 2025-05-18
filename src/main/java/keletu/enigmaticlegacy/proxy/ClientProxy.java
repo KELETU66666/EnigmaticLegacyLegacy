@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.proxy;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.client.LayerAmulet;
 import keletu.enigmaticlegacy.client.LayerCharm;
+import keletu.enigmaticlegacy.client.LayerHeadwear;
 import keletu.enigmaticlegacy.entity.EntityHarmlessLightningBolt;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.material.Material;
@@ -70,6 +71,7 @@ public class ClientProxy extends CommonProxy {
         //renderPlayer.addLayer(new LayerDrinkingHat(renderPlayer));
         renderPlayer.addLayer(new LayerAmulet(renderPlayer));
         renderPlayer.addLayer(new LayerCharm(renderPlayer));
+        renderPlayer.addLayer(new LayerHeadwear(renderPlayer));
         //renderPlayer.addLayer(new LayerBelt(renderPlayer));
         //renderPlayer.addLayer(new LayerCloak(renderPlayer));
         //renderPlayer.addLayer(new LayerNightVisionGoggles(renderPlayer));
