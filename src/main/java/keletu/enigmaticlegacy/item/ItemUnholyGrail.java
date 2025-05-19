@@ -2,6 +2,8 @@ package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
+import keletu.enigmaticlegacy.util.compat.CompatSimpledDifficulty;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -69,6 +71,9 @@ public class ItemUnholyGrail extends ItemBaseFireProof {
 
 				//UseUnholyGrailTrigger.INSTANCE.trigger((ServerPlayer) player, true);
 			}
+
+			if(ModCompat.COMPAT_SIMPLED_DIFFICULTY)
+				CompatSimpledDifficulty.addThirstAmountWhenDrink(isTheWorthyOne, player);
 		}
 
 		player.addStat(StatList.getObjectUseStats(this));
