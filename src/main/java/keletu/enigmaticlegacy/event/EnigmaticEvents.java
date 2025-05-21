@@ -1548,7 +1548,7 @@ public class EnigmaticEvents {
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.blazingCore) != -1) {
                 if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
                     EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
-                    if (!attacker.isImmuneToFire()) {
+                    if (!attacker.isImmuneToFire() && event.getSource() != EntityDamageSource.causeThornsDamage(attacker)) {
                         attacker.attackEntityFrom(new EntityDamageSource(DamageSource.ON_FIRE.damageType, player), (float) magmaHeartDamageFeedback);
                         attacker.setFire(magmaHeartIgnitionFeedback);
                     }
