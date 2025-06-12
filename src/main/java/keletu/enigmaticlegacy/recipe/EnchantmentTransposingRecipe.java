@@ -50,7 +50,7 @@ public class EnchantmentTransposingRecipe extends IForgeRegistryEntry.Impl<IReci
 
         }
 
-        if (transposer != null && stackList.size() == 1 && stackList.get(0).getCount() == 1 && stackList.get(0).isItemEnchanted()) {
+        if (transposer != null && stackList.size() == 1 && stackList.get(0).isItemEnchanted()) {
             ItemStack enchanted = stackList.get(0).copy();
             NBTTagList enchantmentNBT = enchanted.getEnchantmentTagList();
 
@@ -92,7 +92,6 @@ public class EnchantmentTransposingRecipe extends IForgeRegistryEntry.Impl<IReci
 
         if (transposer != null && stackList.size() == 1 && stackList.get(0).isItemEnchanted())
             return true;
-
         return false;
     }
 
@@ -104,6 +103,7 @@ public class EnchantmentTransposingRecipe extends IForgeRegistryEntry.Impl<IReci
             ItemStack item = inv.getStackInSlot(i);
             if (item.getItem() != EnigmaticLegacy.enchantmentTransposer && item.isItemEnchanted()) {
                 ItemStack returned = item.copy();
+                returned.setCount(1);
                 if (returned.getTagCompound() != null) {
                     NBTTagCompound nbt = returned.getTagCompound();
 
