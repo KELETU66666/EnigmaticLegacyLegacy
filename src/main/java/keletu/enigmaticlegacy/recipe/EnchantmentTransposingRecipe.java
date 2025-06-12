@@ -50,14 +50,14 @@ public class EnchantmentTransposingRecipe extends IForgeRegistryEntry.Impl<IReci
 
         }
 
-        if (transposer != null && stackList.size() == 1 && stackList.get(0).isItemEnchanted()) {
+        if (transposer != null && stackList.size() == 1 && stackList.get(0).getCount() == 1 && stackList.get(0).isItemEnchanted()) {
             ItemStack enchanted = stackList.get(0).copy();
             NBTTagList enchantmentNBT = enchanted.getEnchantmentTagList();
 
             ItemStack returned = new ItemStack(Items.ENCHANTED_BOOK);
             if (returned.getTagCompound() != null)
                 returned.getTagCompound().setTag("StoredEnchantments", enchantmentNBT);
-            else{
+            else {
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setTag("StoredEnchantments", enchantmentNBT);
                 returned.setTagCompound(tag);
