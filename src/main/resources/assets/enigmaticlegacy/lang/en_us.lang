@@ -564,6 +564,8 @@ item.blessed_ring.name=Ring of Redemption
 item.half_heart_mask.name=Ominous Mask
 item.thunder_scroll.name=Scroll of Thunder Embrace
 
+tooltip.enigmaticlegacy.blessed1=§6Still shiny from your hand.
+
 tooltip.enigmaticaddons.blessStone1=§5Take this stone to seek death,
 tooltip.enigmaticaddons.blessStone2=§5hen the §6Ring of the Seven Curses §5will
 tooltip.enigmaticaddons.blessStone3=§5transform into the §6Ring of Redemption§5.

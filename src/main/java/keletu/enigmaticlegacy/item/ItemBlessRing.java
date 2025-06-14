@@ -65,7 +65,7 @@ public class ItemBlessRing extends ItemBaseBauble implements IFortuneBonus, ILoo
 
     @Override
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return player instanceof EntityPlayer && !SuperpositionHandler.hasCursed((EntityPlayer) player);
+        return player instanceof EntityPlayer && !SuperpositionHandler.hasCursed((EntityPlayer) player) && !SuperpositionHandler.hasBlessed((EntityPlayer) player);
     }
 
     @Override

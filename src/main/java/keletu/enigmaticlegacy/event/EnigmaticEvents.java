@@ -246,7 +246,7 @@ public class EnigmaticEvents {
                 addDrop(event, getRandomSizeStack(EnigmaticLegacy.ingotWitherite, 3, 8));
             }
 
-            if (hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
+            if (hasCursed(player) || hasBlessed(player)) {
 
 
                 if (!EnigmaticConfigs.enableSpecialDrops)
@@ -325,7 +325,7 @@ public class EnigmaticEvents {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 1));
                 } else if (killed.getClass() == EntityChicken.class) {
                     addDropWithChance(event, new ItemStack(Items.EGG, 1), 50);
-                } else if (killed.getClass() == EntityWither.class) {
+                } else if (killed.getClass() == EntityWither.class && hasCursed(player)) {
                     addDrop(event, getRandomSizeStack(EnigmaticLegacy.evilEssence, 1, 4));
                 }
             }

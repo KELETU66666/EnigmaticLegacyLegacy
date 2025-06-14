@@ -60,12 +60,11 @@ public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble {
         attributesDefault.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(UUID.fromString("371929FC-4CBC-11E8-842F-0ED5F89F718B"), "generic.armor", -armorDebuff, 2));
         attributesDefault.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(UUID.fromString("22E6BD72-4CBD-11E8-842F-0ED5F89F718B"), "generic.armorToughness", -armorDebuff, 2));
 
-		return attributesDefault;
+        return attributesDefault;
     }
 
     @Override
-    public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player)
-    {
+    public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
         return true;
     }
 
@@ -109,7 +108,7 @@ public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble {
 
     @Override
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return player instanceof EntityPlayer && !SuperpositionHandler.hasCursed((EntityPlayer) player);
+        return player instanceof EntityPlayer && !SuperpositionHandler.hasCursed((EntityPlayer) player) && !SuperpositionHandler.hasBlessed((EntityPlayer) player);
     }
 
     @Override
