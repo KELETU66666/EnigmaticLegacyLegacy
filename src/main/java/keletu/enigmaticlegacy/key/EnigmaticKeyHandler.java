@@ -28,8 +28,8 @@ public class EnigmaticKeyHandler {
     @SideOnly(Side.CLIENT)
     public static void registerKeybinds() {
         enderRingKey = new KeyBinding("key.enderRing", Keyboard.KEY_I, "key.categories.enigmaticlegacy");
-        spellstoneAbilityKey = new KeyBinding("key.spellstoneAbility", Keyboard.KEY_K, "key.categories.enigmaticLegacy");
-        xpScrollKey = new KeyBinding("key.xpScroll", Keyboard.KEY_J, "key.categories.enigmaticLegacy");
+        spellstoneAbilityKey = new KeyBinding("key.spellstoneAbility", Keyboard.KEY_K, "key.categories.enigmaticlegacy");
+        xpScrollKey = new KeyBinding("key.xpScroll", Keyboard.KEY_J, "key.categories.enigmaticlegacy");
 
         ClientRegistry.registerKeyBinding(enderRingKey);
         ClientRegistry.registerKeyBinding(spellstoneAbilityKey);

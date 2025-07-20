@@ -17,20 +17,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantmentHelper.class)
 public class MixinEnchantmentHelper {
 
-    @Inject(method = "getLootingModifier", at = @At(value = "HEAD"), cancellable = true)
-    private static void enchantment_getLootingLevel(EntityLivingBase living, CallbackInfoReturnable<Integer> cir) {
-        int base = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOOTING, living.getHeldItemMainhand());
-        if (living instanceof EntityPlayer) {
-            if (EnigmaticConfigs.lootingBonus > 0 && hasCursed((EntityPlayer) living))
-                base += EnigmaticConfigs.lootingBonus;
-
-            for (int i = 0; i < BaublesApi.getBaublesHandler((EntityPlayer) living).getSlots(); i++) {
-                ItemStack bStack = BaublesApi.getBaublesHandler((EntityPlayer) living).getStackInSlot(i);
+    @ModifyReturnValue(method = "getLootingModifier", at = @At("RETURN"))
+    private static int enchantment_getLootingLevel(int original, EntityLivingBase entity) {
+        int bonus = 0;
+        if (entity instanceof EntityPlayer) {
+            for (int i = 0; i < BaublesApi.getBaublesHandler((EntityPlayer) entity).getSlots(); i++) {
+                ItemStack bStack = BaublesApi.getBaublesHandler((EntityPlayer) entity).getStackInSlot(i);
                 if (!bStack.isEmpty() && bStack.getItem() instanceof ILootingBonus) {
-                    base += ((ILootingBonus) bStack.getItem()).bonusLevelLooting();
+                    bonus += ((ILootingBonus) bStack.getItem()).bonusLevelLooting();
                 }
             }
         }
-        cir.setReturnValue(base);
+        return original + bonus;
     }
 }
