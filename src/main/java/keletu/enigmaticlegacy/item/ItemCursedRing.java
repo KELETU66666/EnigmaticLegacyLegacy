@@ -9,7 +9,9 @@ import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
 import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
+import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -39,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble {
+public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble, ILootingBonus, IFortuneBonus {
 
     public ItemCursedRing() {
         super("cursed_ring", EnumHelper.addRarity("Curses", TextFormatting.DARK_RED, "Curses"));
@@ -228,5 +230,15 @@ public class ItemCursedRing extends ItemBase implements IBauble, IKeptBauble {
     @Override
     public BaubleType getBaubleType(ItemStack itemStack) {
         return BaubleType.RING;
+    }
+
+    @Override
+    public int bonusLevelFortune() {
+        return fortuneBonus;
+    }
+
+    @Override
+    public int bonusLevelLooting() {
+        return lootingBonus;
     }
 }

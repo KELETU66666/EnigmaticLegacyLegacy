@@ -171,6 +171,7 @@ public class EnigmaticLegacy {
     public static Item blessedRing = new ItemBlessRing();
     public static Item halfHeartMask = new ItemHalfHeartMask();
     public static Item thunderScroll = new ItemThunderScroll();
+    public static Item lostEngine = new ItemLostEngine();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -353,6 +354,7 @@ public class EnigmaticLegacy {
             if (COMPAT_FIRSTAID)
                 event.getRegistry().register(halfHeartMask);
             event.getRegistry().register(thunderScroll);
+            event.getRegistry().register(lostEngine);
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -476,6 +478,7 @@ public class EnigmaticLegacy {
             if (COMPAT_FIRSTAID)
                 ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(lostEngine, 0, new ModelResourceLocation(lostEngine.getRegistryName(), "inventory"));
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));

@@ -7,14 +7,14 @@
   "minVersion": "0.8",
   "mixins": [
     "early.MixinBlockDropEvent",
+    "early.MixinContainerEnchantment",
     "early.MixinCooldownTracker",
+    "early.MixinEnchantmentHelper",
     "early.MixinEnterBlockTrigger",
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
-    "early.MixinSummonedEntityTrigger",
-    "early.MixinEnchantmentHelper",
     "early.mixinStupidLogger",
-    "early.MixinContainerEnchantment"
+    "early.MixinSummonedEntityTrigger"
   ],
   "injectors": {
     "maxShiftBy": 10

@@ -911,4 +911,41 @@ public class SuperpositionHandler {
         EnchantmentHelper.setEnchantments(inputEnchants, returnedStack);
         return returnedStack;
     }
+
+    public static double getX(Entity ett, double var1) {
+        return ett.posX + (double)ett.width * var1;
+    }
+
+    public static double getRandomX(Entity ett, double var1) {
+        return getX(ett, (2.0D * ett.world.rand.nextDouble() - 1.0D) * var1);
+    }
+
+    public static double getZ(Entity ett, double var1) {
+        return ett.posZ + (double)ett.width * var1;
+    }
+
+    public static double getRandomZ(Entity ett, double var1) {
+        return getZ(ett, (2.0D * ett.world.rand.nextDouble() - 1.0D) * var1);
+    }
+
+    public static float nextFloatFromHigher(Random rand, float bound) {
+        checkBound(bound);
+
+        return boundedNextFloat(rand, bound);
+    }
+
+    public static float boundedNextFloat(Random rng, float bound) {
+        // Specialize boundedNextFloat for origin == 0, bound > 0
+        float r = rng.nextFloat();
+        r = r * bound;
+        if (r >= bound) // may need to correct a rounding problem
+            r = Float.intBitsToFloat(Float.floatToIntBits(bound) - 1);
+        return r;
+    }
+
+    public static void checkBound(float bound) {
+        if (!(bound > 0.0 && bound < Float.POSITIVE_INFINITY)) {
+            throw new IllegalArgumentException("error!");
+        }
+    }
 }

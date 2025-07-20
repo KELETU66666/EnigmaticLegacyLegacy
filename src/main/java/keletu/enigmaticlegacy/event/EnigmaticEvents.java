@@ -74,10 +74,7 @@ import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -345,7 +342,7 @@ public class EnigmaticEvents {
                 }
                 if (player.inventory.hasItemStack(new ItemStack(blessedStone))) {
                     for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++) {
-                        if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedRing)){
+                        if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedRing)) {
                             BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
                             BaublesApi.getBaublesHandler(player).setStackInSlot(i, new ItemStack(EnigmaticLegacy.blessedRing));
                         }
@@ -614,6 +611,38 @@ public class EnigmaticEvents {
     @SubscribeEvent(priority = HIGH)
     public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
         enforce(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onEntityDamageLowest(LivingDamageEvent event) {
+        EntityLivingBase victim = event.getEntityLiving();
+        Entity attacker = event.getSource().getTrueSource();
+
+        if (victim instanceof EntityPlayer) {
+            if (BaublesApi.isBaubleEquipped((EntityPlayer) victim, lostEngine) != -1 && event.getSource() == DamageSource.LIGHTNING_BOLT) {
+                if (victim instanceof EntityPlayerMP) {
+                    EntityPlayerMP player = (EntityPlayerMP) victim;
+                    for (NonNullList<ItemStack> compartment : Arrays.<NonNullList<ItemStack>>asList(player.inventory.mainInventory, player.inventory.armorInventory, player.inventory.offHandInventory)) {
+                        for (ItemStack itemStack : compartment) {
+                            itemStack.damageItem(itemStack.getMaxDamage() * 3 / 2, player);
+                        }
+                    }
+                    //BaublesApi.getBaubles(player).ifPresent(curiosItemHandler -> {
+                    //    int slots = curiosItemHandler.getEquippedCurios().getSlots();
+                    //    for (int i = 0; i < slots; i++) {
+                    //        ItemStack stackInSlot = curiosItemHandler.getEquippedCurios().getStackInSlot(i);
+                    //        if (!stackInSlot.is(BLESS_RING) && stackInSlot.hurt(stackInSlot.getMaxDamage() * 3 / 2, player.getRandom(), player)) {
+                    //            stackInSlot.shrink(1);
+                    //            player.awardStat(Stats.ITEM_BROKEN.get(stackInSlot.getItem()));
+                    //            stackInSlot.setDamageValue(0);
+                    //        }
+                    //    }
+                    //});
+                }
+                event.setAmount(event.getAmount() * (victim.world.rand.nextInt(4) + 4) + victim.getMaxHealth());
+            }
+
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -1062,12 +1091,6 @@ public class EnigmaticEvents {
 
     }
 
-
-    @SubscribeEvent
-    public void onTick(LivingEvent.LivingUpdateEvent event) {
-
-    }
-
     @SubscribeEvent
     public static void tickHandler(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
@@ -1175,10 +1198,32 @@ public class EnigmaticEvents {
                     player.motionY = 0;
                     if (player.isSneaking())
                         player.motionY -= 0.2;
-                } else if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4)) {
-                    if (player.motionY < 0)
+                } else if (player.motionY < 0) {
+                    if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4) && player.motionY < 0)
                         player.motionY *= 0.9;
+                    if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1)
+                        player.motionY *= (1 + Math.max(lostEngineGravityModifier - 0.2, 0));
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCriticalHit(CriticalHitEvent event) {
+        EntityPlayer player = event.getEntityPlayer();
+        Entity target = event.getTarget();
+        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+            event.setDamageModifier(event.getDamageModifier() + lostEngineCritModifier);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingChangeTarget(LivingSetAttackTargetEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        EntityLivingBase target = event.getTarget();
+        if (entity instanceof EntityGolem && target instanceof EntityPlayer) {
+            if (BaublesApi.isBaubleEquipped((EntityPlayer) target, lostEngine) != -1) {
+                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
             }
         }
     }
@@ -1192,7 +1237,24 @@ public class EnigmaticEvents {
         if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4)) {
             event.getEntityLiving().motionY *= 1.25F;
         }
+        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+            player.motionY *= (1 - lostEngineGravityModifier);
+        }
+        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+            player.motionY += 0.1214F;
+            if (player.isSneaking()) {
+                float rot = (float) (player.rotationYaw * Math.PI / 180.0F);
+                float sin = (float) (-Math.sin(rot) * 0.055F);
+                float cos = (float) (Math.cos(rot) * 0.055F);
+                player.addVelocity(sin * 3F, 0.45, cos * 3F);
+                for (int i = 0; i < 5; i++) {
+                    float width = player.width;
+                    player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, width), SuperpositionHandler.getRandomZ(player, 0.5), sin, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.12F) + 0.05, cos);
+                }
+            }
+        }
     }
+
 
     @SubscribeEvent
     public static void onEnchantmentLevelSet(EnchantmentLevelSetEvent event) {
@@ -1406,6 +1468,21 @@ public class EnigmaticEvents {
                 if (SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")) {
                     packetInstance.sendTo(new PacketCustom("hasAstralFruit"), playerMP);
                     player.addTag("hasAstralFruit");
+                }
+            }
+
+            if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+                if (!player.world.isRemote && player.ticksExisted % 2 == 0)
+                    player.getCooldownTracker().tick();
+                if (player.world.isRemote && Minecraft.getMinecraft().player == player) {
+                    boolean spaceDown = player.jumpMovementFactor > 0;
+                    if (spaceDown && player.motionY > 0.225F && !player.world.getBlockState(player.getPosition()).isOpaqueCube()) {
+                        player.addVelocity(0.0D, 0.0256D, 0.0D);
+                        float width = player.width;
+                        for (int i = 0; i < RANDOM.nextInt(3); i++) {
+                            player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.2F), SuperpositionHandler.getRandomZ(player, width), 0, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.5F) * player.motionY, 0);
+                        }
+                    }
                 }
             }
         }

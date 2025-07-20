@@ -140,6 +140,14 @@ public class EnigmaticConfigs {
     public static int blessedOneRegenerationSpeed;
     public static final List<ResourceLocation> blessedItemList = new ArrayList<>();
 
+    public static final List<ResourceLocation> golemList = new ArrayList<>();
+    public static float lostEngineCritModifier;
+    public static double lostEngineToughnessModifier;
+    public static double lostEngineKRModifier;
+    public static double lostEngineSpeedModifier;
+    public static double lostEngineGravityModifier;
+    public static double lostEngineVulnerabilityModifier;
+
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
@@ -366,6 +374,14 @@ public class EnigmaticConfigs {
         bloodLustTicksPerLevel = config.getInt("TicksPerLevel", "Growing BloodLust", 300, 0, 20000, "How lock the The Voracious Pan needs to be held, in ticks, to increase the strength "
                 + "of the Growing Bloodlust effect by one level.");
 
+        lostEngineCritModifier = config.getFloat("CritDamageModifier", "Lost Engine", 0.6F, 0, 1, "The crit damage modifier of the Lost Engine.");
+        lostEngineToughnessModifier = config.getFloat("ToughnessModifier", "Lost Engine", 4.0F, 0.0F, 256.0F, "The Armor Toughness modifier of the Lost Engine.");
+        lostEngineKRModifier = config.getFloat("KnockbackResistanceModifier", "Lost Engine", 0.2F, 0.0F, 256.0F, "The Knockback resistance modifier of the Lost Engine.");
+        lostEngineSpeedModifier = config.getFloat("SpeedModifier", "Lost Engine", 0.1F, 0.0F, 1.0F, "The speed multiplier of the Lost Engine.");
+        lostEngineGravityModifier = config.getFloat("GravityModifier", "Lost Engine", 0.4F, 0.0F, 1.0F, "The gravity multiplier of the Lost Engine.");
+        lostEngineVulnerabilityModifier = config.getFloat("VulnerabilityModifier", "Lost Engine", 2.5F, 0.0F, 256.0F, "Modifier for Magic Damage vulnerability applied by Lost Engine. Default value of 2.0 means that player will receive twice as much damage from magic.");
+
+
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect.");
@@ -406,6 +422,11 @@ public class EnigmaticConfigs {
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(blessed).forEach(entry -> blessedItemList.add(new ResourceLocation(entry)));
+
+        golemList.clear();
+        String[] golems = config.getStringList("LostEngineExtraGolemList", "Balance Options", new String[0], "List of entities that will be affected as Golem by the Lost Engine. Examples: minecraft:iron_golem. Changing this option required game restart to take effect.");
+
+        Arrays.stream(golems).forEach(entry -> golemList.add(new ResourceLocation(entry)));
 
         config.save();
     }
