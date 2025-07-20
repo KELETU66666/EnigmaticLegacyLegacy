@@ -1,18 +1,14 @@
 package keletu.enigmaticlegacy.mixins.early;
 
 import baubles.api.BaublesApi;
-import keletu.enigmaticlegacy.EnigmaticConfigs;
-import static keletu.enigmaticlegacy.event.SuperpositionHandler.hasCursed;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantmentHelper.class)
 public class MixinEnchantmentHelper {
