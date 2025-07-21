@@ -159,7 +159,7 @@ public class ItemHalfHeartMask extends ItemBaseFireProof implements IBauble {
                 if (r.nextDouble() < 0.3) {
                     ItemStack diamondAxe = new ItemStack(Items.DIAMOND_AXE);
                     EnchantmentHelper.addRandomEnchantment(itemRand, diamondAxe, 40, true);
-                    tradesToGoods(list, itemRand, new ItemStack(Items.DIAMOND), new PriceInfo(1, 1), new PriceInfo(10, 20), diamondAxe);
+                    tradesToGoods(list, itemRand, new ItemStack(Items.DIAMOND_AXE), new PriceInfo(1, 1), new PriceInfo(10, 20), diamondAxe);
                 }
             } else if (illager instanceof EntityIllusionIllager) {
                 tradesForEmerald(list, itemRand, new ItemStack(Items.ARROW), new PriceInfo(16, 32), new PriceInfo(1, 3));
