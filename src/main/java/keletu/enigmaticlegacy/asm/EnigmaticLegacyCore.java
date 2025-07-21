@@ -36,7 +36,7 @@ public class EnigmaticLegacyCore implements IFMLLoadingPlugin {
 
 	@Override
 	public String getAccessTransformerClass() {
-		return "keletu.enigmaticlegacy.asm.ELCoreTransformer";
+		return null;
 	}
 
 }

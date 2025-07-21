@@ -389,13 +389,13 @@ public class EnigmaticConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         neutralAngerWhitelist.clear();
-        String[] whitelist = config.getStringList("CursedRingNeutralAngerWhiteList", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem", "minecraft:zombie_pigman", "minecraft:enderman"}, "List of entities that should be affected"
+        String[] whitelist = config.getStringList("CursedRingNeutralAngerWhiteList", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem", "minecraft:spider", "minecraft:cave_spider", "minecraft:zombie_pigman", "minecraft:enderman"}, "List of entities that should be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf, minecraft:zombie_pigman. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
 
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticlegacy:thunder_scroll"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticlegacy:half_heart_mask", "enigmaticlegacy:thunder_scroll"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
@@ -418,13 +418,13 @@ public class EnigmaticConfigs {
         blessedOneRegenerationSpeed = config.getInt("blessedOneRegenerationSpeed", "Additions", 20, 5, 1000, "The time required for each regeneration of Ring of Redemption. Measured in ticks.");
 
         blessedItemList.clear();
-        String[] blessed = config.getStringList("ItemBeBlessed", "Additions", new String[]{"enigmaticlegacy:astral_fruit", "enigmaticlegacy:twisted_mirror", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:guardian_heart", "enigmaticlegacy:twisted_core", "enigmaticlegacy:curse_transposer", "enigmaticaddons:night_scroll", "enigmaticaddons:sanguinary_handbook", "enigmaticaddons:earth_promise", "enigmaticlegacy:thunder_scroll", "enigmaticaddons:pure_heart", "enigmaticaddons:bless_amplifier", "enigmaticaddons:the_bless", "enigmaticaddons:scorched_charm"}, "List of items needs ware ring to use"
+        String[] blessed = config.getStringList("ItemBeBlessed", "Additions", new String[]{"enigmaticlegacy:astral_fruit", "enigmaticlegacy:twisted_mirror", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:guardian_heart", "enigmaticlegacy:twisted_core", "enigmaticlegacy:curse_transposer", "enigmaticaddons:night_scroll", "enigmaticaddons:sanguinary_handbook", "enigmaticaddons:earth_promise", "enigmaticlegacy:thunder_scroll", "enigmaticaddons:pure_heart", "enigmaticaddons:bless_amplifier", "wnigmaticaddons:scorched_charm"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(blessed).forEach(entry -> blessedItemList.add(new ResourceLocation(entry)));
 
         golemList.clear();
-        String[] golems = config.getStringList("LostEngineExtraGolemList", "Balance Options", new String[0], "List of entities that will be affected as Golem by the Lost Engine. Examples: minecraft:iron_golem. Changing this option required game restart to take effect.");
+        String[] golems = config.getStringList("LostEngineExtraGolemList", "Additions", new String[0], "List of entities that will be affected as Golem by the Lost Engine. Examples: minecraft:iron_golem. Changing this option required game restart to take effect.");
 
         Arrays.stream(golems).forEach(entry -> golemList.add(new ResourceLocation(entry)));
 

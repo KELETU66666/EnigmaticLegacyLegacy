@@ -1,4 +1,4 @@
-package keletu.enigmaticlegacy.util.loot;
+/*package keletu.enigmaticlegacy.util.loot;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
@@ -58,4 +58,4 @@ public class SpecialLootModifierEndCity extends LootEntryTable {
     private static SpecialLootModifierEndCity getInjectEntry(String name, int weight) {
         return new SpecialLootModifierEndCity(new ResourceLocation(EnigmaticLegacy.MODID, "special/" + name), weight, 0, new LootCondition[0], "enigmatic_inject_pool_special_1");
     }
-}
+}*/

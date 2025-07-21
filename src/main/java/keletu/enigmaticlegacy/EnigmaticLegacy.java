@@ -21,10 +21,8 @@ import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
-import keletu.enigmaticlegacy.util.compat.CompatFirstAidEvent;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
-import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FIRSTAID;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
 import keletu.enigmaticlegacy.util.loot.LootHandler;
@@ -74,7 +72,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.6.6-rlc";
+    public static final String VERSION = "1.8.0-rlc";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -163,8 +161,8 @@ public class EnigmaticLegacy {
     public static Item forbiddenFruit = new ItemForbiddenFruit();
     public static Item unholyGrail = new ItemUnholyGrail();
     public static Item redemptionPotion = new ItemRedemptionPotion();
-    public static Item astralFruit = new ItemAstralFruit();
-    public static Item ichorBottle = new ItemIchorBottle();
+    //public static Item astralFruit = new ItemAstralFruit();
+    //public static Item ichorBottle = new ItemIchorBottle();
 
     //Additions
     public static Item blessedStone = new ItemBlessStone();
@@ -196,8 +194,7 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketCosmicRevive.Handler.class, PacketCosmicRevive.class, 10, Side.CLIENT);
-        packetInstance.registerMessage(PacketCustom.Handler.class, PacketCustom.class, 11, Side.CLIENT);
-        packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 12, Side.SERVER);
+        packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 11, Side.SERVER);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -240,8 +237,6 @@ public class EnigmaticLegacy {
     public void postInit(FMLPostInitializationEvent event) {
         if (ModCompat.COMPAT_TRINKETS)
             MinecraftForge.EVENT_BUS.register(new CompatTrinketEvent());
-        if (ModCompat.COMPAT_FIRSTAID)
-            MinecraftForge.EVENT_BUS.register(new CompatFirstAidEvent());
     }
 
     @Mod.EventHandler
@@ -346,13 +341,12 @@ public class EnigmaticLegacy {
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
             event.getRegistry().register(redemptionPotion);
-            event.getRegistry().register(astralFruit);
-            event.getRegistry().register(ichorBottle);
+            //event.getRegistry().register(astralFruit);
+            //event.getRegistry().register(ichorBottle);
 
             event.getRegistry().register(blessedStone);
             event.getRegistry().register(blessedRing);
-            if (COMPAT_FIRSTAID)
-                event.getRegistry().register(halfHeartMask);
+            event.getRegistry().register(halfHeartMask);
             event.getRegistry().register(thunderScroll);
             event.getRegistry().register(lostEngine);
 
@@ -459,8 +453,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
+            //ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
@@ -474,9 +468,8 @@ public class EnigmaticLegacy {
 
             ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
-            
-            if (COMPAT_FIRSTAID)
-                ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
+
+            ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(lostEngine, 0, new ModelResourceLocation(lostEngine.getRegistryName(), "inventory"));
 

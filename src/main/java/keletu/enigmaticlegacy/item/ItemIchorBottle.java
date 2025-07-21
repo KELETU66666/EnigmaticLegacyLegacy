@@ -1,4 +1,4 @@
-package keletu.enigmaticlegacy.item;
+/*package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
@@ -90,12 +90,6 @@ public class ItemIchorBottle extends Item {
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase player) {
         if (player instanceof EntityPlayerMP) {
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            if (!SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")) {
-                SuperpositionHandler.setPersistentBoolean(playerMP, "ConsumedIchorBottle", true);
-                playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1F);
-            }
-
             double multiplier = 1;
             stack.shrink(1);
 
@@ -128,4 +122,4 @@ public class ItemIchorBottle extends Item {
         return item;
     }
 
-}
+}*/

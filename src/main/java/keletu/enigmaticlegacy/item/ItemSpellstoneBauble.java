@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.item;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.util.interfaces.ISpellstone;
@@ -30,7 +31,16 @@ public abstract class ItemSpellstoneBauble extends ItemBase implements IBauble, 
 
     @Override
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return BaublesApi.isBaubleEquipped((EntityPlayer) player, this) == -1;
+        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) player);
+
+        for (int slot = 0; slot < baubles.getSlots(); slot++) {
+            ItemStack equipped = baubles.getStackInSlot(slot);
+            if (!equipped.isEmpty() && equipped.getItem() instanceof ISpellstone) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean isResistantTo(String damageType) {

@@ -551,6 +551,8 @@ message.enigmaticlegacy.eldritch_pan_buff=With the taste of this new soul, The V
 commands.setcursedtime.usage=Usage: /setcursedtime tick (optional)playerName
 commands.setnoringtime.usage=Usage: /setnoringtime tick (optional)playerName
 
+death.darkness=%1$s was devoured by darkness
+
 #Compat
 tooltip.enigmaticlegacy.compatXat1=§dAlteration of the §6'Secret' Curse§d:
 tooltip.enigmaticlegacy.compatXat2=§5- Endermen no longer teleport to you.
@@ -613,6 +615,12 @@ tooltip.enigmaticaddons.lostEngine6=§5- Immune to §dFall §5& §dExplosion §5
 tooltip.enigmaticaddons.lostEngine7=§5- Add §6%1$s§d Crit damage§5.
 tooltip.enigmaticaddons.lostEngine8=§5- Golems will not target you actively.
 tooltip.enigmaticaddons.lostEngine9=§5- You are vulnerable to §dMagic Damage§5 and §dLightning Damage§5.
+
+tooltip.enigmaticlegacy.halfHeartMask1=§6When equipped:
+tooltip.enigmaticlegacy.halfHeartMask2=§5- Illagers will treat you as one of them.
+tooltip.enigmaticlegacy.halfHeartMask3=§5- Your can only regenerate your health by half.
+tooltip.enigmaticlegacy.halfHeartMask4=§5- Villagers no longer trade with you.
+tooltip.enigmaticlegacy.halfHeartMask5=§5- You can also trade with Illagers.
 
 tooltip.enigmaticaddons.blessUse1=This item understands your past experiences,
 tooltip.enigmaticaddons.blessUse2=and it still recognizes your qualifications.

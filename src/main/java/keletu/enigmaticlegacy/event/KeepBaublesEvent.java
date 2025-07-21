@@ -1,6 +1,5 @@
 package keletu.enigmaticlegacy.event;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.EnigmaticLegacy;

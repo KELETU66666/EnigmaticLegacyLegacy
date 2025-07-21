@@ -33,14 +33,8 @@ import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemEnchantedBook;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -947,5 +941,23 @@ public class SuperpositionHandler {
         if (!(bound > 0.0 && bound < Float.POSITIVE_INFINITY)) {
             throw new IllegalArgumentException("error!");
         }
+    }
+
+    //From Raids Backport mod
+    //Author:SmileycorpMC
+    //Under LGPL-2.1 license
+    public static ItemStack ominousBanner() {
+        NBTTagList patterns = new NBTTagList();
+        String[] shapes = {"mr", "bs", "cs", "ms", "hh", "mc", "bo"};
+        int[] colours = {6, 7, 8, 0, 7, 7, 0};
+        for (int i = 0; i < shapes.length; i++) {
+            NBTTagCompound pattern = new NBTTagCompound();
+            pattern.setString("Pattern", shapes[i]);
+            pattern.setInteger("Color", colours[i]);
+            patterns.appendTag(pattern);
+        }
+        ItemStack banner = ItemBanner.makeBanner(EnumDyeColor.WHITE, patterns);
+        banner.getTagCompound().setInteger("HideFlags", 32);
+        return banner;
     }
 }

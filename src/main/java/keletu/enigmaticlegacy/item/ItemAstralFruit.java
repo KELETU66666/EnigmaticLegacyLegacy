@@ -1,4 +1,4 @@
-package keletu.enigmaticlegacy.item;
+/*package keletu.enigmaticlegacy.item;
 
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
@@ -63,11 +63,6 @@ public class ItemAstralFruit extends ItemFood {
     public void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
         if(player instanceof EntityPlayerMP) {
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            if(!SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")) {
-                SuperpositionHandler.setPersistentBoolean(playerMP, "ConsumedAstralFruit", true);
-                //SuperpositionHandler.unlockSpecialSlot("ring", playerMP);
-                playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1F);
-            }
 
             double multiplier = 1;
 
@@ -98,4 +93,4 @@ public class ItemAstralFruit extends ItemFood {
 
         return item;
     }
-}
+}*/

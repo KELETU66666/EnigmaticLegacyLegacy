@@ -14,11 +14,6 @@
           "type": "item",
           "name": "enigmaticlegacy:angel_blessing",
           "weight": 65
-        },
-        {
-          "type": "item",
-          "name": "enigmaticlegacy:ichor_bottle",
-          "weight": 65
         }
       ]
     }

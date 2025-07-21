@@ -3,7 +3,6 @@ package keletu.enigmaticlegacy.event;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import baubles.client.gui.GuiPlayerExpanded;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
@@ -20,7 +19,10 @@ import keletu.enigmaticlegacy.event.special.EndPortalActivatedEvent;
 import keletu.enigmaticlegacy.event.special.EnterBlockEvent;
 import keletu.enigmaticlegacy.event.special.SummonedEntityEvent;
 import keletu.enigmaticlegacy.item.*;
-import keletu.enigmaticlegacy.packet.*;
+import keletu.enigmaticlegacy.packet.PacketCosmicRevive;
+import keletu.enigmaticlegacy.packet.PacketEmptyLeftClick;
+import keletu.enigmaticlegacy.packet.PacketPortalParticles;
+import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -66,7 +68,6 @@ import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
@@ -110,43 +111,6 @@ public class EnigmaticEvents {
     public static final ResourceLocation FIREBAR_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/firebar.png");
     public static final ResourceLocation ICONS_LOCATION = new ResourceLocation(EnigmaticLegacy.MODID, "textures/gui/generic_icons.png");
     private static final ResourceLocation texture = new ResourceLocation(MODID, "textures/gui/bar.png");
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public static void onGui(GuiScreenEvent.BackgroundDrawnEvent evt) {
-        if (evt.getGui() instanceof GuiPlayerExpanded) {
-            evt.getGui().mc.getTextureManager().bindTexture(texture);
-            ScaledResolution sr = new ScaledResolution(evt.getGui().mc);
-            int startX = (sr.getScaledWidth() - 176) / 2;
-            int startY = (sr.getScaledHeight() - 166) / 2;
-            evt.getGui().drawTexturedModalRect(startX, startY - 6 - 18, 0, 0, 6, 6);
-            evt.getGui().drawTexturedModalRect(startX + 18 * 7 + 6, startY - 6 - 18, 58, 0, 6, 6);
-            for (int i = 0; i < 7; i++) {
-                evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 6 - 18, 4, 0, 18, 6);
-                evt.getGui().drawTexturedModalRect(6 + startX + i * 18, startY - 18, 6, 6, 18, 18);
-            }
-            evt.getGui().drawTexturedModalRect(startX, startY - 18, 0, 6, 6, 18);
-            evt.getGui().drawTexturedModalRect(startX + 18 * 7 + 6, startY - 18, 58, 6, 6, 30);
-
-            if (Minecraft.getMinecraft().player.getTags().contains("hasIchorBottle"))
-                evt.getGui().drawTexturedModalRect(startX + 6, startY - 18 - 1, 0, 46, 18, 18);
-
-            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 1, startY - 18 - 1, 18, 46, 18, 18);
-
-            if (Minecraft.getMinecraft().player.getTags().contains("hasAstralFruit"))
-                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 2, startY - 18 - 1, 36, 46, 18, 18);
-
-            if (BaublesApi.isBaubleEquipped(Minecraft.getMinecraft().player, EnigmaticLegacy.enigmaticEye) != -1)
-                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 3, startY - 18 - 1, 54, 46, 18, 18);
-
-            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 4, startY - 18 - 1, 72, 46, 18, 18);
-
-            evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 5, startY - 18 - 1, 90, 46, 18, 18);
-
-            if (false)
-                evt.getGui().drawTexturedModalRect(startX + 6 + 18 * 6, startY - 18 - 1, 108, 46, 18, 18);
-        }
-    }
 
     @SubscribeEvent
     public static void playerClone(PlayerEvent.Clone event) {
@@ -580,6 +544,34 @@ public class EnigmaticEvents {
     }
 
 
+    @SubscribeEvent
+    public static void entityInteract(PlayerInteractEvent.EntityInteract event) {
+        enforce(event);
+
+        World world = event.getWorld();
+        EntityPlayer player = event.getEntityPlayer();
+
+        if (!world.isRemote) {
+            boolean success = false;
+
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.halfHeartMask) != -1) {
+                final Entity ent = SuperpositionHandler.getPointedEntity(player.world, player, 0.0F, 5.0F, 3F, false);
+                if (ent instanceof AbstractIllager) {
+                    AbstractIllager living = (AbstractIllager) ent;
+                    final ItemHalfHeartMask.IllagerTrades merchant = new ItemHalfHeartMask.IllagerTrades(living);
+                    merchant.playIntro();
+                    merchant.setCustomer(player);
+                    player.displayVillagerTradeGui(merchant);
+                    success = true;
+                }
+                if(ent instanceof EntityVillager){
+                    world.playSound(null, ent.getPosition(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.NEUTRAL, 1.0F, 0.5F);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
     @SubscribeEvent(priority = HIGH)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         enforce(event);
@@ -945,6 +937,12 @@ public class EnigmaticEvents {
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
                 event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
             }
+
+            if (event.getEntityLiving() instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayerMP) event.getEntityLiving(), EnigmaticLegacy.halfHeartMask) != -1) {
+                if(player.getHealth() >= player.getMaxHealth() * 0.5F){
+                    event.setCanceled(true);
+                }
+            }
         }
 
     }
@@ -985,11 +983,6 @@ public class EnigmaticEvents {
                 }
             }
         }
-    }
-
-    @SubscribeEvent(priority = HIGH)
-    public static void entityInteract(PlayerInteractEvent.EntityInteract event) {
-        enforce(event);
     }
 
     @SubscribeEvent
@@ -1174,19 +1167,6 @@ public class EnigmaticEvents {
                 }
             }
         }
-
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(7).isEmpty() && !player.getTags().contains("hasIchorBottle")) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(7), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(7, ItemStack.EMPTY);
-        }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(9).isEmpty() && !player.getTags().contains("hasAstralFruit")) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(9), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(9, ItemStack.EMPTY);
-        }
-        if (!BaublesApi.getBaublesHandler(player).getStackInSlot(10).isEmpty() && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enigmaticEye) == -1) {
-            player.dropItem(BaublesApi.getBaublesHandler(player).getStackInSlot(10), false);
-            BaublesApi.getBaublesHandler(player).setStackInSlot(10, ItemStack.EMPTY);
-        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -1194,15 +1174,17 @@ public class EnigmaticEvents {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (!player.capabilities.isFlying && !player.onGround) {
-                if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1 && player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getMaterial() == Material.WATER) {
-                    player.motionY = 0;
-                    if (player.isSneaking())
-                        player.motionY -= 0.2;
+                if (player.getEntityWorld().getBlockState(new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ)).getMaterial() == Material.WATER) {
+                    if (BaublesApi.isBaubleEquipped(player, oceanStone) != -1) {
+                        player.motionY = 0;
+                        if (player.isSneaking())
+                            player.motionY -= 0.2;
+                    }
                 } else if (player.motionY < 0) {
                     if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4) && player.motionY < 0)
                         player.motionY *= 0.9;
                     if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1)
-                        player.motionY *= (1 + Math.max(lostEngineGravityModifier - 0.2, 0));
+                        player.motionY *= (1 + Math.max(lostEngineGravityModifier / 10, 0));
                 }
             }
         }
@@ -1226,6 +1208,11 @@ public class EnigmaticEvents {
                 ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
             }
         }
+        if (entity instanceof AbstractIllager && target instanceof EntityPlayer) {
+            if (BaublesApi.isBaubleEquipped((EntityPlayer) target, halfHeartMask) != -1) {
+                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -1237,9 +1224,9 @@ public class EnigmaticEvents {
         if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4)) {
             event.getEntityLiving().motionY *= 1.25F;
         }
-        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
-            player.motionY *= (1 - lostEngineGravityModifier);
-        }
+        //if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+        //    player.motionY *= (1 + Math.max(lostEngineGravityModifier / 10, 0));
+        //}
         if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
             player.motionY += 0.1214F;
             if (player.isSneaking()) {
@@ -1458,18 +1445,6 @@ public class EnigmaticEvents {
                     }
 
                 }
-
-            if (player instanceof EntityPlayerMP) {
-                EntityPlayerMP playerMP = (EntityPlayerMP) player;
-                if (SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")) {
-                    packetInstance.sendTo(new PacketCustom("hasIchorBottle"), playerMP);
-                    player.addTag("hasIchorBottle");
-                }
-                if (SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")) {
-                    packetInstance.sendTo(new PacketCustom("hasAstralFruit"), playerMP);
-                    player.addTag("hasAstralFruit");
-                }
-            }
 
             if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
                 if (!player.world.isRemote && player.ticksExisted % 2 == 0)
