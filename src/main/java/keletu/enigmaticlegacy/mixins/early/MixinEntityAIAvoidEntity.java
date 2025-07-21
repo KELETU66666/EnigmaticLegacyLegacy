@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.mixins.early;
 
-import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
+import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -23,9 +23,9 @@ public class MixinEntityAIAvoidEntity {
     protected Entity closestLivingEntity;
 
     @Inject(method = "shouldExecute", at = @At(value = "HEAD"), cancellable = true)
-    public void mixinShouldExecute(CallbackInfoReturnable<Boolean> cir){
+    private void mixinShouldExecute(CallbackInfoReturnable<Boolean> cir){
         if(entity instanceof AbstractIllager && closestLivingEntity instanceof EntityPlayer){
-            if(BaublesApi.isBaubleEquipped((EntityPlayer) closestLivingEntity, EnigmaticLegacy.halfHeartMask) != -1){
+            if(SuperpositionHandler.isBaubleEquipped((EntityPlayer) closestLivingEntity, EnigmaticLegacy.halfHeartMask)){
                 cir.setReturnValue(false);
             }
         }

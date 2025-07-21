@@ -960,4 +960,8 @@ public class SuperpositionHandler {
         banner.getTagCompound().setInteger("HideFlags", 32);
         return banner;
     }
+
+    public static boolean isBaubleEquipped(EntityPlayer player, Item item){
+        return BaublesApi.isBaubleEquipped(player, item) != -1;
+    }
 }
