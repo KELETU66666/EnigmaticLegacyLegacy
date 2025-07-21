@@ -564,7 +564,7 @@ public class EnigmaticEvents {
                     player.displayVillagerTradeGui(merchant);
                     success = true;
                 }
-                if(ent instanceof EntityVillager){
+                if (ent instanceof EntityVillager) {
                     world.playSound(null, ent.getPosition(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.NEUTRAL, 1.0F, 0.5F);
                     event.setCanceled(true);
                 }
@@ -939,7 +939,7 @@ public class EnigmaticEvents {
             }
 
             if (event.getEntityLiving() instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayerMP) event.getEntityLiving(), EnigmaticLegacy.halfHeartMask) != -1) {
-                if(player.getHealth() >= player.getMaxHealth() * 0.5F){
+                if (player.getHealth() >= player.getMaxHealth() * 0.5F) {
                     event.setCanceled(true);
                 }
             }
@@ -1208,7 +1208,7 @@ public class EnigmaticEvents {
                 ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
             }
         }
-        if (entity instanceof AbstractIllager && target instanceof EntityPlayer) {
+        if ((entity instanceof AbstractIllager || entity instanceof EntityWitch) && target instanceof EntityPlayer) {
             if (BaublesApi.isBaubleEquipped((EntityPlayer) target, halfHeartMask) != -1) {
                 ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
             }
