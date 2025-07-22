@@ -3,6 +3,7 @@ package keletu.enigmaticlegacy.item;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;
+import keletu.enigmaticlegacy.util.interfaces.IScroll;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemFabulousScroll extends ItemHeavenScroll {
+public class ItemFabulousScroll extends ItemHeavenScroll implements IScroll {
 
     public ItemFabulousScroll() {
         super("fabulous_scroll", EnumRarity.EPIC);

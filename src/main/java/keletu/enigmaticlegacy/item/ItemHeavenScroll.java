@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class ItemHeavenScroll extends ItemScrollBauble {
+public class ItemHeavenScroll extends ItemScrollBauble implements IScroll {
 
     public Map<EntityPlayer, Integer> flyMap = new WeakHashMap<EntityPlayer, Integer>();
     public final double baseXpConsumptionProbability = 0.025D / 2D;
