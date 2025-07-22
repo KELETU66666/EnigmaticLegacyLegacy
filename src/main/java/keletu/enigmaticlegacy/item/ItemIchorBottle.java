@@ -1,5 +1,8 @@
-/*package keletu.enigmaticlegacy.item;
+package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
+import baubles.api.cap.BaublesContainer;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
@@ -29,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemIchorBottle extends Item {
+
 
     public ItemIchorBottle() {
         this.setMaxStackSize(1);
@@ -90,8 +94,18 @@ public class ItemIchorBottle extends Item {
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase player) {
         if (player instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) player;
+            BaublesContainer container = BaublesApi.getBaublesContainer(playerMP);
+
+            if (!SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")) {
+                SuperpositionHandler.setPersistentBoolean(playerMP, "ConsumedIchorBottle", true);
+                container.grow(BaubleType.AMULET, 1);
+                playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1F);
+            }
+
             double multiplier = 1;
             stack.shrink(1);
+            playerMP.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
 
             player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, (int) (1200 * multiplier), 2, false, true));
             player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, (int) (800 * multiplier), 4, false, true));
@@ -122,4 +136,4 @@ public class ItemIchorBottle extends Item {
         return item;
     }
 
-}*/
+}

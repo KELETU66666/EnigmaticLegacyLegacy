@@ -21,13 +21,12 @@ import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
+import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_BUBBLES;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
-import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
-import keletu.enigmaticlegacy.util.loot.LootHandler;
-import keletu.enigmaticlegacy.util.loot.LootHandlerForgottenRelics;
-import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
+import keletu.enigmaticlegacy.util.loot.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -161,8 +160,6 @@ public class EnigmaticLegacy {
     public static Item forbiddenFruit = new ItemForbiddenFruit();
     public static Item unholyGrail = new ItemUnholyGrail();
     public static Item redemptionPotion = new ItemRedemptionPotion();
-    //public static Item astralFruit = new ItemAstralFruit();
-    //public static Item ichorBottle = new ItemIchorBottle();
 
     //Additions
     public static Item blessedStone = new ItemBlessStone();
@@ -221,6 +218,9 @@ public class EnigmaticLegacy {
             MinecraftForge.EVENT_BUS.register(new LootHandlerOptional());
         else
             MinecraftForge.EVENT_BUS.register(new LootHandlerForgottenRelics());
+
+        if (COMPAT_BUBBLES)
+            MinecraftForge.EVENT_BUS.register(SpecialLootModifierEndCity.class);
 
 
         if (event.getSide().isClient()) {
@@ -341,8 +341,11 @@ public class EnigmaticLegacy {
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
             event.getRegistry().register(redemptionPotion);
-            //event.getRegistry().register(astralFruit);
-            //event.getRegistry().register(ichorBottle);
+
+            if (ModCompat.COMPAT_BUBBLES) {
+                event.getRegistry().register(CompatBubbles.astralFruit);
+                event.getRegistry().register(CompatBubbles.ichorBottle);
+            }
 
             event.getRegistry().register(blessedStone);
             event.getRegistry().register(blessedRing);
@@ -453,8 +456,12 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(astralFruit, 0, new ModelResourceLocation(astralFruit.getRegistryName(), "inventory"));
-            //ModelLoader.setCustomModelResourceLocation(ichorBottle, 0, new ModelResourceLocation(ichorBottle.getRegistryName(), "inventory"));
+
+            if (ModCompat.COMPAT_BUBBLES) {
+                ModelLoader.setCustomModelResourceLocation(CompatBubbles.astralFruit, 0, new ModelResourceLocation(CompatBubbles.astralFruit.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(CompatBubbles.ichorBottle, 0, new ModelResourceLocation(CompatBubbles.ichorBottle.getRegistryName(), "inventory"));
+            }
+
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));

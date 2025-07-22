@@ -136,7 +136,13 @@ public class ItemEtheriumAxe extends ItemAxe implements IEtheriumTool {
                     }
                 }
             }
-        }return ret;
+        }
+        return ret;
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return super.getIsRepairable(toRepair, repair) || repair.getItem() == EnigmaticLegacy.etheriumIngot;
     }
 
     @Override

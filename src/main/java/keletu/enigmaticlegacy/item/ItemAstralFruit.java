@@ -1,5 +1,8 @@
-/*package keletu.enigmaticlegacy.item;
+package keletu.enigmaticlegacy.item;
 
+import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
+import baubles.api.cap.BaublesContainer;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
@@ -27,7 +30,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemAstralFruit extends ItemFood {
-
     public ItemAstralFruit() {
         super(5, 20, false);
         this.setAlwaysEdible();
@@ -63,7 +65,13 @@ public class ItemAstralFruit extends ItemFood {
     public void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
         if(player instanceof EntityPlayerMP) {
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
+            BaublesContainer container = BaublesApi.getBaublesContainer(playerMP);
 
+            if(!SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedAstralFruit")) {
+                SuperpositionHandler.setPersistentBoolean(playerMP, "ConsumedAstralFruit", true);
+                container.grow(BaubleType.RING, 1);
+                playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1F);
+            }
             double multiplier = 1;
 
             player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, (int) (3000 * multiplier), 3, false, true));
@@ -93,4 +101,4 @@ public class ItemAstralFruit extends ItemFood {
 
         return item;
     }
-}*/
+}
