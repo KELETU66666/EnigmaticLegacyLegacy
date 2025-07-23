@@ -711,7 +711,10 @@ public class SuperpositionHandler {
     }
 
     public static boolean hasBlessed(EntityPlayer player) {
-        return BaublesApi.isBaubleEquipped(player, blessedRing) != -1;
+        if (!EnigmaticConfigs.allowAddonItems)
+            return false;
+        else
+            return BaublesApi.isBaubleEquipped(player, blessedRing) != -1;
     }
 
     public static boolean hasCursed(EntityPlayer player) {
@@ -907,7 +910,7 @@ public class SuperpositionHandler {
     }
 
     public static double getX(Entity ett, double var1) {
-        return ett.posX + (double)ett.width * var1;
+        return ett.posX + (double) ett.width * var1;
     }
 
     public static double getRandomX(Entity ett, double var1) {
@@ -915,7 +918,7 @@ public class SuperpositionHandler {
     }
 
     public static double getZ(Entity ett, double var1) {
-        return ett.posZ + (double)ett.width * var1;
+        return ett.posZ + (double) ett.width * var1;
     }
 
     public static double getRandomZ(Entity ett, double var1) {
@@ -961,7 +964,7 @@ public class SuperpositionHandler {
         return banner;
     }
 
-    public static boolean isBaubleEquipped(EntityPlayer player, Item item){
+    public static boolean isBaubleEquipped(EntityPlayer player, Item item) {
         return BaublesApi.isBaubleEquipped(player, item) != -1;
     }
 }

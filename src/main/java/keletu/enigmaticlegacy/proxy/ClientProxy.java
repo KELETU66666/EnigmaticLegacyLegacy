@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.proxy;
 
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.client.LayerAmulet;
 import keletu.enigmaticlegacy.client.LayerCharm;
@@ -56,8 +57,9 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    public void renderEntities(){
-        RenderingRegistry.registerEntityRenderingHandler(EntityHarmlessLightningBolt.class, new RenderLightningBolt(Minecraft.getMinecraft().getRenderManager()));
+    public void renderEntities() {
+        if (EnigmaticConfigs.allowAddonItems)
+            RenderingRegistry.registerEntityRenderingHandler(EntityHarmlessLightningBolt.class, new RenderLightningBolt(Minecraft.getMinecraft().getRenderManager()));
     }
 
     public static void addRenderLayers() {

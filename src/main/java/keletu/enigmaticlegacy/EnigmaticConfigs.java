@@ -135,6 +135,8 @@ public class EnigmaticConfigs {
 
 
     //Additions
+
+    public static boolean allowAddonItems;
     public static float blessedOneDamageResistance;
     public static float blessedOneDamageBoost;
     public static int blessedOneRegenerationSpeed;
@@ -150,6 +152,8 @@ public class EnigmaticConfigs {
 
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
+
+        allowAddonItems = config.getBoolean("AllowAddonItems", "Generic Config", true, "If true, the game will add some items from enigmatic addons.");
 
         spawnWithBook = config.getBoolean("SpawnWithBook", "Generic Config", true, "If true, When player entering a new world will give the acknowledgment guidebook");
 

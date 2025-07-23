@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.util.loot;
 
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.util.compat.CompatBubbles;
@@ -56,6 +57,12 @@ public class SpecialLootModifierEndCity extends LootEntryTable {
         if (event.getName().equals(new ResourceLocation(EnigmaticLegacy.MODID, "inject/spellstone_temple"))) {
             LootPool main = event.getTable().getPool("spellstones");
             main.addEntry(new LootEntryItem(CompatBubbles.ichorBottle, 65, 0, new LootFunction[0], new LootCondition[0], "enigmatic_inject_pool_special_ichor_bottle"));
+        }
+        if (EnigmaticConfigs.allowAddonItems) {
+            if (event.getName().equals(new ResourceLocation(EnigmaticLegacy.MODID, "inject/spellstone_temple_jungle"))) {
+                LootPool main = event.getTable().getPool("spellstones");
+                main.addEntry(new LootEntryItem(EnigmaticLegacy.lostEngine, 75, 0, new LootFunction[0], new LootCondition[0], "enigmatic_inject_pool_special_lost_engine"));
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.mixins.early;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.entity.Entity;
@@ -23,10 +24,12 @@ public abstract class MixinEntityAIAvoidEntity<T extends Entity> extends EntityA
     protected T closestLivingEntity;
 
     @ModifyReturnValue(method = "shouldExecute", at = @At(value = "RETURN", ordinal = 3))
-    private boolean mixinShouldExecute(boolean original){
-        if(entity instanceof AbstractIllager && closestLivingEntity instanceof EntityPlayer){
-            if(SuperpositionHandler.isBaubleEquipped((EntityPlayer) closestLivingEntity, EnigmaticLegacy.halfHeartMask)){
-                return false;
+    private boolean mixinShouldExecute(boolean original) {
+        if (EnigmaticConfigs.allowAddonItems) {
+            if (entity instanceof AbstractIllager && closestLivingEntity instanceof EntityPlayer) {
+                if (SuperpositionHandler.isBaubleEquipped((EntityPlayer) closestLivingEntity, EnigmaticLegacy.halfHeartMask)) {
+                    return false;
+                }
             }
         }
         return original;

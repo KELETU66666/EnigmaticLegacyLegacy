@@ -2,6 +2,7 @@ package keletu.enigmaticlegacy.mixins.early;
 
 import baubles.api.BaublesApi;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.util.interfaces.ILootingBonus;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -32,8 +33,9 @@ public class MixinEnchantmentHelper {
 
     @Inject(method = "getSweepingDamageRatio", at = @At("RETURN"), cancellable = true)
     private static void getSweeping(EntityLivingBase entity, CallbackInfoReturnable<Float> cir) {
-        if (entity instanceof EntityPlayer && BaublesApi.isBaubleEquipped((EntityPlayer) entity, EnigmaticLegacy.thunderScroll) != -1) {
-            cir.setReturnValue(Math.max(1.0F, cir.getReturnValue()));
-        }
+        if (EnigmaticConfigs.allowAddonItems)
+            if (entity instanceof EntityPlayer && BaublesApi.isBaubleEquipped((EntityPlayer) entity, EnigmaticLegacy.thunderScroll) != -1) {
+                cir.setReturnValue(Math.max(1.0F, cir.getReturnValue()));
+            }
     }
 }

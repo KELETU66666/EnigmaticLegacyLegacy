@@ -304,16 +304,18 @@ public class EnigmaticEvents {
                     hasCursedStone = true;
                     player.inventory.clearMatchingItems(cursedStone, 0, 1, null);
                 }
-                if (player.inventory.hasItemStack(new ItemStack(blessedStone))) {
-                    for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++) {
-                        if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedRing)) {
-                            BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
-                            BaublesApi.getBaublesHandler(player).setStackInSlot(i, new ItemStack(EnigmaticLegacy.blessedRing));
+                if (allowAddonItems) {
+                    if (player.inventory.hasItemStack(new ItemStack(blessedStone))) {
+                        for (int i = 0; i < BaublesApi.getBaublesHandler(player).getSlots(); i++) {
+                            if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedRing)) {
+                                BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
+                                BaublesApi.getBaublesHandler(player).setStackInSlot(i, new ItemStack(EnigmaticLegacy.blessedRing));
+                            }
+                            if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.desolationRing))
+                                BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
                         }
-                        if (i == BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.desolationRing))
-                            BaublesApi.getBaublesHandler(player).setStackInSlot(i, ItemStack.EMPTY);
+                        player.inventory.clearMatchingItems(blessedStone, 0, 1, null);
                     }
-                    player.inventory.clearMatchingItems(blessedStone, 0, 1, null);
                 }
 
                 if (hasCursedStone && player.world.provider instanceof WorldProviderHell) {
@@ -374,9 +376,11 @@ public class EnigmaticEvents {
                         hasCursedStone = true;
                         itemStack.shrink(1);
                     }
-                    if (itemStack.getItem() == blessedStone) {
-                        dropBlessedStone = true;
-                        itemStack.shrink(1);
+                    if (EnigmaticConfigs.allowAddonItems) {
+                        if (itemStack.getItem() == blessedStone) {
+                            dropBlessedStone = true;
+                            itemStack.shrink(1);
+                        }
                     }
                 }
 
@@ -554,19 +558,21 @@ public class EnigmaticEvents {
         if (!world.isRemote) {
             boolean success = false;
 
-            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.halfHeartMask) != -1) {
-                final Entity ent = SuperpositionHandler.getPointedEntity(player.world, player, 0.0F, 5.0F, 3F, false);
-                if (ent instanceof AbstractIllager) {
-                    AbstractIllager living = (AbstractIllager) ent;
-                    final ItemHalfHeartMask.IllagerTrades merchant = new ItemHalfHeartMask.IllagerTrades(living);
-                    merchant.playIntro();
-                    merchant.setCustomer(player);
-                    player.displayVillagerTradeGui(merchant);
-                    success = true;
-                }
-                if (ent instanceof EntityVillager) {
-                    world.playSound(null, ent.getPosition(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.NEUTRAL, 1.0F, 0.5F);
-                    event.setCanceled(true);
+            if (allowAddonItems) {
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.halfHeartMask) != -1) {
+                    final Entity ent = SuperpositionHandler.getPointedEntity(player.world, player, 0.0F, 5.0F, 3F, false);
+                    if (ent instanceof AbstractIllager) {
+                        AbstractIllager living = (AbstractIllager) ent;
+                        final ItemHalfHeartMask.IllagerTrades merchant = new ItemHalfHeartMask.IllagerTrades(living);
+                        merchant.playIntro();
+                        merchant.setCustomer(player);
+                        player.displayVillagerTradeGui(merchant);
+                        success = true;
+                    }
+                    if (ent instanceof EntityVillager) {
+                        world.playSound(null, ent.getPosition(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.NEUTRAL, 1.0F, 0.5F);
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
@@ -610,30 +616,32 @@ public class EnigmaticEvents {
         EntityLivingBase victim = event.getEntityLiving();
         Entity attacker = event.getSource().getTrueSource();
 
-        if (victim instanceof EntityPlayer) {
-            if (BaublesApi.isBaubleEquipped((EntityPlayer) victim, lostEngine) != -1 && event.getSource() == DamageSource.LIGHTNING_BOLT) {
-                if (victim instanceof EntityPlayerMP) {
-                    EntityPlayerMP player = (EntityPlayerMP) victim;
-                    for (NonNullList<ItemStack> compartment : Arrays.<NonNullList<ItemStack>>asList(player.inventory.mainInventory, player.inventory.armorInventory, player.inventory.offHandInventory)) {
-                        for (ItemStack itemStack : compartment) {
-                            itemStack.damageItem(itemStack.getMaxDamage() * 3 / 2, player);
+        if (allowAddonItems) {
+            if (victim instanceof EntityPlayer) {
+                if (BaublesApi.isBaubleEquipped((EntityPlayer) victim, lostEngine) != -1 && event.getSource() == DamageSource.LIGHTNING_BOLT) {
+                    if (victim instanceof EntityPlayerMP) {
+                        EntityPlayerMP player = (EntityPlayerMP) victim;
+                        for (NonNullList<ItemStack> compartment : Arrays.<NonNullList<ItemStack>>asList(player.inventory.mainInventory, player.inventory.armorInventory, player.inventory.offHandInventory)) {
+                            for (ItemStack itemStack : compartment) {
+                                itemStack.damageItem(itemStack.getMaxDamage() * 3 / 2, player);
+                            }
                         }
+                        //BaublesApi.getBaubles(player).ifPresent(curiosItemHandler -> {
+                        //    int slots = curiosItemHandler.getEquippedCurios().getSlots();
+                        //    for (int i = 0; i < slots; i++) {
+                        //        ItemStack stackInSlot = curiosItemHandler.getEquippedCurios().getStackInSlot(i);
+                        //        if (!stackInSlot.is(BLESS_RING) && stackInSlot.hurt(stackInSlot.getMaxDamage() * 3 / 2, player.getRandom(), player)) {
+                        //            stackInSlot.shrink(1);
+                        //            player.awardStat(Stats.ITEM_BROKEN.get(stackInSlot.getItem()));
+                        //            stackInSlot.setDamageValue(0);
+                        //        }
+                        //    }
+                        //});
                     }
-                    //BaublesApi.getBaubles(player).ifPresent(curiosItemHandler -> {
-                    //    int slots = curiosItemHandler.getEquippedCurios().getSlots();
-                    //    for (int i = 0; i < slots; i++) {
-                    //        ItemStack stackInSlot = curiosItemHandler.getEquippedCurios().getStackInSlot(i);
-                    //        if (!stackInSlot.is(BLESS_RING) && stackInSlot.hurt(stackInSlot.getMaxDamage() * 3 / 2, player.getRandom(), player)) {
-                    //            stackInSlot.shrink(1);
-                    //            player.awardStat(Stats.ITEM_BROKEN.get(stackInSlot.getItem()));
-                    //            stackInSlot.setDamageValue(0);
-                    //        }
-                    //    }
-                    //});
+                    event.setAmount(event.getAmount() * (victim.world.rand.nextInt(4) + 4) + victim.getMaxHealth());
                 }
-                event.setAmount(event.getAmount() * (victim.world.rand.nextInt(4) + 4) + victim.getMaxHealth());
-            }
 
+            }
         }
     }
 
@@ -938,9 +946,11 @@ public class EnigmaticEvents {
                 event.setAmount(event.getAmount() + (event.getAmount() * (cursedScrollRegenBoost * getCurseAmount(player))));
             }
 
-            if (event.getEntityLiving() instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayerMP) event.getEntityLiving(), EnigmaticLegacy.halfHeartMask) != -1) {
-                if (player.getHealth() >= player.getMaxHealth() * 0.5F) {
-                    event.setCanceled(true);
+            if (allowAddonItems) {
+                if (event.getEntityLiving() instanceof EntityPlayerMP && BaublesApi.isBaubleEquipped((EntityPlayerMP) event.getEntityLiving(), EnigmaticLegacy.halfHeartMask) != -1) {
+                    if (player.getHealth() >= player.getMaxHealth() * 0.5F) {
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
@@ -1183,8 +1193,10 @@ public class EnigmaticEvents {
                 } else if (player.motionY < 0) {
                     if (SuperpositionHandler.isWearEnigmaticAmulet(player, 4) && player.motionY < 0)
                         player.motionY *= 0.9;
-                    if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1)
-                        player.motionY *= (1 + Math.max(lostEngineGravityModifier / 10, 0));
+                    if (allowAddonItems) {
+                        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1)
+                            player.motionY *= (1 + Math.max(lostEngineGravityModifier / 10, 0));
+                    }
                 }
             }
         }
@@ -1203,14 +1215,18 @@ public class EnigmaticEvents {
     public static void onLivingChangeTarget(LivingSetAttackTargetEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         EntityLivingBase target = event.getTarget();
-        if (entity instanceof EntityGolem && target instanceof EntityPlayer) {
-            if (BaublesApi.isBaubleEquipped((EntityPlayer) target, lostEngine) != -1) {
-                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+        if (allowAddonItems) {
+            if (entity instanceof EntityGolem && target instanceof EntityPlayer) {
+                if (BaublesApi.isBaubleEquipped((EntityPlayer) target, lostEngine) != -1) {
+                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+                }
             }
         }
-        if ((entity instanceof AbstractIllager || entity instanceof EntityWitch) && target instanceof EntityPlayer) {
-            if (BaublesApi.isBaubleEquipped((EntityPlayer) target, halfHeartMask) != -1) {
-                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+        if (allowAddonItems) {
+            if ((entity instanceof AbstractIllager || entity instanceof EntityWitch) && target instanceof EntityPlayer) {
+                if (BaublesApi.isBaubleEquipped((EntityPlayer) target, halfHeartMask) != -1) {
+                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+                }
             }
         }
     }
@@ -1227,16 +1243,18 @@ public class EnigmaticEvents {
         //if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
         //    player.motionY *= (1 + Math.max(lostEngineGravityModifier / 10, 0));
         //}
-        if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
-            player.motionY += 0.1214F;
-            if (player.isSneaking()) {
-                float rot = (float) (player.rotationYaw * Math.PI / 180.0F);
-                float sin = (float) (-Math.sin(rot) * 0.055F);
-                float cos = (float) (Math.cos(rot) * 0.055F);
-                player.addVelocity(sin * 3F, 0.45, cos * 3F);
-                for (int i = 0; i < 5; i++) {
-                    float width = player.width;
-                    player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, width), SuperpositionHandler.getRandomZ(player, 0.5), sin, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.12F) + 0.05, cos);
+        if (allowAddonItems) {
+            if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+                player.motionY += 0.1214F;
+                if (player.isSneaking()) {
+                    float rot = (float) (player.rotationYaw * Math.PI / 180.0F);
+                    float sin = (float) (-Math.sin(rot) * 0.055F);
+                    float cos = (float) (Math.cos(rot) * 0.055F);
+                    player.addVelocity(sin * 3F, 0.45, cos * 3F);
+                    for (int i = 0; i < 5; i++) {
+                        float width = player.width;
+                        player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, width), SuperpositionHandler.getRandomZ(player, 0.5), sin, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.12F) + 0.05, cos);
+                    }
                 }
             }
         }
@@ -1446,16 +1464,18 @@ public class EnigmaticEvents {
 
                 }
 
-            if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
-                if (!player.world.isRemote && player.ticksExisted % 2 == 0)
-                    player.getCooldownTracker().tick();
-                if (player.world.isRemote && Minecraft.getMinecraft().player == player) {
-                    boolean spaceDown = player.jumpMovementFactor > 0;
-                    if (spaceDown && player.motionY > 0.225F && !player.world.getBlockState(player.getPosition()).isOpaqueCube()) {
-                        player.addVelocity(0.0D, 0.0256D, 0.0D);
-                        float width = player.width;
-                        for (int i = 0; i < RANDOM.nextInt(3); i++) {
-                            player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.2F), SuperpositionHandler.getRandomZ(player, width), 0, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.5F) * player.motionY, 0);
+            if (allowAddonItems) {
+                if (BaublesApi.isBaubleEquipped(player, lostEngine) != -1) {
+                    if (!player.world.isRemote && player.ticksExisted % 2 == 0)
+                        player.getCooldownTracker().tick();
+                    if (player.world.isRemote && Minecraft.getMinecraft().player == player) {
+                        boolean spaceDown = player.jumpMovementFactor > 0;
+                        if (spaceDown && player.motionY > 0.225F && !player.world.getBlockState(player.getPosition()).isOpaqueCube()) {
+                            player.addVelocity(0.0D, 0.0256D, 0.0D);
+                            float width = player.width;
+                            for (int i = 0; i < RANDOM.nextInt(3); i++) {
+                                player.world.spawnParticle(EnumParticleTypes.CLOUD, SuperpositionHandler.getRandomX(player, width), player.posY + SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.2F), SuperpositionHandler.getRandomZ(player, width), 0, SuperpositionHandler.nextFloatFromHigher(RANDOM, 0.5F) * player.motionY, 0);
+                            }
                         }
                     }
                 }
@@ -1503,12 +1523,14 @@ public class EnigmaticEvents {
 
             Entity immediateSource = event.getSource().getImmediateSource();
 
-            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1) {
-                if (SuperpositionHandler.canPerformanceSweeping(player)) {
-                    int electric = event.getEntityLiving().getEntityData().getInteger("Electric");
-                    event.getEntityLiving().getEntityData().setInteger("Electric", electric + 60 + player.world.rand.nextInt(80) + (int) (event.getAmount() * 10));
+            if (allowAddonItems) {
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1) {
+                    if (SuperpositionHandler.canPerformanceSweeping(player)) {
+                        int electric = event.getEntityLiving().getEntityData().getInteger("Electric");
+                        event.getEntityLiving().getEntityData().setInteger("Electric", electric + 60 + player.world.rand.nextInt(80) + (int) (event.getAmount() * 10));
+                    }
+                    event.setAmount(ItemThunderScroll.modify(event.getEntityLiving(), event.getAmount()));
                 }
-                event.setAmount(ItemThunderScroll.modify(event.getEntityLiving(), event.getAmount()));
             }
 
             if (player.getHeldItemMainhand() != ItemStack.EMPTY) {
@@ -1581,8 +1603,10 @@ public class EnigmaticEvents {
                 }
             }
 
-            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1 && event.getSource().equals(DamageSource.LIGHTNING_BOLT)) {
-                event.setAmount(event.getAmount() * 0.5F);
+            if (allowAddonItems) {
+                if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1 && event.getSource().equals(DamageSource.LIGHTNING_BOLT)) {
+                    event.setAmount(event.getAmount() * 0.5F);
+                }
             }
 
             if (event.getSource() == DamageSource.FALL) {
@@ -1716,9 +1740,11 @@ public class EnigmaticEvents {
     @SubscribeEvent
     public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
         EntityPlayer player = event.getEntityPlayer();
-        boolean flag = player.onGround && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1;
-        if (flag && !player.isSprinting() && SuperpositionHandler.canPerformanceSweeping(player) && !player.getCooldownTracker().hasCooldown(EnigmaticLegacy.thunderScroll)) {
-            EnigmaticLegacy.packetInstance.sendToServer(new PacketEmptyLeftClick(true));
+        if (allowAddonItems) {
+            boolean flag = player.onGround && BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.thunderScroll) != -1;
+            if (flag && !player.isSprinting() && SuperpositionHandler.canPerformanceSweeping(player) && !player.getCooldownTracker().hasCooldown(EnigmaticLegacy.thunderScroll)) {
+                EnigmaticLegacy.packetInstance.sendToServer(new PacketEmptyLeftClick(true));
+            }
         }
     }
 
@@ -1838,33 +1864,34 @@ public class EnigmaticEvents {
             players.forEach(player -> Quote.WITH_DRAGONS.playOnceIfUnlocked(player, 140));
         }
 
+        if (allowAddonItems) {
+            EntityLivingBase entity = event.getEntityLiving();
+            NBTTagCompound data = entity.getEntityData();
+            // CosmicPotion
+            int cooldown = data.getInteger("CosmicPotion");
 
-        EntityLivingBase entity = event.getEntityLiving();
-        NBTTagCompound data = entity.getEntityData();
-        // CosmicPotion
-        int cooldown = data.getInteger("CosmicPotion");
+            // Counter of Lightning
+            int electric = data.getInteger("Electric");
+            if (electric > 0) {
+                if (electric > 1200) {
+                    List<Entity> entities = event.getEntity().world.getEntitiesWithinAABB(Entity.class, entity.getEntityBoundingBox().grow(2.2));
+                    boolean flag = true;
+                    for (Entity target : entities) {
+                        if (target instanceof EntityPlayer && BaublesApi.isBaubleEquipped((EntityPlayer) target, EnigmaticLegacy.thunderScroll) != -1) {
+                            flag = false;
+                            break;
+                        }
 
-        // Counter of Lightning
-        int electric = data.getInteger("Electric");
-        if (electric > 0) {
-            if (electric > 1200) {
-                List<Entity> entities = event.getEntity().world.getEntitiesWithinAABB(Entity.class, entity.getEntityBoundingBox().grow(2.2));
-                boolean flag = true;
-                for (Entity target : entities) {
-                    if (target instanceof EntityPlayer && BaublesApi.isBaubleEquipped((EntityPlayer) target, EnigmaticLegacy.thunderScroll) != -1) {
-                        flag = false;
-                        break;
                     }
-
-                }
-                if (flag) {
-                    EntityHarmlessLightningBolt lightningbolt = new EntityHarmlessLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 5.0F * electric / 600.0F);
-                    lightningbolt.setSilent(entity.world.rand.nextBoolean());
-                    entity.world.spawnEntity(lightningbolt);
-                    data.setInteger("Electric", (electric - 1200) / 2 + 100);
-                }
-            } else data.setInteger("Electric", electric - 1);
-        } else data.removeTag("Electric");
+                    if (flag) {
+                        EntityHarmlessLightningBolt lightningbolt = new EntityHarmlessLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 5.0F * electric / 600.0F);
+                        lightningbolt.setSilent(entity.world.rand.nextBoolean());
+                        entity.world.spawnEntity(lightningbolt);
+                        data.setInteger("Electric", (electric - 1200) / 2 + 100);
+                    }
+                } else data.setInteger("Electric", electric - 1);
+            } else data.removeTag("Electric");
+        }
     }
 
     @SubscribeEvent

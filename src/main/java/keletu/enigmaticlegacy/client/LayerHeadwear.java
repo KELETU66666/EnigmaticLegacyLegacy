@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.client;
 
 import baubles.api.BaublesApi;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -49,10 +50,12 @@ public class LayerHeadwear extends LayerBauble {
     }
 
     private ModelBase setTexturesGetModel(EntityPlayer player) {
-        if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.halfHeartMask) != -1) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(OMINOUS_MASK);
+        if (EnigmaticConfigs.allowAddonItems) {
+            if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.halfHeartMask) != -1) {
+                Minecraft.getMinecraft().getTextureManager().bindTexture(OMINOUS_MASK);
 
-            return new ModelHeadBauble();
+                return new ModelHeadBauble();
+            }
         }
         return null;
     }

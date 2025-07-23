@@ -191,7 +191,8 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketCosmicRevive.Handler.class, PacketCosmicRevive.class, 10, Side.CLIENT);
-        packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 11, Side.SERVER);
+        if (EnigmaticConfigs.allowAddonItems)
+            packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 11, Side.SERVER);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -207,7 +208,8 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "special_drop"), EntityBlessedStone.class, "special_drop", 3, MODID, 80, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "harmless_lightning"), EntityHarmlessLightningBolt.class, "harmless_lightning", 4, MODID, 80, 3, true);
+        if (EnigmaticConfigs.allowAddonItems)
+            EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "harmless_lightning"), EntityHarmlessLightningBolt.class, "harmless_lightning", 4, MODID, 80, 3, true);
 
         MinecraftForge.EVENT_BUS.register(new LootHandler());
         for (Quote quote : Quote.getAllQuotes()) {
@@ -347,11 +349,13 @@ public class EnigmaticLegacy {
                 event.getRegistry().register(CompatBubbles.ichorBottle);
             }
 
-            event.getRegistry().register(blessedStone);
-            event.getRegistry().register(blessedRing);
-            event.getRegistry().register(halfHeartMask);
-            event.getRegistry().register(thunderScroll);
-            event.getRegistry().register(lostEngine);
+            if (EnigmaticConfigs.allowAddonItems) {
+                event.getRegistry().register(blessedStone);
+                event.getRegistry().register(blessedRing);
+                event.getRegistry().register(halfHeartMask);
+                event.getRegistry().register(thunderScroll);
+                event.getRegistry().register(lostEngine);
+            }
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -473,12 +477,15 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
 
-            ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
 
-            ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(lostEngine, 0, new ModelResourceLocation(lostEngine.getRegistryName(), "inventory"));
+            if (EnigmaticConfigs.allowAddonItems) {
+                ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
+
+                ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(lostEngine, 0, new ModelResourceLocation(lostEngine.getRegistryName(), "inventory"));
+            }
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));

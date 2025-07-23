@@ -9,11 +9,6 @@
           "type": "item",
           "name": "enigmaticlegacy:golem_heart",
           "weight": 25
-        },
-        {
-          "type": "item",
-          "name": "enigmaticlegacy:lost_engine",
-          "weight": 75
         }
       ]
     }
