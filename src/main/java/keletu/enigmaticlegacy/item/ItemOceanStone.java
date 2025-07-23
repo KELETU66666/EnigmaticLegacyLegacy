@@ -2,7 +2,8 @@ package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
-import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneSwimmingSpeedBoost;
+import static keletu.enigmaticlegacy.EnigmaticConfigs.oceanStoneUnderwaterCreaturesResistance;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
 import keletu.enigmaticlegacy.util.helper.ExperienceHelper;

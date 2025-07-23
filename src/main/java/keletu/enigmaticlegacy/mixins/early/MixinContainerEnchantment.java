@@ -51,59 +51,58 @@ public abstract class MixinContainerEnchantment extends Container {
         // so we need to forget our own class to avoid alerting the compiler
         ContainerEnchantment container = (ContainerEnchantment) (Object) this;
 
-        if (SuperpositionHandler.hasCursed(player))
-            if (SuperpositionHandler.hasPearl(player) || BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enchanterPearl) != -1) {
-                ItemStack itemstack = container.tableInventory.getStackInSlot(0);
-                int levelsRequired = clickedID + 1;
+        if (SuperpositionHandler.hasPearl(player) || BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.enchanterPearl) != -1) {
+            ItemStack itemstack = container.tableInventory.getStackInSlot(0);
+            int levelsRequired = clickedID + 1;
 
-                if (container.enchantLevels[clickedID] > 0 && !itemstack.isEmpty() && (player.experienceLevel >= clickedID && player.experienceLevel >= container.enchantLevels[clickedID] || player.capabilities.isCreativeMode)) {
-                    ItemStack enchantedItem = itemstack;
+            if (container.enchantLevels[clickedID] > 0 && !itemstack.isEmpty() && (player.experienceLevel >= clickedID && player.experienceLevel >= container.enchantLevels[clickedID] || player.capabilities.isCreativeMode)) {
+                ItemStack enchantedItem = itemstack;
 
-                    if (!this.world.isRemote) {
-                        List<EnchantmentData> list = getEnchantmentList(itemstack, clickedID, container.enchantLevels[clickedID]);
+                if (!this.world.isRemote) {
+                    List<EnchantmentData> list = getEnchantmentList(itemstack, clickedID, container.enchantLevels[clickedID]);
 
-                        if (!list.isEmpty()) {
-                            ItemStack doubleRoll = EnchantmentHelper.addRandomEnchantment(player.getRNG(), enchantedItem.copy(), Math.min(container.enchantLevels[clickedID] + 7, 40), true);
+                    if (!list.isEmpty()) {
+                        ItemStack doubleRoll = EnchantmentHelper.addRandomEnchantment(player.getRNG(), enchantedItem.copy(), Math.min(container.enchantLevels[clickedID] + 7, 40), true);
 
-                            player.onEnchant(itemstack, levelsRequired);
-                            boolean flag = itemstack.getItem() == Items.BOOK;
+                        player.onEnchant(itemstack, levelsRequired);
+                        boolean flag = itemstack.getItem() == Items.BOOK;
+
+                        if (flag) {
+                            enchantedItem = new ItemStack(Items.ENCHANTED_BOOK);
+                            container.tableInventory.setInventorySlotContents(0, enchantedItem);
+                        }
+
+                        for (int j = 0; j < list.size(); ++j) {
+                            EnchantmentData enchantmentdata = list.get(j);
 
                             if (flag) {
-                                enchantedItem = new ItemStack(Items.ENCHANTED_BOOK);
-                                container.tableInventory.setInventorySlotContents(0, enchantedItem);
+                                ItemEnchantedBook.addEnchantment(enchantedItem, enchantmentdata);
+                            } else {
+                                enchantedItem.addEnchantment(enchantmentdata.enchantment, enchantmentdata.enchantmentLevel);
                             }
-
-                            for (int j = 0; j < list.size(); ++j) {
-                                EnchantmentData enchantmentdata = list.get(j);
-
-                                if (flag) {
-                                    ItemEnchantedBook.addEnchantment(enchantedItem, enchantmentdata);
-                                } else {
-                                    enchantedItem.addEnchantment(enchantmentdata.enchantment, enchantmentdata.enchantmentLevel);
-                                }
-                            }
-
-                            enchantedItem = SuperpositionHandler.mergeEnchantments(enchantedItem, doubleRoll, false, false);
-                            container.tableInventory.setInventorySlotContents(0, enchantedItem);
-
-                            player.addStat(StatList.ITEM_ENCHANTED);
-
-                            if (player instanceof EntityPlayerMP) {
-                                CriteriaTriggers.ENCHANTED_ITEM.trigger((EntityPlayerMP) player, itemstack, levelsRequired);
-                            }
-
-                            container.tableInventory.markDirty();
-                            container.xpSeed = player.getXPSeed();
-                            this.onCraftMatrixChanged(container.tableInventory);
-                            this.world.playSound(null, this.position, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
                         }
-                    }
 
-                    info.setReturnValue(true);
-                } else {
-                    info.setReturnValue(false);
+                        enchantedItem = SuperpositionHandler.mergeEnchantments(enchantedItem, doubleRoll, false, false);
+                        container.tableInventory.setInventorySlotContents(0, enchantedItem);
+
+                        player.addStat(StatList.ITEM_ENCHANTED);
+
+                        if (player instanceof EntityPlayerMP) {
+                            CriteriaTriggers.ENCHANTED_ITEM.trigger((EntityPlayerMP) player, itemstack, levelsRequired);
+                        }
+
+                        container.tableInventory.markDirty();
+                        container.xpSeed = player.getXPSeed();
+                        this.onCraftMatrixChanged(container.tableInventory);
+                        this.world.playSound(null, this.position, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+                    }
                 }
+
+                info.setReturnValue(true);
+            } else {
+                info.setReturnValue(false);
             }
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -123,10 +122,9 @@ public abstract class MixinContainerEnchantment extends Container {
         }
 
         if (containerUser != null) {
-            if (SuperpositionHandler.hasCursed(containerUser))
-                if (SuperpositionHandler.hasPearl(containerUser) || BaublesApi.isBaubleEquipped(containerUser, EnigmaticLegacy.enchanterPearl) != -1) {
-                    info.setReturnValue(64);
-                }
+            if (SuperpositionHandler.hasPearl(containerUser) || BaublesApi.isBaubleEquipped(containerUser, EnigmaticLegacy.enchanterPearl) != -1) {
+                info.setReturnValue(64);
+            }
         }
     }
 

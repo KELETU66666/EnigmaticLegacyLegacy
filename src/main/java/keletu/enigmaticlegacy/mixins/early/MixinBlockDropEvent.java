@@ -1,7 +1,7 @@
 package keletu.enigmaticlegacy.mixins.early;
 
-import keletu.enigmaticlegacy.EnigmaticConfigs;
-import static keletu.enigmaticlegacy.event.SuperpositionHandler.*;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.getBaubleSlots;
+import static keletu.enigmaticlegacy.event.SuperpositionHandler.getSlotBauble;
 import keletu.enigmaticlegacy.util.interfaces.IFortuneBonus;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

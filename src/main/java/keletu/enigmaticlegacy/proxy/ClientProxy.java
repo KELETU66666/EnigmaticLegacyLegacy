@@ -1,12 +1,16 @@
 package keletu.enigmaticlegacy.proxy;
 
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.client.LayerAmulet;
 import keletu.enigmaticlegacy.client.LayerCharm;
+import keletu.enigmaticlegacy.client.LayerHeadwear;
+import keletu.enigmaticlegacy.entity.EntityHarmlessLightningBolt;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderLightningBolt;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,6 +57,11 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    public void renderEntities() {
+        if (EnigmaticConfigs.allowAddonItems)
+            RenderingRegistry.registerEntityRenderingHandler(EntityHarmlessLightningBolt.class, new RenderLightningBolt(Minecraft.getMinecraft().getRenderManager()));
+    }
+
     public static void addRenderLayers() {
         Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
 
@@ -63,6 +73,7 @@ public class ClientProxy extends CommonProxy {
         //renderPlayer.addLayer(new LayerDrinkingHat(renderPlayer));
         renderPlayer.addLayer(new LayerAmulet(renderPlayer));
         renderPlayer.addLayer(new LayerCharm(renderPlayer));
+        renderPlayer.addLayer(new LayerHeadwear(renderPlayer));
         //renderPlayer.addLayer(new LayerBelt(renderPlayer));
         //renderPlayer.addLayer(new LayerCloak(renderPlayer));
         //renderPlayer.addLayer(new LayerNightVisionGoggles(renderPlayer));

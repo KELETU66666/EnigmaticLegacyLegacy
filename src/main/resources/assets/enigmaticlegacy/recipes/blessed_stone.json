@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xhx",
+    "sSs",
+    "xsx"
+  ],
+  "key": {
+    "S": {
+      "item": "enigmaticlegacy:cursed_stone"
+    },
+    "s": {
+      "item": "enigmaticlegacy:twisted_core"
+    },
+    "h": {
+      "item": "enigmaticlegacy:cosmic_heart"
+    },
+    "x": {
+      "item": "enigmaticlegacy:astral_dust"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:blessed_stone"
+  }
+}

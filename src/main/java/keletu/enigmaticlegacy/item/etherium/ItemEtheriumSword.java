@@ -31,10 +31,15 @@ public class ItemEtheriumSword extends ItemSword implements IEtheriumTool {
 
         this.setCreativeTab(EnigmaticLegacy.tabEnigmaticLegacy);
     }
-    
+
     @Override
     public EnumRarity getRarity(ItemStack itemstack) {
         return EnumRarity.EPIC;
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return super.getIsRepairable(toRepair, repair) || repair.getItem() == EnigmaticLegacy.etheriumIngot;
     }
 
     @Override

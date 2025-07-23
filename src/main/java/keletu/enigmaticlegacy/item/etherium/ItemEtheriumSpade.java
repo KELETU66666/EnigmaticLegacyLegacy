@@ -49,6 +49,11 @@ public class ItemEtheriumSpade extends ItemSpade implements IEtheriumTool {
     }
 
     @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return super.getIsRepairable(toRepair, repair) || repair.getItem() == EnigmaticLegacy.etheriumIngot;
+    }
+
+    @Override
     @Nullable
     public Entity createEntity(World world, Entity location, ItemStack stack) {
         EntityItemIndestructible item = new EntityItemIndestructible(world, location.posX, location.posY, location.posZ, stack);

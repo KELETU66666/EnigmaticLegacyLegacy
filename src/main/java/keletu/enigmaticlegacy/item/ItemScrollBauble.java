@@ -30,6 +30,6 @@ public class ItemScrollBauble extends ItemBaseBauble implements IScroll {
             }
         }
 
-        return super.canEquip(itemstack, player);
+        return true;
     }
 }

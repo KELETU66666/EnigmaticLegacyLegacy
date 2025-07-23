@@ -93,6 +93,7 @@ public class ItemMiningCharm extends ItemBaseBauble implements IFortuneBonus {
         }
     }
 
+    @Override
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
         attributes.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(UUID.fromString("08c3c83d-7137-4b42-880f-b146bcb64dde"), "Reach bonus", EnigmaticConfigs.reachDistanceBonus, 0).setSaved(false));
     }

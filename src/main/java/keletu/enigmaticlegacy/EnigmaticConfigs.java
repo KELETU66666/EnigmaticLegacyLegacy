@@ -133,8 +133,27 @@ public class EnigmaticConfigs {
 
     public static double flyingScrollXpCostModifier;
 
+
+    //Additions
+
+    public static boolean allowAddonItems;
+    public static float blessedOneDamageResistance;
+    public static float blessedOneDamageBoost;
+    public static int blessedOneRegenerationSpeed;
+    public static final List<ResourceLocation> blessedItemList = new ArrayList<>();
+
+    public static final List<ResourceLocation> golemList = new ArrayList<>();
+    public static float lostEngineCritModifier;
+    public static double lostEngineToughnessModifier;
+    public static double lostEngineKRModifier;
+    public static double lostEngineSpeedModifier;
+    public static double lostEngineGravityModifier;
+    public static double lostEngineVulnerabilityModifier;
+
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
+
+        allowAddonItems = config.getBoolean("AllowAddonItems", "Generic Config", true, "If true, the game will add some items from enigmatic addons.");
 
         spawnWithBook = config.getBoolean("SpawnWithBook", "Generic Config", true, "If true, When player entering a new world will give the acknowledgment guidebook");
 
@@ -359,6 +378,14 @@ public class EnigmaticConfigs {
         bloodLustTicksPerLevel = config.getInt("TicksPerLevel", "Growing BloodLust", 300, 0, 20000, "How lock the The Voracious Pan needs to be held, in ticks, to increase the strength "
                 + "of the Growing Bloodlust effect by one level.");
 
+        lostEngineCritModifier = config.getFloat("CritDamageModifier", "Lost Engine", 0.6F, 0, 1, "The crit damage modifier of the Lost Engine.");
+        lostEngineToughnessModifier = config.getFloat("ToughnessModifier", "Lost Engine", 4.0F, 0.0F, 256.0F, "The Armor Toughness modifier of the Lost Engine.");
+        lostEngineKRModifier = config.getFloat("KnockbackResistanceModifier", "Lost Engine", 0.2F, 0.0F, 256.0F, "The Knockback resistance modifier of the Lost Engine.");
+        lostEngineSpeedModifier = config.getFloat("SpeedModifier", "Lost Engine", 0.1F, 0.0F, 1.0F, "The speed multiplier of the Lost Engine.");
+        lostEngineGravityModifier = config.getFloat("GravityModifier", "Lost Engine", 0.4F, 0.0F, 1.0F, "The gravity multiplier of the Lost Engine.");
+        lostEngineVulnerabilityModifier = config.getFloat("VulnerabilityModifier", "Lost Engine", 2.5F, 0.0F, 256.0F, "Modifier for Magic Damage vulnerability applied by Lost Engine. Default value of 2.0 means that player will receive twice as much damage from magic.");
+
+
         neutralAngerBlacklist.clear();
         String[] blacklist = config.getStringList("CursedRingNeutralAngerBlacklist", "The Seven Curses", new String[]{"minecraft:ocelot", "minecraft:snowman", "lycanitesmobs:arisaur", "lycanitesmobs:aspid", "lycanitesmobs:aegis", "lycanitesmobs:nymph", "lycanitesmobs:silex", "lycanitesmobs:yale", "lycanitesmobs:bobeko", "lycanitesmobs:maka"}, "List of entities that should never be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf. Changing this option required game restart to take effect.");
@@ -366,13 +393,13 @@ public class EnigmaticConfigs {
         Arrays.stream(blacklist).forEach(entry -> neutralAngerBlacklist.add(new ResourceLocation(entry)));
 
         neutralAngerWhitelist.clear();
-        String[] whitelist = config.getStringList("CursedRingNeutralAngerWhiteList", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem", "minecraft:zombie_pigman", "minecraft:enderman"}, "List of entities that should be affected"
+        String[] whitelist = config.getStringList("CursedRingNeutralAngerWhiteList", "The Seven Curses", new String[]{"minecraft:wolf", "minecraft:villager_golem", "minecraft:spider", "minecraft:cave_spider", "minecraft:zombie_pigman", "minecraft:enderman"}, "List of entities that should be affected"
                 + " by the Second Curse of Ring of the Seven Curses. Examples: minecraft:villager_golem, minecraft:wolf, minecraft:zombie_pigman. Changing this option required game restart to take effect. Need enable 'enableWhitelist' to work.");
 
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticlegacy:half_heart_mask", "enigmaticlegacy:thunder_scroll"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
@@ -389,6 +416,21 @@ public class EnigmaticConfigs {
 
         Arrays.stream(desolation).forEach(entry -> desolationRingExtraMonstersList.add(new ResourceLocation(entry)));
 
+
+        blessedOneDamageResistance = config.getFloat("BlessedOneDamageResistance", "Additions", 0.25F, 0, 1, "The damage resistance of the Ring of Redemption. Measured in percentage.");
+        blessedOneDamageBoost = config.getFloat("blessedOneDamageBoost", "Additions", 0.20F, 0, 5, "The damage boost of the Ring of Redemption. Measured in percentage.");
+        blessedOneRegenerationSpeed = config.getInt("blessedOneRegenerationSpeed", "Additions", 20, 5, 1000, "The time required for each regeneration of Ring of Redemption. Measured in ticks.");
+
+        blessedItemList.clear();
+        String[] blessed = config.getStringList("ItemBeBlessed", "Additions", new String[]{"enigmaticlegacy:astral_fruit", "enigmaticlegacy:twisted_mirror", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:guardian_heart", "enigmaticlegacy:twisted_core", "enigmaticlegacy:curse_transposer", "enigmaticaddons:night_scroll", "enigmaticaddons:sanguinary_handbook", "enigmaticaddons:earth_promise", "enigmaticlegacy:thunder_scroll", "enigmaticaddons:pure_heart", "enigmaticaddons:bless_amplifier", "wnigmaticaddons:scorched_charm"}, "List of items needs ware ring to use"
+                + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
+
+        Arrays.stream(blessed).forEach(entry -> blessedItemList.add(new ResourceLocation(entry)));
+
+        golemList.clear();
+        String[] golems = config.getStringList("LostEngineExtraGolemList", "Additions", new String[0], "List of entities that will be affected as Golem by the Lost Engine. Examples: minecraft:iron_golem. Changing this option required game restart to take effect.");
+
+        Arrays.stream(golems).forEach(entry -> golemList.add(new ResourceLocation(entry)));
 
         config.save();
     }

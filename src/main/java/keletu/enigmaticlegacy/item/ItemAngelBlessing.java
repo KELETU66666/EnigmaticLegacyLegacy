@@ -4,7 +4,6 @@ import com.google.common.collect.Multimap;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
-import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.packet.PacketForceArrowRotations;
 import keletu.enigmaticlegacy.packet.PacketPlayerMotion;
 import keletu.enigmaticlegacy.util.Vector3;

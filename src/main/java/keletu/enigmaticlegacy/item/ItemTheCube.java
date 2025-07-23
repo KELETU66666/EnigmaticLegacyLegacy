@@ -230,7 +230,7 @@ public class ItemTheCube extends ItemSpellstoneBauble implements IFortuneBonus {
 
         return item;
     }
-    
+
     @Override
     public void triggerActiveAbility(World world, EntityPlayerMP player, ItemStack stack) {
         if (IForbiddenConsumed.get(player).getSpellstoneCooldown() > 0)

@@ -2,6 +2,7 @@ package keletu.enigmaticlegacy.event;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.event.SuperpositionHandler.getPersistentBoolean;
 import keletu.enigmaticlegacy.item.ItemCursedRing;
 import keletu.enigmaticlegacy.util.interfaces.IKeptBauble;
@@ -80,7 +81,16 @@ public class KeepBaublesEvent {
                 ItemStack stack = baublesMap.get(player.getUniqueID()).get(i);
                 int slot = slotMap.get(player.getUniqueID()).get(i);
 
-                if (!EnigmaticEvents.dropCursedStone) {
+                if (EnigmaticEvents.dropBlessedStone) {
+                    IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+                    if (stack.getItem() == EnigmaticLegacy.cursedRing)
+                        handler.setStackInSlot(slot, new ItemStack(EnigmaticLegacy.blessedRing));
+                    else if (stack.getItem() == EnigmaticLegacy.desolationRing)
+                        handler.setStackInSlot(slot, ItemStack.EMPTY);
+                    else
+                        handler.setStackInSlot(slot, stack);
+                    EnigmaticEvents.dropBlessedStone = false;
+                } else if (!EnigmaticEvents.dropCursedStone) {
                     IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
                     handler.setStackInSlot(slot, stack);
                 } else {

@@ -13,7 +13,9 @@
     "early.MixinEnterBlockTrigger",
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
-    "early.MixinSummonedEntityTrigger"
+    "early.mixinStupidLogger",
+    "early.MixinSummonedEntityTrigger",
+    "early.MixinEntityAIAvoidEntity"
   ],
   "injectors": {
     "maxShiftBy": 10

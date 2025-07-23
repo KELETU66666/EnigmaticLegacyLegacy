@@ -8,10 +8,7 @@ import keletu.enigmaticlegacy.command.CommandSetNoRingTime;
 import keletu.enigmaticlegacy.effect.BlazingStrengthEffect;
 import keletu.enigmaticlegacy.effect.GrowingBloodlustEffect;
 import keletu.enigmaticlegacy.effect.GrowingHungerEffect;
-import keletu.enigmaticlegacy.entity.EntityItemImportant;
-import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
-import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
-import keletu.enigmaticlegacy.entity.RenderEntitySoulCrystal;
+import keletu.enigmaticlegacy.entity.*;
 import keletu.enigmaticlegacy.event.EnigmaticEvents;
 import keletu.enigmaticlegacy.event.EventHandlerEntity;
 import keletu.enigmaticlegacy.item.*;
@@ -24,13 +21,12 @@ import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
+import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
+import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_BUBBLES;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
-import keletu.enigmaticlegacy.util.loot.LoggerWrapper;
-import keletu.enigmaticlegacy.util.loot.LootHandler;
-import keletu.enigmaticlegacy.util.loot.LootHandlerOptional;
-import keletu.enigmaticlegacy.util.loot.LootHandlerForgottenRelics;
+import keletu.enigmaticlegacy.util.loot.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -75,7 +71,7 @@ public class EnigmaticLegacy {
 
     public static final String MODID = "enigmaticlegacy";
     public static final String MOD_NAME = "Enigmatic Legacy²";
-    public static final String VERSION = "1.4.8";
+    public static final String VERSION = "2.1.0";
 
     @SidedProxy(clientSide = "keletu.enigmaticlegacy.proxy.ClientProxy", serverSide = "keletu.enigmaticlegacy.proxy.CommonProxy")
     public static CommonProxy proxy;
@@ -118,6 +114,7 @@ public class EnigmaticLegacy {
     public static Item angelBlessing = new ItemAngelBlessing();
     public static Item blazingCore = new ItemMagmaHeart();
     public static Item eyeOfNebula = new ItemEyeOfNebula();
+    public static ItemTheCube the_cube = new ItemTheCube();
     public static ItemHeavenScroll heavenScroll = new ItemHeavenScroll("heaven_scroll", EnumRarity.EPIC);
     public static Item fabulousScroll = new ItemFabulousScroll();
 
@@ -158,13 +155,18 @@ public class EnigmaticLegacy {
     //public static ItemSoulCompass soulCompass = new ItemSoulCompass();
     public static ItemEldritchAmulet eldritchAmulet = new ItemEldritchAmulet();
     public static Item voidPearl = new ItemVoidPearl();
-    public static ItemTheCube the_cube = new ItemTheCube();
     public static Item desolationRing = new ItemDesolationRing();
     public static Item extraDimensionalEye = new ItemExtradimensionalEye();
     public static Item forbiddenFruit = new ItemForbiddenFruit();
     public static Item unholyGrail = new ItemUnholyGrail();
     public static Item redemptionPotion = new ItemRedemptionPotion();
 
+    //Additions
+    public static Item blessedStone = new ItemBlessStone();
+    public static Item blessedRing = new ItemBlessRing();
+    public static Item halfHeartMask = new ItemHalfHeartMask();
+    public static Item thunderScroll = new ItemThunderScroll();
+    public static Item lostEngine = new ItemLostEngine();
 
     public static SimpleNetworkWrapper packetInstance;
     public static Potion blazingStrengthEffect = new BlazingStrengthEffect();
@@ -189,6 +191,8 @@ public class EnigmaticLegacy {
         packetInstance.registerMessage(PacketPlayerMotion.Handler.class, PacketPlayerMotion.class, 8, Side.CLIENT);
         packetInstance.registerMessage(PacketPlayerSetlook.Handler.class, PacketPlayerSetlook.class, 9, Side.CLIENT);
         packetInstance.registerMessage(PacketCosmicRevive.Handler.class, PacketCosmicRevive.class, 10, Side.CLIENT);
+        if (EnigmaticConfigs.allowAddonItems)
+            packetInstance.registerMessage(PacketEmptyLeftClick.Handler.class, PacketEmptyLeftClick.class, 11, Side.SERVER);
         packetInstance.registerMessage(PacketPlayQuote.Handler.class, PacketPlayQuote.class, 29, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
@@ -203,6 +207,10 @@ public class EnigmaticLegacy {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "soul_crystal"), EntityItemSoulCrystal.class, "soul_crystal", 0, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "permanent_item"), EntityItemIndestructible.class, "permanent_item", 1, MODID, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "important_item"), EntityItemImportant.class, "important_item", 2, MODID, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "special_drop"), EntityBlessedStone.class, "special_drop", 3, MODID, 80, 3, true);
+        if (EnigmaticConfigs.allowAddonItems)
+            EntityRegistry.registerModEntity(new ResourceLocation(MODID + ":" + "harmless_lightning"), EntityHarmlessLightningBolt.class, "harmless_lightning", 4, MODID, 80, 3, true);
+
         MinecraftForge.EVENT_BUS.register(new LootHandler());
         for (Quote quote : Quote.getAllQuotes()) {
             ForgeRegistries.SOUND_EVENTS.register(quote.getSound());
@@ -213,6 +221,9 @@ public class EnigmaticLegacy {
         else
             MinecraftForge.EVENT_BUS.register(new LootHandlerForgottenRelics());
 
+        if (COMPAT_BUBBLES)
+            MinecraftForge.EVENT_BUS.register(SpecialLootModifierEndCity.class);
+
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new LayerScroll());
@@ -220,6 +231,8 @@ public class EnigmaticLegacy {
             ClientProxy.addRenderLayers();
         }
         GameRegistry.addSmelting(etheriumOre, new ItemStack(etheriumIngot, 1), 8.0f);
+
+        proxy.renderEntities();
     }
 
     @Mod.EventHandler
@@ -251,7 +264,6 @@ public class EnigmaticLegacy {
         soulCrystal.attributeDispatcher.clear();
         //enigmaticItem.flightMap.clear();
         heavenScroll.flyMap.clear();
-        EnigmaticLegacy.the_cube.clearLocationCache();
         //RegisteredMeleeAttack.clearRegistry();
     }
 
@@ -331,6 +343,19 @@ public class EnigmaticLegacy {
             event.getRegistry().register(desolationRing);
             event.getRegistry().register(eldritchAmulet);
             event.getRegistry().register(redemptionPotion);
+
+            if (ModCompat.COMPAT_BUBBLES) {
+                event.getRegistry().register(CompatBubbles.astralFruit);
+                event.getRegistry().register(CompatBubbles.ichorBottle);
+            }
+
+            if (EnigmaticConfigs.allowAddonItems) {
+                event.getRegistry().register(blessedStone);
+                event.getRegistry().register(blessedRing);
+                event.getRegistry().register(halfHeartMask);
+                event.getRegistry().register(thunderScroll);
+                event.getRegistry().register(lostEngine);
+            }
 
             event.getRegistry().register(new ItemBlock(astralBlock).setRegistryName("astral_block"));
             event.getRegistry().register(new ItemBlock(etheriumBlock).setRegistryName("etherium_block"));
@@ -435,6 +460,12 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(voidPearl, 0, new ModelResourceLocation(voidPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
+
+            if (ModCompat.COMPAT_BUBBLES) {
+                ModelLoader.setCustomModelResourceLocation(CompatBubbles.astralFruit, 0, new ModelResourceLocation(CompatBubbles.astralFruit.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(CompatBubbles.ichorBottle, 0, new ModelResourceLocation(CompatBubbles.ichorBottle.getRegistryName(), "inventory"));
+            }
+
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(blazingCore, 0, new ModelResourceLocation(blazingCore.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(forbiddenFruit, 0, new ModelResourceLocation(forbiddenFruit.getRegistryName(), "inventory"));
@@ -445,6 +476,16 @@ public class EnigmaticLegacy {
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(astralBlock.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(etheriumBlock.getRegistryName(), "inventory"));
+
+
+            if (EnigmaticConfigs.allowAddonItems) {
+                ModelLoader.setCustomModelResourceLocation(blessedStone, 0, new ModelResourceLocation(blessedStone.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(blessedRing, 0, new ModelResourceLocation(blessedRing.getRegistryName(), "inventory"));
+
+                ModelLoader.setCustomModelResourceLocation(halfHeartMask, 0, new ModelResourceLocation(halfHeartMask.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(thunderScroll, 0, new ModelResourceLocation(thunderScroll.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(lostEngine, 0, new ModelResourceLocation(lostEngine.getRegistryName(), "inventory"));
+            }
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(astralBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(astralBlock).getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(etheriumBlock), 0, new ModelResourceLocation(Item.getItemFromBlock(etheriumBlock).getRegistryName(), "inventory"));

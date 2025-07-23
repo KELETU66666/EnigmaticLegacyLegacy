@@ -5,8 +5,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.cursedRing;
-import static keletu.enigmaticlegacy.EnigmaticLegacy.enchanterPearl;
+import static keletu.enigmaticlegacy.EnigmaticLegacy.*;
 import keletu.enigmaticlegacy.api.cap.IPlaytimeCounter;
 import keletu.enigmaticlegacy.api.quack.IProperShieldUser;
 import keletu.enigmaticlegacy.entity.EntityItemSoulCrystal;
@@ -32,14 +31,10 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemEnchantedBook;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -166,9 +161,7 @@ public class SuperpositionHandler {
         for (int distance = 1; entities.size() == 0 && distance < maxDist; ++distance) {
             target = target.add(new Vector3(player.getLookVec()).multiply(distance)).add(0.0, 0.5, 0.0);
             entities = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(target.x - range, target.y - range, target.z - range, target.x + range, target.y + range, target.z + range));
-            if (entities.contains(player)) {
-                entities.remove(player);
-            }
+            entities.remove(player);
         }
         if (entities.size() > 0) {
             newTarget = entities.get(0);
@@ -591,6 +584,21 @@ public class SuperpositionHandler {
         return count;
     }
 
+    public static boolean canPerformanceSweeping(EntityPlayer player) {
+        double d0 = player.distanceWalkedModified - player.prevDistanceWalkedModified;
+        boolean flag2 = player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
+        float f2 = player.getCooledAttackStrength(0.5F);
+        boolean flag = f2 > 0.9F;
+
+        if (!player.isSprinting() && !flag2 && !flag && player.onGround && d0 < (double) player.getAIMoveSpeed()) {
+            ItemStack itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
+
+            return itemstack.getItem() instanceof ItemSword;
+        }
+
+        return false;
+    }
+
     public static List<ItemStack> getFullEquipment(EntityPlayer player) {
         List<ItemStack> equipmentStacks = Lists.newArrayList();
 
@@ -609,12 +617,23 @@ public class SuperpositionHandler {
         }
 
         boolean lol = false;
-        if(KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())){
+        if (KeepBaublesEvent.cursedPlayers.contains(player.getUniqueID())) {
             lol = true;
             KeepBaublesEvent.cursedPlayers.remove(player.getUniqueID());
         }
 
         return EnigmaticLegacy.soulCrystal.getLostCrystals(player) < EnigmaticConfigs.heartLoss && lol;
+    }
+
+    public static void loseSoul(EntityPlayer player) {
+        if (hasCursed(player)) {
+            if (player instanceof EntityPlayerMP && shouldPlayerDropSoulCrystal(player)) {
+                ItemStack soulCrystal = EnigmaticLegacy.soulCrystal.createCrystalFrom(player);
+                EntityItemSoulCrystal droppedSoulCrystal = new EntityItemSoulCrystal(player.world, player.posX, player.posY + 1.5, player.posZ, soulCrystal);
+                droppedSoulCrystal.setOwnerId(player.getUniqueID());
+                player.world.spawnEntity(droppedSoulCrystal);
+            }
+        }
     }
 
     /**
@@ -667,14 +686,20 @@ public class SuperpositionHandler {
             return;
 
         if ((!hasCursed(player) && isCursed(stack)) || (!isTheWorthyOne(player) && isEldritch(stack))) {
-            event.setCanceled(true);
-            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+            if (!(hasBlessed(player) && isBlessed(stack))) {
+                event.setCanceled(true);
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5F);
+            }
 
         }
     }
 
     public static void enforce(PlayerInteractEvent event) {
         genericEnforce(event, event.getEntityPlayer(), event.getItemStack());
+    }
+
+    public static boolean isBlessed(ItemStack stack) {
+        return EnigmaticConfigs.blessedItemList.contains(stack.getItem().getRegistryName());
     }
 
     public static boolean isCursed(ItemStack stack) {
@@ -685,12 +710,19 @@ public class SuperpositionHandler {
         return EnigmaticConfigs.eldritchItemList.contains(stack.getItem().getRegistryName());
     }
 
+    public static boolean hasBlessed(EntityPlayer player) {
+        if (!EnigmaticConfigs.allowAddonItems)
+            return false;
+        else
+            return BaublesApi.isBaubleEquipped(player, blessedRing) != -1;
+    }
+
     public static boolean hasCursed(EntityPlayer player) {
         return BaublesApi.isBaubleEquipped(player, cursedRing) != -1;
     }
 
     public static boolean hasPearl(EntityPlayer player) {
-        return hasCursed(player) && player.inventory.hasItemStack(new ItemStack(enchanterPearl));
+        return (hasBlessed(player) || hasCursed(player)) && player.inventory.hasItemStack(new ItemStack(enchanterPearl));
     }
 
     public static boolean hasEnderRing(EntityPlayer player) {
@@ -827,7 +859,6 @@ public class SuperpositionHandler {
         return pointedEntity;
     }
 
-
     /**
      * Merges enchantments from mergeFrom onto input ItemStack, with exact same
      * rules as vanilla Anvil when used in Survival Mode.
@@ -876,5 +907,64 @@ public class SuperpositionHandler {
 
         EnchantmentHelper.setEnchantments(inputEnchants, returnedStack);
         return returnedStack;
+    }
+
+    public static double getX(Entity ett, double var1) {
+        return ett.posX + (double) ett.width * var1;
+    }
+
+    public static double getRandomX(Entity ett, double var1) {
+        return getX(ett, (2.0D * ett.world.rand.nextDouble() - 1.0D) * var1);
+    }
+
+    public static double getZ(Entity ett, double var1) {
+        return ett.posZ + (double) ett.width * var1;
+    }
+
+    public static double getRandomZ(Entity ett, double var1) {
+        return getZ(ett, (2.0D * ett.world.rand.nextDouble() - 1.0D) * var1);
+    }
+
+    public static float nextFloatFromHigher(Random rand, float bound) {
+        checkBound(bound);
+
+        return boundedNextFloat(rand, bound);
+    }
+
+    public static float boundedNextFloat(Random rng, float bound) {
+        // Specialize boundedNextFloat for origin == 0, bound > 0
+        float r = rng.nextFloat();
+        r = r * bound;
+        if (r >= bound) // may need to correct a rounding problem
+            r = Float.intBitsToFloat(Float.floatToIntBits(bound) - 1);
+        return r;
+    }
+
+    public static void checkBound(float bound) {
+        if (!(bound > 0.0 && bound < Float.POSITIVE_INFINITY)) {
+            throw new IllegalArgumentException("error!");
+        }
+    }
+
+    //From Raids Backport mod
+    //Author:SmileycorpMC
+    //Under LGPL-2.1 license
+    public static ItemStack ominousBanner() {
+        NBTTagList patterns = new NBTTagList();
+        String[] shapes = {"mr", "bs", "cs", "ms", "hh", "mc", "bo"};
+        int[] colours = {6, 7, 8, 0, 7, 7, 0};
+        for (int i = 0; i < shapes.length; i++) {
+            NBTTagCompound pattern = new NBTTagCompound();
+            pattern.setString("Pattern", shapes[i]);
+            pattern.setInteger("Color", colours[i]);
+            patterns.appendTag(pattern);
+        }
+        ItemStack banner = ItemBanner.makeBanner(EnumDyeColor.WHITE, patterns);
+        banner.getTagCompound().setInteger("HideFlags", 32);
+        return banner;
+    }
+
+    public static boolean isBaubleEquipped(EntityPlayer player, Item item) {
+        return BaublesApi.isBaubleEquipped(player, item) != -1;
     }
 }
