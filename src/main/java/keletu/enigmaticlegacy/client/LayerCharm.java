@@ -2,12 +2,9 @@ package keletu.enigmaticlegacy.client;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.item.ItemBerserkEmblem;
-import keletu.enigmaticlegacy.item.ItemEnigmaticEye;
-import keletu.enigmaticlegacy.item.ItemMiningCharm;
-import keletu.enigmaticlegacy.item.ItemMonsterCharm;
+import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -56,21 +53,13 @@ public class LayerCharm extends LayerBauble {
         return stack.getTagCompound() == null || !stack.getTagCompound().getBoolean("phantom_thread_invisible");
     }
 
-    public static int LayerCharmItems(BaubleType type, EntityPlayer player) {
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            if (baubles.getSlotType(i) != type) continue;
-            ItemStack stack = baubles.getStackInSlot(i);
-            if (stack.getItem() instanceof ItemMonsterCharm) return i;
-            if (stack.getItem() instanceof ItemMiningCharm) return i;
-            if (stack.getItem() instanceof ItemBerserkEmblem) return i;
-            if (stack.getItem() instanceof ItemEnigmaticEye) return i;
-        }
-        return -1;
-    }
 
     private ModelBase setTexturesGetModel(EntityPlayer player) {
-        ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(LayerCharmItems(BaubleType.CHARM, player));
+        ItemStack stack;
+        if (ModCompat.COMPAT_BUBBLES)
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBubbles.LayerCharmItems(BaubleType.CHARM, player));
+        else
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.CHARM.getValidSlots()[0]);
         if (BaublesApi.isBaubleEquipped(player, stack.getItem()) == -1) return null;
         ResourceLocation textures = getTextures(stack);
         if (textures != null) {

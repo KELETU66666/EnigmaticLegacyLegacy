@@ -24,6 +24,7 @@ import keletu.enigmaticlegacy.packet.PacketEmptyLeftClick;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.Quote;
+import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import keletu.enigmaticlegacy.util.helper.RenderHelper;
@@ -1913,10 +1914,14 @@ public class EnigmaticEvents {
             if (ultraHardcore) {
                 {
                     IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
-                    if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(BaubleType.RING.getValidSlots()[0]) == ItemStack.EMPTY)
-                        baubles.setStackInSlot(BaubleType.RING.getValidSlots()[0], new ItemStack(cursedRing));
-                    else
-                        ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
+                    if (ModCompat.COMPAT_BUBBLES) {
+                        CompatBubbles.insetBubblesRing(event.player);
+                    } else {
+                        if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(BaubleType.RING.getValidSlots()[0]) == ItemStack.EMPTY)
+                            baubles.setStackInSlot(BaubleType.RING.getValidSlots()[0], new ItemStack(cursedRing));
+                        else
+                            ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
+                    }
                 }
             } else {
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));

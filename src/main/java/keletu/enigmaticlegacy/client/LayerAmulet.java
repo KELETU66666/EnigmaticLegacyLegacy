@@ -2,11 +2,9 @@ package keletu.enigmaticlegacy.client;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.item.ItemAscensionAmulet;
-import keletu.enigmaticlegacy.item.ItemEldritchAmulet;
-import keletu.enigmaticlegacy.item.ItemEnigmaticAmulet;
+import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -55,20 +53,13 @@ public class LayerAmulet extends LayerBauble {
         return stack.getTagCompound() == null || !stack.getTagCompound().getBoolean("phantom_thread_invisible");
     }
 
-    public static int LayerAmuletItems(BaubleType type, EntityPlayer player) {
-        IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-        for (int i = 0; i < baubles.getSlots(); i++) {
-            if (baubles.getSlotType(i) != type) continue;
-            ItemStack stack = baubles.getStackInSlot(i);
-            if (stack.getItem() instanceof ItemEnigmaticAmulet) return i;
-            if (stack.getItem() instanceof ItemEldritchAmulet) return i;
-            if (stack.getItem() instanceof ItemAscensionAmulet) return i;
-        }
-        return -1;
-    }
-
     private ModelBase setTexturesGetModel(EntityPlayer player) {
-        ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(LayerAmuletItems(BaubleType.AMULET, player));
+        ItemStack stack;
+        if (ModCompat.COMPAT_BUBBLES)
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBubbles.LayerAmuletItems(BaubleType.AMULET, player));
+        else
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.AMULET.getValidSlots()[0]);
+
         if (BaublesApi.isBaubleEquipped(player, stack.getItem()) == -1) return null;
         ResourceLocation textures = getTextures(stack);
         if (textures != null) {
