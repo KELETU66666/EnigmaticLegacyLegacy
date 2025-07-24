@@ -2,12 +2,9 @@ package keletu.enigmaticlegacy.item;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
-import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -39,21 +36,7 @@ public class ItemEnchanterPearl extends ItemBaseFireProof implements IBauble {
 	}
 
 	@Override
-	public void onEquipped(ItemStack stack, EntityLivingBase player) {
-		if(ModCompat.COMPAT_BUBBLES){
-			CompatBubbles.onEquippedBubbles(stack, player);
-		}
-	}
-
-	@Override
-	public void onUnequipped(ItemStack stack, EntityLivingBase living) {
-		if(ModCompat.COMPAT_BUBBLES){
-			CompatBubbles.onUnequippedBubbles(stack, living);
-		}
-	}
-
-	@Override
 	public BaubleType getBaubleType(ItemStack itemStack) {
-		return BaubleType.CHARM;
+		return BaubleType.TRINKET;
 	}
 }

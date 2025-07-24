@@ -4,8 +4,6 @@ import baubles.api.BaubleType;
 import com.google.common.collect.Multimap;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
 import keletu.enigmaticlegacy.util.Quote;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
-import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -78,19 +76,11 @@ public class ItemEnigmaticEye extends ItemBaseBauble {
     @Override
     public void onEquipped(ItemStack stack, EntityLivingBase player) {
         super.onEquipped(stack, player);
-
-        if(ModCompat.COMPAT_BUBBLES){
-            CompatBubbles.onEquippedBubbles(stack, player);
-        }
     }
 
     @Override
     public void onUnequipped(ItemStack stack, EntityLivingBase living) {
         super.onUnequipped(stack, living);
-
-        if(ModCompat.COMPAT_BUBBLES){
-            CompatBubbles.onUnequippedBubbles(stack, living);
-        }
     }
 
     public void fillModifiers(Multimap<String, AttributeModifier> attributes, ItemStack stack) {
@@ -136,4 +126,5 @@ public class ItemEnigmaticEye extends ItemBaseBauble {
         } else
             return new ActionResult<>(EnumActionResult.FAIL, stack);
     }
+
 }
