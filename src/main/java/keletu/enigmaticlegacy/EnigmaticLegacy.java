@@ -21,6 +21,7 @@ import keletu.enigmaticlegacy.recipe.EnchantmentTransposingRecipe;
 import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
+import keletu.enigmaticlegacy.util.RegisteredMeleeAttack;
 import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
@@ -79,6 +80,7 @@ public class EnigmaticLegacy {
     public static ItemArmor.ArmorMaterial ARMOR_ETHERIUM = EnumHelper.addArmorMaterial("etherium", EnigmaticLegacy.MODID + ":etherium", 132, new int[]{4, 7, 9, 4}, 24, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4F);
     public static Item.ToolMaterial ETHERIUM = EnumHelper.addToolMaterial("etherium", 5, 3000, 8.0F, 5.0F, 32);
     public static Item.ToolMaterial ELDRITCH_PAN = EnumHelper.addToolMaterial("eldritch_pan", 0, 4000, 6.0F, 3.0F, 24);
+    public static Item.ToolMaterial ENDER_SLAYER = EnumHelper.addToolMaterial("ender_slayer", 0, 2000, 6.0F, 3.0F, 16);
 
     public static CreativeTabs tabEnigmaticLegacy = new CreativeTabs("tabEnigmaticLegacy") {
         @SideOnly(Side.CLIENT)
@@ -149,6 +151,7 @@ public class EnigmaticLegacy {
     public static Item theInfinitum = new ItemTheInfinitum();
     public static Item eldritchPan = new ItemEldritchPan();
     public static Item infinimeal = new ItemInfinimeal();
+    public static ItemEnderSlayer enderSlayer = new ItemEnderSlayer();
     public static Item infernalShield = new ItemInfernalShield();
     public static Item enchantmentTransposer = new ItemEnchantmentTransposer();
     public static ItemOblivionStone oblivionStone = new ItemOblivionStone();
@@ -261,10 +264,12 @@ public class EnigmaticLegacy {
         //ELEvents.postmortalPossession.clear();
         EnigmaticEvents.knockbackThatBastard.clear();
         //ELEvents.deferredToast.clear();
-        soulCrystal.attributeDispatcher.clear();
+        EnigmaticEvents.DESOLATION_BOXES.clear();
+        EnigmaticLegacy.soulCrystal.attributeDispatcher.clear();
         //enigmaticItem.flightMap.clear();
-        heavenScroll.flyMap.clear();
-        //RegisteredMeleeAttack.clearRegistry();
+        EnigmaticLegacy.heavenScroll.flyMap.clear();
+        EnigmaticLegacy.the_cube.clearLocationCache();
+        RegisteredMeleeAttack.clearRegistry();
     }
 
 
@@ -308,8 +313,12 @@ public class EnigmaticLegacy {
             event.getRegistry().register(twistedCore);
             event.getRegistry().register(theTwist);
             event.getRegistry().register(evilEssence);
-            event.getRegistry().register(ingotWitherite);
+
+            if (EnigmaticConfigs.enableWitherite)
+                event.getRegistry().register(ingotWitherite);
+
             event.getRegistry().register(enchanterPearl);
+            event.getRegistry().register(enderSlayer);
             event.getRegistry().register(infernalShield);
             //event.getRegistry().register(soulCompass);
             event.getRegistry().register(evilIngot);
@@ -376,7 +385,9 @@ public class EnigmaticLegacy {
         public static void OreRegister(RegistryEvent.Register<Enchantment> event) {
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 0));
             OreDictionary.registerOre("coreEarth", new ItemStack(earthHeart, 1, 1));
-            OreDictionary.registerOre("ingotNetherite", new ItemStack(ingotWitherite, 1, 0));
+
+            if (EnigmaticConfigs.enableWitherite)
+                OreDictionary.registerOre("ingotNetherite", new ItemStack(ingotWitherite, 1, 0));
 
 
             OreDictionary.registerOre("amuletEnigmatic", new ItemStack(enigmaticAmulet, 1, 1));
@@ -433,7 +444,8 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(theAcknowledgment, 0, new ModelResourceLocation(theAcknowledgment.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(theTwist, 0, new ModelResourceLocation(theTwist.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(evilEssence, 0, new ModelResourceLocation(evilEssence.getRegistryName(), "inventory"));
-            ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
+            if (EnigmaticConfigs.enableWitherite)
+                ModelLoader.setCustomModelResourceLocation(ingotWitherite, 0, new ModelResourceLocation(ingotWitherite.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enchanterPearl, 0, new ModelResourceLocation(enchanterPearl.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(infinimeal, 0, new ModelResourceLocation(infinimeal.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(xpScroll, 0, new ModelResourceLocation(xpScroll.getRegistryName(), "inventory"));
@@ -443,6 +455,7 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(theInfinitum, 0, new ModelResourceLocation(theInfinitum.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(abyssalHeart, 0, new ModelResourceLocation(abyssalHeart.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(storageCrystal, 0, new ModelResourceLocation(storageCrystal.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(enderSlayer, 0, new ModelResourceLocation(enderSlayer.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(infernalShield, 0, new ModelResourceLocation(infernalShield.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(enchantmentTransposer, 0, new ModelResourceLocation(enchantmentTransposer.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(ascensionAmulet, 0, new ModelResourceLocation(ascensionAmulet.getRegistryName(), "inventory"));

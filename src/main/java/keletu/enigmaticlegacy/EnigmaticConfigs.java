@@ -133,6 +133,12 @@ public class EnigmaticConfigs {
 
     public static double flyingScrollXpCostModifier;
 
+    public static final List<ResourceLocation> enderSlayerEndDwellers = new ArrayList<>();
+
+    public static int enderSlayerAttackDamage;
+    public static double enderSlayerAttackSpeed;
+    public static float enderSlayerEndDamageBonus;
+    public static float enderSlayerEndKnockbackBonus;
 
     //Additions
 
@@ -153,7 +159,7 @@ public class EnigmaticConfigs {
     public static void onConfig(FMLPreInitializationEvent builder) {
         Configuration config = new Configuration(builder.getSuggestedConfigurationFile());
 
-        allowAddonItems = config.getBoolean("AllowAddonItems", "Generic Config", true, "If true, the game will add some items from enigmatic addons.");
+        allowAddonItems = config.getBoolean("AllowAddonItems", "Generic Config", false, "If true, the game will add some items from enigmatic addons.");
 
         spawnWithBook = config.getBoolean("SpawnWithBook", "Generic Config", true, "If true, When player entering a new world will give the acknowledgment guidebook");
 
@@ -378,6 +384,14 @@ public class EnigmaticConfigs {
         bloodLustTicksPerLevel = config.getInt("TicksPerLevel", "Growing BloodLust", 300, 0, 20000, "How lock the The Voracious Pan needs to be held, in ticks, to increase the strength "
                 + "of the Growing Bloodlust effect by one level.");
 
+        enderSlayerAttackDamage = config.getInt("AttackDamage", "Ender Slayer", 7, 0, 32768, "Attack damage of The Ender Slayer, actual damage shown in tooltip will be is 4 + this_value.");
+
+        enderSlayerAttackSpeed = config.getFloat("AttackSpeed", "Ender Slayer", -2.6F, -32768, 32768, "Attack speed of The Ender Slayer.");
+
+        enderSlayerEndDamageBonus = config.getFloat("EndDamageBonus", "Ender Slayer", 1.5F, 0, 32768, "Attack damage bonus of The Ender Slayer against dwellers of The End.");
+
+        enderSlayerEndKnockbackBonus = config.getFloat("EndKnockbackBonus", "Ender Slayer", 6.0F, 0, 32768, "Knockback bonus of The Ender Slayer against dwellers of The End.");
+
         lostEngineCritModifier = config.getFloat("CritDamageModifier", "Lost Engine", 0.6F, 0, 1, "The crit damage modifier of the Lost Engine.");
         lostEngineToughnessModifier = config.getFloat("ToughnessModifier", "Lost Engine", 4.0F, 0.0F, 256.0F, "The Armor Toughness modifier of the Lost Engine.");
         lostEngineKRModifier = config.getFloat("KnockbackResistanceModifier", "Lost Engine", 0.2F, 0.0F, 256.0F, "The Knockback resistance modifier of the Lost Engine.");
@@ -399,7 +413,7 @@ public class EnigmaticConfigs {
         Arrays.stream(whitelist).forEach(entry -> neutralAngerWhitelist.add(new ResourceLocation(entry)));
 
         cursedItemList.clear();
-        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticlegacy:half_heart_mask", "enigmaticlegacy:thunder_scroll"}, "List of items needs ware ring to use"
+        String[] cursed = config.getStringList("ItemBeCursed", "The Seven Curses", new String[]{"enigmaticlegacy:twisted_core", "enigmaticlegacy:the_twist", "enigmaticlegacy:berserk_emblem", "enigmaticlegacy:evil_essence", "enigmaticlegacy:enchanter_pearl", "enigmaticlegacy:cursed_scroll", "enigmaticlegacy:infernal_shield", "enigmaticlegacy:evil_ingot", "enigmaticlegacy:cursed_stone", "enigmaticlegacy:ender_slayer", "enigmaticlegacy:astral_fruit", "enigmaticlegacy:blessed_stone", "enigmaticlegacy:half_heart_mask", "enigmaticlegacy:thunder_scroll"}, "List of items needs ware ring to use"
                 + "Examples: minecraft:dirt, minecraft:diamond_sword. Changing this option required game restart to take effect.");
 
         Arrays.stream(cursed).forEach(entry -> cursedItemList.add(new ResourceLocation(entry)));
@@ -416,6 +430,11 @@ public class EnigmaticConfigs {
 
         Arrays.stream(desolation).forEach(entry -> desolationRingExtraMonstersList.add(new ResourceLocation(entry)));
 
+        enderSlayerEndDwellers.clear();
+        String[] enderDwellers = config.getStringList("EnderSlayerEndDwellers", "Ender Slayer", new String[0], "List of entities that should be considered dwellers of The End by The Ender Slayer."
+                + " Examples: minecraft:villager_golem, minecraft:zombie_pigman");
+
+        Arrays.stream(enderDwellers).forEach(entry -> enderSlayerEndDwellers.add(new ResourceLocation(entry)));
 
         blessedOneDamageResistance = config.getFloat("BlessedOneDamageResistance", "Additions", 0.25F, 0, 1, "The damage resistance of the Ring of Redemption. Measured in percentage.");
         blessedOneDamageBoost = config.getFloat("blessedOneDamageBoost", "Additions", 0.20F, 0, 5, "The damage boost of the Ring of Redemption. Measured in percentage.");

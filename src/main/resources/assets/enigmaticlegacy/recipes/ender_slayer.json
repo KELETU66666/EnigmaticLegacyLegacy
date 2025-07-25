@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "eoe",
+    "yoy",
+    "tst"
+  ],
+  "key": {
+	"o": {
+      "item": "minecraft:obsidian"
+    },
+	"s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+	"e": {
+      "item": "enigmaticlegacy:evil_essence"
+    },
+	"y": {
+      "item": "minecraft:ender_eye"
+    },
+	"t": {
+      "item": "minecraft:ghast_tear"
+    }
+  },
+  "result": {
+    "item": "enigmaticlegacy:ender_slayer"
+  }
+}

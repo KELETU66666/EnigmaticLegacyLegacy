@@ -437,6 +437,8 @@ tooltip.enigmaticlegacy.soulCrystal2=§5restore one of your lost §6Soul Crystal
 item.ichor_bottle.name=Bottle of Ichor
 item.astral_fruit.name=Celestial Fruit
 
+item.ender_slayer.name=The Ender Slayer
+
 potion.blazing_strength=Blazing Might
 potion.growing_hunger=Growing Hunger
 potion.growing_bloodlust=Growing Bloodlust
@@ -540,6 +542,22 @@ tooltip.enigmaticlegacy.eldritchAmulet5=§5down and weakened.
 
 tooltip.enigmaticlegacy.desolationRing1=§6Iron Golems§5, §6Endermen§5 and §6Zombie Pigman§5
 tooltip.enigmaticlegacy.desolationRing2=§5will not spawn in your proximity.
+
+tooltip.enigmaticlegacy.enderSlayer1=§5To exterminate them all...
+tooltip.enigmaticlegacy.enderSlayer2=§5Is such the only way?
+tooltip.enigmaticlegacy.enderSlayer1_alt=§5To slap them all...
+tooltip.enigmaticlegacy.enderSlayer2_alt=§5Is such the only way?
+tooltip.enigmaticlegacy.enderSlayer3=§6+%1$s §dDamage§5 against dwellers of §6The End§5.
+tooltip.enigmaticlegacy.enderSlayer4=§6+%1$s §dKnockback§5 against dwellers of §6The End§5.
+tooltip.enigmaticlegacy.enderSlayer5=§5In §6The End§5, fully charged attacks deal
+tooltip.enigmaticlegacy.enderSlayer6=§5colossal damage to §6Endermen§5, and all drops
+tooltip.enigmaticlegacy.enderSlayer7=§5from them are transformed into experience.
+tooltip.enigmaticlegacy.enderSlayer8=§5Temporarily disables teleportation abilities of
+tooltip.enigmaticlegacy.enderSlayer9=§5§6Shulkers§5 and §6Endermen§5.
+tooltip.enigmaticlegacy.enderSlayer10=§5Temporarily disables active ability of §6Eye of
+tooltip.enigmaticlegacy.enderSlayer11=§6Nebula§5, §6Non-Euclidean Cube§5 and ability to use
+tooltip.enigmaticlegacy.enderSlayer12=§5§6Ender Pearls§5, §6Potions of Recall§5 and §6Twisted
+tooltip.enigmaticlegacy.enderSlayer13=§5§6Mirror§5 for attacked players.
 
 #Misc
 itemGroup.tabEnigmaticLegacy=Enigmatic Legacy²

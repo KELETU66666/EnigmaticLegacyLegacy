@@ -24,6 +24,7 @@ import keletu.enigmaticlegacy.packet.PacketEmptyLeftClick;
 import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.Quote;
+import keletu.enigmaticlegacy.util.RegisteredMeleeAttack;
 import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
@@ -42,6 +43,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -292,8 +294,42 @@ public class EnigmaticEvents {
                 }
             }
         }
+
+        /*
+         * Ender Slayer XP conversion.
+         */
+
+        if (event.isRecentlyHit() && event.getSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer && SuperpositionHandler.hasCursed((EntityPlayer) event.getSource().getTrueSource())) {
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+            EntityLivingBase killed = event.getEntityLiving();
+
+            if (killed instanceof EntityEnderman && killed.world.provider.getDimension() == 1 && killed.getEntityData().getBoolean("EnderSlayerVictim")) {
+                int extraXP = 0;
+
+                for (EntityItem entity : event.getDrops()) {
+                    if (entity.getItem() != null) {
+                        if (entity.getItem().getItem() == Items.ENDER_PEARL) {
+                            dropXPOrb(killed.world, killed.posX, killed.posY, killed.posZ, 10);
+                            //extraXP += 10;
+                        } else if (entity.getItem().getItem() == Items.ENDER_EYE) {
+                            dropXPOrb(killed.world, killed.posX, killed.posY, killed.posZ, 20);
+                            //extraXP += 20;
+                        }
+                    }
+                }
+
+                //killed.getPersistentData().remove("EnderSlayerVictim");
+                //killed.getPersistentData().putInt("EnderSlayerExtraXP", extraXP);
+                event.getDrops().clear();
+                event.setCanceled(true);
+            }
+        }
     }
 
+    private static void dropXPOrb(World level, double x, double y, double z, int xp) {
+        EntityXPOrb orb = new EntityXPOrb(level, x, y, z, xp);
+        level.spawnEntity(orb);
+    }
 
     @SubscribeEvent
     public static void onCursedDeath(LivingDeathEvent event) {
@@ -517,10 +553,14 @@ public class EnigmaticEvents {
 
             float knockbackPower = 1F;
 
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == EnigmaticLegacy.theTwist && hasCursed(player)) {
+            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theTwist && hasCursed(player)) {
                 knockbackPower += knockbackBonus;
-            } else if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == EnigmaticLegacy.theTwist && isTheWorthyOne(player)) {
+            } else if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == theInfinitum && isTheWorthyOne(player)) {
                 knockbackPower += infinitumKnockbackBonus;
+            } else if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == enderSlayer && SuperpositionHandler.hasCursed(player)) {
+                if (enderSlayer.isEndDweller(event.getEntityLiving())) {
+                    knockbackPower += enderSlayerEndKnockbackBonus;
+                }
             }
 
             knockbackThatBastard.put(event.getEntityLiving(), knockbackPower);
@@ -1431,6 +1471,23 @@ public class EnigmaticEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
+        if (event.getEntityLiving().isDead)
+            return;
+
+        if (!event.getEntityLiving().world.isRemote) {
+            if (event.getEntityLiving() instanceof EntityEnderman || event.getEntityLiving() instanceof EntityShulker) {
+                int cooldown = event.getEntityLiving().getEntityData().getInteger("ELTeleportBlock");
+
+                if (cooldown > 0) {
+                    if (--cooldown > 0) {
+                        event.getEntityLiving().getEntityData().setInteger("ELTeleportBlock", cooldown);
+                    } else {
+                        event.getEntityLiving().getEntityData().removeTag("ELTeleportBlock");
+                    }
+                }
+            }
+        }
+
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (IForbiddenConsumed.get(player).isConsumed()) {
@@ -1511,6 +1568,18 @@ public class EnigmaticEvents {
     }
 
     @SubscribeEvent
+    public static void onEnderTeleport(EnderTeleportEvent event) {
+        if (event.getEntity().getEntityData().hasKey("ELTeleportBlock")) {
+            event.setCanceled(true);
+        }
+
+        if (event.getEntityLiving() instanceof EntityPlayer)
+            if (SuperpositionHandler.isBaubleEquipped((EntityPlayer) event.getEntityLiving(), eyeOfNebula) || SuperpositionHandler.isBaubleEquipped((EntityPlayer) event.getEntityLiving(), the_cube)) {
+                event.setAttackDamage(0);
+            }
+    }
+
+    @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
         if (event.getAmount() >= Float.MAX_VALUE)
             return;
@@ -1520,6 +1589,25 @@ public class EnigmaticEvents {
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.voidPearl) != -1) {
                 event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.WITHER, witheringTime, witheringLevel, false, true));
+            }
+
+            if (player instanceof EntityPlayerMP && SuperpositionHandler.hasCursed(player)) {
+                if (player.getHeldItemMainhand().getItem() == enderSlayer) {
+                    if (event.getEntity() instanceof EntityPlayerMP) {
+                        EntityPlayerMP targetPlayer = (EntityPlayerMP) event.getEntity();
+                        targetPlayer.getCooldownTracker().setCooldown(Items.ENDER_PEARL, 400);
+                        //targetPlayer.getCooldownTracker().setCooldown(Items.RECALL_POTION, 400);
+                        //targetPlayer.getCooldownTracker().setCooldown(Items.TWISTED_MIRROR, 400);
+
+                        if (SuperpositionHandler.isBaubleEquipped(targetPlayer, eyeOfNebula) || SuperpositionHandler.isBaubleEquipped(targetPlayer, the_cube)) {
+                            IForbiddenConsumed.get(targetPlayer).setSpellstoneCooldown(400);
+                        }
+                    }
+
+                    if (event.getEntity() instanceof EntityEnderman || event.getEntity() instanceof EntityShulker) {
+                        event.getEntity().getEntityData().setInteger("ELTeleportBlock", 400);
+                    }
+                }
             }
 
             Entity immediateSource = event.getSource().getImmediateSource();
@@ -1563,6 +1651,21 @@ public class EnigmaticEvents {
                     }
                 } else if (mainhandStack.getItem() == eldritchPan) {
                     if (!SuperpositionHandler.isTheWorthyOne(player)) {
+                        event.setCanceled(true);
+                    }
+                } else if (mainhandStack.getItem() == enderSlayer) {
+                    if (SuperpositionHandler.hasCursed(player)) {
+                        if (enderSlayer.isEndDweller(event.getEntityLiving())) {
+                            if (player.world.provider.getDimension() == 1) {
+                                if (event.getEntity() instanceof EntityEnderman && RegisteredMeleeAttack.getRegisteredAttackStregth(player) >= 1F) {
+                                    event.setAmount((event.getAmount() + 100F) * 10F);
+                                }
+                                event.getEntity().getEntityData().setBoolean("EnderSlayerVictim", true);
+                            }
+
+                            event.setAmount(event.getAmount() * enderSlayerEndDamageBonus);
+                        }
+                    } else {
                         event.setCanceled(true);
                     }
                 }
@@ -1735,6 +1838,13 @@ public class EnigmaticEvents {
                     the_cube.applyRandomEffect(living, false);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onEntityAttacked(AttackEntityEvent event) {
+        if (!event.getEntity().world.isRemote) {
+            RegisteredMeleeAttack.registerAttack(event.getEntityPlayer());
         }
     }
 
