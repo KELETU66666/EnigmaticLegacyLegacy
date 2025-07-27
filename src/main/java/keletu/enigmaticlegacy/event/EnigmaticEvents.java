@@ -848,23 +848,23 @@ public class EnigmaticEvents {
          */
 
         if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
-
             EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
             if (SuperpositionHandler.isTheWorthyOne(player))
                 if (player.getHeldItemMainhand().getItem() == eldritchPan
                         || player.getHeldItemOffhand().getItem() == eldritchPan)
                     for (EntityItem drop : new ArrayList<>(event.getDrops())) {
                         ItemStack stack = drop.getItem();
-                        ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
+                        if (!stack.isEmpty()) {
+                            ItemStack smelted = FurnaceRecipes.instance().getSmeltingResult(stack);
 
-                        if (!smelted.isEmpty()) {
-                            ItemStack cooked = smelted.copy();
-                            cooked.setCount(smelted.getCount());
+                            if (!smelted.isEmpty()) {
+                                ItemStack cooked = smelted.copy();
+                                cooked.setCount(smelted.getCount());
 
-                            event.getDrops().remove(drop);
-                            addDrop(event, smelted);
+                                event.getDrops().remove(drop);
+                                addDrop(event, smelted);
+                            }
                         }
-
                     }
         }
     }

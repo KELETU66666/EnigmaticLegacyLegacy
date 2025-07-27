@@ -553,7 +553,7 @@ public class SuperpositionHandler {
         int totalCurses = 0;
 
         for (Enchantment enchantment : enchantments.keySet()) {
-            if (enchantment.isCurse() && enchantments.get(enchantment) > 0) {
+            if (enchantment != null && enchantment.isCurse() && enchantments.get(enchantment) > 0) {
                 totalCurses += 1;
             }
         }
