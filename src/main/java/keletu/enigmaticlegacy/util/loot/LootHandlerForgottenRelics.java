@@ -12,7 +12,7 @@ public final class LootHandlerForgottenRelics {
     private static final String TABLE = "inject/nether_bridge";
 
     public LootHandlerForgottenRelics() {
-            LootTableList.register(new ResourceLocation(EnigmaticLegacy.MODID, TABLE));
+        LootTableList.register(new ResourceLocation(EnigmaticLegacy.MODID, TABLE));
     }
 
     @SubscribeEvent

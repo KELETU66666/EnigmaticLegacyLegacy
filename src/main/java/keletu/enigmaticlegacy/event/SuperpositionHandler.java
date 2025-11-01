@@ -542,7 +542,7 @@ public class SuperpositionHandler {
                     }
                 }
             }
-            return blocker.isActiveItemStackBlocking();
+            return false;
         }
 
         return false;

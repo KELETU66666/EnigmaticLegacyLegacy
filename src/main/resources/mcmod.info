@@ -1,20 +1,16 @@
 [
   {
-    "modid": "enigmaticlegacy",
-    "name": "Enigmatic Legacy²",
-    "description": "A backport of Enigmatic Legacy",
-    "version": "2.1.0",
-    "mcversion": "1.12.2",
-    "url": "",
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://www.curseforge.com/members/ReplaceMeAuthor/projects",
     "updateUrl": "",
-    "authorList": [
-      "Aizistral",
-      "keletu"
-    ],
+    "authorList": ${mod_author},
     "credits": "",
     "logoFile": "",
-    "screenshots": [],
-    "requiredMods": [
+    "dependencies": [
       "baubles",
       "fermiumbooter"
     ]

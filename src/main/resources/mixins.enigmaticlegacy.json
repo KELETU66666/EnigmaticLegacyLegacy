@@ -13,7 +13,6 @@
     "early.MixinEnterBlockTrigger",
     "early.MixinEntityLivingBase",
     "early.MixinEntityPlayer",
-    "early.mixinStupidLogger",
     "early.MixinSummonedEntityTrigger",
     "early.MixinEntityAIAvoidEntity"
   ],

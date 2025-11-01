@@ -180,6 +180,9 @@ public class EntityItemSoulCrystal extends Entity {
     public void onUpdate() {
         super.onUpdate();
         this.setGlowing(true);
+
+        this.rotationYaw = (this.rotationYaw + 2.0F) % 360.0F;
+
         motionX *= 0.9;
         motionY *= 0.9;
         motionZ *= 0.9;

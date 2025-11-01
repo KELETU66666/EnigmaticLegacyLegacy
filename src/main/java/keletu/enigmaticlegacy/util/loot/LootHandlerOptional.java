@@ -12,7 +12,7 @@ public final class LootHandlerOptional {
     private static final String TABLE = "inject/nether_bridge_optional";
 
     public LootHandlerOptional() {
-            LootTableList.register(new ResourceLocation(EnigmaticLegacy.MODID, TABLE));
+        LootTableList.register(new ResourceLocation(EnigmaticLegacy.MODID, TABLE));
     }
 
     @SubscribeEvent
