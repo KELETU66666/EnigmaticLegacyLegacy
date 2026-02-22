@@ -41,8 +41,8 @@ public class ItemGolemHeart extends ItemSpellstoneBauble {
         this.immunityList.add(DamageSource.IN_WALL.damageType);
         this.immunityList.add(DamageSource.FALLING_BLOCK.damageType);
 
-        Supplier<Float> meleeResistanceSupplier = () -> meleeResistance;
-        Supplier<Float> explosionResistanceSupplier = () -> explosionResistance;
+        Supplier<Float> meleeResistanceSupplier = () -> (1 - meleeResistance);
+        Supplier<Float> explosionResistanceSupplier = () -> (1 - explosionResistance);
         Supplier<Float> magicVulnerabilitySupplier = () -> (float) vulnerabilityModifier;
 
         this.resistanceList.put(DamageSource.GENERIC.damageType, meleeResistanceSupplier);

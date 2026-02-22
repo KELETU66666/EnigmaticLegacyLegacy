@@ -980,7 +980,7 @@ public class EnigmaticEvents {
 
             if (event.getAmount() <= 1.0F)
                 if (IForbiddenConsumed.get(player).isConsumed()) {
-                    event.setAmount(event.getAmount() * EnigmaticConfigs.regenerationSubtraction);
+                    event.setAmount(event.getAmount() * (1 - EnigmaticConfigs.regenerationSubtraction));
                 }
 
             if (BaublesApi.isBaubleEquipped(player, EnigmaticLegacy.cursedScroll) != -1) {
@@ -1699,11 +1699,11 @@ public class EnigmaticEvents {
                 } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
                     event.setAmount(event.getAmount() * 2F);
                 } else if (advancedCurio == oceanStone && trueSource != null && (trueSource.isWet() || trueSource.isInWater())) {
-                    event.setAmount(event.getAmount() * oceanStoneUnderwaterCreaturesResistance);
+                    event.setAmount(event.getAmount() * (1 - oceanStoneUnderwaterCreaturesResistance));
                 }
 
                 if (advancedCurio.resistanceList.containsKey(event.getSource().damageType)) {
-                    event.setAmount(event.getAmount() * (1 - advancedCurio.resistanceList.get(event.getSource().damageType).get()));
+                    event.setAmount(event.getAmount() * advancedCurio.resistanceList.get(event.getSource().damageType).get());
                 }
             }
 

@@ -35,7 +35,7 @@ public class ItemEyeOfNebula extends ItemSpellstoneBauble {
 	public ItemEyeOfNebula() {
 		super("eye_of_nebula", EnumRarity.EPIC);
 
-		Supplier<Float> magicResistanceSupplier = () -> eyeOfNebulaMagicResistance;
+		Supplier<Float> magicResistanceSupplier = () -> (1 - eyeOfNebulaMagicResistance);
 		this.resistanceList.put(DamageSource.MAGIC.damageType, magicResistanceSupplier);
 		this.resistanceList.put(DamageSource.DRAGON_BREATH.damageType, magicResistanceSupplier);
 		this.resistanceList.put(DamageSource.WITHER.damageType, magicResistanceSupplier);
