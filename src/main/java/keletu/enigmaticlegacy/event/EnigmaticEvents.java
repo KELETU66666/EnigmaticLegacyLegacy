@@ -84,7 +84,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import static net.minecraftforge.fml.common.eventhandler.EventPriority.HIGH;
+import static net.minecraftforge.fml.common.eventhandler.EventPriority.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -272,7 +272,7 @@ public class EnigmaticEvents {
                 } else if (killed.getClass() == EntityWitherSkeleton.class) {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                } else if (Loader.isModLoaded("oe") && killed.toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                } else if (Loader.isModLoaded("oe") && killed.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
                     addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
                     //    addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 4));
@@ -660,7 +660,7 @@ public class EnigmaticEvents {
         if (allowAddonItems) {
             if (victim instanceof EntityPlayer) {
                 if (BaublesApi.isBaubleEquipped((EntityPlayer) victim, lostEngine) != -1 && event.getSource() == DamageSource.LIGHTNING_BOLT) {
-                    if (victim instanceof EntityPlayerMP) {
+                    if (victim instanceof EntityPlayerMP && allowEvilSetting) {
                         EntityPlayerMP player = (EntityPlayerMP) victim;
                         for (NonNullList<ItemStack> compartment : Arrays.<NonNullList<ItemStack>>asList(player.inventory.mainInventory, player.inventory.armorInventory, player.inventory.offHandInventory)) {
                             for (ItemStack itemStack : compartment) {
@@ -1703,7 +1703,7 @@ public class EnigmaticEvents {
                 }
 
                 if (advancedCurio.resistanceList.containsKey(event.getSource().damageType)) {
-                    event.setAmount(event.getAmount() * advancedCurio.resistanceList.get(event.getSource().damageType).get());
+                    event.setAmount(event.getAmount() * (1 - advancedCurio.resistanceList.get(event.getSource().damageType).get()));
                 }
             }
 
@@ -2056,5 +2056,25 @@ public class EnigmaticEvents {
             EnigmaticLegacy.soulCrystal.updatePlayerSoulMap(player);
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onApplyPotion(PotionEvent.PotionAddedEvent event) {
+        if (event.getEntity() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntity();
+            PotionEffect effect = event.getPotionEffect();
+
+            //if (isApplyingNightVision)
+            //    return;
+
+            //if (ForgeRegistries.MOB_EFFECTS.getKey(effect.getEffect()).equals(new ResourceLocation("mana-and-artifice", "chrono-exhaustion")))
+            //    return;
+
+            if (BaublesApi.isBaubleEquipped(player, voidPearl) != -1) {
+                event.setResult(Event.Result.DENY);
+            } else if (BaublesApi.isBaubleEquipped(player, the_cube) != -1 && effect.getPotion().isBadEffect()) {
+                event.setResult(Event.Result.DENY);
+            }
+        }
     }
 }

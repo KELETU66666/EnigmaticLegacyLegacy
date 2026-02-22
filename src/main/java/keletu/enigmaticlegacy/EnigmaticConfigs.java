@@ -146,6 +146,7 @@ public class EnigmaticConfigs {
     public static float blessedOneDamageResistance;
     public static float blessedOneDamageBoost;
     public static int blessedOneRegenerationSpeed;
+    public static boolean allowEvilSetting;
     public static final List<ResourceLocation> blessedItemList = new ArrayList<>();
 
     public static final List<ResourceLocation> golemList = new ArrayList<>();
@@ -436,6 +437,7 @@ public class EnigmaticConfigs {
 
         Arrays.stream(enderDwellers).forEach(entry -> enderSlayerEndDwellers.add(new ResourceLocation(entry)));
 
+        allowEvilSetting = config.getBoolean("AllowLostEngineBreakItems", "Additions", false, "Allows Lost Engine Breaks all the breakable items when player stuck by lightning.");
         blessedOneDamageResistance = config.getFloat("BlessedOneDamageResistance", "Additions", 0.25F, 0, 1, "The damage resistance of the Ring of Redemption. Measured in percentage.");
         blessedOneDamageBoost = config.getFloat("blessedOneDamageBoost", "Additions", 0.20F, 0, 5, "The damage boost of the Ring of Redemption. Measured in percentage.");
         blessedOneRegenerationSpeed = config.getInt("blessedOneRegenerationSpeed", "Additions", 20, 5, 1000, "The time required for each regeneration of Ring of Redemption. Measured in ticks.");

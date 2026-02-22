@@ -31,6 +31,11 @@ public class GrowingBloodlustEffect extends Potion {
         }
     }
 
+    @Override
+    public boolean isReady(int duration, int amplifier) {
+        return true;
+    }
+
     @SideOnly(Side.CLIENT)
     public int getStatusIconIndex() {
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("enigmaticlegacy", "textures/misc/potions.png"));
