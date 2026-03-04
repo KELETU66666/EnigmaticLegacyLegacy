@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.client;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.CompatBaublesEX;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -55,8 +55,8 @@ public class LayerAmulet extends LayerBauble {
 
     private ModelBase setTexturesGetModel(EntityPlayer player) {
         ItemStack stack;
-        if (ModCompat.COMPAT_BUBBLES)
-            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBubbles.LayerAmuletItems(BaubleType.AMULET, player));
+        if (ModCompat.COMPAT_BAUBLES_EX)
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBaublesEX.LayerAmuletItems(baubles.api.registries.TypeData.Preset.AMULET, player));
         else
             stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.AMULET.getValidSlots()[0]);
 

@@ -1,8 +1,10 @@
 package keletu.enigmaticlegacy.item;
 
-import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
-import baubles.api.cap.BaublesContainer;
+import baubles.api.attribute.AdvancedInstance;
+import baubles.api.attribute.AttributeManager;
+import baubles.api.registries.TypeData;
+import baubles.common.network.PacketHandler;
+import baubles.common.network.PacketModifier;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import static keletu.enigmaticlegacy.EnigmaticLegacy.tabEnigmaticLegacy;
 import keletu.enigmaticlegacy.entity.EntityItemIndestructible;
@@ -12,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -95,11 +98,17 @@ public class ItemIchorBottle extends Item {
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase player) {
         if (player instanceof EntityPlayerMP) {
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            BaublesContainer container = BaublesApi.getBaublesContainer(playerMP);
 
             if (!SuperpositionHandler.hasPersistentTag(playerMP, "ConsumedIchorBottle")) {
                 SuperpositionHandler.setPersistentBoolean(playerMP, "ConsumedIchorBottle", true);
-                container.grow(BaubleType.AMULET, 1);
+
+                //Add slot(s).
+                AbstractAttributeMap map = player.getAttributeMap();
+                AdvancedInstance instance = AttributeManager.getInstance(map, TypeData.Preset.AMULET);
+                double present = instance.getAnonymousModifier(0);
+                instance.applyAnonymousModifier(0, present + 1);
+                PacketHandler.INSTANCE.sendTo(new PacketModifier(player, TypeData.Preset.AMULET, (int) (present + 1), 0), playerMP);
+
                 playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1F);
             }
 

@@ -25,7 +25,6 @@ import keletu.enigmaticlegacy.packet.PacketPortalParticles;
 import keletu.enigmaticlegacy.packet.PacketRecallParticles;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.RegisteredMeleeAttack;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import keletu.enigmaticlegacy.util.helper.ItemNBTHelper;
 import keletu.enigmaticlegacy.util.helper.RenderHelper;
@@ -84,7 +83,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import static net.minecraftforge.fml.common.eventhandler.EventPriority.*;
+import static net.minecraftforge.fml.common.eventhandler.EventPriority.HIGH;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -2024,14 +2023,10 @@ public class EnigmaticEvents {
             if (ultraHardcore) {
                 {
                     IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(event.player);
-                    if (ModCompat.COMPAT_BUBBLES) {
-                        CompatBubbles.insetBubblesRing(event.player);
-                    } else {
-                        if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(BaubleType.RING.getValidSlots()[0]) == ItemStack.EMPTY)
-                            baubles.setStackInSlot(BaubleType.RING.getValidSlots()[0], new ItemStack(cursedRing));
-                        else
-                            ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
-                    }
+                    if (BaublesApi.getBaublesHandler(event.player).getStackInSlot(BaubleType.RING.getValidSlots()[0]) == ItemStack.EMPTY)
+                        baubles.setStackInSlot(BaubleType.RING.getValidSlots()[0], new ItemStack(cursedRing));
+                    else
+                        ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));
                 }
             } else {
                 ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(cursedRing));

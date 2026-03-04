@@ -1,6 +1,5 @@
 package keletu.enigmaticlegacy.client;
 
-import baubles.common.Config;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -28,7 +27,7 @@ public abstract class LayerBauble implements LayerRenderer<EntityPlayer> {
 
     @Override
     public final void doRenderLayer(@Nonnull EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if(!Config.renderBaubles || player.getActivePotionEffect(MobEffects.INVISIBILITY) != null) return;
+        if (player.getActivePotionEffect(MobEffects.INVISIBILITY) != null) return;
 
         GlStateManager.enableLighting();
         GlStateManager.enableRescaleNormal();

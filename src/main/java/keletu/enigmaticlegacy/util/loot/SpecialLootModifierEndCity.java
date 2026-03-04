@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.util.loot;
 import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.CompatBaublesEX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,7 +35,7 @@ public class SpecialLootModifierEndCity extends LootEntryTable {
             EntityPlayer player = (EntityPlayer) entity;
             if (!SuperpositionHandler.hasPersistentTag(player, "LootedAstralFruit") && SuperpositionHandler.hasCursed(player)) {
                 SuperpositionHandler.setPersistentBoolean(player, "LootedAstralFruit", true);
-                stacks.add(new ItemStack(CompatBubbles.astralFruit, 1));
+                stacks.add(new ItemStack(CompatBaublesEX.astralFruit, 1));
             }
         }
     }
@@ -56,7 +56,7 @@ public class SpecialLootModifierEndCity extends LootEntryTable {
     public static void onLootTableLoad(LootTableLoadEvent event) {
         if (event.getName().equals(new ResourceLocation(EnigmaticLegacy.MODID, "inject/spellstone_temple"))) {
             LootPool main = event.getTable().getPool("spellstones");
-            main.addEntry(new LootEntryItem(CompatBubbles.ichorBottle, 65, 0, new LootFunction[0], new LootCondition[0], "enigmatic_inject_pool_special_ichor_bottle"));
+            main.addEntry(new LootEntryItem(CompatBaublesEX.ichorBottle, 65, 0, new LootFunction[0], new LootCondition[0], "enigmatic_inject_pool_special_ichor_bottle"));
         }
         if (EnigmaticConfigs.allowAddonItems) {
             if (event.getName().equals(new ResourceLocation(EnigmaticLegacy.MODID, "inject/spellstone_temple_jungle"))) {

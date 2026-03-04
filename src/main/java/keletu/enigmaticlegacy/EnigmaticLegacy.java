@@ -22,10 +22,10 @@ import keletu.enigmaticlegacy.recipe.RecipeOblivionStone;
 import keletu.enigmaticlegacy.util.Quote;
 import keletu.enigmaticlegacy.util.QuoteHandler;
 import keletu.enigmaticlegacy.util.RegisteredMeleeAttack;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.CompatBaublesEX;
 import keletu.enigmaticlegacy.util.compat.CompatTrinketEvent;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
-import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_BUBBLES;
+import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_BAUBLES_EX;
 import static keletu.enigmaticlegacy.util.compat.ModCompat.COMPAT_FORGOTTEN_RELICS;
 import keletu.enigmaticlegacy.util.loot.*;
 import net.minecraft.block.Block;
@@ -224,7 +224,7 @@ public class EnigmaticLegacy {
         else
             MinecraftForge.EVENT_BUS.register(new LootHandlerForgottenRelics());
 
-        if (COMPAT_BUBBLES)
+        if (COMPAT_BAUBLES_EX)
             MinecraftForge.EVENT_BUS.register(SpecialLootModifierEndCity.class);
 
 
@@ -353,9 +353,9 @@ public class EnigmaticLegacy {
             event.getRegistry().register(eldritchAmulet);
             event.getRegistry().register(redemptionPotion);
 
-            if (ModCompat.COMPAT_BUBBLES) {
-                event.getRegistry().register(CompatBubbles.astralFruit);
-                event.getRegistry().register(CompatBubbles.ichorBottle);
+            if (ModCompat.COMPAT_BAUBLES_EX) {
+                event.getRegistry().register(CompatBaublesEX.astralFruit);
+                event.getRegistry().register(CompatBaublesEX.ichorBottle);
             }
 
             if (EnigmaticConfigs.allowAddonItems) {
@@ -474,9 +474,9 @@ public class EnigmaticLegacy {
             ModelLoader.setCustomModelResourceLocation(fabulousScroll, 0, new ModelResourceLocation(fabulousScroll.getRegistryName(), "inventory"));
             ModelLoader.setCustomModelResourceLocation(desolationRing, 0, new ModelResourceLocation(desolationRing.getRegistryName(), "inventory"));
 
-            if (ModCompat.COMPAT_BUBBLES) {
-                ModelLoader.setCustomModelResourceLocation(CompatBubbles.astralFruit, 0, new ModelResourceLocation(CompatBubbles.astralFruit.getRegistryName(), "inventory"));
-                ModelLoader.setCustomModelResourceLocation(CompatBubbles.ichorBottle, 0, new ModelResourceLocation(CompatBubbles.ichorBottle.getRegistryName(), "inventory"));
+            if (ModCompat.COMPAT_BAUBLES_EX) {
+                ModelLoader.setCustomModelResourceLocation(CompatBaublesEX.astralFruit, 0, new ModelResourceLocation(CompatBaublesEX.astralFruit.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(CompatBaublesEX.ichorBottle, 0, new ModelResourceLocation(CompatBaublesEX.ichorBottle.getRegistryName(), "inventory"));
             }
 
             ModelLoader.setCustomModelResourceLocation(extraDimensionalEye, 0, new ModelResourceLocation(extraDimensionalEye.getRegistryName(), "inventory"));

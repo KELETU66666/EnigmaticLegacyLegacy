@@ -60,7 +60,7 @@ dependencies {
 
     //implementation fg.deobf("curse.maven:baubles-227083:2518667")
     implementation fg.deobf("curse.maven:patchouli-306770:3162874")
-    implementation files("libs/Kebbles-2.4.8.jar")
+    implementation fg.deobf("curse.maven:baubles-ex-1096600:7670807")
 
     implementation fg.deobf("curse.maven:trinkets-and-baubles-279900:5717039")
     compileOnly fg.deobf("curse.maven:simpledifficulty-360779:3613814")

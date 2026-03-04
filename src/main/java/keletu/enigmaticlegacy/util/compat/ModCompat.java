@@ -9,5 +9,5 @@ public class ModCompat {
     public static final boolean COMPAT_FORGOTTEN_RELICS = !Loader.isModLoaded("forgotten_relics");
     public static final boolean COMPAT_SIMPLED_DIFFICULTY = Loader.isModLoaded("simpledifficulty");
     public static final boolean COMPAT_FIRSTAID = Loader.isModLoaded("firstaid");
-    public static final boolean COMPAT_BUBBLES = Objects.equals(Loader.instance().getIndexedModList().get("baubles").getName(), "Bubbles");
+    public static final boolean COMPAT_BAUBLES_EX = Objects.equals(Loader.instance().getIndexedModList().get("baubles").getName(), "BaublesEX");
 }

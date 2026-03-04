@@ -3,7 +3,7 @@ package keletu.enigmaticlegacy.client;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
-import keletu.enigmaticlegacy.util.compat.CompatBubbles;
+import keletu.enigmaticlegacy.util.compat.CompatBaublesEX;
 import keletu.enigmaticlegacy.util.compat.ModCompat;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -56,8 +56,8 @@ public class LayerCharm extends LayerBauble {
 
     private ModelBase setTexturesGetModel(EntityPlayer player) {
         ItemStack stack;
-        if (ModCompat.COMPAT_BUBBLES)
-            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBubbles.LayerCharmItems(BaubleType.CHARM, player));
+        if (ModCompat.COMPAT_BAUBLES_EX)
+            stack = BaublesApi.getBaublesHandler(player).getStackInSlot(CompatBaublesEX.LayerCharmItems(baubles.api.registries.TypeData.Preset.CHARM, player));
         else
             stack = BaublesApi.getBaublesHandler(player).getStackInSlot(BaubleType.CHARM.getValidSlots()[0]);
         if (BaublesApi.isBaubleEquipped(player, stack.getItem()) == -1) return null;
