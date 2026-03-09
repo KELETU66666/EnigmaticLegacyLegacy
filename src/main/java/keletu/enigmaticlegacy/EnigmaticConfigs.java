@@ -118,6 +118,7 @@ public class EnigmaticConfigs {
     public static double angelBlessingAccelerationModifier;
     public static double angelBlessingAccelerationModifierElytra;
     public static float angelBlessingDeflectChance;
+    public static boolean angelBlessingAbilityJumping;
 
     public static int magmaHeartSpellstoneCooldown;
     public static double magmaHeartDamageFeedback;
@@ -268,7 +269,7 @@ public class EnigmaticConfigs {
 
         cursedScrollRegenBoost = config.getFloat("RegenBoost", "Cursed Scroll", 0.04F, 0, 1, "Health regeneration increase provided by Scroll of a Thousand Curses for each curse, as percentage.");
 
-        infinitumAttackDamage = config.getInt("AttackDamage", "The Infinitum", 15, 0, 32768, "Attack damage of The Infinitum, actual damage shown in tooltip will be is 1 + this_value.");
+        infinitumAttackDamage = config.getFloat("AttackDamage", "The Infinitum", 15, 0, 32768, "Attack damage of The Infinitum, actual damage shown in tooltip will be is 1 + this_value.");
 
         infinitumAttackSpeed = config.getFloat("AttackSpeed", "The Infinitum", -2.0F, -32768, 32768, "Attack speed of The Infinitum.");
 
@@ -335,6 +336,8 @@ public class EnigmaticConfigs {
         angelBlessingAccelerationModifierElytra = config.getFloat("AccelerationModifierElytra", "Angel Blessing", 0.6F, 0, 256, "Separate acceleration modifier for active ability of Angel's Blessing when player is flying with Elytra.");
 
         angelBlessingDeflectChance = config.getFloat("DeflectChance", "Angel Blessing", 0.5F, 0, 1, "Chance to deflect projectile when having Angel's Blessing equipped. Measured in parents.");
+
+        angelBlessingAbilityJumping = config.getBoolean("AllowFastUse", "Angel Blessing", false, "Allows wearer toggle angel blessing's ability when jumping");
 
         magmaHeartSpellstoneCooldown = config.getInt("Cooldown", "BlazingCore", 0, 0, 32768, "Active ability cooldown for Blazing Core. Measured in ticks. 20 ticks equal to 1 second.");
 

@@ -1,6 +1,7 @@
 package keletu.enigmaticlegacy.item;
 
 import com.google.common.collect.Multimap;
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import static keletu.enigmaticlegacy.EnigmaticConfigs.*;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.api.cap.IForbiddenConsumed;
@@ -62,8 +63,12 @@ public class ItemAngelBlessing extends ItemSpellstoneBauble {
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing4"));
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing5") + TextFormatting.GOLD + angelBlessingDeflectChance * 100 + "%" + I18n.format("tooltip.enigmaticlegacy.angelBlessing5_1"));
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing6"));
-			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing7"));
-			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing8"));
+
+			if(angelBlessingAbilityJumping) {
+				list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing7"));
+				list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing8"));
+			}
+
 			list.add(I18n.format("tooltip.enigmaticlegacy.angelBlessing9"));
 		} else {
 			list.add(I18n.format("tooltip.enigmaticlegacy.holdShift"));

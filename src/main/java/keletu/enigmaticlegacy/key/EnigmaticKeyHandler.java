@@ -1,5 +1,6 @@
 package keletu.enigmaticlegacy.key;
 
+import keletu.enigmaticlegacy.EnigmaticConfigs;
 import keletu.enigmaticlegacy.EnigmaticLegacy;
 import keletu.enigmaticlegacy.event.SuperpositionHandler;
 import keletu.enigmaticlegacy.item.ItemAngelBlessing;
@@ -69,7 +70,7 @@ public class EnigmaticKeyHandler {
 
         if (spellstoneAbilityKey.isPressed() && SuperpositionHandler.getAdvancedBaubles(Minecraft.getMinecraft().player).getItem() instanceof ISpellstone) {
             EnigmaticLegacy.packetInstance.sendToServer(new PacketSpellstoneKey(true));
-        } else if (jumpClicked && !player.isInWater() && !player.onGround && SuperpositionHandler.getAdvancedBaubles(Minecraft.getMinecraft().player).getItem() instanceof ItemAngelBlessing) {
+        } else if (EnigmaticConfigs.angelBlessingAbilityJumping && jumpClicked && !player.isInWater() && !player.onGround && SuperpositionHandler.getAdvancedBaubles(Minecraft.getMinecraft().player).getItem() instanceof ItemAngelBlessing) {
             EnigmaticLegacy.packetInstance.sendToServer(new PacketSpellstoneKey(true));
         }
     }

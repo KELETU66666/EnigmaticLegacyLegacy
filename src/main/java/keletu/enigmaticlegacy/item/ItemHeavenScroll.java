@@ -49,7 +49,7 @@ public class ItemHeavenScroll extends ItemScrollBauble implements IScroll {
     }
 
     public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-        return (itemstack.getItem() instanceof IScroll) && BaublesApi.isBaubleEquipped((EntityPlayer) player, itemstack.getItem()) == -1;
+        return super.canEquip(itemstack, player) && BaublesApi.isBaubleEquipped((EntityPlayer) player, itemstack.getItem()) == -1;
     }
 
     protected boolean shouldCheckXpDrain(EntityPlayer player) {

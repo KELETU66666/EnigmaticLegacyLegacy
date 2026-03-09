@@ -302,7 +302,7 @@ public class SuperpositionHandler {
             for (TileEntityBeacon beacon : list)
                 if (beacon.getLevels() > 0) {
                     try {
-                        if (beacon.getBeamSegments().isEmpty()) {
+                        if (beacon.beamSegments.isEmpty()) {
                             continue;
                         }
                     } catch (Exception ex) {

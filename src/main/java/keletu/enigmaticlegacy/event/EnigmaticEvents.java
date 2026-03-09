@@ -255,7 +255,7 @@ public class EnigmaticEvents {
                     //addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 30);
                     //addDropWithChance(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 3), 50);
-                } else if ((Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityPillager.class")) || killed.getClass() == EntityVindicator.class) {
+                } else if ((Loader.isModLoaded("raids") && killed.getClass().getName().equals("net.smileycorp.raids.common.entities.EntityPillager")) || killed.getClass() == EntityVindicator.class) {
                     addDrop(event, getRandomSizeStack(Items.EMERALD, 0, 4));
                 } else if (killed.getClass() == EntityVillager.class) {
                     addDrop(event, getRandomSizeStack(Items.EMERALD, 2, 6));
@@ -271,7 +271,12 @@ public class EnigmaticEvents {
                 } else if (killed.getClass() == EntityWitherSkeleton.class) {
                     addDrop(event, getRandomSizeStack(Items.BLAZE_POWDER, 0, 3));
                     addDropWithChance(event, new ItemStack(Items.GHAST_TEAR, 1), 20);
-                } else if (Loader.isModLoaded("oe") && killed.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                    if (Loader.isModLoaded("netherized")) {
+                        addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("netherized", "netherite_scrap")), 1), 7);
+                    }
+                } else if ((Loader.isModLoaded("netherized") && killed.getClass().getName().equals("mellohi138.netherized.objects.entity.neutral.EntityPiglinBrute"))) {
+                    addDropWithChance(event, new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("netherized", "netherite_scrap")), 1), 20);
+                } else if (Loader.isModLoaded("oe") && killed.getClass().getName().equals("com.sirsquidly.oe.entity.EntityDrowned")) {
                     addDropWithChance(event, getRandomSizeStack(Items.DYE, 1, 3, 4), 30);
                     //} else if (killed.getClass() == EntityGhast.class) {
                     //    addDrop(event, getRandomSizeStack(Items.PHANTOM_MEMBRANE, 1, 4));
@@ -280,7 +285,7 @@ public class EnigmaticEvents {
                     //   addDropWithChance(event, new ItemStack(Items.PHANTOM_MEMBRANE, 1), 30);
                     //}  else if (killed.getClass() == PiglinEntity.class) {
                     //    addDropWithChance(event, getRandomSizeStack(Items.GOLD_INGOT, 2, 4), 50);
-                } else if (Loader.isModLoaded("raids") && killed.getClass().toString().equals("net.smileycorp.raids.common.entities.EntityRavager.class")) {
+                } else if (Loader.isModLoaded("raids") && killed.getClass().getName().equals("net.smileycorp.raids.common.entities.EntityRavager")) {
                     addDrop(event, getRandomSizeStack(Items.EMERALD, 3, 10));
                     addDrop(event, getRandomSizeStack(Items.LEATHER, 2, 7));
                     addDropWithChance(event, getRandomSizeStack(Items.DIAMOND, 0, 4), 50);
@@ -1693,7 +1698,7 @@ public class EnigmaticEvents {
 
                 if (event.getSource().damageType.startsWith("explosion") && advancedCurio == EnigmaticLegacy.golemHeart && SuperpositionHandler.hasAnyArmor(player)) {
                     event.setCanceled(true);
-                } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().toString().equals("com.sirsquidly.oe.entity.EntityDrowned.class")) {
+                } else if (advancedCurio == blazingCore && trueSource != null && trueSource.getClass().getName().equals("com.sirsquidly.oe.entity.EntityDrowned")) {
                     event.setAmount(event.getAmount() * 2F);
                 } else if (advancedCurio == eyeOfNebula && player.isInWater()) {
                     event.setAmount(event.getAmount() * 2F);
